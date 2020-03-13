@@ -9,7 +9,7 @@ int	ft_printf(const char *format, ...)
 
 int main()
 {
-	int a = 123;
+	int a = 123; 
 	int b = -123;
 	double c = 1.23456;
 

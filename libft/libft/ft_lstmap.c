@@ -91,23 +91,28 @@
 // 	return (ret);
 // }
 
-// t_list *ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
-// {
-// 	t_list *ret;
-// 	t_list *tmp;
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
+{
+	t_list *new_lst;
+	t_list *elem;
 
-// 	if (lst && f && del)
-// 	{
-// 		ret = tmp;
-// 		while (lst)
-// 		{
-// 			tmp = f(lst->content);
-// 			lst = lst->next;
-// 		}
-// 	}
-// }
+	if (!f || !del)
+		return (NULL);
+	new_lst = NULL;
+	while (lst)
+	{
+		if ((elem = ft_lstnew(f(lst->content))) == NULL)
+		{
+			ft_lstclear(&new_lst, del);
+			return (NULL);
+		}
+		ft_lstadd_back(&new_lst, elem);
+		lst = lst->next;
+	}
+	return (new_lst);
+}
 
-int main()
+// int main()
 // {
 // 	t_list one;
 // 	t_list two;
@@ -128,11 +133,11 @@ int main()
 // 	void (*del)(void *) = dfunc;
 
 // 	t_list *result = ft_lstmap(pone, f, del);
-// 	while (result)
+// 	while (result) 
 // 	{
 // 		printf("result: %p\n", result);
 // 		result = result->next;
 // 	}
-/* pointer test 를 해보자 시펄! */
-	return 0;
-}
+// 	printf("result->next: %p\n", result->next);
+// 	return 0;
+// }
