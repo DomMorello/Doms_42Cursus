@@ -15,6 +15,7 @@ enum {MINUS, ZERO};
 typedef struct	s_data
 {
 	char		*copy;
+	char		*print;
 	int			flag[2];
 	int			width;
 	int			precision;
