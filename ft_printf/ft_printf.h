@@ -6,6 +6,10 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+# define TRUE 1
+# define FALSE 0
+# define ERROR -1
+
 enum {MINUS, ZERO};
 
 typedef struct	s_data
