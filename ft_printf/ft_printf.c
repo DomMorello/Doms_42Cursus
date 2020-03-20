@@ -117,8 +117,30 @@ void	get_len(t_data *data)
 		data->len += data->width;
 }
 
+/* 프린트 하는 과정은 똑같은 구조로 데이터를 다 넣고 예외를 처리한 이후에 예외가 없으면 진행 */
+// void	print_c(t_data *data, char ret)
+// {
+// 	if (data->flag[MINUS] == TRUE)
+// 	{
+// 		write(1, &ret, 1);
+// 		while((((data->width)--) - 1) > 0)
+// 			write(1, " ", 1);
+// 	}
+// 	else
+// 	{
+// 		while ((((data->width)--) - 1) > 0)
+// 			write(1, " ", 1);
+// 		write(1, &ret, 1);
+// 	}
+// }
+
 int		exception_c(t_data *data, const char *format)
 {
+	char ret;
+	int idx;
+
+	idx = 0;
+	get_len(data);
 	if (data->flag[ZERO] == TRUE)
 		return (ERROR);	
 	while (*format)
@@ -134,63 +156,27 @@ int		exception_c(t_data *data, const char *format)
 	return (TRUE);
 }
 
-void	print_c(t_data *data)
-{
-	char ret;
-
-	ret = va_arg(data->ap, int);
-	while (*(data->print))
-	{
-		if (*(data->print) == '%')
-		{
-			if (data->flag[MINUS] == TRUE)
-			{
-				write(1, &ret, 1);
-				while((((data->width)--) - 1) > 0)
-					write(1, " ", 1);
-			}
-			else
-			{
-				while ((((data->width)--) - 1) > 0)
-					write(1, " ", 1);
-				write(1, &ret, 1);
-			}
-			data->print += data->i;
-		}
-		else
-		{
-			write(1, &*(data->print), 1);
-			data->print++;
-		}
-	}
-}
-
-int		process_c(t_data *data, const char *format)
-{
-	get_len(data);
-	if (exception_c(data, format) == ERROR)
-		return (ERROR);
-	print_c(data);
-	// ret = va_arg(data->ap, int);
-	// if (data->flag[MINUS] == TRUE)
+	/* 프린트하는 부분은 같은 구조로 데이터 다 넣고 난 이후에 에러검사 이후에 실시할 예정 */
+	// while (*(data->print))
 	// {
-	// 	write(1, &ret, 1);
-	// 	while((((data->width)--) - 1) > 0)
-	// 		write(1, " ", 1);
+	// 	if (*(data->print) == '%'정
+	// 	{
+	// 		ret = va_arg(data->ap, int);
+	// 		print_c(data, ret);
+	// 		data->print += data->i;
+	// 		break ;
+	// 	}
+	// 	else
+	// 	{
+	// 		write(1, &*(data->print), 1);
+	// 		data->print++;
+	// 	}
 	// }
-	// else
-	// {
-	// 	while ((((data->width)--) - 1) > 0)
-	// 		write(1, " ", 1);
-	// 	write(1, &ret, 1);
-	// }
-	return (TRUE);
-}
 
-int		process_data(t_data *data, const char *format)
+int		exception_data(t_data *data, const char *format)
 {
 	if (data->type == 'c')
-		return (process_c(data, format));
+		return (exception_c(data, format));
 	// if (data->type == 's')
 	// 	return (process_s(data));
 	// if (data->type == 'p')
@@ -208,6 +194,20 @@ int		process_data(t_data *data, const char *format)
 	return (TRUE);
 }
 
+// void	print_data(t_data *data)
+// {
+// 	while (*(data->print))
+// 	{
+// 		if (*(data->print) == '%')
+// 		{
+// 			data_init(data);
+// 			data->print++;
+// 			input_data(data);
+// 		}
+// 	}
+
+// }
+
 int		parse_data(t_data *data, const char *format)
 {
 	while (*(data->copy))
@@ -216,14 +216,8 @@ int		parse_data(t_data *data, const char *format)
 		{
 			data_init(data);
 			data->copy++;
-			data->i++;
 			input_data(data);
-			// printf("flag minus %d\n", data->flag[MINUS]);
-			// printf("flag zero %d\n", data->flag[ZERO]);
-			// printf("width %d\n", data->width);
-			// printf("precision %d\n", data->precision);
-			// printf("type %c\n", data->type);
-			if (process_data(data, format) == ERROR)
+			if (exception_data(data, format) == ERROR)
 				return (ERROR);
 		}
 		else
@@ -232,6 +226,7 @@ int		parse_data(t_data *data, const char *format)
 			data->len++;
 		}
 	}
+	// print_data(data);
 	return (TRUE);
 }
 
@@ -257,9 +252,9 @@ int		ft_printf(const char *format, ...)
 
 int main()
 {
-	int a = ft_printf("ftt %-*.chello%1.cwow\n", 0, 'a', 'b');
-	int b = printf("lib %-*.chello%1cwow\n", 0, 'a', 'b');
-	printf("ft: %d\n", a);
-	printf("lib: %d\n", b);
+	int a = ft_printf("ftt %-*.chello%1c\n", 5, 'a', 'b');
+	// int b = printf("lib %-*.chello%-01c\n", 5, 'a', 'b');
+	// printf("ft: %d\n", a);
+	// printf("lib: %d\n", b);
 	return 0;
 }
