@@ -34,6 +34,13 @@ int ft_isdigit(int c)
 	return (0);
 }
 
+int		is_valid(char c)
+{
+	if (ft_isdigit(c) || is_flag(c) || c == '.' || c == '*')
+		return (TRUE);
+	return (FALSE);
+}
+
 void	input_flag(t_data *data, char **ptr)
 {
 	while ((**ptr) && is_flag((**ptr)))
@@ -130,12 +137,84 @@ int		exception_c(t_data *data, const char *format)
 	return (TRUE);
 }
 
+// int		exception_s(t_data *data, const char *format)
+// {
+// 	if (data->flag[MINUS] == TRUE)
+// 		return (ERROR);
+
+// }
+
+int		exception_all(const char *format)
+{
+	while (*format)
+	{
+		if (*format == '%')
+		{
+			format++;
+			while (*format != 'c')
+			{
+				if (*format == 'c')
+					break ;
+				if (!is_valid(*format))
+					return 0;
+				while (is_flag(*format))
+					format++;
+				if (*format == 'c')
+					break ;
+				if (!is_valid(*format))
+					return 0;
+				if (*format == '*')
+				{
+					format++;
+					if (*format == 'c')
+						break ;
+					if (ft_isdigit(*format) || !is_valid(*format))
+						return 0;
+				}
+				while (ft_isdigit(*format))
+					format++;
+				if (*format == 'c')
+					break ;
+				if (*format == '*' || !is_valid(*format))
+					return 0;
+				if (*format == '.')
+				{
+					format++;
+					if (*format == 'c')
+						break ;
+					if (*format == '.' || !is_valid(*format) || is_flag(*format))
+						return 0;
+					if (*format == '*')
+					{
+						format++;
+						if (*format == 'c')
+							break ;
+						if (ft_isdigit(*format) || !is_valid(*format))
+							return 0;
+					}
+				}
+				while (ft_isdigit(*format))
+					format++;
+				if (*format != 'c')
+					break ;
+			}
+		}
+		format++;
+	}
+	return 1;
+}
+
 int		exception_data(t_data *data, const char *format)
 {
+	if (!exception_all(format))
+	{
+		printf("ERROR!\n");
+		return (ERROR);
+	}
 	if (data->type == 'c')
 		return (exception_c(data, format));
 	// if (data->type == 's')
-	// 	return (process_s(data));
+	// 	return (exception_s(data, format));
 	// if (data->type == 'p')
 	// 	return (process_p(data));
 	// if (data->type == 'd' || data->type == 'i')
@@ -210,7 +289,6 @@ void	move_to_print(t_data *data)
 			data->len++;
 		}
 	}
-
 }
 
 int		parse_data(t_data *data, const char *format)
@@ -260,9 +338,13 @@ int		ft_printf(const char *format, ...)
 
 int main()
 {
-	int a = ft_printf("aaa%*cbbb%*cddd\n", 3, 'f', 3,'t');
-	int b = printf("aaa%*cbbb%*cddd\n", 3, 'f', 3,'t');
+	// char aa = 'f';
+	// char bb = 't';
+	// int a = ft_printf("aaa%*cbbb%-*cddd\n", 3, aa, 3, bb);
+	// int b = printf("aaa%*cbbb%-*cddd\n", 3, 'f', 3, 't');
+	int a = ft_printf();
+	// int b = printf("%5-c\n", 'a');
 	printf("ft: %d\n", a);
-	printf("lib: %d\n", b);
+	// printf("lib: %d\n", b);
 	return 0;
 }
