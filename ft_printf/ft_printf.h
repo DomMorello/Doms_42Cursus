@@ -21,6 +21,7 @@ typedef struct	s_data
 	int			precision;
 	char		type;
 	va_list		ap;
+	va_list		ap_copy;
 	int			i;
 	int			len;
 }				t_data;
