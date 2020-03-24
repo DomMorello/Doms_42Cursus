@@ -144,73 +144,116 @@ int		exception_c(t_data *data, const char *format)
 
 // }
 
-int		exception_all(const char *format)
+int		handle_exception1(char **format)
+{
+	while (!is_type(**format))
+	{
+		if (!is_valid(**format))
+			return (ERROR);
+		while (is_flag(**format))
+			(*format)++;
+		if (is_type(**format))
+			break ;
+		if (!is_valid(**format))
+			return (ERROR);
+		if (**format == '*')
+		{
+			(*format)++;
+			if (is_type(**format))
+				break ;
+			if (ft_isdigit(**format) || !is_valid(**format))
+				return (ERROR);
+		}
+		while (ft_isdigit(**format))
+			(*format)++;
+		break ;
+	}
+	return (TRUE);
+}
+
+int		handle_exception2(char **format)
+{
+	while (!is_type(**format))
+	{
+		if (is_flag(**format))
+			return (ERROR);
+		if (is_type(**format))
+			break ;
+		if (**format == '*' || !is_valid(**format))
+			return (ERROR);		
+		if (**format == '.')
+			(*format)++;
+		if (is_type(**format))
+			break ;
+		break ;
+	}
+	return (TRUE);
+}
+
+int handle_exception3(char **format)
+{
+	while (!is_type(**format))
+	{
+		if (**format == '.' || !is_valid(**format) || **format == '-')
+			return (ERROR);
+		if (**format == '*')
+		{
+			(*format)++;
+			if (is_type(**format))
+				break ;
+			else
+				return (ERROR);
+		}
+		else
+		{
+			while (ft_isdigit(**format))
+				(*format)++;
+			if (**format == '*' || is_flag(**format) || **format == '.')
+				return (ERROR);
+		}
+		break ;
+	}
+	return (TRUE);
+}
+
+int		handle_exception4(char **format)
+{
+	while (!is_type(**format))
+	{
+		while (ft_isdigit(**format))
+			(*format)++;
+		if (is_type(**format))
+			break ; 
+		break ;
+	}
+	return (TRUE);
+}
+
+int exception_all(char *format)
 {
 	while (*format)
 	{
 		if (*format == '%')
 		{
 			format++;
-			while (*format != 'c')
-			{
-				if (*format == 'c')
-					break ;
-				if (!is_valid(*format))
-					return 0;
-				while (is_flag(*format))
-					format++;
-				if (*format == 'c')
-					break ;
-				if (!is_valid(*format))
-					return 0;
-				if (*format == '*')
-				{
-					format++;
-					if (*format == 'c')
-						break ;
-					if (ft_isdigit(*format) || !is_valid(*format))
-						return 0;
-				}
-				while (ft_isdigit(*format))
-					format++;
-				if (*format == 'c')
-					break ;
-				if (*format == '*' || !is_valid(*format))
-					return 0;
-				if (*format == '.')
-				{
-					format++;
-					if (*format == 'c')
-						break ;
-					if (*format == '.' || !is_valid(*format) || is_flag(*format))
-						return 0;
-					if (*format == '*')
-					{
-						format++;
-						if (*format == 'c')
-							break ;
-						if (ft_isdigit(*format) || !is_valid(*format))
-							return 0;
-					}
-				}
-				while (ft_isdigit(*format))
-					format++;
-				if (*format != 'c')
-					break ;
-			}
+			if (handle_exception1(&format) == ERROR)
+				return (ERROR);
+			if (handle_exception2(&format) == ERROR)
+				return (ERROR);
+			if (handle_exception3(&format) == ERROR)
+				return (ERROR);
+			if (handle_exception4(&format) == ERROR)
+				return (ERROR);
 		}
 		format++;
-	}
-	return 1;
+	}	
+	return (TRUE);
 }
 
 int		exception_data(t_data *data, const char *format)
 {
-	if (!exception_all(format))
-	{
-		printf("ERROR!\n");
+	if (exception_all((char *)format) == ERROR)
 		return (ERROR);
-	}
 	if (data->type == 'c')
 		return (exception_c(data, format));
 	// if (data->type == 's')
@@ -342,7 +385,7 @@ int main()
 	// char bb = 't';
 	// int a = ft_printf("aaa%*cbbb%-*cddd\n", 3, aa, 3, bb);
 	// int b = printf("aaa%*cbbb%-*cddd\n", 3, 'f', 3, 't');
-	int a = ft_printf();
+	int a = ft_printf("%-----3.4c\n", 'a');
 	// int b = printf("%5-c\n", 'a');
 	printf("ft: %d\n", a);
 	// printf("lib: %d\n", b);
