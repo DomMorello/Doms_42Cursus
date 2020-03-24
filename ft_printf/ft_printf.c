@@ -41,6 +41,28 @@ int		is_valid(char c)
 	return (FALSE);
 }
 
+size_t ft_strlen(const char *s)
+{
+	size_t len;
+
+	len = 0;
+	while (s[len])
+		len++;
+	return (len);
+}
+
+void ft_putstr_fd(char *s, int fd)
+{
+	int i;
+
+	i = 0;
+	while (s[i])
+	{
+		write(fd, &s[i], 1);
+		i++;
+	}
+}
+
 void	input_flag(t_data *data, char **ptr)
 {
 	while ((**ptr) && is_flag((**ptr)))
@@ -100,7 +122,7 @@ void	input_type(t_data *data, char **ptr)
 	(*ptr)++;
 }
 
-void	get_len(t_data *data)
+void	get_c_len(t_data *data)
 {
 	if (data->width == 0)
 		data->len += 1;
@@ -136,13 +158,6 @@ int		exception_c(t_data *data, const char *format)
 	}
 	return (TRUE);
 }
-
-// int		exception_s(t_data *data, const char *format)
-// {
-// 	if (data->flag[MINUS] == TRUE)
-// 		return (ERROR);
-
-// }
 
 int		handle_exception1(char **format)
 {
@@ -190,7 +205,7 @@ int		handle_exception2(char **format)
 	return (TRUE);
 }
 
-int handle_exception3(char **format)
+int 	handle_exception3(char **format)
 {
 	while (!is_type(**format))
 	{
@@ -229,7 +244,7 @@ int		handle_exception4(char **format)
 	return (TRUE);
 }
 
-int exception_all(char *format)
+int 	exception_all(char *format)
 {
 	while (*format)
 	{
@@ -256,8 +271,11 @@ int		exception_data(t_data *data, const char *format)
 		return (ERROR);
 	if (data->type == 'c')
 		return (exception_c(data, format));
-	// if (data->type == 's')
-	// 	return (exception_s(data, format));
+	if (data->type == 's')
+	{
+		if (data->flag[ZERO] == TRUE)
+			return (ERROR);
+	}
 	// if (data->type == 'p')
 	// 	return (process_p(data));
 	// if (data->type == 'd' || data->type == 'i')
@@ -293,12 +311,59 @@ void	print_c(t_data *data)
 	}
 }
 
+void 	print_from_head(t_data *data, char *s, int gap)
+{
+	while (data->precision--)
+	{
+		write(1, &*s, 1);
+		data->len++;
+		s++;
+	}
+	while (gap--)
+	{
+		write(1, " ", 1);	
+		data->len++;
+	}
+}
+
+void	print_from_tail(t_data *data, char *s, int gap)
+{
+	while (gap--)
+	{
+		write(1, " ", 1);
+		data->len++;
+	}
+	while (data->precision--)
+	{		
+		write(1, &*s, 1);
+		data->len++;
+		s++;
+	}
+}
+
+void	print_s(t_data *data)
+{
+	char *s;
+	int gap;
+
+	s = va_arg(data->ap_copy, char *);
+	if ((int)ft_strlen(s) < data->precision || data->precision == -1)
+		data->precision = ft_strlen(s);
+	if (data->precision < data->width)
+	{
+		gap = data->width - data->precision;
+		if (data->flag[MINUS] == TRUE)
+			print_from_head(data, s, gap);
+		else
+			print_from_tail(data, s, gap);
+	}
+}
 void	print_data(t_data *data)
 {
 	if (data->type == 'c')
 		print_c(data);
-	// if (data->type == 's')
-	// 	print_s(data);
+	if (data->type == 's')
+		print_s(data);
 	// if (data->type == 'p')
 	// 	print_p(data);
 	// if (data->type == 'd' || data->type == 'i')
@@ -313,6 +378,22 @@ void	print_data(t_data *data)
 	// 	print_perc(data);	
 }
 
+void	get_return_val(t_data *data)
+{
+	if (data->type == 'c')
+		get_c_len(data);
+	// if (data->type == 'p')
+	// 	get_p_len(data);
+	// if (data->type == 'd' || data->type == 'i')
+	// 	get_d_len(data);
+	// if (data->type == 'u')
+	// 	get_u_len(data);
+	// if (data->type == 'x' || data->type == 'X')
+	// 	get_x_len(data);
+	// if (data->type == '%')
+	// 	get_per_len(data);
+}
+
 void	move_to_print(t_data *data)
 {
 	while (*(data->print))
@@ -322,7 +403,7 @@ void	move_to_print(t_data *data)
 			data_init(data);
 			data->print++;
 			input_data(data, &data->print, &data->ap_copy);
-			get_len(data);
+			get_return_val(data);
 			print_data(data);
 		}
 		else
@@ -345,6 +426,11 @@ int		parse_data(t_data *data, const char *format)
 			input_data(data, &data->copy, &data->ap);
 			if (exception_data(data, format) == ERROR)
 				return (ERROR);
+			// printf("width: %d\n", data->width);
+			// printf("precision: %d\n", data->precision);
+			// printf("flag minus: %d\n", data->flag[MINUS]);
+			// printf("flag zero: %d\n", data->flag[ZERO]);
+			// printf("flag type: %c\n", data->type);
 		}
 		else
 			data->copy++;
@@ -381,13 +467,11 @@ int		ft_printf(const char *format, ...)
 
 int main()
 {
-	// char aa = 'f';
-	// char bb = 't';
-	// int a = ft_printf("aaa%*cbbb%-*cddd\n", 3, aa, 3, bb);
-	// int b = printf("aaa%*cbbb%-*cddd\n", 3, 'f', 3, 't');
-	int a = ft_printf("%-----3.4c\n", 'a');
-	// int b = printf("%5-c\n", 'a');
-	printf("ft: %d\n", a);
-	// printf("lib: %d\n", b);
+	char *s1 = "abcde";
+	char *s2 = "12345";
+	int a = ft_printf("hello %*s world %5.c wow\n", 10, s1, 'b');
+	int b = printf("hello %*s world %5.c wow\n", 10, s1, 'b');
+	printf("ft: %d lib: %d\n", a, b);
+	
 	return 0;
 }
