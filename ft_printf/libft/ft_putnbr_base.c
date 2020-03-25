@@ -1,43 +1,69 @@
 #include "libft.h"
 
-static void	print_num(unsigned long nbr, int base_len, char *base, int *cnt)
+static void	get_len(unsigned long nbr, int base_len, int *len)
 {
-	(*cnt)++;
-	if (nbr < 0)
-	{
-		write(1, "-", 1);
-		nbr *= (-1);
-	}
+	(*len)++;
 	if (nbr >= (unsigned long)base_len)
-		print_num(nbr / base_len, base_len, base, cnt);
-	write(1, &base[nbr % base_len], 1);
+		get_len(nbr / base_len, base_len, len);
 }
 
-int		ft_putnbr_base(unsigned long nbr, char *base)
+static char *save_str(unsigned long nbr, int base_len, char *base)
 {
-	int base_len;
+	unsigned long remainder;
+	unsigned long quotient;
+	int len;
+	char *ret;
+
+	len = 0;
+	get_len(nbr, base_len, &len);
+	if ((ret = (char *)malloc(sizeof(char) * len + 1)) == NULL)
+		return (NULL);
+	ret[len] = 0;
+	if (nbr == 0)
+		ret[0] = '0';
+	while (nbr != 0)
+	{
+		remainder = nbr % base_len;
+		quotient = nbr / base_len;
+		nbr = quotient;
+		ret[--len] = base[remainder];
+	}
+	return (ret);
+}
+
+static int	exception_base(int *base_len, char *base)
+{
 	int i;
 	int j;
-	int cnt;
 
-	cnt = 0;
-	base_len = 0;
-	while (base[base_len])
+	while (base[*base_len])
 	{
-		if (base[base_len] == '+' || base[base_len] == '-')
-			return (-1);
-		base_len++;
+		if (base[*base_len] == '+' || base[*base_len] == '-')
+			return (0);
+		(*base_len)++;
 	}
-	if (base_len < 2)
-		return (-1);
+	if (*base_len < 2)
+		return (0);
 	i = -1;
-	while (++i < base_len)
+	while (++i < *base_len)
 	{
 		j = i;
-		while (++j < base_len)
+		while (++j < *base_len)
 			if (base[i] == base[j])
-				return (-1);
+				return (0);
 	}
-	print_num(nbr, base_len, base, &cnt);
-	return (cnt);
+	return (1);
+}
+
+char		*ft_putnbr_base(unsigned long nbr, char *base)
+{
+	int base_len;
+	char *ret;
+
+	base_len = 0;
+	if (!exception_base(&base_len, base))
+		return (NULL);
+	if ((ret = save_str(nbr, base_len, base)) == NULL)
+		return (NULL);
+	return (ret);
 }
