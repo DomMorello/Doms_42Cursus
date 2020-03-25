@@ -86,6 +86,6 @@ t_list *ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 /*
 **	extra 
 */
-void	ft_putnbr_base(int nbr, char *base);
+int		ft_putnbr_base(unsigned long nbr, char *base);
 
 #endif

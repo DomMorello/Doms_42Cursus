@@ -1,18 +1,18 @@
 #include "libft.h"
 
-void	*ffunc(void *content)
-{
-	// printf("ffunc content: %p\n", content);
-	return content;
-}
+// void	*ffunc(void *content)
+// {
+// 	// printf("ffunc content: %p\n", content);
+// 	return content;
+// }
 
-void	dfunc(void *content)
-{
-	int a = 1;
-	// printf("dfunc content: %p\n", content);
-	if (content)
-		a += 1;
-}
+// void	dfunc(void *content)
+// {
+// 	int a = 1;
+// 	// printf("dfunc content: %p\n", content);
+// 	if (content)
+// 		a += 1;
+// }
 
 // t_list  *ft_lstnew(void *content)
 // {
@@ -69,54 +69,75 @@ void	dfunc(void *content)
 // 	}
 // }
 
-t_list *ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
-{
-	t_list *ret;
-	t_list *node;
+// t_list *ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
+// {
+// 	t_list *ret;
+// 	t_list *node;
 
-	ret = NULL;
-	if (lst && f && del)
+// 	ret = NULL;
+// 	if (lst && f && del)
+// 	{
+// 		while (lst)
+// 		{
+// 			if ((node = ft_lstnew(f(lst->content))) == NULL)
+// 			{
+// 				ft_lstclear(&ret, del);
+// 				return (NULL);
+// 			}
+// 			ft_lstadd_back(&ret, node);
+// 			lst = lst->next;
+// 		}
+// 	}
+// 	return (ret);
+// }
+
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
+{
+	t_list *new_lst;
+	t_list *elem;
+
+	if (!f || !del)
+		return (NULL);
+	new_lst = NULL;
+	while (lst)
 	{
-		while (lst)
+		if ((elem = ft_lstnew(f(lst->content))) == NULL)
 		{
-			if ((node = ft_lstnew(f(lst->content))) == NULL)
-			{
-				ft_lstclear(&ret, del);
-				return (NULL);
-			}
-			ft_lstadd_back(&ret, node);
-			lst = lst->next;
+			ft_lstclear(&new_lst, del);
+			return (NULL);
 		}
+		ft_lstadd_back(&new_lst, elem);
+		lst = lst->next;
 	}
-	return (ret);
+	return (new_lst);
 }
 
-int main()
-{
-	t_list one;
-	t_list two;
-	t_list three;
+// int main()
+// {
+// 	t_list one;
+// 	t_list two;
+// 	t_list three;
 
-	t_list *pone = &one;
-	t_list *ptwo = &two;
-	t_list *pthree = &three;
+// 	t_list *pone = &one;
+// 	t_list *ptwo = &two;
+// 	t_list *pthree = &three;
 
-	pone->next = ptwo;
-	ptwo->next = pthree;
-	pthree->next = NULL;
+// 	pone->next = ptwo;
+// 	ptwo->next = pthree;
+// 	pthree->next = NULL;
 
-	printf("pone: %p\n", pone);
-	printf("ptwo: %p\n", ptwo);
-	printf("pthree: %p\n", pthree);
-	void *(*f)(void *) = ffunc;
-	void (*del)(void *) = dfunc;
+// 	printf("pone: %p\n", pone);
+// 	printf("ptwo: %p\n", ptwo);
+// 	printf("pthree: %p\n", pthree);
+// 	void *(*f)(void *) = ffunc;
+// 	void (*del)(void *) = dfunc;
 
-	t_list *result = ft_lstmap(pone, f, del);
-	while (result) 
-	{
-		printf("result: %p\n", result);
-		result = result->next;
-	}
-	printf("result->next: %p\n", result->next);
-	return 0;
-}
+// 	t_list *result = ft_lstmap(pone, f, del);
+// 	while (result) 
+// 	{
+// 		printf("result: %p\n", result);
+// 		result = result->next;
+// 	}
+// 	printf("result->next: %p\n", result->next);
+// 	return 0;
+// }
