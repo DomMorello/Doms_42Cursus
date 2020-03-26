@@ -140,6 +140,7 @@ void		input_flag(t_data *data, char **ptr)
 		if (**ptr == '0')
 			data->flag[ZERO] = TRUE;
 		(*ptr)++;
+		data->i++;
 	}
 }
 
@@ -162,6 +163,7 @@ void		input_width(t_data *data, char **ptr, va_list *list)
 		else
 			tmp = **ptr - '0' + (tmp * 10);
 		(*ptr)++;
+		data->i++;
 	}
 	data->width = tmp;
 }
@@ -169,17 +171,22 @@ void		input_width(t_data *data, char **ptr, va_list *list)
 void		input_precision(t_data *data, char **ptr, va_list *list)
 {
 	int tmp;
+	int flag;
 
 	tmp = 0;
+	flag = 0;
 	while (**ptr && (ft_isdigit(**ptr) || **ptr == '*'))
 	{
+		flag = 1;
 		if (**ptr == '*')
 			tmp = va_arg(*list, int);
 		else
 			tmp = **ptr - '0' + (tmp * 10);
 		(*ptr)++;
+		data->i++;
 	}
-	data->precision = tmp;
+	if (flag == 1)
+		data->precision = tmp;
 }
 
 
@@ -188,6 +195,7 @@ void		input_type(t_data *data, char **ptr)
 	if (is_type(**ptr))
 		data->type = **ptr;
 	(*ptr)++;
+	data->i++;
 }
 
 void		get_c_len(t_data *data)
@@ -204,37 +212,11 @@ void		input_data(t_data *data, char **ptr, va_list *list)
 	input_width(data, ptr, list);
 	if (**ptr == '.')
 	{
-		if (data->type == 'd' || data->type == 'i')	//%u %x %X 도 확인해봐야한다.
-			data->precision = 0;
 		(*ptr)++;
+		data->i++;
 		input_precision(data, ptr, list);
 	}
 	input_type(data, ptr);
-}
-
-int			exception_cp(t_data *data, const char *format)
-{
-	if (data->flag[ZERO] == TRUE)
-		return (ERROR);	
-	while (*format)
-	{
-		if (*format == '%')
-		{
-			format++;
-			while (*format != data->type)
-			{
-				if (*format == '.')
-				{
-					format++;
-					if (ft_isdigit(*format))
-						return (ERROR);
-				}
-				format++;
-			}
-		}
-		format++;
-	}
-	return (TRUE);
 }
 
 int			handle_exception1(char **format)
@@ -343,36 +325,15 @@ int 		exception_all(char *format)
 	return (TRUE);
 }
 
-void		modify_data(t_data *data, const char *format)
-{
-	if (data->flag[ZERO] == TRUE)
-	{
-		while (*format)
-		{
-			if (*format == '%')
-			{
-				format++;
-				while (*format != data->type)
-				{
-					if (*format == '.')
-					{
-						data->flag[ZERO] = FALSE;
-						return ;
-					}
-					format++;
-				}
-			}
-			format++;
-		}
-	}
-}
-
 int			exception_data(t_data *data, const char *format)
 {
 	if (exception_all((char *)format) == ERROR)
 		return (ERROR);
 	if (data->type == 'c' || data->type == 'p')
-		return (exception_cp(data, format));
+	{
+		if (data->flag[ZERO] == TRUE || data->precision != -1)
+			return (ERROR);
+	}
 	if (data->type == 's')
 	{
 		if (data->flag[ZERO] == TRUE)
@@ -505,7 +466,7 @@ void		printp_body(t_data *data, char *convert, int len)
 	}	
 }
 
-void		print_p(t_data *data)
+int			print_p(t_data *data)
 {
 	unsigned long ret;
 	char *convert;
@@ -513,7 +474,8 @@ void		print_p(t_data *data)
 	int gap;
 
 	ret = va_arg(data->ap_copy, unsigned long);
-	convert = ft_putnbr_base(ret, "0123456789abcdef");
+	if ((convert = ft_putnbr_base(ret, "0123456789abcdef")) == NULL)
+		return (ERROR);
 	len = ft_strlen(convert);
 	if (data->width > len)
 	{
@@ -525,6 +487,8 @@ void		print_p(t_data *data)
 	}
 	else
 		printp_body(data, convert, len);
+	free(convert);
+	return (TRUE);
 }
 
 int			ft_get_digits(int nbr)
@@ -532,6 +496,8 @@ int			ft_get_digits(int nbr)
 	int cnt;
 	
 	cnt = 0;
+	if (nbr == 0)
+		return (1);
 	while (nbr != 0)
 	{
 		nbr = nbr / 10;
@@ -616,8 +582,10 @@ void		printd_body(t_data *data, int ret, int len)
 		}
 	}
 	if (ret != 0 || data->precision != 0)
+	{
 		ft_putnbrl_fd(ret, 1);
-	data->len += len;
+		data->len += len;
+	}
 }
 
 void		print_di(t_data *data)
@@ -647,7 +615,7 @@ void		print_di(t_data *data)
 	}
 }
 
-int			print_data(t_data *data, const char *format)
+int			print_data(t_data *data)
 {
 	if (data->type == 'c')
 	{
@@ -657,12 +625,12 @@ int			print_data(t_data *data, const char *format)
 	if (data->type == 's')
 		print_s(data);
 	if (data->type == 'p')
-		print_p(data);
-	if (data->type == 'd' || data->type == 'i')
 	{
-		modify_data(data, format);
-		print_di(data);
+		if (print_p(data) == ERROR)
+			return (ERROR);
 	}
+	if (data->type == 'd' || data->type == 'i')
+		print_di(data);
 	// if (data->type == 'u')
 	// 	print_u(data);
 	// if (data->type == 'x')
@@ -678,8 +646,6 @@ void		get_return_val(t_data *data)
 {
 	if (data->type == 'c')
 		get_c_len(data);
-	// if (data->type == 'd' || data->type == 'i')
-	// 	get_d_len(data);
 	// if (data->type == 'u')
 	// 	get_u_len(data);
 	// if (data->type == 'x' || data->type == 'X')
@@ -688,17 +654,76 @@ void		get_return_val(t_data *data)
 	// 	get_per_len(data);
 }
 
-int			move_to_print(t_data *data, const char *format)
+size_t ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
+	size_t src_len;
+	size_t i;
+
+	src_len = 0;
+	i = 0;
+	while (src[src_len])
+		src_len++;
+	if (dstsize == 0)
+		return (src_len);
+	while (src[i] && i < dstsize - 1)
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = 0;
+	return (src_len);
+}
+
+int			modify_ds_data(t_data *data, char *cpy)
+{
+	char *check;
+	int i;
+
+	i = 0;
+	if ((check = (char *)malloc(sizeof(char) * (data->i) + 2)) == NULL)
+		return (FALSE);
+	ft_strlcpy(check, cpy, (data->i + 2));
+	while (check[i])
+	{
+		if (check[i] == '.')
+		{
+			data->flag[ZERO] = FALSE;
+			i++;
+			if (check[i] == '0' || is_type(check[i]))
+				data->precision = 0;
+		}
+		i++;
+	}
+	free(check);
+	return (TRUE);
+}
+
+int			modify_data(t_data *data, char *cpy)
+{
+	if (data->type == 'd' || data->type == 's')
+	{
+		if (!modify_ds_data(data, cpy))
+			return (FALSE);
+	}
+	return (TRUE);
+}
+
+int			move_to_print(t_data *data)
+{
+	char *cpy;
+
 	while (*(data->print))
 	{
 		if (*(data->print) == '%')
 		{
+			cpy = data->print;
 			data_init(data);
 			data->print++;
 			input_data(data, &data->print, &data->ap_copy);
+			if (!modify_data(data, cpy))
+				return (ERROR);
 			get_return_val(data);
-			if (print_data(data, format) == ERROR)
+			if (print_data(data) == ERROR)
 				return (ERROR);
 		}
 		else
@@ -726,7 +751,7 @@ int			parse_data(t_data *data, const char *format)
 		else
 			data->copy++;
 	}
-	if (move_to_print(data, format) == ERROR)
+	if (move_to_print(data) == ERROR)
 		return (ERROR);
 	return (TRUE);
 }
@@ -759,19 +784,16 @@ int			ft_printf(const char *format, ...)
 
 int main()
 {
-	// int t = 3;
-	// char *s1 = "abcde";
+	int t = 3;
+	int g = 5;
+	int k = 0;
+	int j = 123;
+	char *s1 = "abcde";
 	// char *s2 = "12345";
-	// int a = ft_printf("hello %*s world %5c wow %.p fuck %dyo\n", 10, s1, 'b', &t, t);
-	// printf("ft: %d\n",a);
-	// int b = printf("hello %*s world %5c wow %.p fuck %dyo\n", 10, s1, 'b', &t, t);
-	// printf("lib: %d\n", b);
-
-	int a = 5;
-	int aa = ft_printf("%c %d\n", 'b', a);
-	int bb = printf("%c %d\n", 'b', a);
-	printf("ft: %d lib: %d\n", aa, bb);
-	/* %c 일 때 오류가 난다 아무래도 precision과 관계가 있는 것 같다. 잘 확인해보자. */
+	int a = ft_printf("hello %*.s world %5c wow %.p fuck %06d %.d %i yo\n", 10, s1, 'b', &t, g, k, j);
+	printf("ft: %d\n",a);
+	int b = printf("hello %*.s world %5c wow %.p fuck %06d %.d %i yo\n", 10, s1, 'b', &t, g, k, j);
+	printf("lib: %d\n", b);
 
 	return 0;
 }
