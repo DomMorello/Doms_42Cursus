@@ -1,7 +1,7 @@
 #include "ft_printf.h"
 #include <string.h>
 
-void	data_init(t_data *data)
+void		data_init(t_data *data)
 {
 	data->flag[MINUS] = FALSE;
 	data->flag[ZERO] = FALSE;
@@ -11,7 +11,75 @@ void	data_init(t_data *data)
 	data->i = 0;
 }
 
-int		is_type(char c)
+static void	get_len(unsigned long nbr, int base_len, int *len)
+{
+	(*len)++;
+	if (nbr >= (unsigned long)base_len)
+		get_len(nbr / base_len, base_len, len);
+}
+
+static char *save_str(unsigned long nbr, int base_len, char *base)
+{
+	unsigned long remainder;
+	unsigned long quotient;
+	int len;
+	char *ret;
+
+	len = 0;
+	get_len(nbr, base_len, &len);
+	if ((ret = (char *)malloc(sizeof(char) * len + 1)) == NULL)
+		return (NULL);
+	ret[len] = '\0';
+	if (nbr == 0)
+		ret[0] = '0';
+	while (nbr != 0)
+	{
+		remainder = nbr % base_len;
+		quotient = nbr / base_len;
+		nbr = quotient;
+		ret[--len] = base[remainder];
+	}
+	return (ret);
+}
+
+static int	exception_base(int *base_len, char *base)
+{
+	int i;
+	int j;
+
+	while (base[*base_len])
+	{
+		if (base[*base_len] == '+' || base[*base_len] == '-')
+			return (0);
+		(*base_len)++;
+	}
+	if (*base_len < 2)
+		return (0);
+	i = -1;
+	while (++i < *base_len)
+	{
+		j = i;
+		while (++j < *base_len)
+			if (base[i] == base[j])
+				return (0);
+	}
+	return (1);
+}
+
+char		*ft_putnbr_base(unsigned long nbr, char *base)
+{
+	int base_len;
+	char *ret;
+
+	base_len = 0;
+	if (!exception_base(&base_len, base))
+		return (NULL);
+	if ((ret = save_str(nbr, base_len, base)) == NULL)
+		return (NULL);
+	return (ret);
+}
+
+int			is_type(char c)
 {
 	if (c == 'c' || c == 's' || c == 'p' ||
 		c == 'd' || c == 'i' || c == 'u' ||
@@ -20,28 +88,28 @@ int		is_type(char c)
 	return (FALSE);
 }
 
-int is_flag(char c)
+int 		is_flag(char c)
 {
 	if (c == '-' || c == '0')
 		return (TRUE);
 	return (FALSE);
 }
 
-int ft_isdigit(int c)
+int 		ft_isdigit(int c)
 {
 	if (c >= '0' && c <= '9')
 		return (1);
 	return (0);
 }
 
-int		is_valid(char c)
+int			is_valid(char c)
 {
 	if (ft_isdigit(c) || is_flag(c) || c == '.' || c == '*')
 		return (TRUE);
 	return (FALSE);
 }
 
-size_t ft_strlen(const char *s)
+size_t 		ft_strlen(const char *s)
 {
 	size_t len;
 
@@ -51,7 +119,7 @@ size_t ft_strlen(const char *s)
 	return (len);
 }
 
-void ft_putstr_fd(char *s, int fd)
+void 		ft_putstr_fd(char *s, int fd)
 {
 	int i;
 
@@ -63,7 +131,7 @@ void ft_putstr_fd(char *s, int fd)
 	}
 }
 
-void	input_flag(t_data *data, char **ptr)
+void		input_flag(t_data *data, char **ptr)
 {
 	while ((**ptr) && is_flag((**ptr)))
 	{
@@ -75,7 +143,7 @@ void	input_flag(t_data *data, char **ptr)
 	}
 }
 
-void	input_width(t_data *data, char **ptr, va_list *list)
+void		input_width(t_data *data, char **ptr, va_list *list)
 {
 	int tmp;
 
@@ -98,7 +166,7 @@ void	input_width(t_data *data, char **ptr, va_list *list)
 	data->width = tmp;
 }
 
-void	input_precision(t_data *data, char **ptr, va_list *list)
+void		input_precision(t_data *data, char **ptr, va_list *list)
 {
 	int tmp;
 
@@ -115,14 +183,14 @@ void	input_precision(t_data *data, char **ptr, va_list *list)
 }
 
 
-void	input_type(t_data *data, char **ptr)
+void		input_type(t_data *data, char **ptr)
 {
 	if (is_type(**ptr))
 		data->type = **ptr;
 	(*ptr)++;
 }
 
-void	get_c_len(t_data *data)
+void		get_c_len(t_data *data)
 {
 	if (data->width == 0)
 		data->len += 1;
@@ -130,36 +198,46 @@ void	get_c_len(t_data *data)
 		data->len += data->width;
 }
 
-void	input_data(t_data *data, char **ptr, va_list *list)
+void		input_data(t_data *data, char **ptr, va_list *list)
 {
 	input_flag(data, ptr);
 	input_width(data, ptr, list);
 	if (**ptr == '.')
 	{
+		if (data->type == 'd' || data->type == 'i')	//%u %x %X 도 확인해봐야한다.
+			data->precision = 0;
 		(*ptr)++;
 		input_precision(data, ptr, list);
 	}
 	input_type(data, ptr);
 }
 
-int		exception_c(t_data *data, const char *format)
+int			exception_cp(t_data *data, const char *format)
 {
 	if (data->flag[ZERO] == TRUE)
 		return (ERROR);	
 	while (*format)
 	{
-		if (*format == '.')
+		if (*format == '%')
 		{
 			format++;
-			if (ft_isdigit(*format))
-				return (ERROR);
+			while (*format != data->type)
+			{
+				if (*format == '.')
+				{
+					format++;
+					if (ft_isdigit(*format))
+						return (ERROR);
+				}
+				format++;
+			}
 		}
 		format++;
 	}
 	return (TRUE);
 }
 
-int		handle_exception1(char **format)
+int			handle_exception1(char **format)
 {
 	while (!is_type(**format))
 	{
@@ -186,7 +264,7 @@ int		handle_exception1(char **format)
 	return (TRUE);
 }
 
-int		handle_exception2(char **format)
+int			handle_exception2(char **format)
 {
 	while (!is_type(**format))
 	{
@@ -205,7 +283,7 @@ int		handle_exception2(char **format)
 	return (TRUE);
 }
 
-int 	handle_exception3(char **format)
+int 		handle_exception3(char **format)
 {
 	while (!is_type(**format))
 	{
@@ -231,7 +309,7 @@ int 	handle_exception3(char **format)
 	return (TRUE);
 }
 
-int		handle_exception4(char **format)
+int			handle_exception4(char **format)
 {
 	while (!is_type(**format))
 	{
@@ -244,7 +322,7 @@ int		handle_exception4(char **format)
 	return (TRUE);
 }
 
-int 	exception_all(char *format)
+int 		exception_all(char *format)
 {
 	while (*format)
 	{
@@ -265,38 +343,59 @@ int 	exception_all(char *format)
 	return (TRUE);
 }
 
-int		exception_data(t_data *data, const char *format)
+void		modify_data(t_data *data, const char *format)
+{
+	if (data->flag[ZERO] == TRUE)
+	{
+		while (*format)
+		{
+			if (*format == '%')
+			{
+				format++;
+				while (*format != data->type)
+				{
+					if (*format == '.')
+					{
+						data->flag[ZERO] = FALSE;
+						return ;
+					}
+					format++;
+				}
+			}
+			format++;
+		}
+	}
+}
+
+int			exception_data(t_data *data, const char *format)
 {
 	if (exception_all((char *)format) == ERROR)
 		return (ERROR);
-	if (data->type == 'c')
-		return (exception_c(data, format));
+	if (data->type == 'c' || data->type == 'p')
+		return (exception_cp(data, format));
 	if (data->type == 's')
 	{
 		if (data->flag[ZERO] == TRUE)
 			return (ERROR);
 	}
-	// if (data->type == 'p')
-	// 	return (process_p(data));
-	// if (data->type == 'd' || data->type == 'i')
-	// 	return (process_di(data));
-	// if (data->type == 'u')
-	// 	return (process_u(data));
-	// if (data->type == 'x')
-	// 	return (process_x(data));
-	// if (data->type == 'X')
-	// 	return (process_X(data));
+	if (data->type == 'd' || data->type == 'i' || data->type == 'u'
+		|| data->type == 'x' || data->type == 'X')
+	{
+		if (data->flag[MINUS] == TRUE && data->flag[ZERO] == TRUE)
+			return (ERROR);
+	}
 	// if (data->type == '%')
 	// 	return (process_perc(data));
 	return (TRUE);
 }
 
-void	print_c(t_data *data)
+int			print_c(t_data *data)
 {
 	char ret;
 
 	ret = '\0';
-	ret = va_arg(data->ap_copy, int);
+	if ((ret = va_arg(data->ap_copy, int)) < 0)
+		return (ERROR);
 	if (data->flag[MINUS] == TRUE)
 	{
 		write(1, &ret, 1);
@@ -309,9 +408,10 @@ void	print_c(t_data *data)
 			write(1, " ", 1);
 		write(1, &ret, 1);
 	}
+	return (TRUE);
 }
 
-void 	print_from_head(t_data *data, char *s, int gap)
+void 		prints_from_head(t_data *data, char *s, int gap)
 {
 	while (data->precision--)
 	{
@@ -326,7 +426,7 @@ void 	print_from_head(t_data *data, char *s, int gap)
 	}
 }
 
-void	print_from_tail(t_data *data, char *s, int gap)
+void		prints_from_tail(t_data *data, char *s, int gap)
 {
 	while (gap--)
 	{
@@ -341,33 +441,228 @@ void	print_from_tail(t_data *data, char *s, int gap)
 	}
 }
 
-void	print_s(t_data *data)
+void		print_s(t_data *data)
 {
 	char *s;
 	int gap;
 
-	s = va_arg(data->ap_copy, char *);
+	gap = 0;
+	if (!(s = va_arg(data->ap_copy, char *)))
+		s = "(null)";
 	if ((int)ft_strlen(s) < data->precision || data->precision == -1)
 		data->precision = ft_strlen(s);
 	if (data->precision < data->width)
-	{
 		gap = data->width - data->precision;
-		if (data->flag[MINUS] == TRUE)
-			print_from_head(data, s, gap);
-		else
-			print_from_tail(data, s, gap);
+	if (data->flag[MINUS] == TRUE)
+		prints_from_head(data, s, gap);
+	else
+		prints_from_tail(data, s, gap);
+}
+
+void		printp_from_haed(t_data *data, char *convert, int gap, int len)
+{
+	write(1, "0x", 2);
+	data->len += 2;
+	while (len--)
+	{
+		write(1, &*convert, 1);
+		convert++;
+		data->len++;
+	}
+	while (gap--)
+	{
+		write(1, " ", 1);
+		data->len++;
+	}	
+}
+
+void		printp_from_tail(t_data *data, char *convert, int gap, int len)
+{
+	while (gap--)
+	{
+		write(1, " ", 1);
+		data->len++;
+	}
+	write(1, "0x", 2);
+	data->len += 2;
+	while (len--)
+	{
+		write(1, &*convert, 1);
+		convert++;
+		data->len++;
 	}
 }
-void	print_data(t_data *data)
+
+void		printp_body(t_data *data, char *convert, int len)
+{
+	write(1, "0x", 2);
+	data->len += 2;
+	while (len--)
+	{
+		write(1, &*convert, 1);
+		convert++;
+		data->len++;
+	}	
+}
+
+void		print_p(t_data *data)
+{
+	unsigned long ret;
+	char *convert;
+	int len;
+	int gap;
+
+	ret = va_arg(data->ap_copy, unsigned long);
+	convert = ft_putnbr_base(ret, "0123456789abcdef");
+	len = ft_strlen(convert);
+	if (data->width > len)
+	{
+		gap = data->width - len - 2;
+		if (data->flag[MINUS] == TRUE)
+			printp_from_haed(data, convert, gap, len);
+		else
+			printp_from_tail(data, convert, gap, len);
+	}
+	else
+		printp_body(data, convert, len);
+}
+
+int			ft_get_digits(int nbr)
+{
+	int cnt;
+	
+	cnt = 0;
+	while (nbr != 0)
+	{
+		nbr = nbr / 10;
+		cnt++;
+	}
+	return (cnt);
+}
+
+void 		ft_putnbrl_fd(long long n, int fd)
+{
+	char tmp;
+	long long num;
+
+	if (n < 0)
+	{
+		write(fd, "-", 1);
+		num = (long long)n * (-1);		
+	}
+	if (n >= 0)
+		num = (long long)n;
+	if (num > 9)
+		ft_putnbrl_fd(num / 10, fd);
+	tmp = (num % 10) + '0';
+	write(fd, &tmp, 1);
+}
+
+void		printd_gap(t_data *data, int len)
+{
+	int gap;
+
+	gap = 0;
+	if (data->precision > len)
+	{
+		if (data->width > data->precision)
+			gap = data->width - data->precision;
+	}
+	else
+	{
+		if (data->width > len)
+			gap = data->width - len;
+	}
+	while (gap--)
+	{
+		write(1, " ", 1);
+		data->len++;
+	}
+}
+
+void		printd_zero(t_data *data, int len)
+{
+	int gap;
+
+	gap = 0;
+	if (data->width > len)
+		gap = data->width - len;
+	while (gap--)
+	{
+		write(1, "0", 1);
+		data->len++;
+	}
+}
+
+void		printd_body(t_data *data, int ret, int len)
+{
+	int gap;
+	long long tmp;
+
+	if (data->precision > len)
+	{
+		gap = data->precision - len;
+		tmp = (long long)ret;
+		if (tmp < 0)
+		{
+			write(1, "-", 1);
+			data->len++;
+			tmp *= (-1);
+		}
+		while (gap--)
+		{
+			write(1, "0", 1);
+			data->len++;
+		}
+	}
+	if (ret != 0 || data->precision != 0)
+		ft_putnbrl_fd(ret, 1);
+	data->len += len;
+}
+
+void		print_di(t_data *data)
+{
+	int ret;
+	int len;
+
+	ret = va_arg(data->ap_copy, int);
+	len = ft_get_digits(ret);
+	if (data->flag[MINUS] == TRUE)
+	{
+		printd_body(data, ret, len);
+		printd_gap(data, len);
+	}
+	else
+	{
+		if (data->flag[ZERO] == TRUE)
+		{
+			printd_zero(data, len);
+			printd_body(data, ret, len);
+		}
+		else
+		{
+			printd_gap(data, len);
+			printd_body(data, ret, len);
+		}
+	}
+}
+
+int			print_data(t_data *data, const char *format)
 {
 	if (data->type == 'c')
-		print_c(data);
+	{
+		if (print_c(data) == ERROR)
+			return (ERROR);
+	}
 	if (data->type == 's')
 		print_s(data);
-	// if (data->type == 'p')
-	// 	print_p(data);
-	// if (data->type == 'd' || data->type == 'i')
-	// 	print_di(data);
+	if (data->type == 'p')
+		print_p(data);
+	if (data->type == 'd' || data->type == 'i')
+	{
+		modify_data(data, format);
+		print_di(data);
+	}
 	// if (data->type == 'u')
 	// 	print_u(data);
 	// if (data->type == 'x')
@@ -376,14 +671,13 @@ void	print_data(t_data *data)
 	// 	print_X(data);
 	// if (data->type == '%')
 	// 	print_perc(data);	
+	return (TRUE);
 }
 
-void	get_return_val(t_data *data)
+void		get_return_val(t_data *data)
 {
 	if (data->type == 'c')
 		get_c_len(data);
-	// if (data->type == 'p')
-	// 	get_p_len(data);
 	// if (data->type == 'd' || data->type == 'i')
 	// 	get_d_len(data);
 	// if (data->type == 'u')
@@ -394,7 +688,7 @@ void	get_return_val(t_data *data)
 	// 	get_per_len(data);
 }
 
-void	move_to_print(t_data *data)
+int			move_to_print(t_data *data, const char *format)
 {
 	while (*(data->print))
 	{
@@ -404,7 +698,8 @@ void	move_to_print(t_data *data)
 			data->print++;
 			input_data(data, &data->print, &data->ap_copy);
 			get_return_val(data);
-			print_data(data);
+			if (print_data(data, format) == ERROR)
+				return (ERROR);
 		}
 		else
 		{
@@ -413,9 +708,10 @@ void	move_to_print(t_data *data)
 			data->len++;
 		}
 	}
+	return (TRUE);
 }
 
-int		parse_data(t_data *data, const char *format)
+int			parse_data(t_data *data, const char *format)
 {
 	while (*(data->copy))
 	{
@@ -426,20 +722,16 @@ int		parse_data(t_data *data, const char *format)
 			input_data(data, &data->copy, &data->ap);
 			if (exception_data(data, format) == ERROR)
 				return (ERROR);
-			// printf("width: %d\n", data->width);
-			// printf("precision: %d\n", data->precision);
-			// printf("flag minus: %d\n", data->flag[MINUS]);
-			// printf("flag zero: %d\n", data->flag[ZERO]);
-			// printf("flag type: %c\n", data->type);
 		}
 		else
 			data->copy++;
 	}
-	move_to_print(data);
+	if (move_to_print(data, format) == ERROR)
+		return (ERROR);
 	return (TRUE);
 }
 
-int		ft_printf(const char *format, ...)
+int			ft_printf(const char *format, ...)
 {
 	t_data	*data;
 
@@ -467,11 +759,19 @@ int		ft_printf(const char *format, ...)
 
 int main()
 {
-	char *s1 = "abcde";
-	char *s2 = "12345";
-	int a = ft_printf("hello %*s world %5.c wow\n", 10, s1, 'b');
-	int b = printf("hello %*s world %5.c wow\n", 10, s1, 'b');
-	printf("ft: %d lib: %d\n", a, b);
-	
+	// int t = 3;
+	// char *s1 = "abcde";
+	// char *s2 = "12345";
+	// int a = ft_printf("hello %*s world %5c wow %.p fuck %dyo\n", 10, s1, 'b', &t, t);
+	// printf("ft: %d\n",a);
+	// int b = printf("hello %*s world %5c wow %.p fuck %dyo\n", 10, s1, 'b', &t, t);
+	// printf("lib: %d\n", b);
+
+	int a = 5;
+	int aa = ft_printf("%c %d\n", 'b', a);
+	int bb = printf("%c %d\n", 'b', a);
+	printf("ft: %d lib: %d\n", aa, bb);
+	/* %c 일 때 오류가 난다 아무래도 precision과 관계가 있는 것 같다. 잘 확인해보자. */
+
 	return 0;
 }

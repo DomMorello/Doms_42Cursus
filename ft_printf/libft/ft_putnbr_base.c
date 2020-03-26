@@ -18,7 +18,7 @@ static char *save_str(unsigned long nbr, int base_len, char *base)
 	get_len(nbr, base_len, &len);
 	if ((ret = (char *)malloc(sizeof(char) * len + 1)) == NULL)
 		return (NULL);
-	ret[len] = 0;
+	ret[len] = '\0';
 	if (nbr == 0)
 		ret[0] = '0';
 	while (nbr != 0)
