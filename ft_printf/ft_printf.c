@@ -337,8 +337,6 @@ int			exception_data(t_data *data, const char *format)
 		if (data->flag[MINUS] == TRUE && data->flag[ZERO] == TRUE)
 			return (ERROR);
 	}
-	// if (data->type == '%')
-	// 	return (process_perc(data));
 	return (TRUE);
 }
 
@@ -684,6 +682,38 @@ int			print_x(t_data *data)
 	return (TRUE);
 }
 
+void		print_per_head(t_data *data)
+{
+	write(1, "%", 1);
+	data->len++;
+	while((((data->width)--) - 1) > 0)
+	{
+		write(1, " ", 1);
+		data->len++;
+	}
+}
+
+void		print_per(t_data *data)
+{
+	if (data->flag[MINUS] == TRUE)
+		print_per_head(data);
+	else
+	{
+		if (data->flag[ZERO] == TRUE)
+			printd_zero(data, 1);
+		else
+		{
+			while((((data->width)--) - 1) > 0)
+			{
+				write(1, " ", 1);
+				data->len++;
+			}				
+		}
+		write(1, "%", 1);
+		data->len++;
+	}
+}
+
 int			print_data(t_data *data)
 {
 	if (data->type == 'c')
@@ -705,12 +735,12 @@ int			print_data(t_data *data)
 		if (print_x(data) == ERROR)
 			return (ERROR);
 	}
-	// if (data->type == '%')
-	// 	print_perc(data);	
+	if (data->type == '%')
+		print_per(data);
 	return (TRUE);
 }
 
-size_t ft_strlcpy(char *dst, const char *src, size_t dstsize)
+size_t 		ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
 	size_t src_len;
 	size_t i;
@@ -761,6 +791,12 @@ int			modify_data(t_data *data, char *cpy)
 	{
 		if (!modify_ds_data(data, cpy))
 			return (FALSE);
+	}
+	if (data->type == '%')
+	{
+		data->precision = -1;
+		if (data->flag[MINUS] == TRUE && data->flag[ZERO] == TRUE)
+			data->flag[ZERO] = FALSE;
 	}
 	return (TRUE);
 }
@@ -847,15 +883,10 @@ int main()
 	unsigned int r = 132543532;
 	char *s1 = "abcde";
 	// char *s2 = "12345";
-	int a = ft_printf("hello %*.s world %5c wow %.p fuck %06d %.d %i %-10.6X yo\n", 10, s1, 'b', &t, g, k, j, r);
+	int a = ft_printf("hello %*.s world %5c wow %.p fuck %06d %.d %i %-10.6X %4%yo\n", 10, s1, 'b', &t, g, k, j, r);
 	printf("ft: %d\n",a);
-	int b = printf("hello %*.s world %5c wow %.p fuck %06d %.d %i %-10.6X yo\n", 10, s1, 'b', &t, g, k, j, r);
+	int b = printf("hello %*.s world %5c wow %.p fuck %06d %.d %i %-10.6X %4%yo\n", 10, s1, 'b', &t, g, k, j, r);
 	printf("lib: %d\n", b);
 
-	// int a = 123;
-	// unsigned int b = -1; //4294967295
-	// int c = ft_printf("%-11.9x\n", b);
-	// int d = printf("%-11.9x\n", b);
-	// printf("ft: %d lib: %d\n", c, d);
 	return 0;
 }
