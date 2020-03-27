@@ -198,14 +198,6 @@ void		input_type(t_data *data, char **ptr)
 	data->i++;
 }
 
-void		get_c_len(t_data *data)
-{
-	if (data->width == 0)
-		data->len += 1;
-	if (data->width > 0)
-		data->len += data->width;
-}
-
 void		input_data(t_data *data, char **ptr, va_list *list)
 {
 	input_flag(data, ptr);
@@ -354,20 +346,27 @@ int			print_c(t_data *data)
 {
 	char ret;
 
-	ret = '\0';
 	if ((ret = va_arg(data->ap_copy, int)) < 0)
 		return (ERROR);
 	if (data->flag[MINUS] == TRUE)
 	{
 		write(1, &ret, 1);
+		data->len++;
 		while((((data->width)--) - 1) > 0)
+		{
 			write(1, " ", 1);
+			data->len++;
+		}
 	}
 	else
 	{
 		while ((((data->width)--) - 1) > 0)
+		{
 			write(1, " ", 1);
+			data->len++;
+		}
 		write(1, &ret, 1);
+		data->len++;
 	}
 	return (TRUE);
 }
@@ -491,7 +490,7 @@ int			print_p(t_data *data)
 	return (TRUE);
 }
 
-int			ft_get_digits(int nbr)
+int			ft_get_digits(long long nbr)
 {
 	int cnt;
 	
@@ -560,6 +559,15 @@ void		printd_zero(t_data *data, int len)
 	}
 }
 
+void		printd_nbr(t_data *data, int ret, int len)
+{
+	if (data->type == 'u')
+		ft_putnbrl_fd((unsigned int)ret, 1);
+	else
+		ft_putnbrl_fd(ret, 1);
+	data->len += len;
+}
+
 void		printd_body(t_data *data, int ret, int len)
 {
 	int gap;
@@ -582,19 +590,21 @@ void		printd_body(t_data *data, int ret, int len)
 		}
 	}
 	if (ret != 0 || data->precision != 0)
-	{
-		ft_putnbrl_fd(ret, 1);
-		data->len += len;
-	}
+		printd_nbr(data, ret, len);
 }
 
-void		print_di(t_data *data)
+void		print_diu(t_data *data)
 {
 	int ret;
 	int len;
 
 	ret = va_arg(data->ap_copy, int);
-	len = ft_get_digits(ret);
+	if (data->type == 'd' || data->type == 'i')
+		len = ft_get_digits(ret);
+	else
+		len = ft_get_digits((unsigned int)ret);
+	if (ret == 0 && data->precision == 0)
+		len = 0;
 	if (data->flag[MINUS] == TRUE)
 	{
 		printd_body(data, ret, len);
@@ -603,16 +613,75 @@ void		print_di(t_data *data)
 	else
 	{
 		if (data->flag[ZERO] == TRUE)
-		{
 			printd_zero(data, len);
-			printd_body(data, ret, len);
-		}
 		else
-		{
 			printd_gap(data, len);
-			printd_body(data, ret, len);
+		printd_body(data, ret, len);
+	}
+}
+
+void		printx_body(t_data *data, unsigned int ret, char *convert, int len)
+{
+	int gap;
+
+	if (data->precision > len)
+	{
+		gap = data->precision - len;
+		while (gap--)
+		{
+			write(1, "0", 1);
+			data->len++;
 		}
 	}
+	if (ret != 0 || data->precision != 0)
+	{
+		while (*convert)
+		{
+			write(1, &*convert, 1);
+			convert++;
+			data->len++;
+		}
+	}
+}
+
+void 		print_x_all(t_data *data, unsigned int ret, char *convert, int len)
+{
+	if (data->flag[MINUS] == TRUE)
+	{
+		printx_body(data, ret, convert, len);
+		printd_gap(data, len);
+	}
+	else
+	{
+		if (data->flag[ZERO] == TRUE)
+			printd_zero(data, len);
+		else
+			printd_gap(data, len);
+		printx_body(data, ret, convert, len);
+	}
+}
+
+int			print_x(t_data *data)
+{
+	unsigned int ret;
+	char *convert;
+	int len;
+	int gap;
+	char *base;
+
+	ret = va_arg(data->ap_copy, unsigned int);
+	if (data->type == 'x')
+		base = "0123456789abcdef";
+	if (data->type == 'X')
+		base = "0123456789ABCDEF";
+	if ((convert = ft_putnbr_base(ret, base)) == NULL)
+		return (ERROR);
+	len = ft_strlen(convert);
+	if (ret == 0 && data->precision == 0)
+		len = 0;
+	print_x_all(data, ret, convert, len);
+	free(convert);
+	return (TRUE);
 }
 
 int			print_data(t_data *data)
@@ -629,29 +698,16 @@ int			print_data(t_data *data)
 		if (print_p(data) == ERROR)
 			return (ERROR);
 	}
-	if (data->type == 'd' || data->type == 'i')
-		print_di(data);
-	// if (data->type == 'u')
-	// 	print_u(data);
-	// if (data->type == 'x')
-	// 	print_x(data);
-	// if (data->type == 'X')
-	// 	print_X(data);
+	if (data->type == 'd' || data->type == 'i' || data->type == 'u')
+		print_diu(data);
+	if (data->type == 'x' || data->type == 'X')
+	{
+		if (print_x(data) == ERROR)
+			return (ERROR);
+	}
 	// if (data->type == '%')
 	// 	print_perc(data);	
 	return (TRUE);
-}
-
-void		get_return_val(t_data *data)
-{
-	if (data->type == 'c')
-		get_c_len(data);
-	// if (data->type == 'u')
-	// 	get_u_len(data);
-	// if (data->type == 'x' || data->type == 'X')
-	// 	get_x_len(data);
-	// if (data->type == '%')
-	// 	get_per_len(data);
 }
 
 size_t ft_strlcpy(char *dst, const char *src, size_t dstsize)
@@ -700,7 +756,8 @@ int			modify_ds_data(t_data *data, char *cpy)
 
 int			modify_data(t_data *data, char *cpy)
 {
-	if (data->type == 'd' || data->type == 's')
+	if (data->type == 'd' || data->type == 's' || data->type == 'u'
+		|| data->type == 'x' || data->type == 'X')
 	{
 		if (!modify_ds_data(data, cpy))
 			return (FALSE);
@@ -722,7 +779,6 @@ int			move_to_print(t_data *data)
 			input_data(data, &data->print, &data->ap_copy);
 			if (!modify_data(data, cpy))
 				return (ERROR);
-			get_return_val(data);
 			if (print_data(data) == ERROR)
 				return (ERROR);
 		}
@@ -788,12 +844,18 @@ int main()
 	int g = 5;
 	int k = 0;
 	int j = 123;
+	unsigned int r = 132543532;
 	char *s1 = "abcde";
 	// char *s2 = "12345";
-	int a = ft_printf("hello %*.s world %5c wow %.p fuck %06d %.d %i yo\n", 10, s1, 'b', &t, g, k, j);
+	int a = ft_printf("hello %*.s world %5c wow %.p fuck %06d %.d %i %-10.6X yo\n", 10, s1, 'b', &t, g, k, j, r);
 	printf("ft: %d\n",a);
-	int b = printf("hello %*.s world %5c wow %.p fuck %06d %.d %i yo\n", 10, s1, 'b', &t, g, k, j);
+	int b = printf("hello %*.s world %5c wow %.p fuck %06d %.d %i %-10.6X yo\n", 10, s1, 'b', &t, g, k, j, r);
 	printf("lib: %d\n", b);
 
+	// int a = 123;
+	// unsigned int b = -1; //4294967295
+	// int c = ft_printf("%-11.9x\n", b);
+	// int d = printf("%-11.9x\n", b);
+	// printf("ft: %d lib: %d\n", c, d);
 	return 0;
 }
