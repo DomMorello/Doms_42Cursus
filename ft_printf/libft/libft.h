@@ -87,7 +87,7 @@ t_list *ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 **	extra 
 */
 char	*ft_putnbr_base(unsigned long nbr, char *base);
-int		ft_get_digits(int nbr);
+int		ft_get_digits(long long nbr);
 void 	ft_putnbrl_fd(long long n, int fd);
 
 #endif

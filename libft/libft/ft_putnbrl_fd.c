@@ -13,7 +13,7 @@ void 		ft_putnbrl_fd(long long n, int fd)
 	if (n >= 0)
 		num = (long long)n;
 	if (num > 9)
-		ft_putnbr_fd(num / 10, fd);
+		ft_putnbrl_fd(num / 10, fd);
 	tmp = (num % 10) + '0';
 	write(fd, &tmp, 1);
 }

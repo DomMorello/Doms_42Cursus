@@ -1,6 +1,6 @@
 #include "libft.h"
 
-int			ft_get_digits(int nbr)
+int			ft_get_digits(long long nbr)
 {
 	int cnt;
 	
