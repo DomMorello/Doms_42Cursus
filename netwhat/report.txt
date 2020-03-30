@@ -1,0 +1,6 @@
+IP 주소란? (https://limkydev.tistory.com/167)<br>
+NetMask 란? (https://juner417.github.io/blog/network-101-ip-subnet/) <br>
+SubnetMast 설명 (https://limkydev.tistory.com/166) <br>
+IP와 subnet (https://www.joinc.co.kr/w/Site/Network_Programing/Documents/SubNetWorking)<br>
+서브넷과 서브넷마스크 (https://dany-it.tistory.com/102)<br>
+유니캐스트, 브로드캐스트, 멀티캐스트 (https://moomini.tistory.com/54)<br>
