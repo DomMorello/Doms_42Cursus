@@ -14,8 +14,10 @@ int			print_data(t_data *data)
 		if (print_p(data) == ERROR)
 			return (ERROR);
 	}
-	if (data->type == 'd' || data->type == 'i' || data->type == 'u')
-		print_diu(data);
+	if (data->type == 'd' || data->type == 'i')
+		print_di(data);
+	if (data->type == 'u')
+		print_u(data);
 	if (data->type == 'x' || data->type == 'X')
 	{
 		if (print_x(data) == ERROR)
@@ -53,7 +55,7 @@ int			modify_ds_data(t_data *data, char *cpy)
 int			modify_data(t_data *data, char *cpy)
 {
 	if (data->type == 'd' || data->type == 's' || data->type == 'u'
-		|| data->type == 'x' || data->type == 'X')
+		|| data->type == 'x' || data->type == 'X' || data->type == 'i')
 	{
 		if (!modify_ds_data(data, cpy))
 			return (FALSE);

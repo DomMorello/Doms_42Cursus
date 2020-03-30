@@ -29,14 +29,14 @@ void 		print_x_all(t_data *data, unsigned int ret, char *convert, int len)
 	if (data->flag[MINUS] == TRUE)
 	{
 		printx_body(data, ret, convert, len);
-		printd_gap(data, len);
+		printd_gap(data, ret, len);
 	}
 	else
 	{
 		if (data->flag[ZERO] == TRUE)
 			printd_zero(data, len);
 		else
-			printd_gap(data, len);
+			printd_gap(data, ret, len);
 		printx_body(data, ret, convert, len);
 	}
 }
@@ -46,7 +46,6 @@ int			print_x(t_data *data)
 	unsigned int ret;
 	char *convert;
 	int len;
-	int gap;
 	char *base;
 
 	ret = va_arg(data->ap_copy, unsigned int);
