@@ -27,6 +27,7 @@ typedef struct	s_data
 	int			len;
 }				t_data;
 
+/* this part must be deleted after making makefile */
 int			ft_get_digits(long long nbr);
 int ft_isdigit(int c);
 char		*ft_putnbr_base(unsigned long nbr, char *base);
