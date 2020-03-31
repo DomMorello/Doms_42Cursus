@@ -4,3 +4,12 @@ SubnetMast 설명 (https://limkydev.tistory.com/166) <br>
 IP와 subnet (https://www.joinc.co.kr/w/Site/Network_Programing/Documents/SubNetWorking)<br>
 서브넷과 서브넷마스크 (https://dany-it.tistory.com/102)<br>
 유니캐스트, 브로드캐스트, 멀티캐스트 (https://moomini.tistory.com/54)<br>
+TCP UDP (https://mangkyu.tistory.com/15)<br>
+TCP (https://medium.com/@bpeakcpeak/tcp-%EB%9D%BC%EB%8A%94%EA%B2%8C-%EB%8F%84%EB%8C%80%EC%B2%B4-%EB%AD%94%EA%B0%80%EC%9A%94-1%ED%8E%B8-3296f613ba25)<br>
+네트워크 레이어 (http://www.ktword.co.kr/abbr_view.php?nav=&m_temp1=439&id=747)<br>
+DHCP (https://ko.wikipedia.org/wiki/%EB%8F%99%EC%A0%81_%ED%98%B8%EC%8A%A4%ED%8A%B8_%EA%B5%AC%EC%84%B1_%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C)<br>
+DHCP Server (http://blog.naver.com/PostView.nhn?blogId=on21life&logNo=221385736760&from=search&redirect=Log&widgetTypeCall=true&directAccess=false)<br>
+DNS (https://ko.wikipedia.org/wiki/%EB%8F%84%EB%A9%94%EC%9D%B8_%EB%84%A4%EC%9E%84_%EC%8B%9C%EC%8A%A4%ED%85%9C)<br>
+Routing (http://www.ktword.co.kr/abbr_view.php?nav=&m_temp1=539&id=345)<br>
+Gateway(https://brownbears.tistory.com/195)<br>
+IP port(https://m.blog.naver.com/PostView.nhn?blogId=wind1237&logNo=140190025115&proxyReferer=https%3A%2F%2Fwww.google.com%2F)<br>
