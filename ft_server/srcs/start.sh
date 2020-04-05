@@ -23,8 +23,10 @@ wget https://wordpress.org/latest.tar.gz
 tar -xvf latest.tar.gz
 rm -rf latest.tar.gz
 mv wordpress /var/www/html/
-chown -R www-data:www-data /var/www/html/wordpress
 mv /tmp/wp-config.php /var/www/html/wordpress/
+
+# set owner
+chown -R www-data:www-data /var/www/*
 
 # set database
 mysql < /tmp/set.sql
@@ -40,7 +42,6 @@ echo "<?php phpinfo(); ?>" > /var/www/html/index.php
 wget https://files.phpmyadmin.net/phpMyAdmin/4.9.0.1/phpMyAdmin-4.9.0.1-all-languages.tar.gz
 tar -xvf phpMyAdmin-4.9.0.1-all-languages.tar.gz
 mv phpMyAdmin-4.9.0.1-all-languages /var/www/html/phpmyadmin
-chown -R www-data:www-data /var/www/html/phpmyadmin
 
 #start server
 service mysql restart
