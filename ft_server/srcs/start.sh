@@ -28,6 +28,10 @@ mv /tmp/wp-config.php /var/www/html/wordpress/
 # set owner
 chown -R www-data:www-data /var/www/*
 
+# config ssl
+mkdir ./etc/nginx/ssl
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/ssl/dom.key -out /etc/nginx/ssl/dom.crt -subj "/C=KR/ST=Seoul/L=Itaewon/O=42Seoul/OU=IT/CN=localhost"
+
 # set database
 mysql < /tmp/set.sql
 
