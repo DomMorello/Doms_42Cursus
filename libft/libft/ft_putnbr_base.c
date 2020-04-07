@@ -1,18 +1,30 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_putnbr_base.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/04/07 18:19:13 by donglee           #+#    #+#             */
+/*   Updated: 2020/04/07 18:21:06 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
 static void	get_len(unsigned long nbr, int base_len, int *len)
 {
 	(*len)++;
 	if (nbr >= (unsigned long)base_len)
-		get_len(nbr / base_len, base_len, len);
+		get_len(nbr / base_len, base_len, len)
 }
 
-static char *save_str(unsigned long nbr, int base_len, char *base)
+static char *save_str(unsigned long nbr, int base_len, char *basie)
 {
-	unsigned long remainder;
-	unsigned long quotient;
-	int len;
-	char *ret;
+	unsigned long	remainder;
+	unsigned long	quotient;
+	int				len;
+	char			*ret;
 
 	len = 0;
 	get_len(nbr, base_len, &len);
@@ -57,8 +69,8 @@ static int	exception_base(int *base_len, char *base)
 
 char		*ft_putnbr_base(unsigned long nbr, char *base)
 {
-	int base_len;
-	char *ret;
+	int		base_len;
+	char	*ret;
 
 	base_len = 0;
 	if (!exception_base(&base_len, base))

@@ -75,8 +75,8 @@ char *ft_strtrim(char const *s1, char const *set)
 
 int main()
 {
-	char *set = "";
-	char *s = "";
+	char *set = "\t \n";
+	char *s = "			";
 	char *str = ft_strtrim(s, set);
 	printf("result:: %s\n", str);
 	return 0;
