@@ -72,3 +72,12 @@ char *ft_strtrim(char const *s1, char const *set)
 	result[j] = 0;
 	return (result);
 }
+
+int main()
+{
+	char *set = "";
+	char *s = "";
+	char *str = ft_strtrim(s, set);
+	printf("result:: %s\n", str);
+	return 0;
+}

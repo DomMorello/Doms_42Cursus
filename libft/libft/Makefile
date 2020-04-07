@@ -16,6 +16,8 @@ NAME = libft.a
 
 all: $(NAME)
 
+bonus: $(NAME)
+
 $(NAME) : $(OBJS) libft.h
 	$(CC) $(CFLAGS) -c $(SRCS)
 	ar rcs $(NAME) $(OBJS)
