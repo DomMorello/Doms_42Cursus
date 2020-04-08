@@ -6,7 +6,7 @@
 /*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/07 18:19:13 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/07 18:21:06 by donglee          ###   ########.fr       */
+/*   Updated: 2020/04/08 21:08:24 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ static void	get_len(unsigned long nbr, int base_len, int *len)
 {
 	(*len)++;
 	if (nbr >= (unsigned long)base_len)
-		get_len(nbr / base_len, base_len, len)
+		get_len(nbr / base_len, base_len, len);
 }
 
-static char *save_str(unsigned long nbr, int base_len, char *basie)
+static char	*save_str(unsigned long nbr, int base_len, char *base)
 {
 	unsigned long	remainder;
 	unsigned long	quotient;
@@ -61,8 +61,10 @@ static int	exception_base(int *base_len, char *base)
 	{
 		j = i;
 		while (++j < *base_len)
+		{
 			if (base[i] == base[j])
 				return (0);
+		}
 	}
 	return (1);
 }

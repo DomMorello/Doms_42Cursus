@@ -6,7 +6,7 @@
 /*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/08 17:31:46 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/08 17:34:31 by donglee          ###   ########.fr       */
+/*   Updated: 2020/04/08 21:00:39 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	is_set(char const *set, char c)
 	return (0);
 }
 
-static int	get_fisrt_len(char const *s1, char const *set)
+static int	get_first_len(char const *s1, char const *set)
 {
 	int len;
 	int result;
@@ -70,7 +70,7 @@ char		*ft_strtrim(char const *s1, char const *set)
 
 	i = 0;
 	j = 0;
-	len1 = get_fisrt_len(s1, set);
+	len1 = get_first_len(s1, set);
 	len2 = get_second_len(s1, set);
 	if ((result = (char *)malloc(sizeof(char) * len2 + 1)) == 0)
 		return (NULL);
