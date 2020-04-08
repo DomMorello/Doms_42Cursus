@@ -1,12 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strnstr.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/04/08 17:30:26 by donglee           #+#    #+#             */
+/*   Updated: 2020/04/08 17:30:41 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
-char *ft_strnstr(const char *haystack, const char *needle, size_t len)
+char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 {
-	char *result;
-	size_t n_len;
-	size_t i;
-	size_t check;
-	size_t flag;
+	char	*result;
+	size_t	n_len;
+	size_t	i;
+	size_t	check;
+	size_t	flag;
 
 	result = (char *)haystack;
 	i = 0;

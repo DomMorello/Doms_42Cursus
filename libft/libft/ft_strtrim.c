@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strtrim.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/04/08 17:31:46 by donglee           #+#    #+#             */
+/*   Updated: 2020/04/08 17:34:31 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
-static int is_set(char const *set, char c)
+static int	is_set(char const *set, char c)
 {
 	int i;
 
@@ -14,7 +26,7 @@ static int is_set(char const *set, char c)
 	return (0);
 }
 
-static int get_fisrt_len(char const *s1, char const *set)
+static int	get_fisrt_len(char const *s1, char const *set)
 {
 	int len;
 	int result;
@@ -25,7 +37,7 @@ static int get_fisrt_len(char const *s1, char const *set)
 		len++;
 	while (s1[len - 1] && is_set(set, s1[len - 1]))
 		len--;
-	while(s1[len - 1] && !is_set(set, s1[len - 1]))
+	while (s1[len - 1] && !is_set(set, s1[len - 1]))
 	{
 		result++;
 		len--;
@@ -33,12 +45,13 @@ static int get_fisrt_len(char const *s1, char const *set)
 	return (len + result);
 }
 
-static int get_second_len(char const *s1, char const *set)
+static int	get_second_len(char const *s1, char const *set)
 {
-	int first_len = get_fisrt_len(s1, set);
+	int first_len;
 	int second_len;
 	int i;
 
+	first_len = get_first_len(s1, set);
 	i = 0;
 	second_len = 0;
 	while (s1[i] && is_set(set, s1[i]))
@@ -47,13 +60,13 @@ static int get_second_len(char const *s1, char const *set)
 	return (second_len);
 }
 
-char *ft_strtrim(char const *s1, char const *set)
+char		*ft_strtrim(char const *s1, char const *set)
 {
-	int i;
-	int j;
-	int len1;
-	int len2;
-	char *result;
+	int		i;
+	int		j;
+	int		len1;
+	int		len2;
+	char	*result;
 
 	i = 0;
 	j = 0;
@@ -71,13 +84,4 @@ char *ft_strtrim(char const *s1, char const *set)
 	}
 	result[j] = 0;
 	return (result);
-}
-
-int main()
-{
-	char *set = "\t \n";
-	char *s = "			";
-	char *str = ft_strtrim(s, set);
-	printf("result:: %s\n", str);
-	return 0;
 }
