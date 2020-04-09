@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   print_u.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/04/09 21:47:27 by donglee           #+#    #+#             */
+/*   Updated: 2020/04/09 21:48:33 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
-void		printu_body(t_data *data, unsigned int ret, int len)
+void	printu_body(t_data *data, unsigned int ret, int len)
 {
 	int gap;
 
@@ -17,10 +29,10 @@ void		printu_body(t_data *data, unsigned int ret, int len)
 		printd_nbr(data, ret, len);
 }
 
-void		print_u(t_data *data)
+void	print_u(t_data *data)
 {
-	unsigned int ret;
-	int len;
+	unsigned int	ret;
+	int				len;
 
 	ret = va_arg(data->ap_copy, unsigned int);
 	len = ft_get_digits((unsigned int)ret);

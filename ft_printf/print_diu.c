@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   print_diu.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/04/09 21:42:52 by donglee           #+#    #+#             */
+/*   Updated: 2020/04/09 21:43:29 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
-void		printd_gap(t_data *data, int len)
+void	printd_gap(t_data *data, int len)
 {
 	int gap;
 
@@ -22,7 +34,7 @@ void		printd_gap(t_data *data, int len)
 	}
 }
 
-void		printd_zero(t_data *data, int len)
+void	printd_zero(t_data *data, int len)
 {
 	int gap;
 
@@ -36,7 +48,7 @@ void		printd_zero(t_data *data, int len)
 	}
 }
 
-void		printd_nbr(t_data *data, int ret, int len)
+void	printd_nbr(t_data *data, int ret, int len)
 {
 	if (data->type == 'u')
 		ft_putnbrl_fd((unsigned int)ret, 1);
@@ -45,10 +57,10 @@ void		printd_nbr(t_data *data, int ret, int len)
 	data->len += len;
 }
 
-void		printd_body(t_data *data, int ret, int len)
+void	printd_body(t_data *data, int ret, int len)
 {
-	int gap;
-	long long tmp;
+	int			gap;
+	long long	tmp;
 
 	if (data->precision > len)
 	{
@@ -70,7 +82,7 @@ void		printd_body(t_data *data, int ret, int len)
 		printd_nbr(data, ret, len);
 }
 
-void		print_diu(t_data *data)
+void	print_diu(t_data *data)
 {
 	int ret;
 	int len;

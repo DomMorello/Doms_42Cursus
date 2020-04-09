@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_data.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/04/09 21:40:15 by donglee           #+#    #+#             */
+/*   Updated: 2020/04/09 21:40:54 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
-int			print_data(t_data *data)
+int	print_data(t_data *data)
 {
 	if (data->type == 'c')
 	{
@@ -28,10 +40,10 @@ int			print_data(t_data *data)
 	return (TRUE);
 }
 
-int			modify_ds_data(t_data *data, char *cpy)
+int	modify_ds_data(t_data *data, char *cpy)
 {
-	char *check;
-	int i;
+	char	*check;
+	int		i;
 
 	i = 0;
 	if ((check = (char *)malloc(sizeof(char) * (data->i) + 2)) == NULL)
@@ -52,7 +64,7 @@ int			modify_ds_data(t_data *data, char *cpy)
 	return (TRUE);
 }
 
-int			modify_data(t_data *data, char *cpy)
+int	modify_data(t_data *data, char *cpy)
 {
 	if (data->type == 'd' || data->type == 's' || data->type == 'u'
 		|| data->type == 'x' || data->type == 'X' || data->type == 'i')
@@ -69,7 +81,7 @@ int			modify_data(t_data *data, char *cpy)
 	return (TRUE);
 }
 
-int			move_to_print(t_data *data)
+int	move_to_print(t_data *data)
 {
 	char *cpy;
 
@@ -96,7 +108,7 @@ int			move_to_print(t_data *data)
 	return (TRUE);
 }
 
-int			parse_data(t_data *data, const char *format)
+int	parse_data(t_data *data, const char *format)
 {
 	while (*(data->copy))
 	{

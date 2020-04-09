@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   print_s.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/04/09 21:46:25 by donglee           #+#    #+#             */
+/*   Updated: 2020/04/09 21:47:16 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
-void 		prints_from_head(t_data *data, char *s, int gap)
+void	prints_from_head(t_data *data, char *s, int gap)
 {
 	while (data->precision--)
 	{
@@ -10,12 +22,12 @@ void 		prints_from_head(t_data *data, char *s, int gap)
 	}
 	while (gap--)
 	{
-		write(1, " ", 1);	
+		write(1, " ", 1);
 		data->len++;
 	}
 }
 
-void		prints_from_tail(t_data *data, char *s, int gap)
+void	prints_from_tail(t_data *data, char *s, int gap)
 {
 	while (gap--)
 	{
@@ -23,17 +35,17 @@ void		prints_from_tail(t_data *data, char *s, int gap)
 		data->len++;
 	}
 	while (data->precision--)
-	{		
+	{
 		write(1, &*s, 1);
 		data->len++;
 		s++;
 	}
 }
 
-void		print_s(t_data *data)
+void	print_s(t_data *data)
 {
-	char *s;
-	int gap;
+	char	*s;
+	int		gap;
 
 	gap = 0;
 	if (!(s = va_arg(data->ap_copy, char *)))

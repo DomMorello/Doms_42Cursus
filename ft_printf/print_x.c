@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   print_x.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/04/09 21:48:50 by donglee           #+#    #+#             */
+/*   Updated: 2020/04/09 21:49:27 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
-void		printx_body(t_data *data, unsigned int ret, char *convert, int len)
+void	printx_body(t_data *data, unsigned int ret, char *convert, int len)
 {
 	int gap;
 
@@ -24,7 +36,7 @@ void		printx_body(t_data *data, unsigned int ret, char *convert, int len)
 	}
 }
 
-void 		print_x_all(t_data *data, unsigned int ret, char *convert, int len)
+void	print_x_all(t_data *data, unsigned int ret, char *convert, int len)
 {
 	if (data->flag[MINUS] == TRUE)
 	{
@@ -41,12 +53,12 @@ void 		print_x_all(t_data *data, unsigned int ret, char *convert, int len)
 	}
 }
 
-int			print_x(t_data *data)
+int		print_x(t_data *data)
 {
-	unsigned int ret;
-	char *convert;
-	int len;
-	char *base;
+	unsigned int	ret;
+	char			*convert;
+	int				len;
+	char			*base;
 
 	ret = va_arg(data->ap_copy, unsigned int);
 	if (data->type == 'x')

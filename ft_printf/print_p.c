@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   print_p.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/04/09 21:43:46 by donglee           #+#    #+#             */
+/*   Updated: 2020/04/09 21:45:12 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
-void		printp_from_haed(t_data *data, char *convert, int gap, int len)
+void	printp_from_haed(t_data *data, char *convert, int gap, int len)
 {
 	write(1, "0x", 2);
 	data->len += 2;
@@ -14,10 +26,10 @@ void		printp_from_haed(t_data *data, char *convert, int gap, int len)
 	{
 		write(1, " ", 1);
 		data->len++;
-	}	
+	}
 }
 
-void		printp_from_tail(t_data *data, char *convert, int gap, int len)
+void	printp_from_tail(t_data *data, char *convert, int gap, int len)
 {
 	while (gap--)
 	{
@@ -34,7 +46,7 @@ void		printp_from_tail(t_data *data, char *convert, int gap, int len)
 	}
 }
 
-void		printp_body(t_data *data, char *convert, int len)
+void	printp_body(t_data *data, char *convert, int len)
 {
 	write(1, "0x", 2);
 	data->len += 2;
@@ -43,15 +55,15 @@ void		printp_body(t_data *data, char *convert, int len)
 		write(1, &*convert, 1);
 		convert++;
 		data->len++;
-	}	
+	}
 }
 
-int			print_p(t_data *data)
+int		print_p(t_data *data)
 {
-	unsigned long ret;
-	char *convert;
-	int len;
-	int gap;
+	unsigned long	ret;
+	char			*convert;
+	int				len;
+	int				gap;
 
 	ret = va_arg(data->ap_copy, unsigned long);
 	if ((convert = ft_putnbr_base(ret, "0123456789abcdef")) == NULL)

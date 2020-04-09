@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exception_data.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/04/09 21:36:50 by donglee           #+#    #+#             */
+/*   Updated: 2020/04/09 21:37:05 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
-int			exception_data(t_data *data, const char *format)
+int	exception_data(t_data *data, const char *format)
 {
 	if (exception_all((char *)format) == ERROR)
 		return (ERROR);

@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   input_data.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/04/09 21:39:02 by donglee           #+#    #+#             */
+/*   Updated: 2020/04/09 21:39:36 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
-void		input_flag(t_data *data, char **ptr)
+void	input_flag(t_data *data, char **ptr)
 {
 	while ((**ptr) && is_flag((**ptr)))
 	{
@@ -13,7 +25,7 @@ void		input_flag(t_data *data, char **ptr)
 	}
 }
 
-void		input_width(t_data *data, char **ptr, va_list *list)
+void	input_width(t_data *data, char **ptr, va_list *list)
 {
 	int tmp;
 
@@ -37,7 +49,7 @@ void		input_width(t_data *data, char **ptr, va_list *list)
 	data->width = tmp;
 }
 
-void		input_precision(t_data *data, char **ptr, va_list *list)
+void	input_precision(t_data *data, char **ptr, va_list *list)
 {
 	int tmp;
 	int flag;
@@ -58,7 +70,7 @@ void		input_precision(t_data *data, char **ptr, va_list *list)
 		data->precision = tmp;
 }
 
-void		input_type(t_data *data, char **ptr)
+void	input_type(t_data *data, char **ptr)
 {
 	if (is_type(**ptr))
 		data->type = **ptr;
@@ -66,7 +78,7 @@ void		input_type(t_data *data, char **ptr)
 	data->i++;
 }
 
-void		input_data(t_data *data, char **ptr, va_list *list)
+void	input_data(t_data *data, char **ptr, va_list *list)
 {
 	input_flag(data, ptr);
 	input_width(data, ptr, list);

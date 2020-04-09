@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exception_all.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/04/09 21:33:40 by donglee           #+#    #+#             */
+/*   Updated: 2020/04/09 21:36:41 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
-int			handle_exception1(char **format)
+int	handle_exception1(char **format)
 {
 	while (!is_type(**format))
 	{
@@ -27,7 +39,7 @@ int			handle_exception1(char **format)
 	return (TRUE);
 }
 
-int			handle_exception2(char **format)
+int	handle_exception2(char **format)
 {
 	while (!is_type(**format))
 	{
@@ -36,7 +48,7 @@ int			handle_exception2(char **format)
 		if (is_type(**format))
 			break ;
 		if (**format == '*' || !is_valid(**format))
-			return (ERROR);		
+			return (ERROR);
 		if (**format == '.')
 			(*format)++;
 		if (is_type(**format))
@@ -46,7 +58,7 @@ int			handle_exception2(char **format)
 	return (TRUE);
 }
 
-int 		handle_exception3(char **format)
+int	handle_exception3(char **format)
 {
 	while (!is_type(**format))
 	{
@@ -72,20 +84,20 @@ int 		handle_exception3(char **format)
 	return (TRUE);
 }
 
-int			handle_exception4(char **format)
+int	handle_exception4(char **format)
 {
 	while (!is_type(**format))
 	{
 		while (ft_isdigit(**format))
 			(*format)++;
 		if (is_type(**format))
-			break ; 
+			break ;
 		break ;
 	}
 	return (TRUE);
 }
 
-int 		exception_all(char *format)
+int	exception_all(char *format)
 {
 	while (*format)
 	{
@@ -102,6 +114,6 @@ int 		exception_all(char *format)
 				return (ERROR);
 		}
 		format++;
-	}	
+	}
 	return (TRUE);
 }
