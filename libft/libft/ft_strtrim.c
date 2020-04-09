@@ -6,7 +6,7 @@
 /*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/08 17:31:46 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/08 21:00:39 by donglee          ###   ########.fr       */
+/*   Updated: 2020/04/08 23:15:28 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,8 @@ char		*ft_strtrim(char const *s1, char const *set)
 	i = 0;
 	j = 0;
 	len1 = get_first_len(s1, set);
-	len2 = get_second_len(s1, set);
+	if ((len2 = get_second_len(s1, set)) < 0)
+		return (ft_strdup(""));
 	if ((result = (char *)malloc(sizeof(char) * len2 + 1)) == 0)
 		return (NULL);
 	while (s1[i] && is_set(set, s1[i]))
