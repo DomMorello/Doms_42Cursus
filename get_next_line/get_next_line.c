@@ -6,7 +6,7 @@
 /*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 15:34:00 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/09 20:24:37 by donglee          ###   ########.fr       */
+/*   Updated: 2020/04/09 20:38:29 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,11 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 	return (src_len);
 }
 
-*
-**	joins the BUFFER_SIZE stirng(buf) and string save(accumulated string)
-**	and free the previous save string. 
-*
+/*
+** joins the BUFFER_SIZE stirng(buf) and string save(accumulated string)
+** and free the previous save string.
+*/
+
 char	*ft_strjoindel(char *s1, char *s2)
 {
 	char	*ret;
@@ -59,10 +60,11 @@ char	*ft_strjoindel(char *s1, char *s2)
 	return (ret);
 }
 
-*
-**	when the program reads '\n', puts the string from the beginning to '\n'
-**	in the *line. And the left letters is put in the string save.
-*
+/*
+** when the program reads '\n', puts the string from the beginning to '\n'
+** in the *line. And the left letters is put in the string(save)
+*/
+
 int		is_newline(char **save, char **line)
 {
 	char	*found;
@@ -82,13 +84,14 @@ int		is_newline(char **save, char **line)
 	return (0);
 }
 
-*
-**	handles exceptions like when fd is less than 0, line is NULL
-**	BUFFER_SIZE is less than 1
-**	puts BUFFER_SIZE letters in the buf string and join it with the previous one
-**	until the function reads '\n'
-**	when it reaches eof, the function puts left string(save) in the *line.
-*
+/*
+** handles exceptions like when fd is less than 0, line is NULL
+** BUFFER_SIZE is less than 1
+** puts BUFFER_SIZE letters in the buf string and join it with the previous one
+** until the function reads '\n'
+** when it reaches eof, the function puts left string(save) in the *line.
+*/
+
 int		get_next_line(int fd, char **line)
 {
 	int			bytes_read;
