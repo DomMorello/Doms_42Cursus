@@ -40,12 +40,12 @@ typedef struct	s_data
 }				t_data;
 
 /* this part must be deleted after making makefile */
-int			ft_get_digits(long long nbr);
-int ft_isdigit(int c);
-char		*ft_putnbr_base(unsigned long nbr, char *base);
-void 		ft_putnbrl_fd(long long n, int fd);
-size_t ft_strlcpy(char *dst, const char *src, size_t dstsize);
-size_t ft_strlen(const char *s);
+// int			ft_get_digits(long long nbr);
+// int ft_isdigit(int c);
+// char		*ft_putnbr_base(unsigned long nbr, char *base);
+// void 		ft_putnbrl_fd(long long n, int fd);
+// size_t ft_strlcpy(char *dst, const char *src, size_t dstsize);
+// size_t ft_strlen(const char *s);
 
 
 void		data_init(t_data *data);
