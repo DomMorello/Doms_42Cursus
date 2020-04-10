@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/07 18:15:10 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/07 18:16:17 by donglee          ###   ########.fr       */
+/*   Updated: 2020/04/10 14:29:15 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	ft_memcmp(const void *s1, const void *s2, size_t n)
 	while (i < n)
 	{
 		if (*s1_str++ != *s2_str++)
-			return ((*(s1_str - 1)) > (*(s2_str - 1)) ? 1 : -1);
+			return ((*(s1_str - 1)) - (*(s2_str - 1)));
 		i++;
 	}
 	return (0);
