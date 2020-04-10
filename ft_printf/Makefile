@@ -13,7 +13,7 @@ NAME = libftprintf.a
 
 all : $(NAME)
 
-$(NAME) : $(OBJS) ft_printf.h ./libft/libft.h
+$(NAME) : $(OBJS) ft_printf.h
 	@make -C libft
 	cp libft/libft.a ./$(NAME)
 	$(CC) $(CFLAGS) -c $(SRCS)
