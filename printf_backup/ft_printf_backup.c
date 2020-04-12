@@ -321,7 +321,7 @@ int			exception_data(t_data *data, const char *format)
 	if (data->type == 'd' || data->type == 'i' || data->type == 'u'
 		|| data->type == 'x' || data->type == 'X')
 	{
-		if (data->flag[MINUS] == TRUE && data->flag[ZERO] == TRUE)
+		if (data->flag[MINUS] == TRUE && data->flag[ZERO] == TRUE)	//이 부분 수정해서 - 0 둘 다 오면 둘 중 하나 FALSE로 바꿔야함
 			return (ERROR);
 	}
 	return (TRUE);
