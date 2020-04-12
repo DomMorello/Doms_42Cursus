@@ -138,7 +138,6 @@ size_t ft_strlcpy(char *dst, const char *src, size_t dstsize)
 	return (src_len);
 }
 
-/* - 0 둘 다 올수 있다 ㅅㅂ. tester  원격에서 pull해야된다.  */
 int main()
 {
     int a = 3;
