@@ -6,11 +6,11 @@
 /*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 15:38:07 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/09 17:43:56 by donglee          ###   ########.fr       */
+/*   Updated: 2020/04/12 17:54:02 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 size_t	ft_strlen(const char *s)
 {

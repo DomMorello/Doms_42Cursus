@@ -6,11 +6,11 @@
 /*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 15:34:00 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/09 20:37:09 by donglee          ###   ########.fr       */
+/*   Updated: 2020/04/12 17:53:38 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
