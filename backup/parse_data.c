@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_data.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 21:40:15 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/12 21:12:55 by marvin           ###   ########.fr       */
+/*   Updated: 2020/04/09 21:40:54 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ int	print_data(t_data *data)
 	return (TRUE);
 }
 
-int			modify_ds_data(t_data *data, char *cpy)
+int	modify_ds_data(t_data *data, char *cpy)
 {
-	char *check;
-	int i;
+	char	*check;
+	int		i;
 
 	i = 0;
 	if ((check = (char *)malloc(sizeof(char) * (data->i) + 2)) == NULL)
@@ -53,8 +53,6 @@ int			modify_ds_data(t_data *data, char *cpy)
 	{
 		if (check[i] == '.')
 		{
-			if (data->flag[ZERO] == TRUE && data->precision < 0)
-				break;	//일단 pre가 음수면 0으로 치고 0플래그를 살려야 하기 때문에 이렇게 했다. 
 			data->flag[ZERO] = FALSE;
 			i++;
 			if (check[i] == '0' || is_type(check[i]))

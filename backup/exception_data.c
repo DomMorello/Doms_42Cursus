@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exception_data.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 21:36:50 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/12 21:12:00 by marvin           ###   ########.fr       */
+/*   Updated: 2020/04/09 21:37:05 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int			exception_data(t_data *data, const char *format)
+int	exception_data(t_data *data, const char *format)
 {
 	if (exception_all((char *)format) == ERROR)
 		return (ERROR);
@@ -30,8 +30,7 @@ int			exception_data(t_data *data, const char *format)
 		|| data->type == 'x' || data->type == 'X')
 	{
 		if (data->flag[MINUS] == TRUE && data->flag[ZERO] == TRUE)
-			data->flag[ZERO] = FALSE;
-			// return (ERROR);
+			return (ERROR);
 	}
 	return (TRUE);
 }

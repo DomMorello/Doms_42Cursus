@@ -321,8 +321,9 @@ int			exception_data(t_data *data, const char *format)
 	if (data->type == 'd' || data->type == 'i' || data->type == 'u'
 		|| data->type == 'x' || data->type == 'X')
 	{
-		if (data->flag[MINUS] == TRUE && data->flag[ZERO] == TRUE)	//이 부분 수정해서 - 0 둘 다 오면 둘 중 하나 FALSE로 바꿔야함
-			return (ERROR);
+		if (data->flag[MINUS] == TRUE && data->flag[ZERO] == TRUE)
+			data->flag[ZERO] = FALSE;
+			// return (ERROR);
 	}
 	return (TRUE);
 }
@@ -801,6 +802,8 @@ int			modify_ds_data(t_data *data, char *cpy)
 	{
 		if (check[i] == '.')
 		{
+			if (data->flag[ZERO] == TRUE && data->precision < 0)
+				break;	//일단 pre가 음수면 0으로 치고 0플래그를 살려야 하기 때문에 이렇게 했다. 
 			data->flag[ZERO] = FALSE;
 			i++;
 			if (check[i] == '0' || is_type(check[i]))
@@ -906,14 +909,12 @@ int main()
 {
 	//4,294,967,295
 	//9,223,372,036,854,775,807
-	// pcs
-	int a = 2147483647;
-	unsigned int b = -1;
-	// unsigned int c = 1234;
-	// char s[] = {'a','b','\n','1',' ','\t','\0'};
-
-	int aa = ft_printf("%*.*i\n",-11,16,-1000000000);
-	int bb = printf("%*.*i\n",-11,16,-1000000000);
-	printf("f %d l %d\n", aa, bb);
+	int a = 12;
+	int b = 6;
+	unsigned int c = 12345;
+	unsigned int d = 8;
+	int aa = ft_printf("f:%07.*d\n", -6, a);
+	int bb = printf("l:%07.*d\n", -6, a);
+	printf("return ft: %d lib: %d\n", aa, bb);
 	return 0;
 }
