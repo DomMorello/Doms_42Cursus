@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_itoa.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/04/07 18:03:40 by donglee           #+#    #+#             */
+/*   Updated: 2020/04/07 18:05:47 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
-static int get_digits(int n)
+static int	get_digits(int n)
 {
-	int len;
-	long long tmp;
+	int			len;
+	long long	tmp;
 
 	if (n < 0)
 		tmp = (long long)n * (-1);
@@ -18,7 +30,7 @@ static int get_digits(int n)
 	return (len + 1);
 }
 
-static int alloc_stirng(char **result, int n)
+static int	alloc_stirng(char **result, int n)
 {
 	int size;
 
@@ -36,11 +48,11 @@ static int alloc_stirng(char **result, int n)
 	return (1);
 }
 
-char *ft_itoa(int n)
+char		*ft_itoa(int n)
 {
-	char *result;
-	int len;
-	long long tmp;
+	char		*result;
+	int			len;
+	long long	tmp;
 
 	if (alloc_stirng(&result, n) == 0)
 		return (NULL);
@@ -58,7 +70,7 @@ char *ft_itoa(int n)
 	result[len + 1] = 0;
 	while (tmp > 9)
 	{
-		result[len--] = (tmp % 10) + '0'; 
+		result[len--] = (tmp % 10) + '0';
 		tmp = tmp / 10;
 	}
 	result[len] = (tmp % 10) + '0';

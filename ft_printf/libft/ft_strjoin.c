@@ -1,11 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/04/08 17:23:46 by donglee           #+#    #+#             */
+/*   Updated: 2020/04/08 22:44:36 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
-char *ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	char *result;
-	int len1;
-	int len2;
-	int i;
+	char	*result;
+	int		len1;
+	int		len2;
+	int		i;
 
 	i = 0;
 	len1 = ft_strlen(s1);
@@ -23,6 +35,6 @@ char *ft_strjoin(char const *s1, char const *s2)
 		result[i + len1] = s2[i];
 		i++;
 	}
-	result[i + len1] = 0;
+	result[i + len1] = '\0';
 	return (result);
 }

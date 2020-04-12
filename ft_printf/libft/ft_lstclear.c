@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_lstclear.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/04/07 18:09:42 by donglee           #+#    #+#             */
+/*   Updated: 2020/04/07 18:10:07 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
 void	ft_lstclear(t_list **lst, void (*del)(void *))
@@ -12,6 +24,6 @@ void	ft_lstclear(t_list **lst, void (*del)(void *))
 			ft_lstdelone(*lst, del);
 			(*lst) = tmp;
 		}
-		*lst = NULL; 
+		*lst = NULL;
 	}
 }
