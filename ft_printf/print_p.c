@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_p.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 21:43:46 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/09 21:45:12 by donglee          ###   ########.fr       */
+/*   Updated: 2020/04/13 18:53:49 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,12 @@ void	printp_body(t_data *data, char *convert, int len)
 	}
 }
 
-int		print_p(t_data *data)
+int			print_p(t_data *data)
 {
-	unsigned long	ret;
-	char			*convert;
-	int				len;
-	int				gap;
+	unsigned long ret;
+	char *convert;
+	int len;
+	int gap;
 
 	ret = va_arg(data->ap_copy, unsigned long);
 	if ((convert = ft_putnbr_base(ret, "0123456789abcdef")) == NULL)
@@ -72,6 +72,8 @@ int		print_p(t_data *data)
 	if (data->width > len)
 	{
 		gap = data->width - len - 2;
+		if (gap < 0)
+			gap = 0;	//width가 2일 때 무한루프 돈다.
 		if (data->flag[MINUS] == TRUE)
 			printp_from_haed(data, convert, gap, len);
 		else

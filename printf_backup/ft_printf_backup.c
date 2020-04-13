@@ -465,6 +465,8 @@ int			print_p(t_data *data)
 	if (data->width > len)
 	{
 		gap = data->width - len - 2;
+		if (gap < 0)
+			gap = 0;	//width가 2일 때 무한루프 돈다.
 		if (data->flag[MINUS] == TRUE)
 			printp_from_haed(data, convert, gap, len);
 		else
@@ -928,8 +930,8 @@ int main()
 	unsigned int c = 12345;
 	unsigned int d = 8;
 	char *s = "abcdef";
-	int aa = ft_printf("f:%0u\n", c);
-	int bb = printf("l:%0u\n", c);
+	int aa = ft_printf("f:%*p\n", 1,NULL);
+	int bb = printf("l:%*p\n", 1,NULL);
 	printf("return ft: %d lib: %d\n", aa, bb);
 	return 0;
 }
