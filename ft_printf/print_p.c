@@ -6,16 +6,16 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 21:43:46 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/13 21:57:48 by marvin           ###   ########.fr       */
+/*   Updated: 2020/04/13 22:06:29 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int			modify_p_data(t_data *data, char *cpy)
+int		modify_p_data(t_data *data, char *cpy)
 {
-	char *check;
-	int i;
+	char	*check;
+	int		i;
 
 	i = 0;
 	if ((check = (char *)malloc(sizeof(char) * (data->i) + 2)) == NULL)
@@ -48,7 +48,7 @@ void	printp_from_haed(t_data *data, char *convert, int gap, int len)
 	}
 }
 
-void	printp_from_tail(t_data *data, char   *convert, int gap, int len)
+void	printp_from_tail(t_data *data, char *convert, int gap, int len)
 {
 	while (gap--)
 	{
@@ -77,12 +77,12 @@ void	printp_body(t_data *data, char *convert, int len)
 	}
 }
 
-int			print_p(t_data *data)
+int		print_p(t_data *data)
 {
-	unsigned long ret;
-	char *convert;
-	int len;
-	int gap;
+	unsigned long	ret;
+	char			*convert;
+	int				len;
+	int				gap;
 
 	ret = va_arg(data->ap_copy, unsigned long);
 	if ((convert = ft_putnbr_base(ret, "0123456789abcdef")) == NULL)

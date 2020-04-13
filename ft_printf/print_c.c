@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 21:41:12 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/13 21:57:08 by marvin           ###   ########.fr       */
+/*   Updated: 2020/04/13 22:04:38 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int			print_c(t_data *data)
 	{
 		write(1, &ret, 1);
 		data->len++;
-		while((((data->width)--) - 1) > 0)
+		while ((((data->width)--) - 1) > 0)
 		{
 			write(1, " ", 1);
 			data->len++;

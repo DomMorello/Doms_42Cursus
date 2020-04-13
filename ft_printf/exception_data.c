@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 21:36:50 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/12 21:12:00 by marvin           ###   ########.fr       */
+/*   Updated: 2020/04/13 22:00:46 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ int			exception_data(t_data *data, const char *format)
 	{
 		if (data->flag[MINUS] == TRUE && data->flag[ZERO] == TRUE)
 			data->flag[ZERO] = FALSE;
-			// return (ERROR);
 	}
 	return (TRUE);
 }

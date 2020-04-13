@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 21:46:25 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/13 21:58:26 by marvin           ###   ########.fr       */
+/*   Updated: 2020/04/13 22:07:00 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,10 @@ void	prints_from_tail(t_data *data, char *s, int gap)
 	}
 }
 
-void		print_s(t_data *data)
+void	print_s(t_data *data)
 {
-	char *s;
-	int gap;
+	char	*s;
+	int		gap;
 
 	gap = 0;
 	if (!(s = va_arg(data->ap_copy, char *)))

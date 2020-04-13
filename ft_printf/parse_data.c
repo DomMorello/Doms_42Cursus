@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 21:40:15 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/13 21:56:58 by marvin           ###   ########.fr       */
+/*   Updated: 2020/04/13 22:04:05 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ int	print_data(t_data *data)
 	return (TRUE);
 }
 
-int			modify_ds_data(t_data *data, char *cpy)
+int	modify_ds_data(t_data *data, char *cpy)
 {
-	char *check;
-	int i;
+	char	*check;
+	int		i;
 
 	i = 0;
 	if ((check = (char *)malloc(sizeof(char) * (data->i) + 2)) == NULL)
@@ -56,7 +56,8 @@ int			modify_ds_data(t_data *data, char *cpy)
 			i++;
 			if (is_type(check[i]))
 				data->precision = 0;
-			if (data->type == 's' && data->flag[ZERO] == TRUE && data->precision < 0)
+			if (data->type == 's' && data->flag[ZERO] == TRUE
+				&& data->precision < 0)
 				break ;
 			if (data->type != 's' && data->precision < 0)
 				break ;
@@ -68,7 +69,7 @@ int			modify_ds_data(t_data *data, char *cpy)
 	return (TRUE);
 }
 
-int			modify_data(t_data *data, char *cpy)
+int	modify_data(t_data *data, char *cpy)
 {
 	if (data->type == 'd' || data->type == 's' || data->type == 'u'
 		|| data->type == 'x' || data->type == 'X' || data->type == 'i')

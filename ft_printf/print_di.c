@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 21:41:57 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/13 21:57:27 by marvin           ###   ########.fr       */
+/*   Updated: 2020/04/13 22:05:19 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@ void	printd_gap(t_data *data, long long ret, int len)
 	}
 }
 
-void		printd_zero(t_data *data, int len, int *ret)
+void	printd_zero(t_data *data, int len, int *ret)
 {
-	int gap;
-	long long tmp;
+	int			gap;
+	long long	tmp;
 
 	tmp = 0;
 	if (ret != NULL)
