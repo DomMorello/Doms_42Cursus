@@ -462,7 +462,7 @@ int			print_p(t_data *data)
 	if ((convert = ft_putnbr_base(ret, "0123456789abcdef")) == NULL)
 		return (ERROR);
 	len = ft_strlen(convert);
-	if (data->precision == 0)
+	if (data->precision == 0 && ret == 0)
 		len = 0;	//0x만 출력하도록 
 	if (data->width > len)
 	{
@@ -954,10 +954,10 @@ int main()
 	int b = 6;
 	unsigned int c = 12345;
 	unsigned int d = 8;
-	char *s = "abcdef";
 	char e = 'a';
-	int aa = ft_printf("%-6c\n", 129);
-	int bb = printf("%-6c\n", 129);
+	char *s = "abcdef";
+	int aa = ft_printf("f:%-*.p\n",-18, &a);
+	int bb = printf("l:%-*.p\n",-18, &a);
 	printf("return ft: %d lib: %d\n", aa, bb);
 	return 0;
 }

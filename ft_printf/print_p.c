@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 21:43:46 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/13 22:06:29 by donglee          ###   ########.fr       */
+/*   Updated: 2020/04/13 22:32:49 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int		print_p(t_data *data)
 	if ((convert = ft_putnbr_base(ret, "0123456789abcdef")) == NULL)
 		return (ERROR);
 	len = ft_strlen(convert);
-	if (data->precision == 0)
+	if (data->precision == 0 && ret == 0)
 		len = 0;
 	if (data->width > len)
 	{
