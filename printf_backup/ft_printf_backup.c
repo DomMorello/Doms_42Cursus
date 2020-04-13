@@ -395,7 +395,7 @@ void		print_s(t_data *data)
 	gap = 0;
 	if (!(s = va_arg(data->ap_copy, char *)))
 		s = "(null)";
-	if ((int)ft_strlen(s) < data->precision || data->precision == -1)
+	if ((int)ft_strlen(s) < data->precision || data->precision <= -1)	// == -1 이었는데 음수이 경우도 커버하기 위해 <= 로 바꿈.
 		data->precision = ft_strlen(s);
 	if (data->precision < data->width)
 		gap = data->width - data->precision;
@@ -806,7 +806,8 @@ int			modify_ds_data(t_data *data, char *cpy)
 				break;	//일단 pre가 음수면 0으로 치고 0플래그를 살려야 하기 때문에 이렇게 했다. 
 			data->flag[ZERO] = FALSE;
 			i++;
-			if (check[i] == '0' || is_type(check[i]))
+			// if (check[i] == '0' || is_type(check[i])) //pre가 05 이렇게 올 수도 있으니까 0은 와도 될 거 같은데; 어차피 0만 나오면 input_data에서 해결할 거 같음.
+			if (is_type(check[i]))
 				data->precision = 0;
 		}
 		i++;
@@ -913,8 +914,9 @@ int main()
 	int b = 6;
 	unsigned int c = 12345;
 	unsigned int d = 8;
-	int aa = ft_printf("f:%07.*d\n", -6, a);
-	int bb = printf("l:%07.*d\n", -6, a);
+	char *s = "abcdef";
+	int aa = ft_printf("f:%10.03s\n", s);
+	int bb = printf("l:%10.03s\n", s);
 	printf("return ft: %d lib: %d\n", aa, bb);
 	return 0;
 }
