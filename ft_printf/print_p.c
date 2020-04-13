@@ -6,13 +6,12 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 21:43:46 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/13 20:54:57 by marvin           ###   ########.fr       */
+/*   Updated: 2020/04/13 21:57:48 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-//p에서 . 있으면 precision 0 으로 해서 0이고 NULL일 때는 0x만 나오게;
 int			modify_p_data(t_data *data, char *cpy)
 {
 	char *check;
@@ -90,12 +89,12 @@ int			print_p(t_data *data)
 		return (ERROR);
 	len = ft_strlen(convert);
 	if (data->precision == 0)
-		len = 0;	//0x만 출력하도록 
+		len = 0;
 	if (data->width > len)
 	{
 		gap = data->width - len - 2;
 		if (gap < 0)
-			gap = 0;	//width가 2일 때 무한루프 돈다.
+			gap = 0;
 		if (data->flag[MINUS] == TRUE)
 			printp_from_haed(data, convert, gap, len);
 		else

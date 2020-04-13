@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 21:41:57 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/13 17:34:05 by marvin           ###   ########.fr       */
+/*   Updated: 2020/04/13 21:57:27 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void		printd_zero(t_data *data, int len, int *ret)
 		write(1, "-", 1);
 		data->len++;
 		*ret *= -1;
-	}	//00-12 이지랄 나는거때문에 추가함. 
+	}
 	gap = 0;
 	if (data->width > len)
 		gap = data->width - len;

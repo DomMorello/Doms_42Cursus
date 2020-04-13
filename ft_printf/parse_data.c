@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 21:40:15 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/13 20:53:38 by marvin           ###   ########.fr       */
+/*   Updated: 2020/04/13 21:56:58 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,12 @@ int			modify_ds_data(t_data *data, char *cpy)
 		if (check[i] == '.')
 		{
 			i++;
-			// if (check[i] == '0' || is_type(check[i])) //pre가 05 ,이렇게 올 수도 있으니까 0은 와도 될 거 같은데; 어차피 0만 나오면 input_data에서 해결할 거 같음.
 			if (is_type(check[i]))
 				data->precision = 0;
 			if (data->type == 's' && data->flag[ZERO] == TRUE && data->precision < 0)
-				break ;	//일단 pre가 음수면 0으로 치고 0플래그를 살려야 하기 때문에(s일 경우) 이렇게 했다. 
+				break ;
 			if (data->type != 's' && data->precision < 0)
-				break ;	//정수일 때 pre가 음수면 0 플래그를 무시하지 않는다. 
+				break ;
 			data->flag[ZERO] = FALSE;
 		}
 		i++;

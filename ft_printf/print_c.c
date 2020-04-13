@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 21:41:12 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/13 21:53:04 by marvin           ###   ########.fr       */
+/*   Updated: 2020/04/13 21:57:08 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int			print_c(t_data *data)
 {
-	unsigned char ret;	//unsigned로 바꾸니까 된다?
+	unsigned char ret;
 
 	if ((ret = va_arg(data->ap_copy, int)) < 0)
 		return (ERROR);
