@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   print_c.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 21:41:12 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/09 21:41:42 by donglee          ###   ########.fr       */
+/*   Updated: 2020/04/13 21:53:04 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	print_c(t_data *data)
+int			print_c(t_data *data)
 {
-	char ret;
+	unsigned char ret;	//unsigned로 바꾸니까 된다?
 
 	if ((ret = va_arg(data->ap_copy, int)) < 0)
 		return (ERROR);
@@ -22,7 +22,7 @@ int	print_c(t_data *data)
 	{
 		write(1, &ret, 1);
 		data->len++;
-		while ((((data->width)--) - 1) > 0)
+		while((((data->width)--) - 1) > 0)
 		{
 			write(1, " ", 1);
 			data->len++;

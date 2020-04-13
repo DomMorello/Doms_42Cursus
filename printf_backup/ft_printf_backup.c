@@ -330,7 +330,7 @@ int			exception_data(t_data *data, const char *format)
 
 int			print_c(t_data *data)
 {
-	char ret;
+	unsigned char ret;	//unsigned로 바꾸니까 된다?
 
 	if ((ret = va_arg(data->ap_copy, int)) < 0)
 		return (ERROR);
@@ -955,8 +955,9 @@ int main()
 	unsigned int c = 12345;
 	unsigned int d = 8;
 	char *s = "abcdef";
-	int aa = ft_printf("f:%---*.p\n", 1,NULL);
-	int bb = printf("l:%---*.p\n", 1,NULL);
+	char e = 'a';
+	int aa = ft_printf("%-6c\n", 129);
+	int bb = printf("%-6c\n", 129);
 	printf("return ft: %d lib: %d\n", aa, bb);
 	return 0;
 }
