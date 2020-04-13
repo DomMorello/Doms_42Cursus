@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 21:40:15 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/13 16:38:59 by marvin           ###   ########.fr       */
+/*   Updated: 2020/04/13 20:53:38 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int			modify_ds_data(t_data *data, char *cpy)
 	return (TRUE);
 }
 
-int	modify_data(t_data *data, char *cpy)
+int			modify_data(t_data *data, char *cpy)
 {
 	if (data->type == 'd' || data->type == 's' || data->type == 'u'
 		|| data->type == 'x' || data->type == 'X' || data->type == 'i')
@@ -83,6 +83,9 @@ int	modify_data(t_data *data, char *cpy)
 		if (data->flag[MINUS] == TRUE && data->flag[ZERO] == TRUE)
 			data->flag[ZERO] = FALSE;
 	}
+	if (data->type == 'p')
+		if (!modify_p_data(data, cpy))
+			return (FALSE);
 	return (TRUE);
 }
 

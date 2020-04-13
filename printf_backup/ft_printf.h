@@ -85,6 +85,7 @@ void		print_per_head(t_data *data);
 void		print_per(t_data *data);
 int			print_data(t_data *data);
 int			modify_ds_data(t_data *data, char *cpy);
+int			modify_p_data(t_data *data, char *cpy);
 int			modify_data(t_data *data, char *cpy);
 int			move_to_print(t_data *data);
 int			parse_data(t_data *data, const char *format);

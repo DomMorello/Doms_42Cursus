@@ -6,11 +6,31 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 21:43:46 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/13 18:53:49 by marvin           ###   ########.fr       */
+/*   Updated: 2020/04/13 20:54:57 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+//p에서 . 있으면 precision 0 으로 해서 0이고 NULL일 때는 0x만 나오게;
+int			modify_p_data(t_data *data, char *cpy)
+{
+	char *check;
+	int i;
+
+	i = 0;
+	if ((check = (char *)malloc(sizeof(char) * (data->i) + 2)) == NULL)
+		return (FALSE);
+	ft_strlcpy(check, cpy, (data->i + 2));
+	while (check[i])
+	{
+		if (check[i] == '.')
+			data->precision = 0;
+		i++;
+	}
+	free(check);
+	return (TRUE);
+}
 
 void	printp_from_haed(t_data *data, char *convert, int gap, int len)
 {
@@ -29,7 +49,7 @@ void	printp_from_haed(t_data *data, char *convert, int gap, int len)
 	}
 }
 
-void	printp_from_tail(t_data *data, char *convert, int gap, int len)
+void	printp_from_tail(t_data *data, char   *convert, int gap, int len)
 {
 	while (gap--)
 	{
@@ -69,6 +89,8 @@ int			print_p(t_data *data)
 	if ((convert = ft_putnbr_base(ret, "0123456789abcdef")) == NULL)
 		return (ERROR);
 	len = ft_strlen(convert);
+	if (data->precision == 0)
+		len = 0;	//0x만 출력하도록 
 	if (data->width > len)
 	{
 		gap = data->width - len - 2;

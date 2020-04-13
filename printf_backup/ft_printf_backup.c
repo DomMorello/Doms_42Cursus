@@ -462,6 +462,8 @@ int			print_p(t_data *data)
 	if ((convert = ft_putnbr_base(ret, "0123456789abcdef")) == NULL)
 		return (ERROR);
 	len = ft_strlen(convert);
+	if (data->precision == 0)
+		len = 0;	//0x만 출력하도록 
 	if (data->width > len)
 	{
 		gap = data->width - len - 2;
@@ -831,6 +833,26 @@ int			modify_ds_data(t_data *data, char *cpy)
 	return (TRUE);
 }
 
+//p에서 . 있으면 precision 0 으로 해서 0이고 NULL일 때는 0x만 나오게;
+int			modify_p_data(t_data *data, char *cpy)
+{
+	char *check;
+	int i;
+
+	i = 0;
+	if ((check = (char *)malloc(sizeof(char) * (data->i) + 2)) == NULL)
+		return (FALSE);
+	ft_strlcpy(check, cpy, (data->i + 2));
+	while (check[i])
+	{
+		if (check[i] == '.')
+			data->precision = 0;
+		i++;
+	}
+	free(check);
+	return (TRUE);
+}
+
 int			modify_data(t_data *data, char *cpy)
 {
 	if (data->type == 'd' || data->type == 's' || data->type == 'u'
@@ -845,6 +867,9 @@ int			modify_data(t_data *data, char *cpy)
 		if (data->flag[MINUS] == TRUE && data->flag[ZERO] == TRUE)
 			data->flag[ZERO] = FALSE;
 	}
+	if (data->type == 'p')
+		if (!modify_p_data(data, cpy))
+			return (FALSE);
 	return (TRUE);
 }
 
@@ -930,8 +955,8 @@ int main()
 	unsigned int c = 12345;
 	unsigned int d = 8;
 	char *s = "abcdef";
-	int aa = ft_printf("f:%*p\n", 1,NULL);
-	int bb = printf("l:%*p\n", 1,NULL);
+	int aa = ft_printf("f:%---*.p\n", 1,NULL);
+	int bb = printf("l:%---*.p\n", 1,NULL);
 	printf("return ft: %d lib: %d\n", aa, bb);
 	return 0;
 }

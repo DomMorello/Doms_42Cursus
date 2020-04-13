@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 21:37:41 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/13 16:38:19 by marvin           ###   ########.fr       */
+/*   Updated: 2020/04/13 20:55:44 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ void			print_per_head(t_data *data);
 void			print_per(t_data *data);
 int				print_data(t_data *data);
 int				modify_ds_data(t_data *data, char *cpy);
+int				modify_p_data(t_data *data, char *cpy);
 int				modify_data(t_data *data, char *cpy);
 int				move_to_print(t_data *data);
 int				parse_data(t_data *data, const char *format);
