@@ -537,7 +537,9 @@ void		printd_zero(t_data *data, int len, int *ret)
 	int gap;
 	long long tmp;
 
-	tmp = (long long)*ret;
+	tmp = 0;
+	if (ret != NULL)
+		tmp = (long long)*ret;
 	if (tmp < 0 && tmp != -2147483648)
 	{
 		len++;
@@ -743,7 +745,7 @@ void		print_per(t_data *data)
 			{
 				write(1, " ", 1);
 				data->len++;
-			}				
+			}
 		}
 		write(1, "%", 1);
 		data->len++;
@@ -926,8 +928,8 @@ int main()
 	unsigned int c = 12345;
 	unsigned int d = 8;
 	char *s = "abcdef";
-	int aa = ft_printf("f:%014.*d\n", 17,a);
-	int bb = printf("l:%014.*d\n", 17,a);
+	int aa = ft_printf("f:%0u\n", c);
+	int bb = printf("l:%0u\n", c);
 	printf("return ft: %d lib: %d\n", aa, bb);
 	return 0;
 }

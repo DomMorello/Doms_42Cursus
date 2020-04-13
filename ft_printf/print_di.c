@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 21:41:57 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/13 16:40:03 by marvin           ###   ########.fr       */
+/*   Updated: 2020/04/13 17:34:05 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,9 @@ void		printd_zero(t_data *data, int len, int *ret)
 	int gap;
 	long long tmp;
 
-	tmp = (long long)*ret;
+	tmp = 0;
+	if (ret != NULL)
+		tmp = (long long)*ret;
 	if (tmp < 0 && tmp != -2147483648)
 	{
 		len++;
