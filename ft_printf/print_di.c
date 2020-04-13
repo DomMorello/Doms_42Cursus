@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_di.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 21:41:57 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/09 21:42:35 by donglee          ###   ########.fr       */
+/*   Updated: 2020/04/13 16:40:03 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,19 @@ void	printd_gap(t_data *data, long long ret, int len)
 	}
 }
 
-void	printd_zero(t_data *data, int len)
+void		printd_zero(t_data *data, int len, int *ret)
 {
 	int gap;
+	long long tmp;
 
+	tmp = (long long)*ret;
+	if (tmp < 0 && tmp != -2147483648)
+	{
+		len++;
+		write(1, "-", 1);
+		data->len++;
+		*ret *= -1;
+	}	//00-12 이지랄 나는거때문에 추가함. 
 	gap = 0;
 	if (data->width > len)
 		gap = data->width - len;
@@ -102,7 +111,7 @@ void	print_di(t_data *data)
 	else
 	{
 		if (data->flag[ZERO] == TRUE)
-			printd_zero(data, len);
+			printd_zero(data, len, &ret);
 		else
 			printd_gap(data, ret, len);
 		printd_body(data, ret, len);

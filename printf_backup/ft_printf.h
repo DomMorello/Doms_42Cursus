@@ -72,7 +72,7 @@ void		printp_from_tail(t_data *data, char *convert, int gap, int len);
 void		printp_body(t_data *data, char *convert, int len);
 int			print_p(t_data *data);
 void		printd_gap(t_data *data, long long ret, int len);
-void		printd_zero(t_data *data, int len);
+void		printd_zero(t_data *data, int len, int *ret);
 void		printd_nbr(t_data *data, long long ret, int len);
 void		printd_body(t_data *data, int ret, int len);
 void		printu_body(t_data *data, unsigned int ret, int len);

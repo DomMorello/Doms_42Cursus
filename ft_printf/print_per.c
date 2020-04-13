@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_per.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 21:45:26 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/09 21:46:13 by donglee          ###   ########.fr       */
+/*   Updated: 2020/04/13 16:40:53 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	print_per(t_data *data)
 	else
 	{
 		if (data->flag[ZERO] == TRUE)
-			printd_zero(data, 1);
+			printd_zero(data, 1, NULL);
 		else
 		{
 			while ((((data->width)--) - 1) > 0)

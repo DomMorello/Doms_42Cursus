@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_u.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 21:47:27 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/09 21:48:33 by donglee          ###   ########.fr       */
+/*   Updated: 2020/04/13 16:40:21 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	print_u(t_data *data)
 	else
 	{
 		if (data->flag[ZERO] == TRUE)
-			printd_zero(data, len);
+			printd_zero(data, len, NULL);
 		else
 			printd_gap(data, ret, len);
 		printu_body(data, (unsigned int)ret, len);

@@ -532,10 +532,19 @@ void		printd_gap(t_data *data, long long ret, int len)
 	}
 }
 
-void		printd_zero(t_data *data, int len)
+void		printd_zero(t_data *data, int len, int *ret)
 {
 	int gap;
+	long long tmp;
 
+	tmp = (long long)*ret;
+	if (tmp < 0 && tmp != -2147483648)
+	{
+		len++;
+		write(1, "-", 1);
+		data->len++;
+		*ret *= -1;
+	}	//00-12 이지랄 나는거때문에 추가함. 
 	gap = 0;
 	if (data->width > len)
 		gap = data->width - len;
@@ -615,7 +624,7 @@ void		print_di(t_data *data)
 	else
 	{
 		if (data->flag[ZERO] == TRUE)
-			printd_zero(data, len);
+			printd_zero(data, len, &ret);
 		else
 			printd_gap(data, ret, len);
 		printd_body(data, ret, len);
@@ -639,7 +648,7 @@ void		print_u(t_data *data)
 	else
 	{
 		if (data->flag[ZERO] == TRUE)
-			printd_zero(data, len);
+			printd_zero(data, len, NULL);
 		else
 			printd_gap(data, ret, len);
 		printu_body(data, (unsigned int)ret, len);
@@ -680,7 +689,7 @@ void 		print_x_all(t_data *data, unsigned int ret, char *convert, int len)
 	else
 	{
 		if (data->flag[ZERO] == TRUE)
-			printd_zero(data, len);
+			printd_zero(data, len, NULL);
 		else
 			printd_gap(data, ret, len);
 		printx_body(data, ret, convert, len);
@@ -727,7 +736,7 @@ void		print_per(t_data *data)
 	else
 	{
 		if (data->flag[ZERO] == TRUE)
-			printd_zero(data, 1);
+			printd_zero(data, 1, NULL);
 		else
 		{
 			while((((data->width)--) - 1) > 0)
@@ -802,13 +811,15 @@ int			modify_ds_data(t_data *data, char *cpy)
 	{
 		if (check[i] == '.')
 		{
-			if (data->flag[ZERO] == TRUE && data->precision < 0)
-				break;	//일단 pre가 음수면 0으로 치고 0플래그를 살려야 하기 때문에 이렇게 했다. 
-			data->flag[ZERO] = FALSE;
 			i++;
-			// if (check[i] == '0' || is_type(check[i])) //pre가 05 이렇게 올 수도 있으니까 0은 와도 될 거 같은데; 어차피 0만 나오면 input_data에서 해결할 거 같음.
+			// if (check[i] == '0' || is_type(check[i])) //pre가 05 ,이렇게 올 수도 있으니까 0은 와도 될 거 같은데; 어차피 0만 나오면 input_data에서 해결할 거 같음.
 			if (is_type(check[i]))
 				data->precision = 0;
+			if (data->type == 's' && data->flag[ZERO] == TRUE && data->precision < 0)
+				break ;	//일단 pre가 음수면 0으로 치고 0플래그를 살려야 하기 때문에(s일 경우) 이렇게 했다. 
+			if (data->type != 's' && data->precision < 0)
+				break ;	//정수일 때 pre가 음수면 0 플래그를 무시하지 않는다. 
+			data->flag[ZERO] = FALSE;
 		}
 		i++;
 	}
@@ -910,13 +921,13 @@ int main()
 {
 	//4,294,967,295
 	//9,223,372,036,854,775,807
-	int a = 12;
+	int a = -2147;
 	int b = 6;
 	unsigned int c = 12345;
 	unsigned int d = 8;
 	char *s = "abcdef";
-	int aa = ft_printf("f:%10.03s\n", s);
-	int bb = printf("l:%10.03s\n", s);
+	int aa = ft_printf("f:%014.*d\n", 17,a);
+	int bb = printf("l:%014.*d\n", 17,a);
 	printf("return ft: %d lib: %d\n", aa, bb);
 	return 0;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 21:37:41 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/10 17:27:50 by donglee          ###   ########.fr       */
+/*   Updated: 2020/04/13 16:38:19 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void			printp_from_tail(t_data *data, char *convert, int gap, int len);
 void			printp_body(t_data *data, char *convert, int len);
 int				print_p(t_data *data);
 void			printd_gap(t_data *data, long long ret, int len);
-void			printd_zero(t_data *data, int len);
+void			printd_zero(t_data *data, int len, int *ret);
 void			printd_nbr(t_data *data, long long ret, int len);
 void			printd_body(t_data *data, int ret, int len);
 void			printu_body(t_data *data, unsigned int ret, int len);

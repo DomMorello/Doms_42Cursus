@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_x.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 21:48:50 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/09 21:49:27 by donglee          ###   ########.fr       */
+/*   Updated: 2020/04/13 16:40:37 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	print_x_all(t_data *data, unsigned int ret, char *convert, int len)
 	else
 	{
 		if (data->flag[ZERO] == TRUE)
-			printd_zero(data, len);
+			printd_zero(data, len, NULL);
 		else
 			printd_gap(data, ret, len);
 		printx_body(data, ret, convert, len);
