@@ -956,8 +956,8 @@ int main()
 	unsigned int d = 8;
 	char e = 'a';
 	char *s = "abcdef";
-	int aa = ft_printf("f:%-*.p\n",-18, &a);
-	int bb = printf("l:%-*.p\n",-18, &a);
+	int aa = ft_printf("f:%-4c%04.5d%04i%04u%4.p%4.15s%04x%04.12X\n",e,a,a,c,&b,s,d,d);
+	int bb = printf("l:%-4c%04.5d%04i%04u%4.p%4.15s%04x%04.12X\n",e,a,a,c,&b,s,d,d);
 	printf("return ft: %d lib: %d\n", aa, bb);
 	return 0;
 }
