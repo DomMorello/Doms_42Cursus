@@ -1,6 +1,7 @@
 #include "./minilibx_linux/mlx.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "./main.h"
 
 int main()
 {
