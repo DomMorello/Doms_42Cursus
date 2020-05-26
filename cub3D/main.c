@@ -27,15 +27,6 @@ int worldMap[mapWidth][mapHeight] =
 		{1, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
 
-void verLine(t_mlx mlx, int x, int drawStart, int drawEnd, int color)
-{
-	while (drawStart <= drawEnd)
-	{
-		mlx.img.data[x + WIN_WIDTH * drawStart] = color;
-		drawStart++;
-	}
-}
-
 int main()
 {
 	t_mlx mlx;
@@ -58,8 +49,7 @@ int main()
 		for (int x = 0; x < WIN_WIDTH; x++)
 		{
 			//calculate ray position and direction
-			double cameraX = 2 * x / (double)WIN_WIDTH - 1; //x-coordinate in camera space -> 
-				//FOV = 2 *  atan(0.66 / 1.0) = 66 degree
+			double cameraX = 2 * x / (double)WIN_WIDTH - 1; //x-coordinate in camera space
 			double rayDirX = dirX + planeX * cameraX;
 			double rayDirY = dirY + planeY * cameraX;
 			//which box of the map we're in
@@ -171,19 +161,18 @@ int main()
 			}
 
 			//draw the pixels of the stripe as a vertical line
-			verLine(mlx, x, drawStart, drawEnd, color);
-		}
-		//timing for input and FPS counter
-		// oldTime = time;
-		// time = getTicks();
-		// double frameTime = (time - oldTime) / 1000.0; //frameTime is the time this frame has taken, in seconds
-		// print(1.0 / frameTime);						  //FPS counter
-		// redraw();
-		// cls();
+			// verLine(mlx, x, drawStart, drawEnd, color);	//매개변수 5개라서 일단 함수화하지 않았음
+			while (drawStart <= drawEnd)
+			{
+				mlx.img.data[x + WIN_WIDTH * drawStart] = color;
+				drawStart++;
+			}
 
+			
+		}
 		// //speed modifiers
-		// double moveSpeed = frameTime * 5.0; //the constant value is in squares/second
-		// double rotSpeed = frameTime * 3.0;	//the constant value is in radians/second
+		// double moveSpeed = 10 * 5.0; //the constant value is in squares/second
+		// double rotSpeed = 10 * 3.0;	//the constant value is in radians/second
 		// readKeys();
 		// //move forward if no wall in front of you
 		// if (keyDown(SDLK_UP))
