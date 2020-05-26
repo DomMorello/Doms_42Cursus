@@ -58,7 +58,8 @@ int main()
 		for (int x = 0; x < WIN_WIDTH; x++)
 		{
 			//calculate ray position and direction
-			double cameraX = 2 * x / (double)WIN_WIDTH - 1; //x-coordinate in camera space
+			double cameraX = 2 * x / (double)WIN_WIDTH - 1; //x-coordinate in camera space -> 
+				//FOV = 2 *  atan(0.66 / 1.0) = 66 degree
 			double rayDirX = dirX + planeX * cameraX;
 			double rayDirY = dirY + planeY * cameraX;
 			//which box of the map we're in
