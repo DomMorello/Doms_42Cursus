@@ -27,9 +27,16 @@ int worldMap[mapWidth][mapHeight] =
 		{1, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
 
+int		key_press(int key, void *param)
+{
+	printf("input keyCode: %d\n", key);
+	return (0);
+}
+
 int main()
 {
 	t_mlx mlx;
+	int (*test)() = key_press;
 
 	mlx.mlx_ptr = mlx_init();
 	mlx.win_ptr = mlx_new_window(mlx.mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "DomMorello");
@@ -214,6 +221,7 @@ int main()
 		// }
 	}
 
+	mlx_key_hook(mlx.win_ptr, test, 0);
 	mlx_put_image_to_window(mlx.mlx_ptr, mlx.win_ptr, mlx.img.img_ptr, 0, 0);
 	mlx_loop(mlx.mlx_ptr);
 	return (0);
