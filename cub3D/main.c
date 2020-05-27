@@ -1,4 +1,5 @@
 #include "./main.h"
+#include <math.h>
 
 int worldMap[mapWidth][mapHeight] =
 	{
@@ -27,41 +28,109 @@ int worldMap[mapWidth][mapHeight] =
 		{1, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
 
-int		key_press(int key, void *param)
+typedef struct		s_game
 {
-	printf("input keyCode: %d\n", key);
+	double posX;
+	double posY;
+	double dirX;
+	double dirY;
+	double planeX;
+	double planeY;
+}					t_game;
+
+int key_press(int key, t_game *mola)
+{
+	//speed modifiers
+	double moveSpeed = 3; //the constant value is in squares/second
+	double rotSpeed = 3;  //the constant value is in radians/second
+	//move forward if no wall in front of you
+	if (key == 65362)
+	{
+		if (worldMap[(int)(mola->posX + mola->dirX * moveSpeed)][(int)mola->posY] == 0)
+			mola->posX += mola->dirX * moveSpeed;
+		if (worldMap[(int)mola->posX][(int)(mola->posY + mola->dirY * moveSpeed)] == 0)
+			mola->posY += mola->dirY * moveSpeed;
+		printf("mola->posY %f\n", mola->posY);
+	}
+	//move backwards if no wall behind you
+	if (key == 65364)
+	{
+		if (worldMap[(int)(mola->posX - mola->dirX * moveSpeed)][(int)mola->posY] == 0)
+			mola->posX -= mola->dirX * moveSpeed;
+		if (worldMap[(int)mola->posX][(int)(mola->posY - mola->dirY * moveSpeed)] == 0)
+			mola->posY -= mola->dirY * moveSpeed;
+	}
+	//rotate to the right
+	if (key == 65363)
+	{
+		//both camera direction and camera plane must be rotated
+		double oldDirX = mola->dirX;
+		mola->dirX = mola->dirX * cos(-rotSpeed) - mola->dirY * sin(-rotSpeed);
+		mola->dirY = oldDirX * sin(-rotSpeed) + mola->dirY * cos(-rotSpeed);
+		double oldPlaneX = mola->planeX;
+		mola->planeX = mola->planeX * cos(-rotSpeed) - mola->planeY * sin(-rotSpeed);
+		mola->planeY = oldPlaneX * sin(-rotSpeed) + mola->planeY * cos(-rotSpeed);
+	}
+	//rotate to the left
+	if (key == 65361)
+	{
+		//both camera direction and camera plane must be rotated
+		double oldDirX = mola->dirX;
+		mola->dirX = mola->dirX * cos(rotSpeed) - mola->dirY * sin(rotSpeed);
+		mola->dirY = oldDirX * sin(rotSpeed) + mola->dirY * cos(rotSpeed);
+		double oldPlaneX = mola->planeX;
+		mola->planeX = mola->planeX * cos(rotSpeed) - mola->planeY * sin(rotSpeed);
+		mola->planeY = oldPlaneX * sin(rotSpeed) + mola->planeY * cos(rotSpeed);
+	}
+	// printf("input keyCode: %d\n", key);
 	return (0);
 }
 
 int main()
 {
 	t_mlx mlx;
-	int (*test)() = key_press;
+	t_game mola;
+	t_game *ptr = &mola;
+
+	// printf("%lu\n", sizeof(ptr));
+	int (*test)(int, t_game *) = key_press;
 
 	mlx.mlx_ptr = mlx_init();
 	mlx.win_ptr = mlx_new_window(mlx.mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "DomMorello");
 	mlx.img.img_ptr = mlx_new_image(mlx.mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
 	mlx.img.data = (int *)mlx_get_data_addr(mlx.img.img_ptr, &mlx.img.bpp, &mlx.img.size_l, &mlx.img.endian);
 
-	double posX = 22, posY = 12;	  //x and y start position
-	double dirX = -1, dirY = 0;		  //initial direction vector
-	double planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
+	// double posX = 22, posY = 12;	  //x and y start position
+	// double dirX = -1, dirY = 0;		  //initial direction vector
+	// double planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
 
-	double time = 0;	//time of current frame
-	double oldTime = 0; //time of previous frame
+	mola.posX = 22;
+	mola.posY = 12;
+	mola.dirX = -1;
+	mola.dirY = 0;
+	mola.planeX = 0;
+	mola.planeY = 0.66;
+
 	int flag = 1;
-
 	while (flag)
 	{
 		for (int x = 0; x < WIN_WIDTH; x++)
 		{
+			// //calculate ray position and direction
+			// double cameraX = 2 * x / (double)WIN_WIDTH - 1; //x-coordinate in camera space
+			// double rayDirX = dirX + planeX * cameraX;
+			// double rayDirY = dirY + planeY * cameraX;
+			// //which box of the map we're in
+			// int mapX = (int)posX;
+			// int mapY = (int)posY;
+
 			//calculate ray position and direction
 			double cameraX = 2 * x / (double)WIN_WIDTH - 1; //x-coordinate in camera space
-			double rayDirX = dirX + planeX * cameraX;
-			double rayDirY = dirY + planeY * cameraX;
+			double rayDirX = mola.dirX + mola.planeX * cameraX;
+			double rayDirY = mola.dirY + mola.planeY * cameraX;
 			//which box of the map we're in
-			int mapX = (int)posX;
-			int mapY = (int)posY;
+			int mapX = (int)mola.posX;
+			int mapY = (int)mola.posY;			
 
 			//length of ray from current position to next x or y-side
 			double sideDistX;
@@ -82,22 +151,22 @@ int main()
 			if (rayDirX < 0)
 			{
 				stepX = -1;
-				sideDistX = (posX - mapX) * deltaDistX;
+				sideDistX = (mola.posX - mapX) * deltaDistX;
 			}
 			else
 			{
 				stepX = 1;
-				sideDistX = (mapX + 1.0 - posX) * deltaDistX;
+				sideDistX = (mapX + 1.0 - mola.posX) * deltaDistX;
 			}
 			if (rayDirY < 0)
 			{
 				stepY = -1;
-				sideDistY = (posY - mapY) * deltaDistY;
+				sideDistY = (mola.posY - mapY) * deltaDistY;
 			}
 			else
 			{
 				stepY = 1;
-				sideDistY = (mapY + 1.0 - posY) * deltaDistY;
+				sideDistY = (mapY + 1.0 - mola.posY) * deltaDistY;
 			}
 			//perform DDA
 			while (hit == 0)
@@ -124,9 +193,9 @@ int main()
 			}
 			//Calculate distance projected on camera direction (Euclidean distance will give fisheye effect!)
 			if (side == 0)
-				perpWallDist = (mapX - posX + (1 - stepX) / 2) / rayDirX;
+				perpWallDist = (mapX - mola.posX + (1 - stepX) / 2) / rayDirX;
 			else
-				perpWallDist = (mapY - posY + (1 - stepY) / 2) / rayDirY;
+				perpWallDist = (mapY - mola.posY + (1 - stepY) / 2) / rayDirY;
 
 			//Calculate height of line to draw on screen
 			int lineHeight = (int)(WIN_HEIGHT / perpWallDist);
@@ -168,60 +237,14 @@ int main()
 			}
 
 			//draw the pixels of the stripe as a vertical line
-			// verLine(mlx, x, drawStart, drawEnd, color);	//매개변수 5개라서 일단 함수화하지 않았음
 			while (drawStart <= drawEnd)
 			{
 				mlx.img.data[x + WIN_WIDTH * drawStart] = color;
 				drawStart++;
 			}
-
-			
+			mlx_hook(mlx.win_ptr, 2, 1L<<0, key_press, &mola);
 		}
-		// //speed modifiers
-		// double moveSpeed = 10 * 5.0; //the constant value is in squares/second
-		// double rotSpeed = 10 * 3.0;	//the constant value is in radians/second
-		// readKeys();
-		// //move forward if no wall in front of you
-		// if (keyDown(SDLK_UP))
-		// {
-		// 	if (worldMap[int(posX + dirX * moveSpeed)][int(posY)] == false)
-		// 		posX += dirX * moveSpeed;
-		// 	if (worldMap[int(posX)][int(posY + dirY * moveSpeed)] == false)
-		// 		posY += dirY * moveSpeed;
-		// }
-		// //move backwards if no wall behind you
-		// if (keyDown(SDLK_DOWN))
-		// {
-		// 	if (worldMap[int(posX - dirX * moveSpeed)][int(posY)] == false)
-		// 		posX -= dirX * moveSpeed;
-		// 	if (worldMap[int(posX)][int(posY - dirY * moveSpeed)] == false)
-		// 		posY -= dirY * moveSpeed;
-		// }
-		// //rotate to the right
-		// if (keyDown(SDLK_RIGHT))
-		// {
-		// 	//both camera direction and camera plane must be rotated
-		// 	double oldDirX = dirX;
-		// 	dirX = dirX * cos(-rotSpeed) - dirY * sin(-rotSpeed);
-		// 	dirY = oldDirX * sin(-rotSpeed) + dirY * cos(-rotSpeed);
-		// 	double oldPlaneX = planeX;
-		// 	planeX = planeX * cos(-rotSpeed) - planeY * sin(-rotSpeed);
-		// 	planeY = oldPlaneX * sin(-rotSpeed) + planeY * cos(-rotSpeed);
-		// }
-		// //rotate to the left
-		// if (keyDown(SDLK_LEFT))
-		// {
-		// 	//both camera direction and camera plane must be rotated
-		// 	double oldDirX = dirX;
-		// 	dirX = dirX * cos(rotSpeed) - dirY * sin(rotSpeed);
-		// 	dirY = oldDirX * sin(rotSpeed) + dirY * cos(rotSpeed);
-		// 	double oldPlaneX = planeX;
-		// 	planeX = planeX * cos(rotSpeed) - planeY * sin(rotSpeed);
-		// 	planeY = oldPlaneX * sin(rotSpeed) + planeY * cos(rotSpeed);
-		// }
 	}
-
-	mlx_key_hook(mlx.win_ptr, test, 0);
 	mlx_put_image_to_window(mlx.mlx_ptr, mlx.win_ptr, mlx.img.img_ptr, 0, 0);
 	mlx_loop(mlx.mlx_ptr);
 	return (0);
