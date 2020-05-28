@@ -50,7 +50,6 @@ int key_press(int key, t_game *mola)
 			mola->posX += mola->dirX * moveSpeed;
 		if (worldMap[(int)mola->posX][(int)(mola->posY + mola->dirY * moveSpeed)] == 0)
 			mola->posY += mola->dirY * moveSpeed;
-		printf("mola->posY %f\n", mola->posY);
 	}
 	//move backwards if no wall behind you
 	if (key == 65364)
@@ -82,7 +81,6 @@ int key_press(int key, t_game *mola)
 		mola->planeX = mola->planeX * cos(rotSpeed) - mola->planeY * sin(rotSpeed);
 		mola->planeY = oldPlaneX * sin(rotSpeed) + mola->planeY * cos(rotSpeed);
 	}
-	// printf("input keyCode: %d\n", key);
 	return (0);
 }
 
