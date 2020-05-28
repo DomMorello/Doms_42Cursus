@@ -40,6 +40,7 @@ typedef struct		s_game
 
 int key_press(int key, t_game *mola)
 {
+	static int i = 0;
 	//speed modifiers
 	double moveSpeed = 3; //the constant value is in squares/second
 	double rotSpeed = 3;  //the constant value is in radians/second
@@ -88,7 +89,6 @@ int main()
 {
 	t_mlx mlx;
 	t_game mola;
-	t_game *ptr = &mola;
 
 	// printf("%lu\n", sizeof(ptr));
 	int (*test)(int, t_game *) = key_press;

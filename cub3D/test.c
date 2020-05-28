@@ -1,34 +1,41 @@
 #include <stdio.h>
 #include "./main.h"
 
-int test(int a, char b)
+int functDraw(int key, t_mlx *mola)
 {
-    printf("in the test\n");
-    return 0;
+    static int i = 0;
+
+    printf("key: %d\n", key);
+    i++;
+    mola->img.data[200 + WIN_WIDTH * i] = 0xFFFFFF;
+    printf("i: %d\n", i);
+    return 1;
 }
 
 int main(int argc, char const *argv[])
 {
+    t_mlx mlx;
+    int (*func_ptr)(int, t_mlx *) = functDraw;
 
-    int (*ptr)(int, char) = test;
-    ptr(3, 'a');
+    mlx.mlx_ptr = mlx_init();
+    mlx.win_ptr = mlx_new_window(mlx.mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "DomMorello");
+    mlx.img.img_ptr = mlx_new_image(mlx.mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
+    mlx.img.data = (int *)mlx_get_data_addr(mlx.img.img_ptr, &mlx.img.bpp, &mlx.img.size_l, &mlx.img.endian);
 
+    for (int i = 0; i < 100; i++)
+    {
+        mlx.img.data[100 + WIN_WIDTH * i] = 0xFFFFFF;
+    }
 
-    // double posX = 22, posY = 12;      //x and y start position
-    // double dirX = -1, dirY = 0;       //initial direction vector
-    // double planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
-
-    // double time = 0;    //time of current frame
-    // double oldTime = 0; //time of previous frame
-
-    // for (int x = 0; x <= WIN_WIDTH; x++)
+    // mlx_destroy_image(mlx.mlx_ptr, mlx.img.img_ptr);
+    // mlx.img.img_ptr = mlx_new_image(mlx.mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
+    // for (int i = 0; i < 100; i++)
     // {
-    //     double cameraX = 2 * x / (double)WIN_WIDTH - 1;
-    //     double rayDirX = dirX + planeX * cameraX; 
-    //     double rayDirY = dirY + planeY * cameraX; 
-
-    //     printf("cameraX: %f rayDirX %f rayDirY %f\n", cameraX, rayDirX, rayDirY);
+    //     mlx.img.data[200 + WIN_WIDTH * i] = 0xFFFFFF;
     // }
+    mlx_key_hook(mlx.win_ptr, func_ptr, &mlx);
+    mlx_put_image_to_window(mlx.mlx_ptr, mlx.win_ptr, mlx.img.img_ptr, 0, 0);
+    mlx_loop(mlx.mlx_ptr);
 
     return 0;
 }
