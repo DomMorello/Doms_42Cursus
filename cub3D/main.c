@@ -28,12 +28,8 @@ int worldMap[mapWidth][mapHeight] =
 		{1, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
 
-int		init_window(t_mlx *mlx)
+int init_window(t_mlx *mlx)
 {
-	mlx->mlx_ptr = mlx_init();
-	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr, WIN_WIDTH, WIN_WIDTH, "DomMorello");
-	mlx->img.img_ptr = mlx_new_image(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
-	mlx->img.data = (int *)mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size_l, &mlx->img.endian);
 	mlx->game.posX = 22;
 	mlx->game.posY = 12;
 	mlx->game.dirX = -1;
@@ -43,7 +39,7 @@ int		init_window(t_mlx *mlx)
 	return 0;
 }
 
-int		setSideDist(t_mlx *mlx)
+int setSideDist(t_mlx *mlx)
 {
 	if (mlx->game.rayDirX < 0)
 	{
@@ -53,7 +49,7 @@ int		setSideDist(t_mlx *mlx)
 	else
 	{
 		mlx->game.stepX = 1;
-		mlx->game.sideDistX = (mlx->game.mapX + 1.0) * mlx->game.deltaDistX;
+		mlx->game.sideDistX = (mlx->game.mapX + 1.0 - mlx->game.posX) * mlx->game.deltaDistX;
 	}
 	if (mlx->game.rayDirY < 0)
 	{
@@ -66,9 +62,9 @@ int		setSideDist(t_mlx *mlx)
 		mlx->game.sideDistY = (mlx->game.mapY + 1.0 - mlx->game.posY) * mlx->game.deltaDistY;
 	}
 	return 0;
-}	
+}
 
-int		setVar(t_mlx *mlx, int i)
+int setVar(t_mlx *mlx, int i)
 {
 	mlx->game.cameraX = 2 * i / (double)WIN_WIDTH - 1;
 	mlx->game.rayDirX = mlx->game.dirX + mlx->game.planeX * mlx->game.cameraX;
@@ -82,8 +78,8 @@ int		setVar(t_mlx *mlx, int i)
 	return 0;
 }
 
-int		setDraw(t_mlx *mlx)
-{	
+int setDraw(t_mlx *mlx)
+{
 	mlx->game.lineHeight = (int)(WIN_HEIGHT / mlx->game.perpWallDist);
 	mlx->game.drawStart = -mlx->game.lineHeight / 2 + WIN_HEIGHT / 2;
 	if (mlx->game.drawStart < 0)
@@ -103,8 +99,7 @@ int		setDraw(t_mlx *mlx)
 		return 0xFFEB5A;
 }
 
-
-int		performDDA(t_mlx *mlx)
+int performDDA(t_mlx *mlx)
 {
 	while (mlx->game.hit == 0)
 	{
@@ -122,31 +117,84 @@ int		performDDA(t_mlx *mlx)
 		}
 		if (worldMap[mlx->game.mapX][mlx->game.mapY] > 0)
 			mlx->game.hit = 1;
-		if (mlx->game.side == 0)
-			mlx->game.perpWallDist = (mlx->game.mapX - mlx->game.posX + (1 - mlx->game.stepX) / 2) / mlx->game.rayDirX;
-		else
-			mlx->game.perpWallDist = (mlx->game.mapY - mlx->game.posY + (1 - mlx->game.stepY) / 2) / mlx->game.rayDirY;
-		return setDraw(mlx);
 	}
+	if (mlx->game.side == 0)
+		mlx->game.perpWallDist = (mlx->game.mapX - mlx->game.posX + (1 - mlx->game.stepX) / 2) / mlx->game.rayDirX;
+	else
+		mlx->game.perpWallDist = (mlx->game.mapY - mlx->game.posY + (1 - mlx->game.stepY) / 2) / mlx->game.rayDirY;
+	return setDraw(mlx);
 }
 
-int		key_press(int key, t_mlx *mlx)
+int		adjustFigure(int key, t_mlx *mlx)
+{
+	double moveSpeed = 3; //the constant value is in squares/second
+    double rotSpeed = 3;  //the constant value is in radians/second
+    //move forward if no wall in front of you
+    if (key == 65362)
+    {
+        if (worldMap[(int)(mlx->game.posX + mlx->game.dirX * moveSpeed)][(int)mlx->game.posY] == 0)
+            mlx->game.posX += mlx->game.dirX * moveSpeed;
+        if (worldMap[(int)mlx->game.posX][(int)(mlx->game.posY + mlx->game.dirY * moveSpeed)] == 0)
+            mlx->game.posY += mlx->game.dirY * moveSpeed;
+    }
+    //move backwards if no wall behind you
+    if (key == 65364)
+    {
+        if (worldMap[(int)(mlx->game.posX - mlx->game.dirX * moveSpeed)][(int)mlx->game.posY] == 0)
+            mlx->game.posX -= mlx->game.dirX * moveSpeed;
+        if (worldMap[(int)mlx->game.posX][(int)(mlx->game.posY - mlx->game.dirY * moveSpeed)] == 0)
+            mlx->game.posY -= mlx->game.dirY * moveSpeed;
+    }
+    //rotate to the right
+    if (key == 65363)
+    {
+        //both camera direction and camera plane must be rotated
+        double oldDirX = mlx->game.dirX;
+        mlx->game.dirX = mlx->game.dirX * cos(-rotSpeed) - mlx->game.dirY * sin(-rotSpeed);
+        mlx->game.dirY = oldDirX * sin(-rotSpeed) + mlx->game.dirY * cos(-rotSpeed);
+        double oldPlaneX = mlx->game.planeX;
+        mlx->game.planeX = mlx->game.planeX * cos(-rotSpeed) - mlx->game.planeY * sin(-rotSpeed);
+        mlx->game.planeY = oldPlaneX * sin(-rotSpeed) + mlx->game.planeY * cos(-rotSpeed);
+    }
+    //rotate to the left
+    if (key == 65361)
+    {
+        //both camera direction and camera plane must be rotated
+        double oldDirX = mlx->game.dirX;
+        mlx->game.dirX = mlx->game.dirX * cos(rotSpeed) - mlx->game.dirY * sin(rotSpeed);
+        mlx->game.dirY = oldDirX * sin(rotSpeed) + mlx->game.dirY * cos(rotSpeed);
+        double oldPlaneX = mlx->game.planeX;
+        mlx->game.planeX = mlx->game.planeX * cos(rotSpeed) - mlx->game.planeY * sin(rotSpeed);
+        mlx->game.planeY = oldPlaneX * sin(rotSpeed) + mlx->game.planeY * cos(rotSpeed);
+    }
+}
+
+int key_press(int key, t_mlx *mlx)
 {
 	printf("key: %d\n", key);
+	// mlx_destroy_image(mlx->mlx_ptr, mlx->img.img_ptr);
+	// mlx->img.img_ptr = mlx_new_image(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
+	// mlx->img.data = (int *)mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size_l, &mlx->img.endian);
+	/* 어떻게 해야 그 루프안에서 반복될까? */
+	adjustFigure(key, mlx);
+	// for (int i = 0; i < 200; i++)
+	// {
+	// 	mlx->img.data[200 + WIN_WIDTH * i] = 0xFFFFFF;
+	// }
+	// mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img.img_ptr, 0, 0);
 	return 0;
 }
 
-int		drawVertLine(t_mlx *mlx, int i, int color)
+int drawVertLine(t_mlx *mlx, int i, int color)
 {
 	while (mlx->game.drawStart <= mlx->game.drawEnd)
 	{
 		mlx->img.data[i + WIN_WIDTH * mlx->game.drawStart] = color;
 		mlx->game.drawStart++;
 	}
-	mlx_hook(mlx->mlx_ptr, 2, 1L<<0, key_press, mlx);
 }
 
-int		startEngine(t_mlx *mlx)
+int startEngine(t_mlx *mlx)
 {
 	int i;
 	int color;
@@ -163,10 +211,12 @@ int		startEngine(t_mlx *mlx)
 	return 0;
 }
 
-int		start_game(t_mlx *mlx)
+int start_game(t_mlx *mlx)
 {
 	init_window(mlx);
 	startEngine(mlx);
+	mlx_hook(mlx->win_ptr, 2, 1L<<0, key_press, mlx);
+	mlx_loop_hook(mlx->mlx_ptr, startEngine, mlx);
 	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img.img_ptr, 0, 0);
 	mlx_loop(mlx->mlx_ptr);
 	return 0;
@@ -174,8 +224,13 @@ int		start_game(t_mlx *mlx)
 
 int main()
 {
-	/* read map, handle exception */
 	t_mlx mlx;
+	/* read map, handle exception */
+
+	mlx.mlx_ptr = mlx_init();
+	mlx.win_ptr = mlx_new_window(mlx.mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "DomMorello");
+	mlx.img.img_ptr = mlx_new_image(mlx.mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
+	mlx.img.data = (int *)mlx_get_data_addr(mlx.img.img_ptr, &mlx.img.bpp, &mlx.img.size_l, &mlx.img.endian);
 	start_game(&mlx);
 	return (0);
 }

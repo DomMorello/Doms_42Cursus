@@ -38,7 +38,7 @@ int main(int argc, char const *argv[])
     // {
     //     mlx.img.data[200 + WIN_WIDTH * i] = 0xFFFFFF;
     // }
-    mlx_key_hook(mlx.win_ptr, func_ptr, &mlx);
+    mlx_hook(mlx.win_ptr,2, 1L<<0, func_ptr, &mlx);
     mlx_put_image_to_window(mlx.mlx_ptr, mlx.win_ptr, mlx.img.img_ptr, 0, 0);
     mlx_loop(mlx.mlx_ptr);
 

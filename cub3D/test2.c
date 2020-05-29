@@ -28,50 +28,58 @@ int worldMap[mapWidth][mapHeight] =
         {1, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
         {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
 
-int key_press(int key, t_game *mola)
+int key_press(int key, t_mlx *mola)
 {
-    static int i = 0;
-    //speed modifiers
-    double moveSpeed = 3; //the constant value is in squares/second
-    double rotSpeed = 3;  //the constant value is in radians/second
-    //move forward if no wall in front of you
-    if (key == 65362)
+    mlx_destroy_image(mola->mlx_ptr, mola->img.img_ptr);
+    mola->img.img_ptr = mlx_new_image(mola->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
+    mola->img.data = (int *)mlx_get_data_addr(mola->img.img_ptr, &mola->img.bpp, &mola->img.size_l, &mola->img.endian);
+    printf("key: %d\n", key);
+    for (int i = 0; i < 50; i++)
     {
-        if (worldMap[(int)(mola->posX + mola->dirX * moveSpeed)][(int)mola->posY] == 0)
-            mola->posX += mola->dirX * moveSpeed;
-        if (worldMap[(int)mola->posX][(int)(mola->posY + mola->dirY * moveSpeed)] == 0)
-            mola->posY += mola->dirY * moveSpeed;
+        mola->img.data[200 + WIN_WIDTH * i] = 0xFFFFFF;
     }
-    //move backwards if no wall behind you
-    if (key == 65364)
-    {
-        if (worldMap[(int)(mola->posX - mola->dirX * moveSpeed)][(int)mola->posY] == 0)
-            mola->posX -= mola->dirX * moveSpeed;
-        if (worldMap[(int)mola->posX][(int)(mola->posY - mola->dirY * moveSpeed)] == 0)
-            mola->posY -= mola->dirY * moveSpeed;
-    }
-    //rotate to the right
-    if (key == 65363)
-    {
-        //both camera direction and camera plane must be rotated
-        double oldDirX = mola->dirX;
-        mola->dirX = mola->dirX * cos(-rotSpeed) - mola->dirY * sin(-rotSpeed);
-        mola->dirY = oldDirX * sin(-rotSpeed) + mola->dirY * cos(-rotSpeed);
-        double oldPlaneX = mola->planeX;
-        mola->planeX = mola->planeX * cos(-rotSpeed) - mola->planeY * sin(-rotSpeed);
-        mola->planeY = oldPlaneX * sin(-rotSpeed) + mola->planeY * cos(-rotSpeed);
-    }
-    //rotate to the left
-    if (key == 65361)
-    {
-        //both camera direction and camera plane must be rotated
-        double oldDirX = mola->dirX;
-        mola->dirX = mola->dirX * cos(rotSpeed) - mola->dirY * sin(rotSpeed);
-        mola->dirY = oldDirX * sin(rotSpeed) + mola->dirY * cos(rotSpeed);
-        double oldPlaneX = mola->planeX;
-        mola->planeX = mola->planeX * cos(rotSpeed) - mola->planeY * sin(rotSpeed);
-        mola->planeY = oldPlaneX * sin(rotSpeed) + mola->planeY * cos(rotSpeed);
-    }
+    mlx_put_image_to_window(mola->mlx_ptr, mola->win_ptr, mola->img.img_ptr, 0, 0);
+    // //speed modifiers
+    // double moveSpeed = 3; //the constant value is in squares/second
+    // double rotSpeed = 3;  //the constant value is in radians/second
+    // //move forward if no wall in front of you
+    // if (key == 65362)
+    // {
+    //     if (worldMap[(int)(mola->posX + mola->dirX * moveSpeed)][(int)mola->posY] == 0)
+    //         mola->posX += mola->dirX * moveSpeed;
+    //     if (worldMap[(int)mola->posX][(int)(mola->posY + mola->dirY * moveSpeed)] == 0)
+    //         mola->posY += mola->dirY * moveSpeed;
+    // }
+    // //move backwards if no wall behind you
+    // if (key == 65364)
+    // {
+    //     if (worldMap[(int)(mola->posX - mola->dirX * moveSpeed)][(int)mola->posY] == 0)
+    //         mola->posX -= mola->dirX * moveSpeed;
+    //     if (worldMap[(int)mola->posX][(int)(mola->posY - mola->dirY * moveSpeed)] == 0)
+    //         mola->posY -= mola->dirY * moveSpeed;
+    // }
+    // //rotate to the right
+    // if (key == 65363)
+    // {
+    //     //both camera direction and camera plane must be rotated
+    //     double oldDirX = mola->dirX;
+    //     mola->dirX = mola->dirX * cos(-rotSpeed) - mola->dirY * sin(-rotSpeed);
+    //     mola->dirY = oldDirX * sin(-rotSpeed) + mola->dirY * cos(-rotSpeed);
+    //     double oldPlaneX = mola->planeX;
+    //     mola->planeX = mola->planeX * cos(-rotSpeed) - mola->planeY * sin(-rotSpeed);
+    //     mola->planeY = oldPlaneX * sin(-rotSpeed) + mola->planeY * cos(-rotSpeed);
+    // }
+    // //rotate to the left
+    // if (key == 65361)
+    // {
+    //     //both camera direction and camera plane must be rotated
+    //     double oldDirX = mola->dirX;
+    //     mola->dirX = mola->dirX * cos(rotSpeed) - mola->dirY * sin(rotSpeed);
+    //     mola->dirY = oldDirX * sin(rotSpeed) + mola->dirY * cos(rotSpeed);
+    //     double oldPlaneX = mola->planeX;
+    //     mola->planeX = mola->planeX * cos(rotSpeed) - mola->planeY * sin(rotSpeed);
+    //     mola->planeY = oldPlaneX * sin(rotSpeed) + mola->planeY * cos(rotSpeed);
+    // }
     return (0);
 }
 
@@ -79,9 +87,6 @@ int main()
 {
     t_mlx mlx;
     t_game mola;
-
-    // printf("%lu\n", sizeof(ptr));
-    int (*test)(int, t_game *) = key_press;
 
     mlx.mlx_ptr = mlx_init();
     mlx.win_ptr = mlx_new_window(mlx.mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "DomMorello");
@@ -101,14 +106,6 @@ int main()
 
     for (int x = 0; x < WIN_WIDTH; x++)
     {
-        // //calculate ray position and direction
-        // double cameraX = 2 * x / (double)WIN_WIDTH - 1; //x-coordinate in camera space
-        // double rayDirX = dirX + planeX * cameraX;
-        // double rayDirY = dirY + planeY * cameraX;
-        // //which box of the map we're in
-        // int mapX = (int)posX;
-        // int mapY = (int)posY;
-
         //calculate ray position and direction
         double cameraX = 2 * x / (double)WIN_WIDTH - 1; //x-coordinate in camera space
         double rayDirX = mola.dirX + mola.planeX * cameraX;
@@ -153,6 +150,7 @@ int main()
             stepY = 1;
             sideDistY = (mapY + 1.0 - mola.posY) * deltaDistY;
         }
+
         //perform DDA
         while (hit == 0)
         {
@@ -191,7 +189,6 @@ int main()
         int drawEnd = lineHeight / 2 + WIN_HEIGHT / 2;
         if (drawEnd >= WIN_HEIGHT)
             drawEnd = WIN_HEIGHT - 1;
-
         int color;
 
         //choose wall color
@@ -213,21 +210,19 @@ int main()
             color = 0xFFEB5A;
             break; //yellow
         }
-
         //give x and y sides different brightness
         if (side == 1)
         {
             color = color / 2;
         }
-
         //draw the pixels of the stripe as a vertical line
         while (drawStart <= drawEnd)
         {
             mlx.img.data[x + WIN_WIDTH * drawStart] = color;
             drawStart++;
         }
-        mlx_hook(mlx.win_ptr, 2, 1L << 0, key_press, &mola);
     }
+    mlx_hook(mlx.win_ptr, 2, 1L << 0, key_press, &mlx);
     mlx_put_image_to_window(mlx.mlx_ptr, mlx.win_ptr, mlx.img.img_ptr, 0, 0);
     mlx_loop(mlx.mlx_ptr);
     return (0);
