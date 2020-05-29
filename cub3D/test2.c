@@ -30,56 +30,56 @@ int worldMap[mapWidth][mapHeight] =
 
 int key_press(int key, t_mlx *mola)
 {
-    mlx_destroy_image(mola->mlx_ptr, mola->img.img_ptr);
-    mola->img.img_ptr = mlx_new_image(mola->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
-    mola->img.data = (int *)mlx_get_data_addr(mola->img.img_ptr, &mola->img.bpp, &mola->img.size_l, &mola->img.endian);
-    printf("key: %d\n", key);
-    for (int i = 0; i < 50; i++)
+    // mlx_destroy_image(mola->mlx_ptr, mola->img.img_ptr);
+    // mola->img.img_ptr = mlx_new_image(mola->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
+    // mola->img.data = (int *)mlx_get_data_addr(mola->img.img_ptr, &mola->img.bpp, &mola->img.size_l, &mola->img.endian);
+    // printf("key: %d\n", key);
+    // for (int i = 0; i < 50; i++)
+    // {
+    //     mola->img.data[200 + WIN_WIDTH * i] = 0xFFFFFF;
+    // }
+    // mlx_put_image_to_window(mola->mlx_ptr, mola->win_ptr, mola->img.img_ptr, 0, 0);
+    //speed modifiers
+    double moveSpeed = 3; //the constant value is in squares/second
+    double rotSpeed = 3;  //the constant value is in radians/second
+    //move forward if no wall in front of you
+    if (key == 65362)
     {
-        mola->img.data[200 + WIN_WIDTH * i] = 0xFFFFFF;
+        if (worldMap[(int)(mola->posX + mola->dirX * moveSpeed)][(int)mola->posY] == 0)
+            mola->posX += mola->dirX * moveSpeed;
+        if (worldMap[(int)mola->posX][(int)(mola->posY + mola->dirY * moveSpeed)] == 0)
+            mola->posY += mola->dirY * moveSpeed;
     }
-    mlx_put_image_to_window(mola->mlx_ptr, mola->win_ptr, mola->img.img_ptr, 0, 0);
-    // //speed modifiers
-    // double moveSpeed = 3; //the constant value is in squares/second
-    // double rotSpeed = 3;  //the constant value is in radians/second
-    // //move forward if no wall in front of you
-    // if (key == 65362)
-    // {
-    //     if (worldMap[(int)(mola->posX + mola->dirX * moveSpeed)][(int)mola->posY] == 0)
-    //         mola->posX += mola->dirX * moveSpeed;
-    //     if (worldMap[(int)mola->posX][(int)(mola->posY + mola->dirY * moveSpeed)] == 0)
-    //         mola->posY += mola->dirY * moveSpeed;
-    // }
-    // //move backwards if no wall behind you
-    // if (key == 65364)
-    // {
-    //     if (worldMap[(int)(mola->posX - mola->dirX * moveSpeed)][(int)mola->posY] == 0)
-    //         mola->posX -= mola->dirX * moveSpeed;
-    //     if (worldMap[(int)mola->posX][(int)(mola->posY - mola->dirY * moveSpeed)] == 0)
-    //         mola->posY -= mola->dirY * moveSpeed;
-    // }
-    // //rotate to the right
-    // if (key == 65363)
-    // {
-    //     //both camera direction and camera plane must be rotated
-    //     double oldDirX = mola->dirX;
-    //     mola->dirX = mola->dirX * cos(-rotSpeed) - mola->dirY * sin(-rotSpeed);
-    //     mola->dirY = oldDirX * sin(-rotSpeed) + mola->dirY * cos(-rotSpeed);
-    //     double oldPlaneX = mola->planeX;
-    //     mola->planeX = mola->planeX * cos(-rotSpeed) - mola->planeY * sin(-rotSpeed);
-    //     mola->planeY = oldPlaneX * sin(-rotSpeed) + mola->planeY * cos(-rotSpeed);
-    // }
-    // //rotate to the left
-    // if (key == 65361)
-    // {
-    //     //both camera direction and camera plane must be rotated
-    //     double oldDirX = mola->dirX;
-    //     mola->dirX = mola->dirX * cos(rotSpeed) - mola->dirY * sin(rotSpeed);
-    //     mola->dirY = oldDirX * sin(rotSpeed) + mola->dirY * cos(rotSpeed);
-    //     double oldPlaneX = mola->planeX;
-    //     mola->planeX = mola->planeX * cos(rotSpeed) - mola->planeY * sin(rotSpeed);
-    //     mola->planeY = oldPlaneX * sin(rotSpeed) + mola->planeY * cos(rotSpeed);
-    // }
+    //move backwards if no wall behind you
+    if (key == 65364)
+    {
+        if (worldMap[(int)(mola->posX - mola->dirX * moveSpeed)][(int)mola->posY] == 0)
+            mola->posX -= mola->dirX * moveSpeed;
+        if (worldMap[(int)mola->posX][(int)(mola->posY - mola->dirY * moveSpeed)] == 0)
+            mola->posY -= mola->dirY * moveSpeed;
+    }
+    //rotate to the right
+    if (key == 65363)
+    {
+        //both camera direction and camera plane must be rotated
+        double oldDirX = mola->dirX;
+        mola->dirX = mola->dirX * cos(-rotSpeed) - mola->dirY * sin(-rotSpeed);
+        mola->dirY = oldDirX * sin(-rotSpeed) + mola->dirY * cos(-rotSpeed);
+        double oldPlaneX = mola->planeX;
+        mola->planeX = mola->planeX * cos(-rotSpeed) - mola->planeY * sin(-rotSpeed);
+        mola->planeY = oldPlaneX * sin(-rotSpeed) + mola->planeY * cos(-rotSpeed);
+    }
+    //rotate to the left
+    if (key == 65361)
+    {
+        //both camera direction and camera plane must be rotated
+        double oldDirX = mola->dirX;
+        mola->dirX = mola->dirX * cos(rotSpeed) - mola->dirY * sin(rotSpeed);
+        mola->dirY = oldDirX * sin(rotSpeed) + mola->dirY * cos(rotSpeed);
+        double oldPlaneX = mola->planeX;
+        mola->planeX = mola->planeX * cos(rotSpeed) - mola->planeY * sin(rotSpeed);
+        mola->planeY = oldPlaneX * sin(rotSpeed) + mola->planeY * cos(rotSpeed);
+    }
     return (0);
 }
 

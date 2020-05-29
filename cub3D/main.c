@@ -1,5 +1,4 @@
 #include "./main.h"
-#include <math.h>
 
 int worldMap[mapWidth][mapHeight] =
 	{
@@ -28,18 +27,7 @@ int worldMap[mapWidth][mapHeight] =
 		{1, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
 
-int init_window(t_mlx *mlx)
-{
-	mlx->game.posX = 22;
-	mlx->game.posY = 12;
-	mlx->game.dirX = -1;
-	mlx->game.dirY = 0;
-	mlx->game.planeX = 0;
-	mlx->game.planeY = 0.66;
-	return 0;
-}
-
-int setSideDist(t_mlx *mlx)
+int		setSideDist(t_mlx *mlx)
 {
 	if (mlx->game.rayDirX < 0)
 	{
@@ -64,7 +52,7 @@ int setSideDist(t_mlx *mlx)
 	return 0;
 }
 
-int setVar(t_mlx *mlx, int i)
+int		setVar(t_mlx *mlx, int i)
 {
 	mlx->game.cameraX = 2 * i / (double)WIN_WIDTH - 1;
 	mlx->game.rayDirX = mlx->game.dirX + mlx->game.planeX * mlx->game.cameraX;
@@ -125,76 +113,16 @@ int performDDA(t_mlx *mlx)
 	return setDraw(mlx);
 }
 
-int		adjustFigure(int key, t_mlx *mlx)
-{
-	double moveSpeed = 3; //the constant value is in squares/second
-    double rotSpeed = 3;  //the constant value is in radians/second
-    //move forward if no wall in front of you
-    if (key == 65362)
-    {
-        if (worldMap[(int)(mlx->game.posX + mlx->game.dirX * moveSpeed)][(int)mlx->game.posY] == 0)
-            mlx->game.posX += mlx->game.dirX * moveSpeed;
-        if (worldMap[(int)mlx->game.posX][(int)(mlx->game.posY + mlx->game.dirY * moveSpeed)] == 0)
-            mlx->game.posY += mlx->game.dirY * moveSpeed;
-    }
-    //move backwards if no wall behind you
-    if (key == 65364)
-    {
-        if (worldMap[(int)(mlx->game.posX - mlx->game.dirX * moveSpeed)][(int)mlx->game.posY] == 0)
-            mlx->game.posX -= mlx->game.dirX * moveSpeed;
-        if (worldMap[(int)mlx->game.posX][(int)(mlx->game.posY - mlx->game.dirY * moveSpeed)] == 0)
-            mlx->game.posY -= mlx->game.dirY * moveSpeed;
-    }
-    //rotate to the right
-    if (key == 65363)
-    {
-        //both camera direction and camera plane must be rotated
-        double oldDirX = mlx->game.dirX;
-        mlx->game.dirX = mlx->game.dirX * cos(-rotSpeed) - mlx->game.dirY * sin(-rotSpeed);
-        mlx->game.dirY = oldDirX * sin(-rotSpeed) + mlx->game.dirY * cos(-rotSpeed);
-        double oldPlaneX = mlx->game.planeX;
-        mlx->game.planeX = mlx->game.planeX * cos(-rotSpeed) - mlx->game.planeY * sin(-rotSpeed);
-        mlx->game.planeY = oldPlaneX * sin(-rotSpeed) + mlx->game.planeY * cos(-rotSpeed);
-    }
-    //rotate to the left
-    if (key == 65361)
-    {
-        //both camera direction and camera plane must be rotated
-        double oldDirX = mlx->game.dirX;
-        mlx->game.dirX = mlx->game.dirX * cos(rotSpeed) - mlx->game.dirY * sin(rotSpeed);
-        mlx->game.dirY = oldDirX * sin(rotSpeed) + mlx->game.dirY * cos(rotSpeed);
-        double oldPlaneX = mlx->game.planeX;
-        mlx->game.planeX = mlx->game.planeX * cos(rotSpeed) - mlx->game.planeY * sin(rotSpeed);
-        mlx->game.planeY = oldPlaneX * sin(rotSpeed) + mlx->game.planeY * cos(rotSpeed);
-    }
-}
-
-int key_press(int key, t_mlx *mlx)
-{
-	printf("key: %d\n", key);
-	// mlx_destroy_image(mlx->mlx_ptr, mlx->img.img_ptr);
-	// mlx->img.img_ptr = mlx_new_image(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
-	// mlx->img.data = (int *)mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size_l, &mlx->img.endian);
-	/* 어떻게 해야 그 루프안에서 반복될까? */
-	adjustFigure(key, mlx);
-	// for (int i = 0; i < 200; i++)
-	// {
-	// 	mlx->img.data[200 + WIN_WIDTH * i] = 0xFFFFFF;
-	// }
-	// mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img.img_ptr, 0, 0);
-	return 0;
-}
-
 int drawVertLine(t_mlx *mlx, int i, int color)
 {
-	while (mlx->game.drawStart <= mlx->game.drawEnd)
+	while (mlx->game.drawStart < mlx->game.drawEnd)
 	{
 		mlx->img.data[i + WIN_WIDTH * mlx->game.drawStart] = color;
 		mlx->game.drawStart++;
 	}
 }
 
-int startEngine(t_mlx *mlx)
+int		raycast(t_mlx *mlx)
 {
 	int i;
 	int color;
@@ -211,26 +139,85 @@ int startEngine(t_mlx *mlx)
 	return 0;
 }
 
-int start_game(t_mlx *mlx)
+int		run_game(t_mlx *mlx)
 {
-	init_window(mlx);
-	startEngine(mlx);
-	mlx_hook(mlx->win_ptr, 2, 1L<<0, key_press, mlx);
-	mlx_loop_hook(mlx->mlx_ptr, startEngine, mlx);
+	raycast(mlx);
 	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img.img_ptr, 0, 0);
+}	
+
+int 	key_press(int key, t_mlx *mlx)
+{
+	printf("keyL %d\n", key);
+
+	mlx_destroy_image(mlx->mlx_ptr, mlx->img.img_ptr);
+	mlx->img.img_ptr = mlx_new_image(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
+	mlx->img.data = (int *)mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size_l, &mlx->img.endian);
+
+	double moveSpeed = 0.3; //the constant value is in squares/second
+	double rotSpeed = 0.03;  //the constant value is in radians/second
+	//move forward if no wall in front of you
+	if (key == 65362)
+	{
+		if (worldMap[(int)(mlx->game.posX + mlx->game.dirX * moveSpeed)][(int)mlx->game.posY] == 0)
+			mlx->game.posX += mlx->game.dirX * moveSpeed;
+		if (worldMap[(int)mlx->game.posX][(int)(mlx->game.posY + mlx->game.dirY * moveSpeed)] == 0)
+			mlx->game.posY += mlx->game.dirY * moveSpeed;
+	}
+	//move backwards if no wall behind you
+	if (key == 65364)
+	{
+		if (worldMap[(int)(mlx->game.posX - mlx->game.dirX * moveSpeed)][(int)mlx->game.posY] == 0)
+			mlx->game.posX -= mlx->game.dirX * moveSpeed;
+		if (worldMap[(int)mlx->game.posX][(int)(mlx->game.posY - mlx->game.dirY * moveSpeed)] == 0)
+			mlx->game.posY -= mlx->game.dirY * moveSpeed;
+	}
+	//rotate to the right
+	if (key == 65363)
+	{
+		//both camera direction and camera plane must be rotated
+		double oldDirX = mlx->game.dirX;
+		mlx->game.dirX = mlx->game.dirX * cos(-rotSpeed) - mlx->game.dirY * sin(-rotSpeed);
+		mlx->game.dirY = oldDirX * sin(-rotSpeed) + mlx->game.dirY * cos(-rotSpeed);
+		double oldPlaneX = mlx->game.planeX;
+		mlx->game.planeX = mlx->game.planeX * cos(-rotSpeed) - mlx->game.planeY * sin(-rotSpeed);
+		mlx->game.planeY = oldPlaneX * sin(-rotSpeed) + mlx->game.planeY * cos(-rotSpeed);
+	}
+	//rotate to the left
+	if (key == 65361)
+	{
+		//both camera direction and camera plane must be rotated
+		double oldDirX = mlx->game.dirX;
+		mlx->game.dirX = mlx->game.dirX * cos(rotSpeed) - mlx->game.dirY * sin(rotSpeed);
+		mlx->game.dirY = oldDirX * sin(rotSpeed) + mlx->game.dirY * cos(rotSpeed);
+		double oldPlaneX = mlx->game.planeX;
+		mlx->game.planeX = mlx->game.planeX * cos(rotSpeed) - mlx->game.planeY * sin(rotSpeed);
+		mlx->game.planeY = oldPlaneX * sin(rotSpeed) + mlx->game.planeY * cos(rotSpeed);
+	}
+	return 0;
+}
+
+int initial_setting(t_mlx *mlx)
+{
+	mlx->mlx_ptr = mlx_init();
+	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "DomMorello");
+	mlx->img.img_ptr = mlx_new_image(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
+	mlx->img.data = (int *)mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size_l, &mlx->img.endian);
+	mlx->game.posX = 22;
+	mlx->game.posY = 12;
+	mlx->game.dirX = -1;
+	mlx->game.dirY = 0;
+	mlx->game.planeX = 0;
+	mlx->game.planeY = 0.66;
+	mlx_hook(mlx->win_ptr, 2, 1L << 0, key_press, mlx);
+	mlx_loop_hook(mlx->mlx_ptr, run_game, mlx);
 	mlx_loop(mlx->mlx_ptr);
 	return 0;
 }
 
-int main()
+int main(int argc, char const *argv[])
 {
 	t_mlx mlx;
-	/* read map, handle exception */
 
-	mlx.mlx_ptr = mlx_init();
-	mlx.win_ptr = mlx_new_window(mlx.mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "DomMorello");
-	mlx.img.img_ptr = mlx_new_image(mlx.mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
-	mlx.img.data = (int *)mlx_get_data_addr(mlx.img.img_ptr, &mlx.img.bpp, &mlx.img.size_l, &mlx.img.endian);
-	start_game(&mlx);
-	return (0);
+	initial_setting(&mlx);
+	return 0;
 }
