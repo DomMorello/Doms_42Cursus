@@ -3,12 +3,17 @@
 
 int functDraw(int key, t_mlx *mola)
 {
-    static int i = 0;
+    int i = 0;
 
+    mlx_destroy_image(mola->mlx_ptr, mola->img.img_ptr);
+    mola->img.img_ptr = mlx_new_image(mola->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
+    mola->img.data = (int *)mlx_get_data_addr(mola->img.img_ptr, &mola->img.bpp, &mola->img.size_l, &mola->img.endian);
     printf("key: %d\n", key);
-    i++;
-    mola->img.data[200 + WIN_WIDTH * i] = 0xFFFFFF;
-    printf("i: %d\n", i);
+    for (i = 0; i < 50; i++)
+    {
+        mola->img.data[200 + WIN_WIDTH * i] = 0xFFFFFF;
+    }
+    mlx_put_image_to_window(mola->mlx_ptr, mola->win_ptr, mola->img.img_ptr, 0, 0);
     return 1;
 }
 

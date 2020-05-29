@@ -28,222 +28,154 @@ int worldMap[mapWidth][mapHeight] =
 		{1, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
 
-typedef struct		s_game
+int		init_window(t_mlx *mlx)
 {
-	double posX;
-	double posY;
-	double dirX;
-	double dirY;
-	double planeX;
-	double planeY;
-}					t_game;
+	mlx->mlx_ptr = mlx_init();
+	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr, WIN_WIDTH, WIN_WIDTH, "DomMorello");
+	mlx->img.img_ptr = mlx_new_image(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
+	mlx->img.data = (int *)mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size_l, &mlx->img.endian);
+	mlx->game.posX = 22;
+	mlx->game.posY = 12;
+	mlx->game.dirX = -1;
+	mlx->game.dirY = 0;
+	mlx->game.planeX = 0;
+	mlx->game.planeY = 0.66;
+	return 0;
+}
 
-int key_press(int key, t_game *mola)
+int		setSideDist(t_mlx *mlx)
 {
-	static int i = 0;
-	//speed modifiers
-	double moveSpeed = 3; //the constant value is in squares/second
-	double rotSpeed = 3;  //the constant value is in radians/second
-	//move forward if no wall in front of you
-	if (key == 65362)
+	if (mlx->game.rayDirX < 0)
 	{
-		if (worldMap[(int)(mola->posX + mola->dirX * moveSpeed)][(int)mola->posY] == 0)
-			mola->posX += mola->dirX * moveSpeed;
-		if (worldMap[(int)mola->posX][(int)(mola->posY + mola->dirY * moveSpeed)] == 0)
-			mola->posY += mola->dirY * moveSpeed;
+		mlx->game.stepX = -1;
+		mlx->game.sideDistX = (mlx->game.posX - mlx->game.mapX) * mlx->game.deltaDistX;
 	}
-	//move backwards if no wall behind you
-	if (key == 65364)
+	else
 	{
-		if (worldMap[(int)(mola->posX - mola->dirX * moveSpeed)][(int)mola->posY] == 0)
-			mola->posX -= mola->dirX * moveSpeed;
-		if (worldMap[(int)mola->posX][(int)(mola->posY - mola->dirY * moveSpeed)] == 0)
-			mola->posY -= mola->dirY * moveSpeed;
+		mlx->game.stepX = 1;
+		mlx->game.sideDistX = (mlx->game.mapX + 1.0) * mlx->game.deltaDistX;
 	}
-	//rotate to the right
-	if (key == 65363)
+	if (mlx->game.rayDirY < 0)
 	{
-		//both camera direction and camera plane must be rotated
-		double oldDirX = mola->dirX;
-		mola->dirX = mola->dirX * cos(-rotSpeed) - mola->dirY * sin(-rotSpeed);
-		mola->dirY = oldDirX * sin(-rotSpeed) + mola->dirY * cos(-rotSpeed);
-		double oldPlaneX = mola->planeX;
-		mola->planeX = mola->planeX * cos(-rotSpeed) - mola->planeY * sin(-rotSpeed);
-		mola->planeY = oldPlaneX * sin(-rotSpeed) + mola->planeY * cos(-rotSpeed);
+		mlx->game.stepY = -1;
+		mlx->game.sideDistY = (mlx->game.posY - mlx->game.mapY) * mlx->game.deltaDistY;
 	}
-	//rotate to the left
-	if (key == 65361)
+	else
 	{
-		//both camera direction and camera plane must be rotated
-		double oldDirX = mola->dirX;
-		mola->dirX = mola->dirX * cos(rotSpeed) - mola->dirY * sin(rotSpeed);
-		mola->dirY = oldDirX * sin(rotSpeed) + mola->dirY * cos(rotSpeed);
-		double oldPlaneX = mola->planeX;
-		mola->planeX = mola->planeX * cos(rotSpeed) - mola->planeY * sin(rotSpeed);
-		mola->planeY = oldPlaneX * sin(rotSpeed) + mola->planeY * cos(rotSpeed);
+		mlx->game.stepY = 1;
+		mlx->game.sideDistY = (mlx->game.mapY + 1.0 - mlx->game.posY) * mlx->game.deltaDistY;
 	}
-	return (0);
+	return 0;
+}	
+
+int		setVar(t_mlx *mlx, int i)
+{
+	mlx->game.cameraX = 2 * i / (double)WIN_WIDTH - 1;
+	mlx->game.rayDirX = mlx->game.dirX + mlx->game.planeX * mlx->game.cameraX;
+	mlx->game.rayDirY = mlx->game.dirY + mlx->game.planeY * mlx->game.cameraX;
+	mlx->game.mapX = (int)mlx->game.posX;
+	mlx->game.mapY = (int)mlx->game.posY;
+	mlx->game.deltaDistX = fabs(1 / mlx->game.rayDirX);
+	mlx->game.deltaDistY = fabs(1 / mlx->game.rayDirY);
+	mlx->game.hit = 0;
+	setSideDist(mlx);
+	return 0;
+}
+
+int		setDraw(t_mlx *mlx)
+{	
+	mlx->game.lineHeight = (int)(WIN_HEIGHT / mlx->game.perpWallDist);
+	mlx->game.drawStart = -mlx->game.lineHeight / 2 + WIN_HEIGHT / 2;
+	if (mlx->game.drawStart < 0)
+		mlx->game.drawStart = 0;
+	mlx->game.drawEnd = mlx->game.lineHeight / 2 + WIN_HEIGHT / 2;
+	if (mlx->game.drawEnd >= WIN_HEIGHT)
+		mlx->game.drawEnd = WIN_HEIGHT - 1;
+	if (worldMap[mlx->game.mapX][mlx->game.mapY] == 1)
+		return 0xFF0000;
+	else if (worldMap[mlx->game.mapX][mlx->game.mapY] == 2)
+		return 0x00FF00;
+	else if (worldMap[mlx->game.mapX][mlx->game.mapY] == 3)
+		return 0x0000FF;
+	else if (worldMap[mlx->game.mapX][mlx->game.mapY] == 4)
+		return 0xFFFFFF;
+	else
+		return 0xFFEB5A;
+}
+
+
+int		performDDA(t_mlx *mlx)
+{
+	while (mlx->game.hit == 0)
+	{
+		if (mlx->game.sideDistX < mlx->game.sideDistY)
+		{
+			mlx->game.sideDistX += mlx->game.deltaDistX;
+			mlx->game.mapX += mlx->game.stepX;
+			mlx->game.side = 0;
+		}
+		else
+		{
+			mlx->game.sideDistY += mlx->game.deltaDistY;
+			mlx->game.mapY += mlx->game.stepY;
+			mlx->game.side = 1;
+		}
+		if (worldMap[mlx->game.mapX][mlx->game.mapY] > 0)
+			mlx->game.hit = 1;
+		if (mlx->game.side == 0)
+			mlx->game.perpWallDist = (mlx->game.mapX - mlx->game.posX + (1 - mlx->game.stepX) / 2) / mlx->game.rayDirX;
+		else
+			mlx->game.perpWallDist = (mlx->game.mapY - mlx->game.posY + (1 - mlx->game.stepY) / 2) / mlx->game.rayDirY;
+		return setDraw(mlx);
+	}
+}
+
+int		key_press(int key, t_mlx *mlx)
+{
+	printf("key: %d\n", key);
+	return 0;
+}
+
+int		drawVertLine(t_mlx *mlx, int i, int color)
+{
+	while (mlx->game.drawStart <= mlx->game.drawEnd)
+	{
+		mlx->img.data[i + WIN_WIDTH * mlx->game.drawStart] = color;
+		mlx->game.drawStart++;
+	}
+	mlx_hook(mlx->mlx_ptr, 2, 1L<<0, key_press, mlx);
+}
+
+int		startEngine(t_mlx *mlx)
+{
+	int i;
+	int color;
+
+	i = 0;
+	while (i++ < WIN_WIDTH)
+	{
+		setVar(mlx, i);
+		color = performDDA(mlx);
+		if (mlx->game.side == 1)
+			color = color / 2;
+		drawVertLine(mlx, i, color);
+	}
+	return 0;
+}
+
+int		start_game(t_mlx *mlx)
+{
+	init_window(mlx);
+	startEngine(mlx);
+	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img.img_ptr, 0, 0);
+	mlx_loop(mlx->mlx_ptr);
+	return 0;
 }
 
 int main()
 {
+	/* read map, handle exception */
 	t_mlx mlx;
-	t_game mola;
-
-	// printf("%lu\n", sizeof(ptr));
-	int (*test)(int, t_game *) = key_press;
-
-	mlx.mlx_ptr = mlx_init();
-	mlx.win_ptr = mlx_new_window(mlx.mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "DomMorello");
-	mlx.img.img_ptr = mlx_new_image(mlx.mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
-	mlx.img.data = (int *)mlx_get_data_addr(mlx.img.img_ptr, &mlx.img.bpp, &mlx.img.size_l, &mlx.img.endian);
-
-	// double posX = 22, posY = 12;	  //x and y start position
-	// double dirX = -1, dirY = 0;		  //initial direction vector
-	// double planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
-
-	mola.posX = 22;
-	mola.posY = 12;
-	mola.dirX = -1;
-	mola.dirY = 0;
-	mola.planeX = 0;
-	mola.planeY = 0.66;
-
-	int flag = 1;
-	while (flag)
-	{
-		for (int x = 0; x < WIN_WIDTH; x++)
-		{
-			// //calculate ray position and direction
-			// double cameraX = 2 * x / (double)WIN_WIDTH - 1; //x-coordinate in camera space
-			// double rayDirX = dirX + planeX * cameraX;
-			// double rayDirY = dirY + planeY * cameraX;
-			// //which box of the map we're in
-			// int mapX = (int)posX;
-			// int mapY = (int)posY;
-
-			//calculate ray position and direction
-			double cameraX = 2 * x / (double)WIN_WIDTH - 1; //x-coordinate in camera space
-			double rayDirX = mola.dirX + mola.planeX * cameraX;
-			double rayDirY = mola.dirY + mola.planeY * cameraX;
-			//which box of the map we're in
-			int mapX = (int)mola.posX;
-			int mapY = (int)mola.posY;			
-
-			//length of ray from current position to next x or y-side
-			double sideDistX;
-			double sideDistY;
-
-			//length of ray from one x or y-side to next x or y-side
-			double deltaDistX = fabs(1 / rayDirX);
-			double deltaDistY = fabs(1 / rayDirY);
-			double perpWallDist;
-
-			//what direction to step in x or y-direction (either +1 or -1)
-			int stepX;
-			int stepY;
-
-			int hit = 0; //was there a wall hit?
-			int side;	 //was a NS or a EW wall hit?
-			//calculate step and initial sideDist
-			if (rayDirX < 0)
-			{
-				stepX = -1;
-				sideDistX = (mola.posX - mapX) * deltaDistX;
-			}
-			else
-			{
-				stepX = 1;
-				sideDistX = (mapX + 1.0 - mola.posX) * deltaDistX;
-			}
-			if (rayDirY < 0)
-			{
-				stepY = -1;
-				sideDistY = (mola.posY - mapY) * deltaDistY;
-			}
-			else
-			{
-				stepY = 1;
-				sideDistY = (mapY + 1.0 - mola.posY) * deltaDistY;
-			}
-			//perform DDA
-			while (hit == 0)
-			{
-				//jump to next map square, OR in x-direction, OR in y-direction
-				if (sideDistX < sideDistY)
-				{
-					sideDistX += deltaDistX;
-					mapX += stepX;
-					side = 0;
-				}
-				else
-				{
-					sideDistY += deltaDistY;
-					mapY += stepY;
-					side = 1;
-				}
-				//Check if ray has hit a wall
-				if (worldMap[mapX][mapY] > 0)
-				{
-					hit = 1;
-					flag = 0;
-				}
-			}
-			//Calculate distance projected on camera direction (Euclidean distance will give fisheye effect!)
-			if (side == 0)
-				perpWallDist = (mapX - mola.posX + (1 - stepX) / 2) / rayDirX;
-			else
-				perpWallDist = (mapY - mola.posY + (1 - stepY) / 2) / rayDirY;
-
-			//Calculate height of line to draw on screen
-			int lineHeight = (int)(WIN_HEIGHT / perpWallDist);
-
-			//calculate lowest and highest pixel to fill in current stripe
-			int drawStart = -lineHeight / 2 + WIN_HEIGHT / 2;
-			if (drawStart < 0)
-				drawStart = 0;
-			int drawEnd = lineHeight / 2 + WIN_HEIGHT / 2;
-			if (drawEnd >= WIN_HEIGHT)
-				drawEnd = WIN_HEIGHT - 1;
-
-			int color;
-
-			//choose wall color
-			switch (worldMap[mapX][mapY])
-			{
-			case 1:
-				color = 0xFF0000;
-				break; //red
-			case 2:
-				color = 0x00FF00;
-				break; //green
-			case 3:
-				color = 0x0000FF;
-				break; //blue
-			case 4:
-				color = 0xFFFFFF;
-				break; //white
-			default:
-				color = 0xFFEB5A;
-				break; //yellow
-			}
-
-			//give x and y sides different brightness
-			if (side == 1)
-			{
-				color = color / 2;
-			}
-
-			//draw the pixels of the stripe as a vertical line
-			while (drawStart <= drawEnd)
-			{
-				mlx.img.data[x + WIN_WIDTH * drawStart] = color;
-				drawStart++;
-			}
-			mlx_hook(mlx.win_ptr, 2, 1L<<0, key_press, &mola);
-		}
-	}
-	mlx_put_image_to_window(mlx.mlx_ptr, mlx.win_ptr, mlx.img.img_ptr, 0, 0);
-	mlx_loop(mlx.mlx_ptr);
+	start_game(&mlx);
 	return (0);
 }

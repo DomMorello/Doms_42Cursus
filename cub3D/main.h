@@ -30,11 +30,39 @@ typedef struct      s_img
 	int     endian;
 }                   t_img;
 
+typedef struct		s_game
+{
+	double	posX;
+	double	posY;
+	double	dirX;
+	double	dirY;
+	double	planeX;
+	double	planeY;
+	int		mapX;
+	int 	mapY;
+	double	sideDistX;
+	double	sideDistY;
+	double	deltaDistX;
+	double	deltaDistY;
+	double	perpWallDist;
+	int		stepX;
+	int		stepY;
+	int		hit;
+	int		side;
+	double	cameraX;
+	double	rayDirX;
+	double	rayDirY;
+	int		drawStart;
+	int		drawEnd;
+	int		lineHeight;
+}					t_game;
+
 typedef struct		s_mlx
 {
 	void	*mlx_ptr;
 	void	*win_ptr;
 	t_img	img;
+	t_game	game;
 }					t_mlx;
 
 # endif 
