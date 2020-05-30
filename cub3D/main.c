@@ -210,6 +210,7 @@ int initial_setting(t_mlx *mlx)
 	mlx->game.planeY = 0.66;
 	mlx_hook(mlx->win_ptr, 2, 1L << 0, key_press, mlx);
 	mlx_loop_hook(mlx->mlx_ptr, run_game, mlx);
+	/* keypress keyreleae 해야 한다. */
 	mlx_loop(mlx->mlx_ptr);
 	return 0;
 }
