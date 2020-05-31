@@ -147,17 +147,16 @@ int		run_game(t_mlx *mlx)
 
 int 	key_press(int key, t_mlx *mlx)
 {
-	printf("keyL %d\n", key);
-
 	mlx_destroy_image(mlx->mlx_ptr, mlx->img.img_ptr);
 	mlx->img.img_ptr = mlx_new_image(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
 	mlx->img.data = (int *)mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size_l, &mlx->img.endian);
 
 	double moveSpeed = 0.3; //the constant value is in squares/second
-	double rotSpeed = 0.03;  //the constant value is in radians/second
+	double rotSpeed = 0.05;  //the constant value is in radians/second
 	//move forward if no wall in front of you
 	if (key == 65362)
 	{
+		printf("Moving forward\n");
 		if (worldMap[(int)(mlx->game.posX + mlx->game.dirX * moveSpeed)][(int)mlx->game.posY] == 0)
 			mlx->game.posX += mlx->game.dirX * moveSpeed;
 		if (worldMap[(int)mlx->game.posX][(int)(mlx->game.posY + mlx->game.dirY * moveSpeed)] == 0)
@@ -166,6 +165,7 @@ int 	key_press(int key, t_mlx *mlx)
 	//move backwards if no wall behind you
 	if (key == 65364)
 	{
+		printf("Moving backward\n");
 		if (worldMap[(int)(mlx->game.posX - mlx->game.dirX * moveSpeed)][(int)mlx->game.posY] == 0)
 			mlx->game.posX -= mlx->game.dirX * moveSpeed;
 		if (worldMap[(int)mlx->game.posX][(int)(mlx->game.posY - mlx->game.dirY * moveSpeed)] == 0)
@@ -174,6 +174,7 @@ int 	key_press(int key, t_mlx *mlx)
 	//rotate to the right
 	if (key == 65363)
 	{
+		printf("turning right\n");
 		//both camera direction and camera plane must be rotated
 		double oldDirX = mlx->game.dirX;
 		mlx->game.dirX = mlx->game.dirX * cos(-rotSpeed) - mlx->game.dirY * sin(-rotSpeed);
@@ -185,6 +186,7 @@ int 	key_press(int key, t_mlx *mlx)
 	//rotate to the left
 	if (key == 65361)
 	{
+		printf("turning left\n");
 		//both camera direction and camera plane must be rotated
 		double oldDirX = mlx->game.dirX;
 		mlx->game.dirX = mlx->game.dirX * cos(rotSpeed) - mlx->game.dirY * sin(rotSpeed);
@@ -210,7 +212,6 @@ int initial_setting(t_mlx *mlx)
 	mlx->game.planeY = 0.66;
 	mlx_hook(mlx->win_ptr, 2, 1L << 0, key_press, mlx);
 	mlx_loop_hook(mlx->mlx_ptr, run_game, mlx);
-	/* keypress keyreleae 해야 한다. */
 	mlx_loop(mlx->mlx_ptr);
 	return 0;
 }
@@ -219,6 +220,7 @@ int main(int argc, char const *argv[])
 {
 	t_mlx mlx;
 
+	/* parsing map info */
 	initial_setting(&mlx);
 	return 0;
 }
