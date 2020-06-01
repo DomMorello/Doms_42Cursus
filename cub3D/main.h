@@ -32,6 +32,11 @@ typedef struct      s_img
 	int     endian;
 }                   t_img;
 
+typedef struct		s_tex
+{
+	int		size;
+}					t_tex;
+
 typedef struct		s_game
 {
 	double	posX;

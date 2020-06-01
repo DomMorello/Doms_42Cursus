@@ -120,9 +120,28 @@ int drawVertLine(t_mlx *mlx, int i, int color)
 	// 	mlx->img.data[i + WIN_WIDTH * mlx->game.drawStart] = color;
 	// 	mlx->game.drawStart++;
 	// }
-	int a = 50;
-	int b = 50;
-	void *xpm_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/mossy.xpm", &a, &b);
+
+	t_tex texes[8];
+
+	t_tex *t1 = &texes[0];
+	t_tex *t2 = &texes[1];
+	t_tex *t3 = &texes[2];
+	t_tex *t4 = &texes[3];
+	t_tex *t5 = &texes[4];
+	t_tex *t6 = &texes[5];
+	t_tex *t7 = &texes[6];
+	t_tex *t8 = &texes[7];
+	int a = 64;
+	int b = 64;
+	t1 = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/eagle.xpm", &a, &b);
+	t2 = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/mossy.xpm", &a, &b);
+	t3 = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/greystone.xpm", &a, &b);
+	t4 = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/eagle.xpm", &a, &b);
+	t5 = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/mossy.xpm", &a, &b);
+	t6 = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/greystone.xpm", &a, &b);
+	t7 = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/eagle.xpm", &a, &b);
+	t8 = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/mossy.xpm", &a, &b);
+
 	int texNum = worldMap[mlx->game.mapX][mlx->game.mapY] - 1;
 	double wallX;
 	if (mlx->game.side == 0)
@@ -142,8 +161,8 @@ int drawVertLine(t_mlx *mlx, int i, int color)
 	for (int y = mlx->game.drawStart; y < mlx->game.drawStart; y++)
 	{
 		int texY = (int)texPos & (TEX_HEIGHT - 1);
-		mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, xpm_ptr, 0, 0);
 		texPos += step;
+		mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, t1, 0, 0);
 	}
 }
 
