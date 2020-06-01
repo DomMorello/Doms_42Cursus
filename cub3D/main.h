@@ -5,8 +5,10 @@
 #include <stdio.h>
 #include "./minilibx_linux/mlx.h"
 
-# define WIN_WIDTH 800
-# define WIN_HEIGHT 600
+# define WIN_WIDTH 640
+# define WIN_HEIGHT 480
+# define TEX_WIDTH 64
+# define TEX_HEIGHT 64
 
 #define mapWidth 24
 #define mapHeight 24
