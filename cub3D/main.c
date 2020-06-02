@@ -111,15 +111,15 @@ int performDDA(t_mlx *mlx)
 	else
 		mlx->game.perpWallDist = (mlx->game.mapY - mlx->game.posY + (1 - mlx->game.stepY) / 2) / mlx->game.rayDirY;
 	return setDraw(mlx);
-}
+} 
 
 int drawVertLine(t_mlx *mlx, int i, int color)
 {
-	// while (mlx->game.drawStart < mlx->game.drawEnd)
-	// {
-	// 	mlx->img.data[i + WIN_WIDTH * mlx->game.drawStart] = color;
-	// 	mlx->game.drawStart++;
-	// }
+	while (mlx->game.drawStart < mlx->game.drawEnd)
+	{
+		mlx->img.data[i + WIN_WIDTH * mlx->game.drawStart] = color;
+		mlx->game.drawStart++;
+	}
 
 	int texNum = worldMap[mlx->game.mapX][mlx->game.mapY] - 1;
 	double wallX;
@@ -135,12 +135,16 @@ int drawVertLine(t_mlx *mlx, int i, int color)
 	if (mlx->game.side == 1 && mlx->game.rayDirX < 0)
 		texX = TEX_WIDTH - texX - 1;
 
-	double step = 1.0 * TEX_HEIGHT / mlx->game.lineHeight;
-	double texPos = (mlx->game.drawStart - WIN_HEIGHT / 2 + mlx->game.lineHeight / 2) * step;
-	for (int y = mlx->game.drawStart; y < mlx->game.drawStart; y++)
+	// double step = 1.0 * TEX_HEIGHT / mlx->game.lineHeight;
+	// double texPos = (mlx->game.drawStart - WIN_HEIGHT / 2 + mlx->game.lineHeight / 2) * step;
+	// for (int y = mlx->game.drawStart; y < mlx->game.drawStart; y++)
+	// {
+	// 	int texY = (int)texPos & (TEX_HEIGHT - 1);
+	// 	texPos += step;
+	// }
+	while (mlx->game.drawStart < mlx->game.drawEnd)
 	{
-		int texY = (int)texPos & (TEX_HEIGHT - 1);
-		texPos += step;
+
 	}
 }
 
