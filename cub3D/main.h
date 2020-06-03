@@ -76,6 +76,7 @@ typedef struct		s_mlx
 	void	*win_ptr;
 	t_img	img;
 	t_game	game;
+	t_tex	tex;
 }					t_mlx;
 
 # endif 

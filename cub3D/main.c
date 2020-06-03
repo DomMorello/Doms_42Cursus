@@ -75,16 +75,17 @@ int setDraw(t_mlx *mlx)
 	mlx->game.drawEnd = mlx->game.lineHeight / 2 + WIN_HEIGHT / 2;
 	if (mlx->game.drawEnd >= WIN_HEIGHT)
 		mlx->game.drawEnd = WIN_HEIGHT - 1;
-	if (worldMap[mlx->game.mapX][mlx->game.mapY] == 1)
-		return 0xFF0000;
-	else if (worldMap[mlx->game.mapX][mlx->game.mapY] == 2)
-		return 0x00FF00;
-	else if (worldMap[mlx->game.mapX][mlx->game.mapY] == 3)
-		return 0x0000FF;
-	else if (worldMap[mlx->game.mapX][mlx->game.mapY] == 4)
-		return 0xFFFFFF;
-	else
-		return 0xFFEB5A;
+	return 0;
+	// if (worldMap[mlx->game.mapX][mlx->game.mapY] == 1)
+	// 	return 0xFF0000;
+	// else if (worldMap[mlx->game.mapX][mlx->game.mapY] == 2)
+	// 	return 0x00FF00;
+	// else if (worldMap[mlx->game.mapX][mlx->game.mapY] == 3)
+	// 	return 0x0000FF;
+	// else if (worldMap[mlx->game.mapX][mlx->game.mapY] == 4)
+	// 	return 0xFFFFFF;
+	// else
+	// 	return 0xFFEB5A;
 }
 
 int performDDA(t_mlx *mlx)
@@ -115,11 +116,11 @@ int performDDA(t_mlx *mlx)
 
 int drawVertLine(t_mlx *mlx, int i, int color)
 {
-	while (mlx->game.drawStart < mlx->game.drawEnd)
-	{
-		mlx->img.data[i + WIN_WIDTH * mlx->game.drawStart] = color;
-		mlx->game.drawStart++;
-	}
+	// while (mlx->game.drawStart < mlx->game.drawEnd)
+	// {
+	// 	mlx->img.data[i + WIN_WIDTH * mlx->game.drawStart] = color;
+	// 	mlx->game.drawStart++;
+	// }
 
 	int texNum = worldMap[mlx->game.mapX][mlx->game.mapY] - 1;
 	double wallX;
@@ -137,16 +138,25 @@ int drawVertLine(t_mlx *mlx, int i, int color)
 
 	double step = 1.0 * TEX_HEIGHT / mlx->game.lineHeight;
 	double texPos = (mlx->game.drawStart - WIN_HEIGHT / 2 + mlx->game.lineHeight / 2) * step;
-	for (int y = mlx->game.drawStart; y < mlx->game.drawStart; y++)
+	
+	while (mlx->game.drawStart < mlx->game.drawEnd)
 	{
 		int texY = (int)texPos & (TEX_HEIGHT - 1);
 		texPos += step;
-		/*test: xpm 파일에서 픽셀을 가져와서 그 픽셀을 이용해서 window에 찍어봐야 한다 */
+		int tmp = mlx->tex.data[TEX_HEIGHT * texY + texX];
+		if (mlx->game.side == 1)
+			tmp = tmp / 2;
+		mlx->img.data[i + WIN_WIDTH * mlx->game.drawStart] = tmp;
+		mlx->game.drawStart++;
 	}
-	while (mlx->game.drawStart < mlx->game.drawEnd)
-	{
-
-	}
+	// for (int y = mlx->game.drawStart; y < mlx->game.drawEnd; y++)
+	// {
+	// 	int texY = (int)texPos & (TEX_HEIGHT - 1);
+	// 	texPos += step;
+	// 	int color2 = mlx->tex.data[TEX_HEIGHT * texY + texX];
+	// 	mlx->img.data[] = color2;
+	// 	/*test: xpm 파일에서 픽셀을 가져와서 그 픽셀을 이용해서 window에 찍어봐야 한다 */
+	// }
 }
 
 int raycast(t_mlx *mlx)
@@ -159,8 +169,8 @@ int raycast(t_mlx *mlx)
 	{
 		setVar(mlx, i);
 		color = performDDA(mlx);
-		if (mlx->game.side == 1)
-			color = color / 2;
+		// if (mlx->game.side == 1)
+		// 	color = color / 2;
 		drawVertLine(mlx, i, color);
 	}
 	return 0;
@@ -231,6 +241,8 @@ int initial_setting(t_mlx *mlx)
 	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "DomMorello");
 	mlx->img.img_ptr = mlx_new_image(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
 	mlx->img.data = (int *)mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size_l, &mlx->img.endian);
+	mlx->tex.img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/mossy.xpm", &mlx->tex.width, &mlx->tex.height);
+	mlx->tex.data = (int *)mlx_get_data_addr(mlx->tex.img_ptr, &mlx->tex.bpp, &mlx->tex.size_l, &mlx->tex.endian);
 	mlx->game.posX = 22;
 	mlx->game.posY = 12;
 	mlx->game.dirX = -1;

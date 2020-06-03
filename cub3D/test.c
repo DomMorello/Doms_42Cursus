@@ -17,13 +17,6 @@ int main(int argc, char const *argv[])
     
     tex.img_ptr = mlx_xpm_file_to_image(mlx.mlx_ptr, "./textures/mossy.xpm", &tex.width, &tex.height);
     tex.data = (int *)mlx_get_data_addr(tex.img_ptr, &tex.bpp, &tex.size_l, &tex.endian);
-
-
-    int a = tex.data[200];
-    for (size_t i = 0; i < 100; i++)
-    {
-        mlx.img.data[100 + i * WIN_WIDTH] = a;
-    }
     
     // mlx_put_image_to_window(mlx.mlx_ptr, mlx.win_ptr, tex.img_ptr, 0, 0);
     
