@@ -135,13 +135,14 @@ int drawVertLine(t_mlx *mlx, int i, int color)
 	if (mlx->game.side == 1 && mlx->game.rayDirX < 0)
 		texX = TEX_WIDTH - texX - 1;
 
-	// double step = 1.0 * TEX_HEIGHT / mlx->game.lineHeight;
-	// double texPos = (mlx->game.drawStart - WIN_HEIGHT / 2 + mlx->game.lineHeight / 2) * step;
-	// for (int y = mlx->game.drawStart; y < mlx->game.drawStart; y++)
-	// {
-	// 	int texY = (int)texPos & (TEX_HEIGHT - 1);
-	// 	texPos += step;
-	// }
+	double step = 1.0 * TEX_HEIGHT / mlx->game.lineHeight;
+	double texPos = (mlx->game.drawStart - WIN_HEIGHT / 2 + mlx->game.lineHeight / 2) * step;
+	for (int y = mlx->game.drawStart; y < mlx->game.drawStart; y++)
+	{
+		int texY = (int)texPos & (TEX_HEIGHT - 1);
+		texPos += step;
+		/*test: xpm 파일에서 픽셀을 가져와서 그 픽셀을 이용해서 window에 찍어봐야 한다 */
+	}
 	while (mlx->game.drawStart < mlx->game.drawEnd)
 	{
 

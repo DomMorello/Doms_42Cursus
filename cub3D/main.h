@@ -34,7 +34,13 @@ typedef struct      s_img
 
 typedef struct		s_tex
 {
-	int		size;
+	void	*img_ptr;
+	int		*data;
+	int		width;
+	int		height;
+	int     size_l;
+	int     bpp;
+	int     endian;
 }					t_tex;
 
 typedef struct		s_game
