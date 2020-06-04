@@ -66,7 +66,7 @@ int setVar(t_mlx *mlx, int i)
 	return 0;
 }
 
-void	setDraw(t_mlx *mlx)
+void setDraw(t_mlx *mlx)
 {
 	mlx->game.lineHeight = (int)(WIN_HEIGHT / mlx->game.perpWallDist);
 	mlx->game.drawStart = -mlx->game.lineHeight / 2 + WIN_HEIGHT / 2;
@@ -101,9 +101,9 @@ int performDDA(t_mlx *mlx)
 	else
 		mlx->game.perpWallDist = (mlx->game.mapY - mlx->game.posY + (1 - mlx->game.stepY) / 2) / mlx->game.rayDirY;
 	setDraw(mlx);
-} 
+}
 
-int		get_side(t_mlx *mlx)
+int get_side(t_mlx *mlx)
 {
 	int wall_side;
 
@@ -136,15 +136,14 @@ int drawVertLine(t_mlx *mlx, int i)
 
 	double step = 1.0 * TEX_HEIGHT / mlx->game.lineHeight;
 	double texPos = (mlx->game.drawStart - WIN_HEIGHT / 2 + mlx->game.lineHeight / 2) * step;
-	
+
 	int wall_side = get_side(mlx);
 	while (mlx->game.drawStart < mlx->game.drawEnd)
 	{
 		int texY = (int)texPos & (TEX_HEIGHT - 1);
 		texPos += step;
 		int color = mlx->tex[wall_side].data[TEX_HEIGHT * texY + texX];
-		// if (mlx->game.side == 1)
-		// 	color = color / 2;
+		/* shading? */
 		mlx->img.data[i + WIN_WIDTH * mlx->game.drawStart] = color;
 		mlx->game.drawStart++;
 	}
@@ -153,7 +152,7 @@ int drawVertLine(t_mlx *mlx, int i)
 int key_press(t_mlx *mlx)
 {
 	double moveSpeed = 0.015; //the constant value is in squares/second
-	double rotSpeed = 0.005; //the constant value is in radians/second
+	double rotSpeed = 0.005;  //the constant value is in radians/second
 	// move forward if no wall in front of you
 	if (mlx->game.move_f == 1)
 	{
@@ -172,7 +171,6 @@ int key_press(t_mlx *mlx)
 		if (worldMap[(int)mlx->game.posX][(int)(mlx->game.posY - mlx->game.dirY * moveSpeed)] == 0)
 			mlx->game.posY -= mlx->game.dirY * moveSpeed;
 	}
-
 	//move to the right
 	if (mlx->game.move_r == 1)
 	{
@@ -182,7 +180,6 @@ int key_press(t_mlx *mlx)
 		if (worldMap[(int)mlx->game.posX][(int)(mlx->game.posY + mlx->game.planeY * 0.008)] == 0)
 			mlx->game.posY += mlx->game.planeY * 0.008;
 	}
-
 	//rotate to the right
 	if (mlx->game.rotate_r == 1)
 	{
@@ -195,7 +192,6 @@ int key_press(t_mlx *mlx)
 		mlx->game.planeX = mlx->game.planeX * cos(-rotSpeed) - mlx->game.planeY * sin(-rotSpeed);
 		mlx->game.planeY = oldPlaneX * sin(-rotSpeed) + mlx->game.planeY * cos(-rotSpeed);
 	}
-
 	//move to the left
 	if (mlx->game.move_l == 1)
 	{
@@ -205,7 +201,6 @@ int key_press(t_mlx *mlx)
 		if (worldMap[(int)mlx->game.posX][(int)(mlx->game.posY - mlx->game.planeY * 0.008)] == 0)
 			mlx->game.posY -= mlx->game.planeY * 0.008;
 	}
-
 	//rotate to the left
 	if (mlx->game.rotate_l == 1)
 	{
@@ -229,6 +224,15 @@ int run_game(t_mlx *mlx)
 	mlx_destroy_image(mlx->mlx_ptr, mlx->img.img_ptr);
 	mlx->img.img_ptr = mlx_new_image(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
 	mlx->img.data = (int *)mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size_l, &mlx->img.endian);
+	// 이렇게 간단하게 천장과 바닥을 할 수가 있다. 
+	for (size_t i = 0; i < (WIN_WIDTH * WIN_HEIGHT) / 2; i++)
+	{
+		mlx->img.data[i] = 0x23cd2e4;
+	}
+	for (size_t i = (WIN_WIDTH * WIN_HEIGHT) / 2; i < (WIN_WIDTH * WIN_HEIGHT); i++)
+	{
+		mlx->img.data[i] = 0x0230ea0;
+	}
 	if (mlx->game.move_f || mlx->game.move_b || mlx->game.move_r || mlx->game.move_l || mlx->game.rotate_r || mlx->game.rotate_l)
 		key_press(mlx);
 	while (i++ < WIN_WIDTH)
@@ -241,7 +245,7 @@ int run_game(t_mlx *mlx)
 	return 0;
 }
 
-int		key_press2(int key, t_mlx *mlx)
+int key_press2(int key, t_mlx *mlx)
 {
 	if (key == KEY_W)
 		mlx->game.move_f = 1;
@@ -257,7 +261,7 @@ int		key_press2(int key, t_mlx *mlx)
 		mlx->game.rotate_r = 1;
 }
 
-int		key_release(int key, t_mlx *mlx)
+int key_release(int key, t_mlx *mlx)
 {
 	if (key == KEY_W)
 		mlx->game.move_f = 0;
@@ -273,7 +277,7 @@ int		key_release(int key, t_mlx *mlx)
 		mlx->game.rotate_r = 0;
 }
 
-void	tmp_direction_tex(t_mlx *mlx)
+void tmp_direction_tex(t_mlx *mlx)
 {
 	int a = 64;
 	int b = 64;
@@ -303,7 +307,7 @@ int initial_setting(t_mlx *mlx)
 	mlx->game.dirY = 0;
 	mlx->game.planeX = 0;
 	mlx->game.planeY = 0.66;
-	tmp_direction_tex(mlx);	//일단 하드코딩으로 filepath를 넣어줬다. 
+	tmp_direction_tex(mlx); //일단 하드코딩으로 filepath를 넣어줬다.
 	mlx_hook(mlx->win_ptr, 2, 1L << 0, key_press2, mlx);
 	mlx_hook(mlx->win_ptr, 3, 1L << 1, key_release, mlx);
 	mlx_loop_hook(mlx->mlx_ptr, run_game, mlx);

@@ -150,51 +150,12 @@ int drawVertLine(t_mlx *mlx, int i)
 	}
 }
 
-int run_game(t_mlx *mlx)
+int key_press(t_mlx *mlx)
 {
-	int i;
-
-	i = 0;
-	while (i++ < WIN_WIDTH)
-	{
-		setVar(mlx, i);
-		performDDA(mlx);
-		drawVertLine(mlx, i);
-	}
-	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img.img_ptr, 0, 0);
-	return 0;
-}
-
-int		key_press2(int key, t_mlx *mlx)
-{
-	if (key == KEY_W || key == KEY_S)
-		mlx->game.move_fb = 1;
-	if (key == KEY_A || key == KEY_D)
-		mlx->game.move_rl = 1;
-	if (key == KEY_LEFT || key == KEY_RIGHT)
-		mlx->game.rotate = 1;
-}
-
-int		key_release(int key, t_mlx *mlx)
-{
-	if (key == KEY_W || key == KEY_S)
-		mlx->game.move_fb = -1;
-	if (key == KEY_A || key == KEY_D)
-		mlx->game.move_rl = -1;
-	if (key == KEY_LEFT || key == KEY_RIGHT)
-		mlx->game.rotate = -1;
-}
-
-int key_press(int key, t_mlx *mlx)
-{
-	mlx_destroy_image(mlx->mlx_ptr, mlx->img.img_ptr);
-	mlx->img.img_ptr = mlx_new_image(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
-	mlx->img.data = (int *)mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size_l, &mlx->img.endian);
-
-	double moveSpeed = 0.3; //the constant value is in squares/second
-	double rotSpeed = 0.05; //the constant value is in radians/second
-	//move forward if no wall in front of you
-	if (key == KEY_W)
+	double moveSpeed = 0.015; //the constant value is in squares/second
+	double rotSpeed = 0.005; //the constant value is in radians/second
+	// move forward if no wall in front of you
+	if (mlx->game.move_f == 1)
 	{
 		printf("Moving forward\n");
 		if (worldMap[(int)(mlx->game.posX + mlx->game.dirX * moveSpeed)][(int)mlx->game.posY] == 0)
@@ -203,7 +164,7 @@ int key_press(int key, t_mlx *mlx)
 			mlx->game.posY += mlx->game.dirY * moveSpeed;
 	}
 	//move backwards if no wall behind you
-	if (key == KEY_S)
+	if (mlx->game.move_b == 1)
 	{
 		printf("Moving backward\n");
 		if (worldMap[(int)(mlx->game.posX - mlx->game.dirX * moveSpeed)][(int)mlx->game.posY] == 0)
@@ -213,17 +174,17 @@ int key_press(int key, t_mlx *mlx)
 	}
 
 	//move to the right
-	if (key == KEY_D)
+	if (mlx->game.move_r == 1)
 	{
 		printf("moving right\n");
-		if (worldMap[(int)(mlx->game.posX + mlx->game.planeX * 0.1)][(int)mlx->game.posY] == 0)
-			mlx->game.posX += mlx->game.planeX * 0.15;
-		if (worldMap[(int)mlx->game.posX][(int)(mlx->game.posY + mlx->game.planeY * 0.1)] == 0)
-			mlx->game.posY += mlx->game.planeY * 0.15;
+		if (worldMap[(int)(mlx->game.posX + mlx->game.planeX * 0.008)][(int)mlx->game.posY] == 0)
+			mlx->game.posX += mlx->game.planeX * 0.008;
+		if (worldMap[(int)mlx->game.posX][(int)(mlx->game.posY + mlx->game.planeY * 0.008)] == 0)
+			mlx->game.posY += mlx->game.planeY * 0.008;
 	}
 
 	//rotate to the right
-	if (key == KEY_RIGHT)
+	if (mlx->game.rotate_r == 1)
 	{
 		printf("turning right\n");
 		//both camera direction and camera plane must be rotated
@@ -236,17 +197,17 @@ int key_press(int key, t_mlx *mlx)
 	}
 
 	//move to the left
-	if (key == KEY_A)
+	if (mlx->game.move_l == 1)
 	{
-		printf("moving left");
-		if (worldMap[(int)(mlx->game.posX - mlx->game.planeX * 0.1)][(int)mlx->game.posY] == 0)
-			mlx->game.posX -= mlx->game.planeX * 0.15;
-		if (worldMap[(int)mlx->game.posX][(int)(mlx->game.posY - mlx->game.planeY * 0.1)] == 0)
-			mlx->game.posY -= mlx->game.planeY * 0.15;
+		printf("moving left\n");
+		if (worldMap[(int)(mlx->game.posX - mlx->game.planeX * 0.008)][(int)mlx->game.posY] == 0)
+			mlx->game.posX -= mlx->game.planeX * 0.008;
+		if (worldMap[(int)mlx->game.posX][(int)(mlx->game.posY - mlx->game.planeY * 0.008)] == 0)
+			mlx->game.posY -= mlx->game.planeY * 0.008;
 	}
 
 	//rotate to the left
-	if (key == KEY_LEFT)
+	if (mlx->game.rotate_l == 1)
 	{
 		printf("turning left\n");
 		//both camera direction and camera plane must be rotated
@@ -258,6 +219,58 @@ int key_press(int key, t_mlx *mlx)
 		mlx->game.planeY = oldPlaneX * sin(rotSpeed) + mlx->game.planeY * cos(rotSpeed);
 	}
 	return 0;
+}
+
+int run_game(t_mlx *mlx)
+{
+	int i;
+
+	i = 0;
+	mlx_destroy_image(mlx->mlx_ptr, mlx->img.img_ptr);
+	mlx->img.img_ptr = mlx_new_image(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
+	mlx->img.data = (int *)mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size_l, &mlx->img.endian);
+	if (mlx->game.move_f || mlx->game.move_b || mlx->game.move_r || mlx->game.move_l || mlx->game.rotate_r || mlx->game.rotate_l)
+		key_press(mlx);
+	while (i++ < WIN_WIDTH)
+	{
+		setVar(mlx, i);
+		performDDA(mlx);
+		drawVertLine(mlx, i);
+	}
+	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img.img_ptr, 0, 0);
+	return 0;
+}
+
+int		key_press2(int key, t_mlx *mlx)
+{
+	if (key == KEY_W)
+		mlx->game.move_f = 1;
+	if (key == KEY_S)
+		mlx->game.move_b = 1;
+	if (key == KEY_A)
+		mlx->game.move_l = 1;
+	if (key == KEY_D)
+		mlx->game.move_r = 1;
+	if (key == KEY_LEFT)
+		mlx->game.rotate_l = 1;
+	if (key == KEY_RIGHT)
+		mlx->game.rotate_r = 1;
+}
+
+int		key_release(int key, t_mlx *mlx)
+{
+	if (key == KEY_W)
+		mlx->game.move_f = 0;
+	if (key == KEY_S)
+		mlx->game.move_b = 0;
+	if (key == KEY_A)
+		mlx->game.move_l = 0;
+	if (key == KEY_D)
+		mlx->game.move_r = 0;
+	if (key == KEY_LEFT)
+		mlx->game.rotate_l = 0;
+	if (key == KEY_RIGHT)
+		mlx->game.rotate_r = 0;
 }
 
 void	tmp_direction_tex(t_mlx *mlx)
@@ -291,7 +304,8 @@ int initial_setting(t_mlx *mlx)
 	mlx->game.planeX = 0;
 	mlx->game.planeY = 0.66;
 	tmp_direction_tex(mlx);	//일단 하드코딩으로 filepath를 넣어줬다. 
-	mlx_hook(mlx->win_ptr, 2, 1L << 0, key_press, mlx);
+	mlx_hook(mlx->win_ptr, 2, 1L << 0, key_press2, mlx);
+	mlx_hook(mlx->win_ptr, 3, 1L << 1, key_release, mlx);
 	mlx_loop_hook(mlx->mlx_ptr, run_game, mlx);
 	mlx_loop(mlx->mlx_ptr);
 	return 0;
