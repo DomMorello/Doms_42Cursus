@@ -138,20 +138,19 @@ int drawVertLine(t_mlx *mlx, int i)
 	double texPos = (mlx->game.drawStart - WIN_HEIGHT / 2 + mlx->game.lineHeight / 2) * step;
 	
 	int wall_side = get_side(mlx);
-	printf("wallside: %d\n", wall_side);
 	while (mlx->game.drawStart < mlx->game.drawEnd)
 	{
 		int texY = (int)texPos & (TEX_HEIGHT - 1);
 		texPos += step;
 		int color = mlx->tex[wall_side].data[TEX_HEIGHT * texY + texX];
-		if (mlx->game.side == 1)
-			color = color / 2;
+		// if (mlx->game.side == 1)
+		// 	color = color / 2;
 		mlx->img.data[i + WIN_WIDTH * mlx->game.drawStart] = color;
 		mlx->game.drawStart++;
 	}
 }
 
-int raycast(t_mlx *mlx)
+int run_game(t_mlx *mlx)
 {
 	int i;
 
@@ -162,13 +161,8 @@ int raycast(t_mlx *mlx)
 		performDDA(mlx);
 		drawVertLine(mlx, i);
 	}
-	return 0;
-}
-
-int run_game(t_mlx *mlx)
-{
-	raycast(mlx);
 	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img.img_ptr, 0, 0);
+	return 0;
 }
 
 int key_press(int key, t_mlx *mlx)
@@ -180,7 +174,8 @@ int key_press(int key, t_mlx *mlx)
 	double moveSpeed = 0.3; //the constant value is in squares/second
 	double rotSpeed = 0.05; //the constant value is in radians/second
 	//move forward if no wall in front of you
-	if (key == 65362)
+	printf("key: %d\n", key);
+	if (key == 119)
 	{
 		printf("Moving forward\n");
 		if (worldMap[(int)(mlx->game.posX + mlx->game.dirX * moveSpeed)][(int)mlx->game.posY] == 0)
@@ -189,7 +184,7 @@ int key_press(int key, t_mlx *mlx)
 			mlx->game.posY += mlx->game.dirY * moveSpeed;
 	}
 	//move backwards if no wall behind you
-	if (key == 65364)
+	if (key == 115)
 	{
 		printf("Moving backward\n");
 		if (worldMap[(int)(mlx->game.posX - mlx->game.dirX * moveSpeed)][(int)mlx->game.posY] == 0)
@@ -197,6 +192,17 @@ int key_press(int key, t_mlx *mlx)
 		if (worldMap[(int)mlx->game.posX][(int)(mlx->game.posY - mlx->game.dirY * moveSpeed)] == 0)
 			mlx->game.posY -= mlx->game.dirY * moveSpeed;
 	}
+
+	//move to the right
+	if (key == 100)
+	{
+		printf("moving right\n");
+		if (worldMap[(int)(mlx->game.posX + mlx->game.planeX * 0.1)][(int)mlx->game.posY] == 0)
+			mlx->game.posX += mlx->game.planeX * 0.15;
+		if (worldMap[(int)mlx->game.posX][(int)(mlx->game.posY + mlx->game.planeY * 0.1)] == 0)
+			mlx->game.posY += mlx->game.planeY * 0.15;
+	}
+
 	//rotate to the right
 	if (key == 65363)
 	{
@@ -209,6 +215,17 @@ int key_press(int key, t_mlx *mlx)
 		mlx->game.planeX = mlx->game.planeX * cos(-rotSpeed) - mlx->game.planeY * sin(-rotSpeed);
 		mlx->game.planeY = oldPlaneX * sin(-rotSpeed) + mlx->game.planeY * cos(-rotSpeed);
 	}
+
+	//move to the left
+	if (key == 97)
+	{
+		printf("moving left");
+		if (worldMap[(int)(mlx->game.posX - mlx->game.planeX * 0.1)][(int)mlx->game.posY] == 0)
+			mlx->game.posX -= mlx->game.planeX * 0.15;
+		if (worldMap[(int)mlx->game.posX][(int)(mlx->game.posY - mlx->game.planeY * 0.1)] == 0)
+			mlx->game.posY -= mlx->game.planeY * 0.15;
+	}
+
 	//rotate to the left
 	if (key == 65361)
 	{
@@ -228,18 +245,18 @@ void	tmp_direction_tex(t_mlx *mlx)
 {
 	int a = 64;
 	int b = 64;
-	mlx->tex[EAST].filepath = "./textures/wood.xpm";
+	mlx->tex[EAST].filepath = "./textures/mossy.xpm";
 	mlx->tex[WEST].filepath = "./textures/eagle.xpm";
 	mlx->tex[SOUTH].filepath = "./textures/greystone.xpm";
-	mlx->tex[NORTH].filepath = "./textures/mossy.xpm";
-	mlx->tex[EAST].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/wood.xpm", &a, &b);
+	mlx->tex[NORTH].filepath = "./textures/wood.xpm";
+	mlx->tex[EAST].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/mossy.xpm", &a, &b);
 	mlx->tex[WEST].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/eagle.xpm", &a, &b);
 	mlx->tex[SOUTH].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/greystone.xpm", &a, &b);
-	mlx->tex[NORTH].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/mossy.xpm", &a, &b);
+	mlx->tex[NORTH].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/wood.xpm", &a, &b);
 	mlx->tex[EAST].data = (int *)mlx_get_data_addr(mlx->tex[EAST].img_ptr, &mlx->tex[EAST].bpp, &mlx->tex[EAST].size_l, &mlx->tex[EAST].endian);
 	mlx->tex[WEST].data = (int *)mlx_get_data_addr(mlx->tex[WEST].img_ptr, &mlx->tex[WEST].bpp, &mlx->tex[WEST].size_l, &mlx->tex[WEST].endian);
 	mlx->tex[SOUTH].data = (int *)mlx_get_data_addr(mlx->tex[SOUTH].img_ptr, &mlx->tex[SOUTH].bpp, &mlx->tex[SOUTH].size_l, &mlx->tex[SOUTH].endian);
-	mlx->tex[EAST].data = (int *)mlx_get_data_addr(mlx->tex[NORTH].img_ptr, &mlx->tex[NORTH].bpp, &mlx->tex[NORTH].size_l, &mlx->tex[NORTH].endian);
+	mlx->tex[NORTH].data = (int *)mlx_get_data_addr(mlx->tex[NORTH].img_ptr, &mlx->tex[NORTH].bpp, &mlx->tex[NORTH].size_l, &mlx->tex[NORTH].endian);
 }
 
 int initial_setting(t_mlx *mlx)
