@@ -12,6 +12,11 @@
 
 #define mapWidth 24
 #define mapHeight 24
+
+enum	e_direction
+{
+	EAST, WEST, SOUTH, NORTH
+};
 // #define screenWidth 640
 // #define screenHeight 480
 
@@ -36,11 +41,12 @@ typedef struct		s_tex
 {
 	void	*img_ptr;
 	int		*data;
-	int		width;
-	int		height;
 	int     size_l;
 	int     bpp;
 	int     endian;
+	int		width;
+	int		height;
+	char	*filepath;
 }					t_tex;
 
 typedef struct		s_game
@@ -76,7 +82,7 @@ typedef struct		s_mlx
 	void	*win_ptr;
 	t_img	img;
 	t_game	game;
-	t_tex	tex;
+	t_tex	tex[4];
 }					t_mlx;
 
 # endif 

@@ -66,7 +66,7 @@ int setVar(t_mlx *mlx, int i)
 	return 0;
 }
 
-int setDraw(t_mlx *mlx)
+void	setDraw(t_mlx *mlx)
 {
 	mlx->game.lineHeight = (int)(WIN_HEIGHT / mlx->game.perpWallDist);
 	mlx->game.drawStart = -mlx->game.lineHeight / 2 + WIN_HEIGHT / 2;
@@ -75,17 +75,6 @@ int setDraw(t_mlx *mlx)
 	mlx->game.drawEnd = mlx->game.lineHeight / 2 + WIN_HEIGHT / 2;
 	if (mlx->game.drawEnd >= WIN_HEIGHT)
 		mlx->game.drawEnd = WIN_HEIGHT - 1;
-	return 0;
-	// if (worldMap[mlx->game.mapX][mlx->game.mapY] == 1)
-	// 	return 0xFF0000;
-	// else if (worldMap[mlx->game.mapX][mlx->game.mapY] == 2)
-	// 	return 0x00FF00;
-	// else if (worldMap[mlx->game.mapX][mlx->game.mapY] == 3)
-	// 	return 0x0000FF;
-	// else if (worldMap[mlx->game.mapX][mlx->game.mapY] == 4)
-	// 	return 0xFFFFFF;
-	// else
-	// 	return 0xFFEB5A;
 }
 
 int performDDA(t_mlx *mlx)
@@ -111,17 +100,26 @@ int performDDA(t_mlx *mlx)
 		mlx->game.perpWallDist = (mlx->game.mapX - mlx->game.posX + (1 - mlx->game.stepX) / 2) / mlx->game.rayDirX;
 	else
 		mlx->game.perpWallDist = (mlx->game.mapY - mlx->game.posY + (1 - mlx->game.stepY) / 2) / mlx->game.rayDirY;
-	return setDraw(mlx);
+	setDraw(mlx);
 } 
 
-int drawVertLine(t_mlx *mlx, int i, int color)
+int		get_side(t_mlx *mlx)
 {
-	// while (mlx->game.drawStart < mlx->game.drawEnd)
-	// {
-	// 	mlx->img.data[i + WIN_WIDTH * mlx->game.drawStart] = color;
-	// 	mlx->game.drawStart++;
-	// }
+	int wall_side;
 
+	if (mlx->game.side == 0 && mlx->game.rayDirX > 0)
+		wall_side = NORTH;
+	if (mlx->game.side == 0 && mlx->game.rayDirX < 0)
+		wall_side = SOUTH;
+	if (mlx->game.side == 1 && mlx->game.rayDirY > 0)
+		wall_side = EAST;
+	if (mlx->game.side == 1 && mlx->game.rayDirY < 0)
+		wall_side = WEST;
+	return (wall_side);
+}
+
+int drawVertLine(t_mlx *mlx, int i)
+{
 	int texNum = worldMap[mlx->game.mapX][mlx->game.mapY] - 1;
 	double wallX;
 	if (mlx->game.side == 0)
@@ -139,39 +137,30 @@ int drawVertLine(t_mlx *mlx, int i, int color)
 	double step = 1.0 * TEX_HEIGHT / mlx->game.lineHeight;
 	double texPos = (mlx->game.drawStart - WIN_HEIGHT / 2 + mlx->game.lineHeight / 2) * step;
 	
+	int wall_side = get_side(mlx);
+	printf("wallside: %d\n", wall_side);
 	while (mlx->game.drawStart < mlx->game.drawEnd)
 	{
 		int texY = (int)texPos & (TEX_HEIGHT - 1);
 		texPos += step;
-		int tmp = mlx->tex.data[TEX_HEIGHT * texY + texX];
+		int color = mlx->tex[wall_side].data[TEX_HEIGHT * texY + texX];
 		if (mlx->game.side == 1)
-			tmp = tmp / 2;
-		mlx->img.data[i + WIN_WIDTH * mlx->game.drawStart] = tmp;
+			color = color / 2;
+		mlx->img.data[i + WIN_WIDTH * mlx->game.drawStart] = color;
 		mlx->game.drawStart++;
 	}
-	// for (int y = mlx->game.drawStart; y < mlx->game.drawEnd; y++)
-	// {
-	// 	int texY = (int)texPos & (TEX_HEIGHT - 1);
-	// 	texPos += step;
-	// 	int color2 = mlx->tex.data[TEX_HEIGHT * texY + texX];
-	// 	mlx->img.data[] = color2;
-	// 	/*test: xpm 파일에서 픽셀을 가져와서 그 픽셀을 이용해서 window에 찍어봐야 한다 */
-	// }
 }
 
 int raycast(t_mlx *mlx)
 {
 	int i;
-	int color;
 
 	i = 0;
 	while (i++ < WIN_WIDTH)
 	{
 		setVar(mlx, i);
-		color = performDDA(mlx);
-		// if (mlx->game.side == 1)
-		// 	color = color / 2;
-		drawVertLine(mlx, i, color);
+		performDDA(mlx);
+		drawVertLine(mlx, i);
 	}
 	return 0;
 }
@@ -235,20 +224,37 @@ int key_press(int key, t_mlx *mlx)
 	return 0;
 }
 
+void	tmp_direction_tex(t_mlx *mlx)
+{
+	int a = 64;
+	int b = 64;
+	mlx->tex[EAST].filepath = "./textures/wood.xpm";
+	mlx->tex[WEST].filepath = "./textures/eagle.xpm";
+	mlx->tex[SOUTH].filepath = "./textures/greystone.xpm";
+	mlx->tex[NORTH].filepath = "./textures/mossy.xpm";
+	mlx->tex[EAST].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/wood.xpm", &a, &b);
+	mlx->tex[WEST].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/eagle.xpm", &a, &b);
+	mlx->tex[SOUTH].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/greystone.xpm", &a, &b);
+	mlx->tex[NORTH].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/mossy.xpm", &a, &b);
+	mlx->tex[EAST].data = (int *)mlx_get_data_addr(mlx->tex[EAST].img_ptr, &mlx->tex[EAST].bpp, &mlx->tex[EAST].size_l, &mlx->tex[EAST].endian);
+	mlx->tex[WEST].data = (int *)mlx_get_data_addr(mlx->tex[WEST].img_ptr, &mlx->tex[WEST].bpp, &mlx->tex[WEST].size_l, &mlx->tex[WEST].endian);
+	mlx->tex[SOUTH].data = (int *)mlx_get_data_addr(mlx->tex[SOUTH].img_ptr, &mlx->tex[SOUTH].bpp, &mlx->tex[SOUTH].size_l, &mlx->tex[SOUTH].endian);
+	mlx->tex[EAST].data = (int *)mlx_get_data_addr(mlx->tex[NORTH].img_ptr, &mlx->tex[NORTH].bpp, &mlx->tex[NORTH].size_l, &mlx->tex[NORTH].endian);
+}
+
 int initial_setting(t_mlx *mlx)
 {
 	mlx->mlx_ptr = mlx_init();
 	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "DomMorello");
 	mlx->img.img_ptr = mlx_new_image(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
 	mlx->img.data = (int *)mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size_l, &mlx->img.endian);
-	mlx->tex.img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/mossy.xpm", &mlx->tex.width, &mlx->tex.height);
-	mlx->tex.data = (int *)mlx_get_data_addr(mlx->tex.img_ptr, &mlx->tex.bpp, &mlx->tex.size_l, &mlx->tex.endian);
 	mlx->game.posX = 22;
 	mlx->game.posY = 12;
 	mlx->game.dirX = -1;
 	mlx->game.dirY = 0;
 	mlx->game.planeX = 0;
 	mlx->game.planeY = 0.66;
+	tmp_direction_tex(mlx);	//일단 하드코딩으로 filepath를 넣어줬다. 
 	mlx_hook(mlx->win_ptr, 2, 1L << 0, key_press, mlx);
 	mlx_loop_hook(mlx->mlx_ptr, run_game, mlx);
 	mlx_loop(mlx->mlx_ptr);
