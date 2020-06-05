@@ -59,8 +59,8 @@ int setVar(t_mlx *mlx, int i)
 	mlx->game.rayDirY = mlx->game.dirY + mlx->game.planeY * mlx->game.cameraX;
 	mlx->game.mapX = (int)mlx->game.posX;
 	mlx->game.mapY = (int)mlx->game.posY;
-	mlx->game.deltaDistX = fabs(1 / mlx->game.rayDirX);
-	mlx->game.deltaDistY = fabs(1 / mlx->game.rayDirY);
+	mlx->game.deltaDistX = (mlx->game.rayDirY == 0) ? 0 : ((mlx->game.rayDirX == 0) ? 1 : fabs(1 / mlx->game.rayDirX));
+	mlx->game.deltaDistY = (mlx->game.rayDirX == 0) ? 0 : ((mlx->game.rayDirY == 0) ? 1 : fabs(1 / mlx->game.rayDirY));
 	mlx->game.hit = 0;
 	setSideDist(mlx);
 	return 0;
@@ -152,7 +152,7 @@ int drawVertLine(t_mlx *mlx, int i)
 int key_press(t_mlx *mlx)
 {
 	double moveSpeed = 0.015; //the constant value is in squares/second
-	double rotSpeed = 0.005;  //the constant value is in radians/second
+	double rotSpeed = 0.006;  //the constant value is in radians/second
 	// move forward if no wall in front of you
 	if (mlx->game.move_f == 1)
 	{
@@ -216,6 +216,61 @@ int key_press(t_mlx *mlx)
 	return 0;
 }
 
+int draw_floor_ceiling(t_mlx *mlx)
+{
+	int y;
+
+	y = 0;
+	while (y < WIN_HEIGHT)
+	{
+		// rayDir for leftmost ray (x = 0) and rightmost ray (x = w)
+		float rayDirX0 = mlx->game.dirX - mlx->game.planeX;
+		float rayDirY0 = mlx->game.dirY - mlx->game.planeY;
+		float rayDirX1 = mlx->game.dirX + mlx->game.planeX;
+		float rayDirY1 = mlx->game.dirY + mlx->game.planeY;
+		// Current y position compared to the center of the screen (the horizon)
+		int p = y - WIN_HEIGHT / 2;
+		// Vertical position of the camera.
+		float posZ = 0.5 * WIN_HEIGHT;
+		// Horizontal distance from the camera to the floor for the current row.
+		// 0.5 is the z position exactly in the middle between floor and ceiling.
+		float rowDistance = posZ / p;
+		// calculate the real world step vector we have to add for each x (parallel to camera plane)
+		// adding step by step avoids multiplications with a weight in the inner loop
+		float floorStepX = rowDistance * (rayDirX1 - rayDirX0) / WIN_WIDTH;
+		float floorStepY = rowDistance * (rayDirY1 - rayDirY0) / WIN_WIDTH;
+		// real world coordinates of the leftmost column. This will be updated as we step to the right.
+		float floorX = mlx->game.posX + rowDistance * rayDirX0;
+		float floorY = mlx->game.posY + rowDistance * rayDirY0;
+
+		for (int x = 0; x < WIN_WIDTH; ++x)
+		{
+			// the cell coord is simply got from the integer parts of floorX and floorY
+			int cellX = (int)floorX;
+			int cellY = (int)floorY;
+
+			// get the texture coordinate from the fractional part
+			int tx = (int)(TEX_WIDTH * (floorX - cellX)) & (TEX_WIDTH - 1);
+			int ty = (int)(TEX_HEIGHT * (floorY - cellY)) & (TEX_HEIGHT - 1);
+
+			floorX += floorStepX;
+			floorY += floorStepY;
+
+			int color;
+			// floor
+			color = mlx->tex[FLOOR].data[TEX_WIDTH * ty + tx];
+			color = (color >> 1) & 8355711; // make a bit darker
+			mlx->img.data[x + WIN_WIDTH * y] = color;
+
+			//ceiling (symmetrical, at screenHeight - y - 1 instead of y)
+			color = mlx->tex[CEILING].data[TEX_WIDTH * ty + tx];
+			color = (color >> 1) & 8355711; // make a bit darker
+			mlx->img.data[x + WIN_WIDTH * (WIN_HEIGHT - y - 1)] = color;
+		}
+		y++;
+	}
+}
+
 int run_game(t_mlx *mlx)
 {
 	int i;
@@ -224,22 +279,24 @@ int run_game(t_mlx *mlx)
 	mlx_destroy_image(mlx->mlx_ptr, mlx->img.img_ptr);
 	mlx->img.img_ptr = mlx_new_image(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
 	mlx->img.data = (int *)mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size_l, &mlx->img.endian);
-	// 이렇게 간단하게 천장과 바닥을 할 수가 있다. 
-	for (size_t i = 0; i < (WIN_WIDTH * WIN_HEIGHT) / 2; i++)
-	{
-		mlx->img.data[i] = 0x23cd2e4;
-	}
-	for (size_t i = (WIN_WIDTH * WIN_HEIGHT) / 2; i < (WIN_WIDTH * WIN_HEIGHT); i++)
-	{
-		mlx->img.data[i] = 0x0230ea0;
-	}
+	draw_floor_ceiling(mlx);
+	// 이렇게 간단하게 천장과 바닥을 할 수가 있다.
+	// for (size_t i = 0; i < (WIN_WIDTH * WIN_HEIGHT) / 2; i++)
+	// {
+	// 	mlx->img.data[i] = 0x23cd2e4;
+	// }
+	// for (size_t i = (WIN_WIDTH * WIN_HEIGHT) / 2; i < (WIN_WIDTH * WIN_HEIGHT); i++)
+	// {
+	// 	mlx->img.data[i] = 0x0230ea0;
+	// }
 	if (mlx->game.move_f || mlx->game.move_b || mlx->game.move_r || mlx->game.move_l || mlx->game.rotate_r || mlx->game.rotate_l)
 		key_press(mlx);
-	while (i++ < WIN_WIDTH)
+	while (i < WIN_WIDTH)
 	{
 		setVar(mlx, i);
 		performDDA(mlx);
 		drawVertLine(mlx, i);
+		i++;
 	}
 	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img.img_ptr, 0, 0);
 	return 0;
@@ -282,17 +339,23 @@ void tmp_direction_tex(t_mlx *mlx)
 	int a = 64;
 	int b = 64;
 	mlx->tex[EAST].filepath = "./textures/mossy.xpm";
-	mlx->tex[WEST].filepath = "./textures/eagle.xpm";
+	mlx->tex[WEST].filepath = "./textures/choga.xpm";
 	mlx->tex[SOUTH].filepath = "./textures/greystone.xpm";
 	mlx->tex[NORTH].filepath = "./textures/wood.xpm";
+	mlx->tex[CEILING].filepath = "./textures/redbrick.xpm";
+	mlx->tex[FLOOR].filepath = "./textures/bluestone.xpm";
 	mlx->tex[EAST].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/mossy.xpm", &a, &b);
-	mlx->tex[WEST].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/eagle.xpm", &a, &b);
+	mlx->tex[WEST].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/choga.xpm", &a, &b);
 	mlx->tex[SOUTH].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/greystone.xpm", &a, &b);
 	mlx->tex[NORTH].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/wood.xpm", &a, &b);
+	mlx->tex[CEILING].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/redbrick.xpm", &a, &b);
+	mlx->tex[FLOOR].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/bluestone.xpm", &a, &b);
 	mlx->tex[EAST].data = (int *)mlx_get_data_addr(mlx->tex[EAST].img_ptr, &mlx->tex[EAST].bpp, &mlx->tex[EAST].size_l, &mlx->tex[EAST].endian);
 	mlx->tex[WEST].data = (int *)mlx_get_data_addr(mlx->tex[WEST].img_ptr, &mlx->tex[WEST].bpp, &mlx->tex[WEST].size_l, &mlx->tex[WEST].endian);
 	mlx->tex[SOUTH].data = (int *)mlx_get_data_addr(mlx->tex[SOUTH].img_ptr, &mlx->tex[SOUTH].bpp, &mlx->tex[SOUTH].size_l, &mlx->tex[SOUTH].endian);
 	mlx->tex[NORTH].data = (int *)mlx_get_data_addr(mlx->tex[NORTH].img_ptr, &mlx->tex[NORTH].bpp, &mlx->tex[NORTH].size_l, &mlx->tex[NORTH].endian);
+	mlx->tex[CEILING].data = (int *)mlx_get_data_addr(mlx->tex[CEILING].img_ptr, &mlx->tex[CEILING].bpp, &mlx->tex[CEILING].size_l, &mlx->tex[CEILING].endian);
+	mlx->tex[FLOOR].data = (int *)mlx_get_data_addr(mlx->tex[FLOOR].img_ptr, &mlx->tex[FLOOR].bpp, &mlx->tex[FLOOR].size_l, &mlx->tex[FLOOR].endian);
 }
 
 int initial_setting(t_mlx *mlx)
@@ -308,10 +371,6 @@ int initial_setting(t_mlx *mlx)
 	mlx->game.planeX = 0;
 	mlx->game.planeY = 0.66;
 	tmp_direction_tex(mlx); //일단 하드코딩으로 filepath를 넣어줬다.
-	mlx_hook(mlx->win_ptr, 2, 1L << 0, key_press2, mlx);
-	mlx_hook(mlx->win_ptr, 3, 1L << 1, key_release, mlx);
-	mlx_loop_hook(mlx->mlx_ptr, run_game, mlx);
-	mlx_loop(mlx->mlx_ptr);
 	return 0;
 }
 
@@ -321,5 +380,9 @@ int main(int argc, char const *argv[])
 
 	/* parsing map info */
 	initial_setting(&mlx);
+	mlx_hook(mlx.win_ptr, 2, 1L << 0, key_press2, &mlx);
+	mlx_hook(mlx.win_ptr, 3, 1L << 1, key_release, &mlx);
+	mlx_loop_hook(mlx.mlx_ptr, run_game, &mlx);
+	mlx_loop(mlx.mlx_ptr);
 	return 0;
 }

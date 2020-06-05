@@ -11,14 +11,12 @@ int main(int argc, char const *argv[])
 	
 	for (size_t i = 0; i < (WIN_WIDTH * WIN_HEIGHT) / 2; i++)
 	{
-		mlx.img.data[i] = 0xffff00;
+		mlx.img.data[i] = 0x23cd2e4;
 	}
 	for (size_t i = (WIN_WIDTH * WIN_HEIGHT) / 2; i < (WIN_WIDTH * WIN_HEIGHT); i++)
 	{
-		mlx.img.data[i] = 0xff00ff;
+		mlx.img.data[i] = 0x0230ea0;
 	}
-	
-		
 	mlx_put_image_to_window(mlx.mlx_ptr, mlx.win_ptr, mlx.img.img_ptr, 0, 0);
 	mlx_loop(mlx.mlx_ptr);
 
