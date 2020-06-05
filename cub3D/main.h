@@ -3,6 +3,7 @@
 
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "./minilibx_linux/mlx.h"
 
 # define WIN_WIDTH 640
@@ -80,13 +81,21 @@ typedef struct		s_game
 	int		rotate_l;
 }					t_game;
 
+typedef struct	s_sprite
+{
+	double		x;
+	double		y;
+	int		perpWallDist;
+}				t_sprite;
+
 typedef struct		s_mlx
 {
-	void	*mlx_ptr;
-	void	*win_ptr;
-	t_img	img;
-	t_game	game;
-	t_tex	tex[7];
+	void		*mlx_ptr;
+	void		*win_ptr;
+	t_img		img;
+	t_game		game;
+	t_tex		tex[7];
+	t_sprite	*sprite;
 }					t_mlx;
 
 # endif 
