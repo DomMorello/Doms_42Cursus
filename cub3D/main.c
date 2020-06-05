@@ -151,8 +151,8 @@ int drawVertLine(t_mlx *mlx, int i)
 
 int key_press(t_mlx *mlx)
 {
-	double moveSpeed = 0.015; //the constant value is in squares/second
-	double rotSpeed = 0.006;  //the constant value is in radians/second
+	double moveSpeed = 0.017; //the constant value is in squares/second
+	double rotSpeed = 0.008;  //the constant value is in radians/second
 	// move forward if no wall in front of you
 	if (mlx->game.move_f == 1)
 	{
@@ -175,10 +175,10 @@ int key_press(t_mlx *mlx)
 	if (mlx->game.move_r == 1)
 	{
 		printf("moving right\n");
-		if (worldMap[(int)(mlx->game.posX + mlx->game.planeX * 0.008)][(int)mlx->game.posY] == 0)
-			mlx->game.posX += mlx->game.planeX * 0.008;
-		if (worldMap[(int)mlx->game.posX][(int)(mlx->game.posY + mlx->game.planeY * 0.008)] == 0)
-			mlx->game.posY += mlx->game.planeY * 0.008;
+		if (worldMap[(int)(mlx->game.posX + mlx->game.planeX * 0.01)][(int)mlx->game.posY] == 0)
+			mlx->game.posX += mlx->game.planeX * 0.01;
+		if (worldMap[(int)mlx->game.posX][(int)(mlx->game.posY + mlx->game.planeY * 0.01)] == 0)
+			mlx->game.posY += mlx->game.planeY * 0.01;
 	}
 	//rotate to the right
 	if (mlx->game.rotate_r == 1)
@@ -196,10 +196,10 @@ int key_press(t_mlx *mlx)
 	if (mlx->game.move_l == 1)
 	{
 		printf("moving left\n");
-		if (worldMap[(int)(mlx->game.posX - mlx->game.planeX * 0.008)][(int)mlx->game.posY] == 0)
-			mlx->game.posX -= mlx->game.planeX * 0.008;
-		if (worldMap[(int)mlx->game.posX][(int)(mlx->game.posY - mlx->game.planeY * 0.008)] == 0)
-			mlx->game.posY -= mlx->game.planeY * 0.008;
+		if (worldMap[(int)(mlx->game.posX - mlx->game.planeX * 0.01)][(int)mlx->game.posY] == 0)
+			mlx->game.posX -= mlx->game.planeX * 0.01;
+		if (worldMap[(int)mlx->game.posX][(int)(mlx->game.posY - mlx->game.planeY * 0.01)] == 0)
+			mlx->game.posY -= mlx->game.planeY * 0.01;
 	}
 	//rotate to the left
 	if (mlx->game.rotate_l == 1)
@@ -344,18 +344,21 @@ void tmp_direction_tex(t_mlx *mlx)
 	mlx->tex[NORTH].filepath = "./textures/wood.xpm";
 	mlx->tex[CEILING].filepath = "./textures/redbrick.xpm";
 	mlx->tex[FLOOR].filepath = "./textures/bluestone.xpm";
+	mlx->tex[SPRITE].filepath = "./textures/barrel.xpm";
 	mlx->tex[EAST].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/mossy.xpm", &a, &b);
 	mlx->tex[WEST].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/choga.xpm", &a, &b);
 	mlx->tex[SOUTH].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/greystone.xpm", &a, &b);
 	mlx->tex[NORTH].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/wood.xpm", &a, &b);
 	mlx->tex[CEILING].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/redbrick.xpm", &a, &b);
 	mlx->tex[FLOOR].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/bluestone.xpm", &a, &b);
+	mlx->tex[SPRITE].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/barrel.xpm", &a, &b);
 	mlx->tex[EAST].data = (int *)mlx_get_data_addr(mlx->tex[EAST].img_ptr, &mlx->tex[EAST].bpp, &mlx->tex[EAST].size_l, &mlx->tex[EAST].endian);
 	mlx->tex[WEST].data = (int *)mlx_get_data_addr(mlx->tex[WEST].img_ptr, &mlx->tex[WEST].bpp, &mlx->tex[WEST].size_l, &mlx->tex[WEST].endian);
 	mlx->tex[SOUTH].data = (int *)mlx_get_data_addr(mlx->tex[SOUTH].img_ptr, &mlx->tex[SOUTH].bpp, &mlx->tex[SOUTH].size_l, &mlx->tex[SOUTH].endian);
 	mlx->tex[NORTH].data = (int *)mlx_get_data_addr(mlx->tex[NORTH].img_ptr, &mlx->tex[NORTH].bpp, &mlx->tex[NORTH].size_l, &mlx->tex[NORTH].endian);
 	mlx->tex[CEILING].data = (int *)mlx_get_data_addr(mlx->tex[CEILING].img_ptr, &mlx->tex[CEILING].bpp, &mlx->tex[CEILING].size_l, &mlx->tex[CEILING].endian);
 	mlx->tex[FLOOR].data = (int *)mlx_get_data_addr(mlx->tex[FLOOR].img_ptr, &mlx->tex[FLOOR].bpp, &mlx->tex[FLOOR].size_l, &mlx->tex[FLOOR].endian);
+	mlx->tex[SPRITE].data = (int *)mlx_get_data_addr(mlx->tex[SPRITE].img_ptr, &mlx->tex[SPRITE].bpp, &mlx->tex[SPRITE].size_l, &mlx->tex[SPRITE].endian);
 }
 
 int initial_setting(t_mlx *mlx)

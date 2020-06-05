@@ -15,7 +15,7 @@
 
 enum	e_direction
 {
-	EAST, WEST, SOUTH, NORTH, CEILING, FLOOR
+	EAST, WEST, SOUTH, NORTH, CEILING, FLOOR, SPRITE
 };
 
 // # define K_ESC 53
@@ -86,7 +86,7 @@ typedef struct		s_mlx
 	void	*win_ptr;
 	t_img	img;
 	t_game	game;
-	t_tex	tex[6];
+	t_tex	tex[7];
 }					t_mlx;
 
 # endif 
