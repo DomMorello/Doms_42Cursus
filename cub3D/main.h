@@ -85,7 +85,7 @@ typedef struct	s_sprite
 {
 	double		x;
 	double		y;
-	int		perpWallDist;
+	int			perpWallDist;
 }				t_sprite;
 
 typedef struct		s_mlx

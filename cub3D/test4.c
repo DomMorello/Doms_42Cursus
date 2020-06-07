@@ -4,6 +4,10 @@
 
 int main(int argc, char const *argv[])
 {
+
+	//x = 11.5 y = 9
+	//x = 10.5 y = 10
+
 	// t_mlx mlx;
 	// mlx.mlx_ptr = mlx_init();
 	// mlx.win_ptr = mlx_new_window(mlx.mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "Hi");

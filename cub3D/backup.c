@@ -26,6 +26,7 @@ int worldMap[mapWidth][mapHeight] =
 		{1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 5, 0, 0, 1, 0, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1},
 		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
+
 int setSideDist(t_mlx *mlx)
 {
 	if (mlx->game.rayDirX < 0)
@@ -357,8 +358,8 @@ int initial_setting(t_mlx *mlx)
 	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "DomMorello");
 	mlx->img.img_ptr = mlx_new_image(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
 	mlx->img.data = (int *)mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size_l, &mlx->img.endian);
-	mlx->game.posX = 22;
-	mlx->game.posY = 12;
+	mlx->game.posX = 21.5;
+	mlx->game.posY = 11.5;
 	mlx->game.dirX = -1;
 	mlx->game.dirY = 0;
 	mlx->game.planeX = 0;

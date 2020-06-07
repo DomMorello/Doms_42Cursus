@@ -26,6 +26,7 @@ int worldMap[mapWidth][mapHeight] =
 		{1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 5, 0, 0, 1, 0, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1},
 		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
+
 int setSideDist(t_mlx *mlx)
 {
 	if (mlx->game.rayDirX < 0)
@@ -146,6 +147,7 @@ int drawVertLine(t_mlx *mlx, int i)
 		mlx->img.data[i + WIN_WIDTH * mlx->game.drawStart] = color;
 		mlx->game.drawStart++;
 	}
+	printf("aa %f\n", mlx->sprite[1].y);
 }
 
 int key_press(t_mlx *mlx)
@@ -357,13 +359,24 @@ int initial_setting(t_mlx *mlx)
 	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "DomMorello");
 	mlx->img.img_ptr = mlx_new_image(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
 	mlx->img.data = (int *)mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size_l, &mlx->img.endian);
-	mlx->game.posX = 22;
-	mlx->game.posY = 12;
+	mlx->game.posX = 21.5;
+	mlx->game.posY = 11.5;
 	mlx->game.dirX = -1;
 	mlx->game.dirY = 0;
 	mlx->game.planeX = 0;
 	mlx->game.planeY = 0.66;
 	tmp_direction_tex(mlx); //일단 하드코딩으로 filepath를 넣어줬다.
+	//sprite 일단 hardcoding으로
+	// t_sprite tmp[2];
+	// mlx->sprite = &tmp;
+	mlx->sprite[0].x = 11.5;
+	mlx->sprite[0].y = 9;
+	mlx->sprite[1].x = 10.5;
+	mlx->sprite[1].y = 10;
+	// 이게 어떻게 가능한거지..? 메모리 크기도 할당하지 않았는데 값이 대입이 된다.
+	// 그리고 위에 tmp로 해서 포인터를 대입해서 값을 넣으면 왜 위에서는 값을 기억 못하고 있찌?
+	// 이 부분을 해결해야 다음 단계로 넘어갈 수 있다. 
+	
 	return 0;
 }
 
