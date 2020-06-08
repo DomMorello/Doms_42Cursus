@@ -4,13 +4,13 @@ int worldMap[mapWidth][mapHeight] =
 	{
 		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 1, 0, 2, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1},
+		{1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1},
 		{1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1},
 		{1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 1, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1},
+		{1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1},
 		{1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1},
 		{1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -147,7 +147,6 @@ int drawVertLine(t_mlx *mlx, int i)
 		mlx->img.data[i + WIN_WIDTH * mlx->game.drawStart] = color;
 		mlx->game.drawStart++;
 	}
-	printf("aa %f\n", mlx->sprite[1].y);
 }
 
 int key_press(t_mlx *mlx)
@@ -272,9 +271,122 @@ int draw_floor_ceiling(t_mlx *mlx)
 	}
 }
 
+void desc_sort(t_mlx *mlx)
+{
+	int i;
+	int j;
+	t_sprite tmp;
+
+	i = 0;
+	while (i < mlx->spriteNum)
+	{
+		j = i;
+		while (j < mlx->spriteNum)
+		{
+			if (mlx->sprite[i].dist < mlx->sprite[j].dist)
+			{
+				tmp = mlx->sprite[i];
+				mlx->sprite[i] = mlx->sprite[j];
+				mlx->sprite[j] = tmp;
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
+int transform_sprite(t_game *game, t_sprite *sprite)
+{
+	double invDet;
+	//translate sprite position to relative to camera
+	sprite->spriteX = sprite->x - game->posX;
+	sprite->spriteY = sprite->y - game->posY;
+	//required for correct matrix multiplication
+	invDet = 1.0 / (game->planeX * game->dirY - game->dirX * game->planeY);
+
+	sprite->transformX = invDet * (game->dirY * sprite->spriteX - game->dirX * sprite->spriteY);
+	//this is actually the depth inside the screen, that what Z is in 3D
+	sprite->transformY = invDet * (-game->planeY * sprite->spriteX + game->planeX * sprite->spriteY);
+
+	sprite->spriteScreenX = (int)((WIN_WIDTH / 2) * (1 + sprite->transformX / sprite->transformY));
+}
+
+int cal_sprite(t_sprite *sprite)
+{
+	//calculate height of the sprite on screen
+	//using 'transformY' instead of the real distance prevents fisheye
+	sprite->spriteHeight = fabs((int)(WIN_HEIGHT / (sprite->transformY)));
+	//calculate lowest and highest pixel to fill in current stripe
+	sprite->drawStartY = -sprite->spriteHeight / 2 + WIN_HEIGHT / 2;
+	if (sprite->drawStartY < 0)
+		sprite->drawStartY = 0;
+	sprite->drawEndY = sprite->spriteHeight / 2 + WIN_HEIGHT / 2;
+	if (sprite->drawEndY >= WIN_HEIGHT)
+		sprite->drawEndY = WIN_WIDTH - 1;
+
+	//calculate width of the sprite
+	sprite->spriteWidth = fabs((int)(WIN_HEIGHT / (sprite->transformY)));
+	sprite->drawStartX = -sprite->spriteWidth / 2 + sprite->spriteScreenX;
+	if (sprite->drawStartX < 0)
+		sprite->drawStartX = 0;
+	sprite->drawEndX = sprite->spriteWidth / 2 + sprite->spriteScreenX;
+	if (sprite->drawEndX >= WIN_WIDTH)
+		sprite->drawEndX = WIN_WIDTH - 1;
+}
+
+int draw_sprite(t_mlx *mlx, t_sprite *sprite, double *zbuffer)
+{
+	int texX;
+	int texY;
+	//loop through every vertical stripe of the sprite on screen
+	while (sprite->drawStartX < sprite->drawEndX)
+	{
+		texX = (int)(256 * (sprite->drawStartX - (-sprite->spriteWidth / 2 + sprite->spriteScreenX)) * TEX_WIDTH / sprite->spriteWidth) / 256;
+		if (sprite->transformY > 0 && sprite->drawStartX > 0 && sprite->drawStartX < WIN_WIDTH && sprite->transformY < zbuffer[sprite->drawStartX])
+		{
+			while (sprite->drawStartY < sprite->drawEndY) //for every pixel of the current stripe
+			{
+				//256 and 128 factors to avoid floats
+				int d = (sprite->drawStartY) * 256 - WIN_HEIGHT * 128 + sprite->spriteHeight * 128;
+				texY = ((d * TEX_HEIGHT) / sprite->spriteHeight) / 256;
+				//get current color from the texture
+				int color = mlx->tex[SPRITE].data[TEX_WIDTH * texY + texX];
+				if ((color & 0x00FFFFFF) != 0)
+					mlx->img.data[sprite->drawStartY + WIN_WIDTH * sprite->drawStartX] = color;
+				//paint pixel if it isn't black, black is the invisible color
+				sprite->drawStartY++;
+			}
+		}
+		sprite->drawStartX++;
+	}
+}
+
+int render_sprite(t_mlx *mlx, double *zbuffer)
+{
+	int i;
+
+	i = 0;
+	//일단은 하드코딩
+	mlx->spriteNum = 3;
+	for (size_t i = 0; i < mlx->spriteNum; i++)
+	{
+		mlx->sprite[i].idx = i;
+		mlx->sprite[i].dist = (mlx->game.posX - mlx->sprite[i].x) * (mlx->game.posX - mlx->sprite[i].x) + (mlx->game.posY - mlx->sprite[i].y) * (mlx->game.posY - mlx->sprite[i].y);
+	}
+	desc_sort(mlx);
+	while (i < mlx->spriteNum)
+	{
+		transform_sprite(&mlx->game, &mlx->sprite[i]);
+		cal_sprite(&mlx->sprite[i]);
+		draw_sprite(mlx, &mlx->sprite[i], zbuffer);
+		i++;
+	}
+}
+
 int run_game(t_mlx *mlx)
 {
 	int i;
+	double zbuffer[WIN_WIDTH];
 
 	i = 0;
 	mlx_destroy_image(mlx->mlx_ptr, mlx->img.img_ptr);
@@ -288,8 +400,10 @@ int run_game(t_mlx *mlx)
 		setVar(mlx, i);
 		performDDA(mlx);
 		drawVertLine(mlx, i);
+		zbuffer[i] = mlx->game.perpWallDist;
 		i++;
 	}
+	render_sprite(mlx, zbuffer);
 	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img.img_ptr, 0, 0);
 	return 0;
 }
@@ -367,16 +481,17 @@ int initial_setting(t_mlx *mlx)
 	mlx->game.planeY = 0.66;
 	tmp_direction_tex(mlx); //일단 하드코딩으로 filepath를 넣어줬다.
 	//sprite 일단 hardcoding으로
-	// t_sprite tmp[2];
-	// mlx->sprite = &tmp;
-	mlx->sprite[0].x = 11.5;
-	mlx->sprite[0].y = 9;
-	mlx->sprite[1].x = 10.5;
-	mlx->sprite[1].y = 10;
-	// 이게 어떻게 가능한거지..? 메모리 크기도 할당하지 않았는데 값이 대입이 된다.
-	// 그리고 위에 tmp로 해서 포인터를 대입해서 값을 넣으면 왜 위에서는 값을 기억 못하고 있찌?
-	// 이 부분을 해결해야 다음 단계로 넘어갈 수 있다. 
-	
+	t_sprite *tmp;
+	tmp = (t_sprite *)malloc(sizeof(t_sprite) * 3);
+	tmp[0].x = 11.5;
+	tmp[0].y = 9;
+	tmp[1].x = 10.5;
+	tmp[1].y = 10;
+	tmp[2].x = 12.5;
+	tmp[2].y = 9.5;
+
+	mlx->sprite = tmp;
+
 	return 0;
 }
 

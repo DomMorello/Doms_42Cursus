@@ -2,12 +2,45 @@
 #include <stdlib.h>
 #include "./main.h"
 
+typedef struct s_test
+{
+	double dist;
+	int idx;	
+}				t_test;
+
+typedef struct s_all
+{
+	int a;
+	t_test test[5];
+	int size;
+}				t_all;
+
+void	desc_sort(t_all *all)
+{
+	int i;
+	int j;
+	t_test tmp;
+
+	i = 0;
+	while (i < all->size)
+	{
+		j = i;
+		while (j < all->size)
+		{
+			if (all->test[i].dist < all->test[j].dist)
+			{
+				tmp = all->test[i];
+				all->test[i] = all->test[j];
+				all->test[j] = tmp;
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
 int main(int argc, char const *argv[])
 {
-
-	//x = 11.5 y = 9
-	//x = 10.5 y = 10
-
 	// t_mlx mlx;
 	// mlx.mlx_ptr = mlx_init();
 	// mlx.win_ptr = mlx_new_window(mlx.mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "Hi");

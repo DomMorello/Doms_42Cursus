@@ -83,9 +83,22 @@ typedef struct		s_game
 
 typedef struct	s_sprite
 {
+	int			idx;
 	double		x;
 	double		y;
+	double		spriteX;
+	double		spriteY;
+	double		transformX;
+	double		transformY;
+	double		spriteScreenX;
 	int			perpWallDist;
+	double		dist;
+	double		spriteHeight;
+	int			drawStartX;
+	int			drawEndX;
+	int			drawStartY;
+	int			drawEndY;
+	double		spriteWidth;
 }				t_sprite;
 
 typedef struct		s_mlx
@@ -96,6 +109,7 @@ typedef struct		s_mlx
 	t_game		game;
 	t_tex		tex[7];
 	t_sprite	*sprite;
+	int			spriteNum;
 }					t_mlx;
 
 # endif 
