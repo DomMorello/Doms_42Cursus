@@ -303,7 +303,6 @@ int transform_sprite(t_game *game, t_sprite *sprite)
 	sprite->spriteY = sprite->y - game->posY;
 	//required for correct matrix multiplication
 	invDet = 1.0 / (game->planeX * game->dirY - game->dirX * game->planeY);
-
 	sprite->transformX = invDet * (game->dirY * sprite->spriteX - game->dirX * sprite->spriteY);
 	//this is actually the depth inside the screen, that what Z is in 3D
 	sprite->transformY = invDet * (-game->planeY * sprite->spriteX + game->planeX * sprite->spriteY);
@@ -315,17 +314,17 @@ int cal_sprite(t_sprite *sprite)
 {
 	//calculate height of the sprite on screen
 	//using 'transformY' instead of the real distance prevents fisheye
-	sprite->spriteHeight = fabs((int)(WIN_HEIGHT / (sprite->transformY)));
+	sprite->spriteHeight = abs((int)(WIN_HEIGHT / (sprite->transformY)));
 	//calculate lowest and highest pixel to fill in current stripe
 	sprite->drawStartY = -sprite->spriteHeight / 2 + WIN_HEIGHT / 2;
 	if (sprite->drawStartY < 0)
 		sprite->drawStartY = 0;
 	sprite->drawEndY = sprite->spriteHeight / 2 + WIN_HEIGHT / 2;
 	if (sprite->drawEndY >= WIN_HEIGHT)
-		sprite->drawEndY = WIN_WIDTH - 1;
+		sprite->drawEndY = WIN_HEIGHT - 1;
 
 	//calculate width of the sprite
-	sprite->spriteWidth = fabs((int)(WIN_HEIGHT / (sprite->transformY)));
+	sprite->spriteWidth = abs((int)(WIN_HEIGHT / (sprite->transformY)));
 	sprite->drawStartX = -sprite->spriteWidth / 2 + sprite->spriteScreenX;
 	if (sprite->drawStartX < 0)
 		sprite->drawStartX = 0;
@@ -371,7 +370,7 @@ int render_sprite(t_mlx *mlx, double *zbuffer)
 	for (size_t i = 0; i < mlx->spriteNum; i++)
 	{
 		mlx->sprite[i].idx = i;
-		mlx->sprite[i].dist = (mlx->game.posX - mlx->sprite[i].x) * (mlx->game.posX - mlx->sprite[i].x) + (mlx->game.posY - mlx->sprite[i].y) * (mlx->game.posY - mlx->sprite[i].y);
+		mlx->sprite[i].dist = ((mlx->game.posX - mlx->sprite[i].x) * (mlx->game.posX - mlx->sprite[i].x) + (mlx->game.posY - mlx->sprite[i].y) * (mlx->game.posY - mlx->sprite[i].y));
 	}
 	desc_sort(mlx);
 	while (i < mlx->spriteNum)
