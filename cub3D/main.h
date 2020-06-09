@@ -4,12 +4,15 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
 #include "./minilibx_linux/mlx.h"
 
 # define WIN_WIDTH 640
 # define WIN_HEIGHT 480
 # define TEX_WIDTH 64
 # define TEX_HEIGHT 64
+# define ERROR -1
 
 #define mapWidth 24
 #define mapHeight 24

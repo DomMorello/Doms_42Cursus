@@ -499,7 +499,7 @@ int initial_setting(t_mlx *mlx)
 int main(int argc, char const *argv[])
 {
 	t_mlx mlx;
-
+ 
 	/* parsing map info */
 	initial_setting(&mlx);
 	mlx_hook(mlx.win_ptr, 2, 1L << 0, key_press2, &mlx);
