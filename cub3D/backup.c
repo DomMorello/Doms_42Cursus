@@ -4,13 +4,13 @@ int worldMap[mapWidth][mapHeight] =
 	{
 		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 1, 0, 2, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1},
+		{1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1},
 		{1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1},
 		{1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 1, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1},
+		{1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1},
 		{1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1},
 		{1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -131,7 +131,7 @@ int drawVertLine(t_mlx *mlx, int i)
 	int texX = (int)(wallX * (double)TEX_WIDTH);
 	if (mlx->game.side == 0 && mlx->game.rayDirX > 0)
 		texX = TEX_WIDTH - texX - 1;
-	if (mlx->game.side == 1 && mlx->game.rayDirX < 0)
+	if (mlx->game.side == 1 && mlx->game.rayDirY < 0)
 		texX = TEX_WIDTH - texX - 1;
 
 	double step = 1.0 * TEX_HEIGHT / mlx->game.lineHeight;
@@ -156,7 +156,6 @@ int key_press(t_mlx *mlx)
 	// move forward if no wall in front of you
 	if (mlx->game.move_f == 1)
 	{
-		printf("Moving forward\n");
 		if (worldMap[(int)(mlx->game.posX + mlx->game.dirX * moveSpeed)][(int)mlx->game.posY] == 0)
 			mlx->game.posX += mlx->game.dirX * moveSpeed;
 		if (worldMap[(int)mlx->game.posX][(int)(mlx->game.posY + mlx->game.dirY * moveSpeed)] == 0)
@@ -165,7 +164,6 @@ int key_press(t_mlx *mlx)
 	//move backwards if no wall behind you
 	if (mlx->game.move_b == 1)
 	{
-		printf("Moving backward\n");
 		if (worldMap[(int)(mlx->game.posX - mlx->game.dirX * moveSpeed)][(int)mlx->game.posY] == 0)
 			mlx->game.posX -= mlx->game.dirX * moveSpeed;
 		if (worldMap[(int)mlx->game.posX][(int)(mlx->game.posY - mlx->game.dirY * moveSpeed)] == 0)
@@ -174,7 +172,6 @@ int key_press(t_mlx *mlx)
 	//move to the right
 	if (mlx->game.move_r == 1)
 	{
-		printf("moving right\n");
 		if (worldMap[(int)(mlx->game.posX + mlx->game.planeX * 0.01)][(int)mlx->game.posY] == 0)
 			mlx->game.posX += mlx->game.planeX * 0.01;
 		if (worldMap[(int)mlx->game.posX][(int)(mlx->game.posY + mlx->game.planeY * 0.01)] == 0)
@@ -183,7 +180,6 @@ int key_press(t_mlx *mlx)
 	//rotate to the right
 	if (mlx->game.rotate_r == 1)
 	{
-		printf("turning right\n");
 		//both camera direction and camera plane must be rotated
 		double oldDirX = mlx->game.dirX;
 		mlx->game.dirX = mlx->game.dirX * cos(-rotSpeed) - mlx->game.dirY * sin(-rotSpeed);
@@ -195,7 +191,6 @@ int key_press(t_mlx *mlx)
 	//move to the left
 	if (mlx->game.move_l == 1)
 	{
-		printf("moving left\n");
 		if (worldMap[(int)(mlx->game.posX - mlx->game.planeX * 0.01)][(int)mlx->game.posY] == 0)
 			mlx->game.posX -= mlx->game.planeX * 0.01;
 		if (worldMap[(int)mlx->game.posX][(int)(mlx->game.posY - mlx->game.planeY * 0.01)] == 0)
@@ -204,7 +199,6 @@ int key_press(t_mlx *mlx)
 	//rotate to the left
 	if (mlx->game.rotate_l == 1)
 	{
-		printf("turning left\n");
 		//both camera direction and camera plane must be rotated
 		double oldDirX = mlx->game.dirX;
 		mlx->game.dirX = mlx->game.dirX * cos(rotSpeed) - mlx->game.dirY * sin(rotSpeed);
@@ -271,9 +265,129 @@ int draw_floor_ceiling(t_mlx *mlx)
 	}
 }
 
+void desc_sort(t_mlx *mlx)
+{
+	int i;
+	int j;
+	t_sprite tmp;
+
+	i = 0;
+	while (i < mlx->spriteNum)
+	{
+		j = i;
+		while (j < mlx->spriteNum)
+		{
+			if (mlx->sprite[i].dist < mlx->sprite[j].dist)
+			{
+				tmp = mlx->sprite[i];
+				mlx->sprite[i] = mlx->sprite[j];
+				mlx->sprite[j] = tmp;
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
+int transform_sprite(t_game *game, t_sprite *sprite)
+{
+	double invDet;
+	//translate sprite position to relative to camera
+	sprite->spriteX = sprite->x - game->posX;
+	sprite->spriteY = sprite->y - game->posY;
+	//required for correct matrix multiplication
+	invDet = 1.0 / (game->planeX * game->dirY - game->dirX * game->planeY);
+	sprite->transformX = invDet * (game->dirY * sprite->spriteX - game->dirX * sprite->spriteY);
+	//this is actually the depth inside the screen, that what Z is in 3D
+	sprite->transformY = invDet * (-game->planeY * sprite->spriteX + game->planeX * sprite->spriteY);
+
+	sprite->spriteScreenX = (int)((WIN_WIDTH / 2) * (1 + sprite->transformX / sprite->transformY));
+}
+
+int cal_sprite(t_sprite *sprite)
+{
+	//calculate height of the sprite on screen
+	//using 'transformY' instead of the real distance prevents fisheye
+	sprite->spriteHeight = abs((int)(WIN_HEIGHT / (sprite->transformY)));
+	//calculate lowest and highest pixel to fill in current stripe
+	sprite->drawStartY = -sprite->spriteHeight / 2 + WIN_HEIGHT / 2;
+	if (sprite->drawStartY < 0)
+		sprite->drawStartY = 0;
+	sprite->drawEndY = sprite->spriteHeight / 2 + WIN_HEIGHT / 2;
+	if (sprite->drawEndY >= WIN_HEIGHT)
+		sprite->drawEndY = WIN_HEIGHT - 1;
+
+	//calculate width of the sprite
+	sprite->spriteWidth = abs((int)(WIN_HEIGHT / (sprite->transformY)));
+	sprite->drawStartX = -sprite->spriteWidth / 2 + sprite->spriteScreenX;
+	if (sprite->drawStartX < 0)
+		sprite->drawStartX = 0;
+	sprite->drawEndX = sprite->spriteWidth / 2 + sprite->spriteScreenX;
+	if (sprite->drawEndX >= WIN_WIDTH)
+		sprite->drawEndX = WIN_WIDTH - 1;
+}
+
+// int draw_sprite(t_mlx *mlx, t_sprite *sprite, double *zbuffer
+int draw_sprite(t_mlx *mlx, t_sprite *sprite)
+{
+	int texX;
+	int texY;
+	int stripe = sprite->drawStartX;
+	//loop through every vertical stripe of the sprite on screen
+	while (stripe < sprite->drawEndX)
+	{
+		texX = (int)(256 * (stripe - (-sprite->spriteWidth / 2 + sprite->spriteScreenX)) * TEX_WIDTH / sprite->spriteWidth) / 256;
+		if (sprite->transformY > 0 && stripe > 0 && stripe < WIN_WIDTH && sprite->transformY < mlx->zbuffer[stripe])
+		{
+			int y = sprite->drawStartY;
+			while (y < sprite->drawEndY) //for every pixel of the current stripe
+			{
+				//256 and 128 factors to avoid floats
+				int d = (y) * 256 - WIN_HEIGHT * 128 + sprite->spriteHeight * 128;
+				texY = ((d * TEX_HEIGHT) / sprite->spriteHeight) / 256;
+				//get current color from the texture
+				int color = mlx->tex[SPRITE].data[TEX_WIDTH * texY + texX];
+				if ((color & 0x00FFFFFF) != 0)
+				{
+					mlx->img.data[stripe + WIN_WIDTH * y] = color;
+					// printf("mlximgdata: %d\n", mlx->img.data[sprite->drawStartX + WIN_WIDTH * sprite->drawStartY]);
+				}
+				//paint pixel if it isn't black, black is the invisible color
+				y++;
+			}
+		}
+		stripe++;
+	}
+}
+
+// int render_sprite(t_mlx *mlx, double *zbuffer)
+int render_sprite(t_mlx *mlx)
+{
+	int i;
+
+	i = 0;
+	//일단은 하드코딩
+	mlx->spriteNum = 3;
+	for (size_t i = 0; i < mlx->spriteNum; i++)
+	{
+		mlx->sprite[i].idx = i;
+		mlx->sprite[i].dist = ((mlx->game.posX - mlx->sprite[i].x) * (mlx->game.posX - mlx->sprite[i].x) + (mlx->game.posY - mlx->sprite[i].y) * (mlx->game.posY - mlx->sprite[i].y));
+	}
+	desc_sort(mlx);
+	while (i < mlx->spriteNum)
+	{
+		transform_sprite(&mlx->game, &mlx->sprite[i]);
+		cal_sprite(&mlx->sprite[i]);
+		// draw_sprite(mlx, &mlx->sprite[i], zbuffer);
+		draw_sprite(mlx, &mlx->sprite[i]);
+		i++;
+	}
+}
+
 int run_game(t_mlx *mlx)
 {
 	int i;
+	// double zbuffer[WIN_WIDTH];
 
 	i = 0;
 	mlx_destroy_image(mlx->mlx_ptr, mlx->img.img_ptr);
@@ -287,8 +401,12 @@ int run_game(t_mlx *mlx)
 		setVar(mlx, i);
 		performDDA(mlx);
 		drawVertLine(mlx, i);
+		// zbuffer[i] = mlx->game.perpWallDist;
+		mlx->zbuffer[i] = mlx->game.perpWallDist;
 		i++;
 	}
+	// render_sprite(mlx, zbuffer);
+	render_sprite(mlx);
 	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img.img_ptr, 0, 0);
 	return 0;
 }
@@ -358,13 +476,23 @@ int initial_setting(t_mlx *mlx)
 	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "DomMorello");
 	mlx->img.img_ptr = mlx_new_image(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
 	mlx->img.data = (int *)mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size_l, &mlx->img.endian);
-	mlx->game.posX = 21.5;
-	mlx->game.posY = 11.5;
+	mlx->game.posX = 11.5;
+	mlx->game.posY = 1.5;
 	mlx->game.dirX = -1;
 	mlx->game.dirY = 0;
 	mlx->game.planeX = 0;
 	mlx->game.planeY = 0.66;
 	tmp_direction_tex(mlx); //일단 하드코딩으로 filepath를 넣어줬다.
+	//sprite 일단 hardcoding으로
+	t_sprite *tmp;
+	tmp = (t_sprite *)malloc(sizeof(t_sprite) * 3);
+	tmp[0].x = 8;
+	tmp[0].y = 1.5;
+	tmp[1].x = 11.5;
+	tmp[1].y = 5;
+	tmp[2].x = 10.5;
+	tmp[2].y = 2.5;
+	mlx->sprite = tmp;
 	return 0;
 }
 

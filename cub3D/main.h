@@ -109,6 +109,7 @@ typedef struct		s_mlx
 	t_game		game;
 	t_tex		tex[7];
 	t_sprite	*sprite;
+	double		zbuffer[WIN_WIDTH];
 	int			spriteNum;
 }					t_mlx;
 
