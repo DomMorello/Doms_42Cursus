@@ -16,7 +16,7 @@ int     parse_info(char const *argv)
         return (error("Error\ncannot open the file"));
     while (get_next_line(fd, &line))
     {
-
+        check_tex(line);        
     }
 }
 
