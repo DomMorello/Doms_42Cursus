@@ -9,6 +9,10 @@
 #include "./libft/libft.h"
 #include "./minilibx_linux/mlx.h"
 
+# define MIN_WIN_WIDTH 320
+# define MIN_WIN_HEIGHT 240
+# define MAX_WIN_WIDTH 1280
+# define MAX_WIN_HEIGHT 720
 # define WIN_WIDTH 640
 # define WIN_HEIGHT 480
 # define TEX_WIDTH 64
@@ -49,11 +53,13 @@ typedef struct		s_tex
 	int     size_l;
 	int     bpp;
 	int     endian;
+	// 이 부분은 t_img를 이용해서 바꾸자. 
 	int		width;
 	int		height;
 	char	*filepath;
 }					t_tex;
 
+//t_game ==> t_ray 로 바꾸자.
 typedef struct		s_game
 {
 	double	posX;
@@ -89,7 +95,6 @@ typedef struct		s_game
 
 typedef struct	s_sprite
 {
-	int			idx;
 	double		x;
 	double		y;
 	double		spriteX;
@@ -100,13 +105,14 @@ typedef struct	s_sprite
 	int			perpWallDist;
 	double		dist;
 	double		spriteHeight;
+	double		spriteWidth;
 	int			drawStartX;
 	int			drawEndX;
 	int			drawStartY;
 	int			drawEndY;
-	double		spriteWidth;
 }				t_sprite;
 
+//mlx->game으로 바꾸자.
 typedef struct		s_mlx
 {
 	void		*mlx_ptr;
@@ -115,8 +121,12 @@ typedef struct		s_mlx
 	t_game		game;
 	t_tex		tex[7];
 	t_sprite	*sprite;
-	double		zbuffer[WIN_WIDTH];
+	double		zbuffer[WIN_WIDTH];	//이 부분 수정해서 바껴야 한다. 
 	int			spriteNum;
+	// int			mapWidth;
+	// int			mapHeight;
+	int			winWidth;
+	int			winHeight;
 }					t_mlx;
 
 # endif 

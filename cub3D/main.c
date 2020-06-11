@@ -370,7 +370,6 @@ int render_sprite(t_mlx *mlx)
 	mlx->spriteNum = 3;
 	for (size_t i = 0; i < mlx->spriteNum; i++)
 	{
-		mlx->sprite[i].idx = i;
 		mlx->sprite[i].dist = ((mlx->game.posX - mlx->sprite[i].x) * (mlx->game.posX - mlx->sprite[i].x) + (mlx->game.posY - mlx->sprite[i].y) * (mlx->game.posY - mlx->sprite[i].y));
 	}
 	desc_sort(mlx);
