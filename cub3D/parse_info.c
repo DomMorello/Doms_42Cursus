@@ -1,19 +1,32 @@
 #include "./main.h"
 #include "./gnl/get_next_line.h"
 
-int     error(char *str)
+int error(char *str)
 {
 	write(1, str, ft_strlen(str));
 	return (ERROR);
 }
 
-int		input_resolution(t_mlx *mlx, char *str)
+int ft_isspace(char c)
+{
+	if ((c >= 9 && c <= 13) || c == ' ')
+		return (TRUE);
+	return (FALSE);
+}
+
+int input_resolution(t_mlx *mlx, char *str)
 {
 	char **ret;
 	int i;
 
-	if ((ret = ft_split(str, ' ')) == NULL)
-		return (ERROR);
+	i = 0;
+	while (str[++i])
+	{
+		if (!(ft_isdigit(str[i]) || ft_isspace(str[i])))
+			return (error("Error\ninvalid format"));
+	}
+	if ((ret = ft_split(&str[1], ' ')) == NULL)
+		return (error("Error\nmemory allocation fail"));
 	mlx->winWidth = ft_atoi(ret[0]);
 	mlx->winHeight = ft_atoi(ret[1]);
 	if (mlx->winWidth > MAX_WIN_WIDTH)
@@ -31,18 +44,27 @@ int		input_resolution(t_mlx *mlx, char *str)
 	ret = NULL;
 }
 
-int		parse_line(char *line, t_mlx *mlx)
+int parse_line(char *line, t_mlx *mlx)
 {
-	if (line[0] == 'R')
-		input_resolution(mlx, line + 2);
-	if (line[0] == 'N' && line[1] == 'O')
+	int i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (ft_isspace(line[i]))
+			i++;
+		else
+			break;
+	}
+	if (line[i] == 'R')
+		input_resolution(mlx, &line[i]);
+	// if (line[i] == 'N' && line[i + 1] == 'O')
 	// if (line[0] == 'S' && line[1] == 'O')
 	// if (line[0] == 'W' && line[1] == 'E')
 	// if (line[0] == 'E' && line[1] == 'A')
-
 }
 
-int     parse_info(char const *argv)
+int parse_info(char const *argv)
 {
 	int fd;
 	char *line;
@@ -53,10 +75,11 @@ int     parse_info(char const *argv)
 	while (get_next_line(fd, &line))
 	{
 		parse_line(line, &mlx);
+		free(line);
 	}
 }
 
-char     *ft_strfromend(char *str, int size)
+char *ft_strfromend(char *str, int size)
 {
 	int len;
 	int j;
@@ -75,7 +98,7 @@ char     *ft_strfromend(char *str, int size)
 	return (copy);
 }
 
-int     check_extension(char const *argv)
+int check_extension(char const *argv)
 {
 	char *extension;
 
@@ -96,7 +119,6 @@ int main(int argc, char const *argv[])
 	}
 	else if (argc == 3)
 		/* bmp */
-	
-	return 0;
-}
 
+		return 0;
+}
