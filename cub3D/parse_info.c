@@ -14,19 +14,37 @@ int ft_isspace(char c)
 	return (FALSE);
 }
 
-int input_resolution(t_mlx *mlx, char *str)
+int		free_2d_char(char **ret, int flag)
+{
+	int i;
+
+	i = 0;
+	while (ret[i])
+	{
+		free(ret[i]);
+		i++;
+	}
+	free(ret);
+	ret = NULL;
+	return (flag);
+}
+
+int		input_resolution(t_mlx *mlx, char *str)
 {
 	char **ret;
+	char *check;
 	int i;
 
 	i = 0;
 	while (str[++i])
-	{
 		if (!(ft_isdigit(str[i]) || ft_isspace(str[i])))
 			return (error("Error\ninvalid format"));
-	}
 	if ((ret = ft_split(&str[1], ' ')) == NULL)
 		return (error("Error\nmemory allocation fail"));
+	check = ret[2];
+	if (check)
+		if (!(check[0] == '\0' || check[0] == '\r' || check[0] == '\n'))//OS에 따라 다르겠지.
+			return (free_2d_char(ret, error("Error\ninalid format")));
 	mlx->winWidth = ft_atoi(ret[0]);
 	mlx->winHeight = ft_atoi(ret[1]);
 	if (mlx->winWidth > MAX_WIN_WIDTH)
@@ -37,11 +55,7 @@ int input_resolution(t_mlx *mlx, char *str)
 		mlx->winHeight = MAX_WIN_HEIGHT;
 	if (mlx->winHeight < MIN_WIN_HEIGHT)
 		mlx->winHeight = MIN_WIN_HEIGHT;
-	i = -1;
-	while (ret[++i])
-		free(ret[i]);
-	free(ret);
-	ret = NULL;
+	return (free_2d_char(ret, TRUE));
 }
 
 int parse_line(char *line, t_mlx *mlx)
@@ -49,13 +63,8 @@ int parse_line(char *line, t_mlx *mlx)
 	int i;
 
 	i = 0;
-	while (line[i])
-	{
-		if (ft_isspace(line[i]))
-			i++;
-		else
-			break;
-	}
+	while (ft_isspace(line[i]))
+		i++;
 	if (line[i] == 'R')
 		input_resolution(mlx, &line[i]);
 	// if (line[i] == 'N' && line[i + 1] == 'O')
@@ -105,9 +114,12 @@ int check_extension(char const *argv)
 	if ((extension = ft_strfromend((char *)argv, 4)) == NULL)
 		return (FALSE);
 	if (!ft_strncmp(extension, ".cub", 5))
+	{
+		free(extension);
 		return (TRUE);
-	else
-		return (FALSE);
+	}
+	free(extension);
+	return (FALSE);
 }
 
 int main(int argc, char const *argv[])
