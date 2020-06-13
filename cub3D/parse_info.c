@@ -58,15 +58,38 @@ int		input_resolution(t_mlx *mlx, char *str)
 	return (free_2d_char(ret, TRUE));
 }
 
+int		which_tex(char *line)
+{
+	if (line[0] == 'N' && line[1] == 'O')
+		return (NORTH);
+	else if (line[0] == 'S' && line[1] == 'O')
+		return (SOUTH);
+	else if (line[0] == 'W' && line[1] == 'E')
+		return (WEST);
+	else if (line[0] == 'E' && line[1] == 'A')
+		return (EAST);
+	else if (line[0] == 'S')
+		return (SPRITE);
+	else if (line[0] == 'F')
+		return (FLOOR);
+	else if (line[0] == 'C')
+		return (CEILING);
+	else
+		return (FALSE);
+}
+
 int parse_line(char *line, t_mlx *mlx)
 {
 	int i;
+	int tex;
 
 	i = 0;
 	while (ft_isspace(line[i]))
 		i++;
 	if (line[i] == 'R')
 		input_resolution(mlx, &line[i]);
+	tex = which_tex(line);
+	printf("tex:%d\n", tex);
 	// if (line[i] == 'N' && line[i + 1] == 'O')
 	// if (line[0] == 'S' && line[1] == 'O')
 	// if (line[0] == 'W' && line[1] == 'E')
