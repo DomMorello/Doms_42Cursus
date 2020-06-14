@@ -4,6 +4,7 @@
 int error(char *str)
 {
 	write(1, str, ft_strlen(str));
+	write(1, "\n", 1);
 	return (ERROR);
 }
 
@@ -75,7 +76,30 @@ int		which_tex(char *line)
 	else if (line[0] == 'C')
 		return (CEILING);
 	else
-		return (FALSE);
+		return (ERROR);
+}
+
+int		input_tex(t_mlx *mlx, int tex, char *line)
+{
+	int space;
+	int i;
+	char *filepath;
+
+	i = 0;
+	if (tex != ERROR)
+	{
+		if (tex >= 0 && tex <= 3)
+			space = 2;
+		else
+			space = 1;
+		while (space--)
+			i++;
+		while (ft_isspace(line[i]))
+			i++;
+		if ((filepath = ft_strdup(&line[i])) == NULL)
+			return (error("Error\nmemory allocation fail"));
+		mlx->tex[tex].filepath = filepath;
+	}
 }
 
 int parse_line(char *line, t_mlx *mlx)
@@ -88,27 +112,28 @@ int parse_line(char *line, t_mlx *mlx)
 		i++;
 	if (line[i] == 'R')
 		input_resolution(mlx, &line[i]);
-	tex = which_tex(line);
-	printf("tex:%d\n", tex);
+	tex = which_tex(&line[i]);
+	input_tex(mlx, tex, &line[i]);
 	// if (line[i] == 'N' && line[i + 1] == 'O')
 	// if (line[0] == 'S' && line[1] == 'O')
 	// if (line[0] == 'W' && line[1] == 'E')
 	// if (line[0] == 'E' && line[1] == 'A')
 }
 
-int parse_info(char const *argv)
+int parse_info(char const *argv, t_mlx *mlx)
 {
 	int fd;
 	char *line;
-	t_mlx mlx;
 
 	if ((fd = open(argv, O_RDONLY)) == -1)
 		return (error("Error\ncannot open the file"));
 	while (get_next_line(fd, &line))
 	{
-		parse_line(line, &mlx);
+		parse_line(line, mlx);
 		free(line);
 	}
+	for (size_t i = 0; i < 7; i++)
+		printf("%s\n", mlx->tex[i].filepath);
 }
 
 char *ft_strfromend(char *str, int size)
@@ -142,18 +167,20 @@ int check_extension(char const *argv)
 		return (TRUE);
 	}
 	free(extension);
-	return (FALSE);
+	return (error("Error\ninvalid extension"));
 }
 
 int main(int argc, char const *argv[])
 {
-	if (argc == 2)
-	{
-		if (check_extension(argv[1]) == FALSE || parse_info(argv[1]) == ERROR)
-			return (ERROR);
-	}
-	else if (argc == 3)
-		/* bmp */
+	t_mlx mlx;
 
-		return 0;
+	if (argc == 2)
+		if (check_extension(argv[1]) == ERROR || parse_info(argv[1], &mlx) == ERROR)
+			return (ERROR);
+	else if (argc == 3)
+	{
+		/* bmp */
+	}
+
+	return 0;
 }
