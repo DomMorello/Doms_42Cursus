@@ -15,7 +15,7 @@ int ft_isspace(char c)
 	return (FALSE);
 }
 
-int		free_2d_char(char **ret, int flag)
+int free_2d_char(char **ret, int flag)
 {
 	int i;
 
@@ -30,7 +30,7 @@ int		free_2d_char(char **ret, int flag)
 	return (flag);
 }
 
-int		input_resolution(t_mlx *mlx, char *str)
+int input_resolution(t_mlx *mlx, char *str)
 {
 	char **ret;
 	char *check;
@@ -44,7 +44,7 @@ int		input_resolution(t_mlx *mlx, char *str)
 		return (error("Error\nmemory allocation fail"));
 	check = ret[2];
 	if (check)
-		if (!(check[0] == '\0' || check[0] == '\r' || check[0] == '\n'))//OS에 따라 다르겠지.
+		if (!(check[0] == '\0' || check[0] == '\r' || check[0] == '\n')) //OS에 따라 다르겠지.
 			return (free_2d_char(ret, error("Error\ninalid format")));
 	mlx->winWidth = ft_atoi(ret[0]);
 	mlx->winHeight = ft_atoi(ret[1]);
@@ -59,7 +59,7 @@ int		input_resolution(t_mlx *mlx, char *str)
 	return (free_2d_char(ret, TRUE));
 }
 
-int		which_tex(char *line)
+int which_tex(char *line)
 {
 	if (line[0] == 'N' && line[1] == 'O')
 		return (NORTH);
@@ -79,11 +79,10 @@ int		which_tex(char *line)
 		return (ERROR);
 }
 
-int		input_tex(t_mlx *mlx, int tex, char *line)
+int input_tex(t_mlx *mlx, int tex, char *line)
 {
 	int space;
 	int i;
-	char *filepath;
 
 	i = 0;
 	if (tex != ERROR)
@@ -96,9 +95,9 @@ int		input_tex(t_mlx *mlx, int tex, char *line)
 			i++;
 		while (ft_isspace(line[i]))
 			i++;
-		if ((filepath = ft_strdup(&line[i])) == NULL)
+		if ((mlx->tex[tex].filepath = ft_strdup(&line[i])) == NULL)
 			return (error("Error\nmemory allocation fail"));
-		mlx->tex[tex].filepath = filepath;
+		/* 중간에 에러가 났을 경우 이 부분을 어떻게 free할지 해결해야 한다. */
 	}
 }
 
@@ -111,13 +110,12 @@ int parse_line(char *line, t_mlx *mlx)
 	while (ft_isspace(line[i]))
 		i++;
 	if (line[i] == 'R')
-		input_resolution(mlx, &line[i]);
+		if ((input_resolution(mlx, &line[i])) == ERROR)
+			return (ERROR);
 	tex = which_tex(&line[i]);
 	input_tex(mlx, tex, &line[i]);
-	// if (line[i] == 'N' && line[i + 1] == 'O')
-	// if (line[0] == 'S' && line[1] == 'O')
-	// if (line[0] == 'W' && line[1] == 'E')
-	// if (line[0] == 'E' && line[1] == 'A')
+	/* init을 통해서 널값 넣어주고 나서 하나라도 널인체로 남아있으면 에러처리 */
+	return (TRUE);
 }
 
 int parse_info(char const *argv, t_mlx *mlx)
@@ -132,26 +130,24 @@ int parse_info(char const *argv, t_mlx *mlx)
 		parse_line(line, mlx);
 		free(line);
 	}
-	for (size_t i = 0; i < 7; i++)
-		printf("%s\n", mlx->tex[i].filepath);
 }
 
 char *ft_strfromend(char *str, int size)
 {
 	int len;
-	int j;
+	int i;
 	char *copy;
 
 	if ((copy = (char *)malloc(sizeof(char) * size + 1)) == NULL)
 		return (NULL);
 	len = ft_strlen(str);
-	j = 0;
+	i = 0;
 	while (size)
 	{
-		copy[j++] = str[len - size];
+		copy[i++] = str[len - size];
 		size--;
 	}
-	copy[j] = '\0';
+	copy[i] = '\0';
 	return (copy);
 }
 
@@ -160,7 +156,7 @@ int check_extension(char const *argv)
 	char *extension;
 
 	if ((extension = ft_strfromend((char *)argv, 4)) == NULL)
-		return (FALSE);
+		return (error("Error\nmemory allocation fail"));
 	if (!ft_strncmp(extension, ".cub", 5))
 	{
 		free(extension);
@@ -175,11 +171,17 @@ int main(int argc, char const *argv[])
 	t_mlx mlx;
 
 	if (argc == 2)
+	{
 		if (check_extension(argv[1]) == ERROR || parse_info(argv[1], &mlx) == ERROR)
 			return (ERROR);
+	}
 	else if (argc == 3)
 	{
 		/* bmp */
+	}
+	else
+	{
+		return (error("Error\nneed a map file"));
 	}
 
 	return 0;
