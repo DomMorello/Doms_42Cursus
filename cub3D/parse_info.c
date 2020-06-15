@@ -59,6 +59,20 @@ int input_resolution(t_mlx *mlx, char *str)
 	return (free_2d_char(ret, TRUE));
 }
 
+int free_tex(t_mlx *mlx, int flag)
+{
+	int i;
+
+	i = 0;
+	while (i)
+	{
+		if (mlx->tex[i].filepath != NULL)
+			free(mlx->tex[i].filepath);
+		i++;
+	}
+	return (flag);
+}
+
 int which_tex(char *line)
 {
 	if (line[0] == 'N' && line[1] == 'O')
@@ -96,8 +110,20 @@ int input_tex(t_mlx *mlx, int tex, char *line)
 		while (ft_isspace(line[i]))
 			i++;
 		if ((mlx->tex[tex].filepath = ft_strdup(&line[i])) == NULL)
-			return (error("Error\nmemory allocation fail"));
-		/* 중간에 에러가 났을 경우 이 부분을 어떻게 free할지 해결해야 한다. */
+			return (free_tex(mlx, ERROR));
+	}
+}
+
+int check_tex(t_mlx *mlx)
+{
+	int i;
+
+	i = 0;
+	while (i < 7)
+	{
+		if (mlx->tex[i].filepath == NULL)
+			return (error("Error\ninvalid format"));
+		i++;
 	}
 }
 
@@ -113,9 +139,13 @@ int parse_line(char *line, t_mlx *mlx)
 		if ((input_resolution(mlx, &line[i])) == ERROR)
 			return (ERROR);
 	tex = which_tex(&line[i]);
-	input_tex(mlx, tex, &line[i]);
-	/* init을 통해서 널값 넣어주고 나서 하나라도 널인체로 남아있으면 에러처리 */
+	if (input_tex(mlx, tex, &line[i]) == ERROR)
+		return (ERROR);
 	return (TRUE);
+}
+
+void init_game(t_mlx *mlx)
+{
 }
 
 int parse_info(char const *argv, t_mlx *mlx)
@@ -123,13 +153,21 @@ int parse_info(char const *argv, t_mlx *mlx)
 	int fd;
 	char *line;
 
+	init_game(mlx);
 	if ((fd = open(argv, O_RDONLY)) == -1)
 		return (error("Error\ncannot open the file"));
 	while (get_next_line(fd, &line))
 	{
-		parse_line(line, mlx);
+		if (parse_line(line, mlx) == ERROR)
+		{
+			free(line);
+			return (ERROR);
+		}
 		free(line);
 	}
+	if (check_tex(mlx) == ERROR)
+		return (ERROR);
+	return (TRUE);
 }
 
 char *ft_strfromend(char *str, int size)

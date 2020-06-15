@@ -121,7 +121,7 @@ typedef struct		s_mlx
 	t_game		game;
 	t_tex		tex[7];
 	t_sprite	*sprite;
-	double		zbuffer[WIN_WIDTH];	//이 부분 수정해서 바껴야 한다. 
+	double		zbuffer[MAX_WIN_WIDTH];	//맥스로 놔두면 되지 않을까?
 	int			spriteNum;
 	// int			mapWidth;
 	// int			mapHeight;
