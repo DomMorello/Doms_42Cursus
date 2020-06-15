@@ -73,7 +73,7 @@ int free_tex(t_mlx *mlx, int flag)
 	return (flag);
 }
 
-int which_tex(char *line)
+int which_tex(char *line, t_mlx *mlx)
 {
 	if (line[0] == 'N' && line[1] == 'O')
 		return (NORTH);
@@ -89,17 +89,21 @@ int which_tex(char *line)
 		return (FLOOR);
 	else if (line[0] == 'C')
 		return (CEILING);
+	else if (line[0] == 0 || line[0] == '1' || line[0] == 'R')
+		return (PASS);
 	else
 		return (ERROR);
 }
 
 int input_tex(t_mlx *mlx, int tex, char *line)
 {
+	/* 여기서 바로 xpm함수를 사용해서 error를 발생시켜야
+		똑같은 filepath가 여러 개 나오거나 그런 예외상황을 막을 수 있다. */
 	int space;
 	int i;
 
 	i = 0;
-	if (tex != ERROR)
+	if (tex != ERROR && tex != PASS)
 	{
 		if (tex >= 0 && tex <= 3)
 			space = 2;
@@ -112,10 +116,12 @@ int input_tex(t_mlx *mlx, int tex, char *line)
 		if ((mlx->tex[tex].filepath = ft_strdup(&line[i])) == NULL)
 			return (free_tex(mlx, ERROR));
 	}
+	return (TRUE);
 }
 
 int check_tex(t_mlx *mlx)
 {
+	/* file에 RGB값으로 들어오는 경우를 생각했을 때를 추가해야된다. */
 	int i;
 
 	i = 0;
@@ -127,6 +133,25 @@ int check_tex(t_mlx *mlx)
 	}
 }
 
+int check_order(t_mlx *mlx, char *line)
+{
+	int allSet;
+	int i;
+
+	i = 0;
+	allSet = TRUE;
+	while (i < 7)
+	{
+		if (mlx->tex[i].filepath == NULL)
+			allSet = FALSE;
+		i++;
+	}
+	if (!allSet)
+		if (line[0] == '1')
+			return (error("Error\nmap info must be located at the end of the file"));
+	return (TRUE);
+}
+
 int parse_line(char *line, t_mlx *mlx)
 {
 	int i;
@@ -135,10 +160,13 @@ int parse_line(char *line, t_mlx *mlx)
 	i = 0;
 	while (ft_isspace(line[i]))
 		i++;
+	if ((check_order(mlx, &line[i])) == ERROR)
+		return (ERROR);
 	if (line[i] == 'R')
 		if ((input_resolution(mlx, &line[i])) == ERROR)
 			return (ERROR);
-	tex = which_tex(&line[i]);
+	if ((tex = which_tex(&line[i], mlx)) == ERROR)
+		return (error("Error\ninvalid format"));
 	if (input_tex(mlx, tex, &line[i]) == ERROR)
 		return (ERROR);
 	return (TRUE);

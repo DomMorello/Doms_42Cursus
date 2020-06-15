@@ -17,9 +17,11 @@
 # define WIN_HEIGHT 480
 # define TEX_WIDTH 64
 # define TEX_HEIGHT 64
+
 # define TRUE 1
 # define FALSE 0
 # define ERROR -1
+# define PASS 7
 
 #define mapWidth 24
 #define mapHeight 24
