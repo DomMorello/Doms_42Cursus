@@ -67,7 +67,10 @@ int free_tex(t_mlx *mlx, int flag)
 	while (i)
 	{
 		if (mlx->tex[i].filepath != NULL)
+		{
 			free(mlx->tex[i].filepath);
+			mlx->tex[i].filepath = NULL;
+		}
 		i++;
 	}
 	return (flag);
@@ -97,10 +100,9 @@ int which_tex(char *line, t_mlx *mlx)
 
 int input_tex(t_mlx *mlx, int tex, char *line)
 {
-	/* 여기서 바로 xpm함수를 사용해서 error를 발생시켜야
-		똑같은 filepath가 여러 개 나오거나 그런 예외상황을 막을 수 있다. */
 	int space;
 	int i;
+	char *tmp;
 
 	i = 0;
 	if (tex != ERROR && tex != PASS)
@@ -114,7 +116,7 @@ int input_tex(t_mlx *mlx, int tex, char *line)
 		while (ft_isspace(line[i]))
 			i++;
 		if ((mlx->tex[tex].filepath = ft_strdup(&line[i])) == NULL)
-			return (free_tex(mlx, ERROR));
+			return (free_tex(mlx, error("Error\nmemory allocation fail")));
 	}
 	return (TRUE);
 }
@@ -172,16 +174,11 @@ int parse_line(char *line, t_mlx *mlx)
 	return (TRUE);
 }
 
-void init_game(t_mlx *mlx)
-{
-}
-
 int parse_info(char const *argv, t_mlx *mlx)
 {
 	int fd;
 	char *line;
 
-	init_game(mlx);
 	if ((fd = open(argv, O_RDONLY)) == -1)
 		return (error("Error\ncannot open the file"));
 	while (get_next_line(fd, &line))
@@ -232,6 +229,28 @@ int check_extension(char const *argv)
 	return (error("Error\ninvalid extension"));
 }
 
+int init_game(t_mlx *mlx)
+{
+	int i;
+	char *tmp;
+
+	i = 0;
+	mlx->mlx_ptr = mlx_init();
+	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr, mlx->winWidth, mlx->winHeight, "DomMorello");
+	mlx->img.img_ptr = mlx_new_image(mlx->mlx_ptr, mlx->winWidth, mlx->winHeight);
+	mlx->img.data = (int *)mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size_l, &mlx->img.endian);
+	while (i < 7)
+	{
+		tmp = mlx->tex[i].filepath;
+		if (tmp[ft_strlen(tmp) - 1] == '\r' || tmp[ft_strlen(tmp) - 1] == '\n')
+			tmp[ft_strlen(tmp) - 1] = 0;
+		if ((mlx->tex[i].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, tmp, &mlx->tex[i].width, &mlx->tex[i].height)) == NULL)
+			return (error("Error\nfail to convert xpm file to image"));
+		mlx->tex[i].data = (int *)mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size_l, &mlx->img.endian);
+		i++;
+	}
+}
+
 int main(int argc, char const *argv[])
 {
 	t_mlx mlx;
@@ -240,6 +259,12 @@ int main(int argc, char const *argv[])
 	{
 		if (check_extension(argv[1]) == ERROR || parse_info(argv[1], &mlx) == ERROR)
 			return (ERROR);
+		if (init_game(&mlx) == ERROR)
+			return (ERROR);
+		for (int i = 0; i < 7; i++)
+		{
+			printf("%d\n", mlx.tex[i].filepath[ft_strlen(mlx.tex[i].filepath) - 1]);
+		}
 	}
 	else if (argc == 3)
 	{
@@ -249,6 +274,6 @@ int main(int argc, char const *argv[])
 	{
 		return (error("Error\nneed a map file"));
 	}
-
+	mlx_loop(mlx.mlx_ptr);
 	return 0;
 }
