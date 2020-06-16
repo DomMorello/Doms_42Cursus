@@ -159,6 +159,20 @@ int check_order(t_mlx *mlx, char *line)
 	return (TRUE);
 }
 
+int	parse_map(t_mlx *mlx, char *line)
+{
+	int i;
+
+	i = 0;
+	while (ft_isspace(line[i]))
+		i++;
+	if (line[i] != '1')
+		return (PASS);
+	
+
+	
+}
+
 int parse_line(char *line, t_mlx *mlx)
 {
 	int i;
@@ -175,13 +189,13 @@ int parse_line(char *line, t_mlx *mlx)
 			if ((input_resolution(mlx, &line[i])) == ERROR)
 				return (ERROR);
 		if ((tex = which_tex(&line[i], mlx)) == ERROR)
-			return (error("Error\ninvalid format:unavailable letter included in the file"));
+			return (error("Error\ninvalid format:invalid letter is included in the file"));
 		if (input_tex(mlx, tex, &line[i]) == ERROR)
 			return (ERROR);
 	}
 	else
 	{
-		
+		parse_map(mlx, line);
 	}
 	return (TRUE);
 }
