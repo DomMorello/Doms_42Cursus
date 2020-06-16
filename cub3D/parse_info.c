@@ -135,20 +135,25 @@ int check_tex(t_mlx *mlx)
 	}
 }
 
-int check_order(t_mlx *mlx, char *line)
+int allset_filepath(t_mlx *mlx)
 {
-	int allSet;
+	int allset;
 	int i;
 
+	allset = TRUE;
 	i = 0;
-	allSet = TRUE;
 	while (i < 7)
 	{
 		if (mlx->tex[i].filepath == NULL)
-			allSet = FALSE;
+			allset = FALSE;
 		i++;
 	}
-	if (!allSet)
+	return (allset);
+}
+
+int check_order(t_mlx *mlx, char *line)
+{
+	if (!allset_filepath(mlx))
 		if (line[0] == '1')
 			return (error("Error\nmap info must be located at the end of the file"));
 	return (TRUE);
@@ -160,17 +165,24 @@ int parse_line(char *line, t_mlx *mlx)
 	int tex;
 
 	i = 0;
-	while (ft_isspace(line[i]))
-		i++;
-	if ((check_order(mlx, &line[i])) == ERROR)
-		return (ERROR);
-	if (line[i] == 'R')
-		if ((input_resolution(mlx, &line[i])) == ERROR)
+	if (!allset_filepath(mlx))
+	{
+		while (ft_isspace(line[i]))
+			i++;
+		if ((check_order(mlx, &line[i])) == ERROR)
 			return (ERROR);
-	if ((tex = which_tex(&line[i], mlx)) == ERROR)
-		return (error("Error\ninvalid format"));
-	if (input_tex(mlx, tex, &line[i]) == ERROR)
-		return (ERROR);
+		if (line[i] == 'R')
+			if ((input_resolution(mlx, &line[i])) == ERROR)
+				return (ERROR);
+		if ((tex = which_tex(&line[i], mlx)) == ERROR)
+			return (error("Error\ninvalid format:unavailable letter included in the file"));
+		if (input_tex(mlx, tex, &line[i]) == ERROR)
+			return (ERROR);
+	}
+	else
+	{
+		
+	}
 	return (TRUE);
 }
 
