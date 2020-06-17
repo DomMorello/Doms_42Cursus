@@ -118,6 +118,7 @@ typedef struct		s_map
 {
 	// int		mapWidth;
 	// int		mapEhight;
+	char			**mapArr;
 	char 			*row;
 	struct s_map	*next;
 }					t_map;
@@ -131,7 +132,7 @@ typedef struct		s_mlx
 	t_game		game;
 	t_tex		tex[7];
 	t_sprite	*sprite;
-	t_map		map;
+	t_map		*map;
 	double		zbuffer[MAX_WIN_WIDTH];	//맥스로 놔두면 되지 않을까?
 	int			spriteNum;
 	int			winWidth;

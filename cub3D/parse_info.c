@@ -159,18 +159,50 @@ int check_order(t_mlx *mlx, char *line)
 	return (TRUE);
 }
 
-int	parse_map(t_mlx *mlx, char *line)
+t_map	*ft_lstnewmap(char *content)
+{
+	t_map *ret;
+
+	if ((ret = (t_map *)malloc(sizeof(ret))) == 0)
+		return (NULL);
+	ret->next = NULL;
+	ret->row = content;
+	return (ret);
+}
+
+int	ft_lstaddmap_back(t_map **lst, t_map *new, char *row)
+{
+	t_map *tmp;
+
+	if (lst)
+	{
+		if ((new = ft_lstnewmap(row)) == NULL)
+			return (ERROR);
+		tmp = *lst;
+		if (!tmp)
+			*lst = new;
+		else
+		{
+			while (tmp->next)
+				tmp = tmp->next;
+			tmp->next = new;
+		}
+	}
+}
+
+int	copy_map(t_mlx *mlx, char *line)
 {
 	int i;
+	t_map *new;
 
 	i = 0;
 	while (ft_isspace(line[i]))
 		i++;
 	if (line[i] != '1')
 		return (PASS);
-	
-
-	
+	if (ft_lstaddmap_back(&mlx->map, new, ft_strdup(line)) == ERROR)
+		return (error("Error\nmemory allocation fail"));
+	//메모리릭 해결해야 한다. 에러났을 경우
 }
 
 int parse_line(char *line, t_mlx *mlx)
@@ -194,10 +226,22 @@ int parse_line(char *line, t_mlx *mlx)
 			return (ERROR);
 	}
 	else
-	{
-		parse_map(mlx, line);
-	}
+		if (copy_map(mlx, line) == ERROR)
+			return (ERROR);
 	return (TRUE);
+}
+
+int	check_lastline(t_mlx *mlx, char *line)
+{
+	int i;
+	t_map *new;
+
+	i = 0;
+	while (ft_isspace(line[i]))
+		i++;
+	if (line[i] == '1')
+		if (ft_lstaddmap_back(&mlx->map, new, ft_strdup(line)) == ERROR)
+			return (ERROR);
 }
 
 int parse_info(char const *argv, t_mlx *mlx)
@@ -218,6 +262,14 @@ int parse_info(char const *argv, t_mlx *mlx)
 	}
 	if (check_tex(mlx) == ERROR)
 		return (ERROR);
+	if (check_lastline(mlx, line) == ERROR)
+		return (ERROR);
+	while (mlx->map)
+	{
+		printf("%s\n", mlx->map->row);
+		mlx->map = mlx->map->next;
+	}
+	// parse_map(mlx);
 	return (TRUE);
 }
 
