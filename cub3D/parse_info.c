@@ -207,9 +207,10 @@ int copy_map(t_mlx *mlx, char *line)
 	i = 0;
 	while (ft_isspace(line[i]))
 		i++;
+	if (line[i] == 0)
+		return (PASS);
 	if (line[i] != '1')
 		return (error("Error\nmap is not entirely surrounded by walls"));
-		/* 어떻게 되나 한 번 보자!  */
 	while (line[i])
 	{
 		if (!is_valid_letter(line[i]))
@@ -295,33 +296,21 @@ int move_map_2d(t_mlx *mlx, int mapsizeY)
 	return (TRUE);
 }
 
-int check_border_side(char **map, int mapsizeY)
+int check_rightside(char **map, int mapsizeY)
 {
 	int i;
 	int j;
 
-	// for (int i = 0; i < mapsizeY; i++)
-	// {
-	// 	for (int j = 0; j < ft_strlen(map[i]); j++)
-	// 	{
-	// 		printf("%c", map[i][j]);
-	// 	}
-	// 	printf("\n");
-	// }
-	// i = 0;
-	// while (i < mapsizeY)
-	// {
-	// 	j = 0;
-	// 	while (ft_isspace(map[i][j]))
-	// 		j++;
-	// 	printf("(%d %d) %c\n", i, j, map[i][j]);
-	// 	if (map[i][j] != '1')
-	// 	{
-	// 		printf("fuck~~!!!!!\n");
-	// 		return (error("Error\nmap is not entirely surrounded by walls"));
-	// 	}
-	// 	i++;
-	// }
+	i = 0;
+	while (i < mapsizeY)
+	{
+		j = ft_strlen(map[i]) - 1;
+		while (ft_isspace(map[i][j]))
+			j--;
+		if (map[i][j] != '1')
+			return (error("Error\nmap is not entirely surrounded by walls"));
+		i++;
+	}
 	return (TRUE);
 }
 
@@ -343,8 +332,120 @@ int check_border(char **map, int mapsizeY)
 			return (error("Error\nmap is not entirely surrounded by walls"));
 		i++;
 	}
-	if (check_border_side(map, mapsizeY) == ERROR)
+	if (check_rightside(map, mapsizeY) == ERROR)
 		return (ERROR);
+	return (TRUE);
+}
+
+int check_updown(int i, int j, char **map)
+{
+	if (ft_isspace(map[i - 1][j + 1]))
+		return (error("Error\nmap is not entirely surrounded by walls"));
+	if (ft_strlen(map[i + 1]) > j + 1)
+	{
+		if (ft_isspace(map[i + 1][j + 1]))
+			return (error("Error\nmap is not entirely surrounded by walls"));
+	}
+	else
+		return (error("Error\nmap is not entirely surrounded by walls"));
+}
+
+int parse_contents(char **map, int mapsizeY)
+{
+	int i;
+	int j;
+
+	i = 1;
+	while (i < mapsizeY - 1)
+	{
+		j = 0;
+		while (ft_isspace(map[i][j]))
+			j++;
+		while (j < ft_strlen(map[i]) - 1)
+		{
+			if (map[i][j + 1] == '0')
+			{
+				if (check_updown(i, j, map) == ERROR)
+					return (ERROR);
+				if (ft_isspace(map[i][j]) || ft_isspace(map[i][j + 2]))
+					return (error("Error\nmap is not entirely surrounded by walls"));
+			}
+			j++;
+		}
+		i++;
+	}
+	return (TRUE);
+}
+
+void set_dir(t_mlx *mlx, double dirX, double dirY)
+{
+	mlx->game.dirX = dirX;
+	mlx->game.dirY = dirY;
+}
+
+void set_plane(t_mlx *mlx, double planeX, double planeY)
+{
+	mlx->game.planeX = planeX;
+	mlx->game.planeY = planeY;
+}
+
+void set_playerpos(t_mlx *mlx, double x, double y)
+{
+	mlx->game.posX = x + 0.5;
+	mlx->game.posY = y + 0.5;
+}
+
+void input_direction(t_mlx *mlx, char direction, int x, int y)
+{
+	if (direction == 'N')
+	{
+		set_dir(mlx, 0, -1);
+		set_plane(mlx, 0.66, 0);
+	}
+	else if (direction == 'S')
+	{
+		set_dir(mlx, 0, 1);
+		set_plane(mlx, -0.66, 0);
+	}
+	else if (direction == 'E')
+	{
+		set_dir(mlx, 1, 0);
+		set_plane(mlx, 0, 0.66);
+	}
+	else if (direction == 'W')
+	{
+		set_dir(mlx, -1, 0);
+		set_plane(mlx, 0, -0.66);	
+	}
+	set_playerpos(mlx, (double)x, (double)y);
+}
+
+int check_direction(t_mlx *mlx, int mapsizeY)
+{
+	int i;
+	int j;
+	int isPlural;
+
+	i = 0;
+	isPlural = 0;
+	while (++i < mapsizeY - 1)
+	{
+		j = 0;
+		while (ft_isspace(mlx->map[i][j]))
+			j++;
+		while (j < ft_strlen(mlx->map[i]) - 1)
+		{
+			if (mlx->map[i][j] == 'N' || mlx->map[i][j] == 'S' || mlx->map[i][j] == 'E' || mlx->map[i][j] == 'W')
+			{
+				input_direction(mlx, mlx->map[i][j], i, j);
+				mlx->map[i][j] = '0';
+				isPlural++;
+			}
+			j++;
+		}
+	}
+	if (isPlural != 1)
+		return (error("Error\nplayer position must be singular"));
 	return (TRUE);
 }
 
@@ -355,17 +456,14 @@ int parse_map(t_mlx *mlx)
 	mapsizeY = get_mapsizeY(mlx);
 	if (move_map_2d(mlx, mapsizeY) == ERROR)
 		return (ERROR);
+	if (check_direction(mlx, mapsizeY) == ERROR)
+		return (ERROR);
 	if (check_border(mlx->map, mapsizeY) == ERROR)
 		return (ERROR);
-	// for (int i = 0; i < mapsizeY; i++)
-	// {
-	// 	for (int j = 0; j < ft_strlen(mlx->map[i]); j++)
-	// 	{
-	// 		printf("%c", mlx->map[i][j]);
-	// 	}
-	// 	printf("\n");
-	// }
-
+	if (parse_contents(mlx->map, mapsizeY) == ERROR)
+		return (ERROR);
+	// count_sprite();
+	// sprite는 갯수를 센 다음에 malloc을 하고 그 이후에 값을 넣어야 한다. 
 	return (TRUE);
 }
 
@@ -391,7 +489,6 @@ int parse_info(char const *argv, t_mlx *mlx)
 		return (ERROR);
 	if (parse_map(mlx) == ERROR)
 		return (ERROR);
-
 	return (TRUE);
 }
 
