@@ -159,7 +159,7 @@ int check_order(t_mlx *mlx, char *line)
 	return (TRUE);
 }
 
-t_map	*ft_lstnewmap(char *content)
+t_map *ft_lstnewmap(char *content)
 {
 	t_map *ret;
 
@@ -170,7 +170,7 @@ t_map	*ft_lstnewmap(char *content)
 	return (ret);
 }
 
-int	ft_lstaddmap_back(t_map **lst, t_map *new, char *row)
+int ft_lstaddmap_back(t_map **lst, t_map *new, char *row)
 {
 	t_map *tmp;
 
@@ -190,7 +190,16 @@ int	ft_lstaddmap_back(t_map **lst, t_map *new, char *row)
 	}
 }
 
-int	copy_map(t_mlx *mlx, char *line)
+int is_valid_letter(char c)
+{
+	if (c == '0' || c == '1' || c == '2' || c == 'N' || c == 'S' || c == 'W' || c == 'E')
+		return (TRUE);
+	else if (ft_isspace(c) || c == '\r' || c == '\n')
+		return (TRUE);
+	return (FALSE);
+}
+
+int copy_map(t_mlx *mlx, char *line)
 {
 	int i;
 	t_map *new;
@@ -199,8 +208,15 @@ int	copy_map(t_mlx *mlx, char *line)
 	while (ft_isspace(line[i]))
 		i++;
 	if (line[i] != '1')
-		return (PASS);
-	if (ft_lstaddmap_back(&mlx->map, new, ft_strdup(line)) == ERROR)
+		return (error("Error\nmap is not entirely surrounded by walls"));
+		/* 어떻게 되나 한 번 보자!  */
+	while (line[i])
+	{
+		if (!is_valid_letter(line[i]))
+			return (error("Error\ninvalid letter is included in the map info"));
+		i++;
+	}
+	if (ft_lstaddmap_back(&mlx->maplst, new, ft_strdup(line)) == ERROR)
 		return (error("Error\nmemory allocation fail"));
 	//메모리릭 해결해야 한다. 에러났을 경우
 }
@@ -225,13 +241,12 @@ int parse_line(char *line, t_mlx *mlx)
 		if (input_tex(mlx, tex, &line[i]) == ERROR)
 			return (ERROR);
 	}
-	else
-		if (copy_map(mlx, line) == ERROR)
-			return (ERROR);
+	else if (copy_map(mlx, line) == ERROR)
+		return (ERROR);
 	return (TRUE);
 }
 
-int	check_lastline(t_mlx *mlx, char *line)
+int check_lastline(t_mlx *mlx, char *line)
 {
 	int i;
 	t_map *new;
@@ -240,8 +255,118 @@ int	check_lastline(t_mlx *mlx, char *line)
 	while (ft_isspace(line[i]))
 		i++;
 	if (line[i] == '1')
-		if (ft_lstaddmap_back(&mlx->map, new, ft_strdup(line)) == ERROR)
+		if (ft_lstaddmap_back(&mlx->maplst, new, ft_strdup(line)) == ERROR)
 			return (ERROR);
+}
+
+int get_mapsizeY(t_mlx *mlx)
+{
+	int len;
+	t_map *tmp;
+
+	tmp = mlx->maplst;
+	len = 0;
+	while (tmp)
+	{
+		len++;
+		tmp = tmp->next;
+	}
+	return (len);
+}
+
+int move_map_2d(t_mlx *mlx, int mapsizeY)
+{
+	int i;
+	char *tmp;
+
+	i = 0;
+	if ((mlx->map = (char **)malloc(sizeof(char *) * mapsizeY + 1)) == NULL)
+		return (error("Error\nmemory allocation fail"));
+	mlx->map[mapsizeY] = 0;
+	while (mlx->maplst)
+	{
+		tmp = mlx->maplst->row;
+		if (tmp[ft_strlen(tmp) - 1] == '\r' || tmp[ft_strlen(tmp) - 1] == '\n')
+			tmp[ft_strlen(tmp) - 1] = 0;
+		mlx->map[i] = tmp;
+		mlx->maplst = mlx->maplst->next;
+		i++;
+	}
+	return (TRUE);
+}
+
+int check_border_side(char **map, int mapsizeY)
+{
+	int i;
+	int j;
+
+	// for (int i = 0; i < mapsizeY; i++)
+	// {
+	// 	for (int j = 0; j < ft_strlen(map[i]); j++)
+	// 	{
+	// 		printf("%c", map[i][j]);
+	// 	}
+	// 	printf("\n");
+	// }
+	// i = 0;
+	// while (i < mapsizeY)
+	// {
+	// 	j = 0;
+	// 	while (ft_isspace(map[i][j]))
+	// 		j++;
+	// 	printf("(%d %d) %c\n", i, j, map[i][j]);
+	// 	if (map[i][j] != '1')
+	// 	{
+	// 		printf("fuck~~!!!!!\n");
+	// 		return (error("Error\nmap is not entirely surrounded by walls"));
+	// 	}
+	// 	i++;
+	// }
+	return (TRUE);
+}
+
+int check_border(char **map, int mapsizeY)
+{
+	int i;
+
+	i = 0;
+	while (map[0][i])
+	{
+		if (map[0][i] != '1' && !ft_isspace(map[0][i]))
+			return (error("Error\nmap is not entirely surrounded by walls"));
+		i++;
+	}
+	i = 0;
+	while (map[mapsizeY - 1][i])
+	{
+		if (map[mapsizeY - 1][i] != '1' && !ft_isspace(map[mapsizeY - 1][i]))
+			return (error("Error\nmap is not entirely surrounded by walls"));
+		i++;
+	}
+	if (check_border_side(map, mapsizeY) == ERROR)
+		return (ERROR);
+	return (TRUE);
+}
+
+int parse_map(t_mlx *mlx)
+{
+	int mapsizeY;
+
+	mapsizeY = get_mapsizeY(mlx);
+	if (move_map_2d(mlx, mapsizeY) == ERROR)
+		return (ERROR);
+	if (check_border(mlx->map, mapsizeY) == ERROR)
+		return (ERROR);
+	// for (int i = 0; i < mapsizeY; i++)
+	// {
+	// 	for (int j = 0; j < ft_strlen(mlx->map[i]); j++)
+	// 	{
+	// 		printf("%c", mlx->map[i][j]);
+	// 	}
+	// 	printf("\n");
+	// }
+
+	return (TRUE);
 }
 
 int parse_info(char const *argv, t_mlx *mlx)
@@ -264,12 +389,9 @@ int parse_info(char const *argv, t_mlx *mlx)
 		return (ERROR);
 	if (check_lastline(mlx, line) == ERROR)
 		return (ERROR);
-	while (mlx->map)
-	{
-		printf("%s\n", mlx->map->row);
-		mlx->map = mlx->map->next;
-	}
-	// parse_map(mlx);
+	if (parse_map(mlx) == ERROR)
+		return (ERROR);
+
 	return (TRUE);
 }
 
@@ -323,7 +445,7 @@ int init_game(t_mlx *mlx)
 		if (tmp[ft_strlen(tmp) - 1] == '\r' || tmp[ft_strlen(tmp) - 1] == '\n')
 			tmp[ft_strlen(tmp) - 1] = 0;
 		if ((mlx->tex[i].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, tmp, &mlx->tex[i].width, &mlx->tex[i].height)) == NULL)
-			return (error("Error\nfail to convert xpm file to image"));
+			return (error("Error\nWrong filepath:fail to convert xpm file to image"));
 		mlx->tex[i].data = (int *)mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size_l, &mlx->img.endian);
 		i++;
 	}
@@ -339,10 +461,6 @@ int main(int argc, char const *argv[])
 			return (ERROR);
 		if (init_game(&mlx) == ERROR)
 			return (ERROR);
-		for (int i = 0; i < 7; i++)
-		{
-			printf("%d\n", mlx.tex[i].filepath[ft_strlen(mlx.tex[i].filepath) - 1]);
-		}
 	}
 	else if (argc == 3)
 	{
