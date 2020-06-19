@@ -289,7 +289,7 @@ void desc_sort(t_mlx *mlx)
 	}
 }
 
-int transform_sprite(t_game *game, t_sprite *sprite)
+int transform_sprite(t_mlx *mlx, t_game *game, t_sprite *sprite)
 {
 	double invDet;
 	//translate sprite position to relative to camera
@@ -304,7 +304,7 @@ int transform_sprite(t_game *game, t_sprite *sprite)
 	sprite->spriteScreenX = (int)((WIN_WIDTH / 2) * (1 + sprite->transformX / sprite->transformY));
 }
 
-int cal_sprite(t_sprite *sprite)
+int cal_sprite(t_mlx *mlx, t_sprite *sprite)
 {
 	//calculate height of the sprite on screen
 	//using 'transformY' instead of the real distance prevents fisheye
@@ -370,14 +370,13 @@ int render_sprite(t_mlx *mlx)
 	mlx->spriteNum = 3;
 	for (size_t i = 0; i < mlx->spriteNum; i++)
 	{
-		mlx->sprite[i].idx = i;
 		mlx->sprite[i].dist = ((mlx->game.posX - mlx->sprite[i].x) * (mlx->game.posX - mlx->sprite[i].x) + (mlx->game.posY - mlx->sprite[i].y) * (mlx->game.posY - mlx->sprite[i].y));
 	}
 	desc_sort(mlx);
 	while (i < mlx->spriteNum)
 	{
-		transform_sprite(&mlx->game, &mlx->sprite[i]);
-		cal_sprite(&mlx->sprite[i]);
+		transform_sprite(mlx, &mlx->game, &mlx->sprite[i]);
+		cal_sprite(mlx, &mlx->sprite[i]);
 		// draw_sprite(mlx, &mlx->sprite[i], zbuffer);
 		draw_sprite(mlx, &mlx->sprite[i]);
 		i++;
@@ -445,8 +444,6 @@ int key_release(int key, t_mlx *mlx)
 
 void tmp_direction_tex(t_mlx *mlx)
 {
-	int a = 64;
-	int b = 64;
 	mlx->tex[EAST].filepath = "./textures/mossy.xpm";
 	mlx->tex[WEST].filepath = "./textures/choga.xpm";
 	mlx->tex[SOUTH].filepath = "./textures/greystone.xpm";
@@ -454,13 +451,13 @@ void tmp_direction_tex(t_mlx *mlx)
 	mlx->tex[CEILING].filepath = "./textures/redbrick.xpm";
 	mlx->tex[FLOOR].filepath = "./textures/bluestone.xpm";
 	mlx->tex[SPRITE].filepath = "./textures/barrel.xpm";
-	mlx->tex[EAST].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/mossy.xpm", &a, &b);
-	mlx->tex[WEST].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/choga.xpm", &a, &b);
-	mlx->tex[SOUTH].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/greystone.xpm", &a, &b);
-	mlx->tex[NORTH].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/wood.xpm", &a, &b);
-	mlx->tex[CEILING].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/redbrick.xpm", &a, &b);
-	mlx->tex[FLOOR].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/bluestone.xpm", &a, &b);
-	mlx->tex[SPRITE].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/barrel.xpm", &a, &b);
+	mlx->tex[EAST].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/mossy.xpm", &mlx->tex[EAST].width, &mlx->tex[EAST].height);
+	mlx->tex[WEST].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/choga.xpm", &mlx->tex[WEST].width, &mlx->tex[EAST].height);
+	mlx->tex[SOUTH].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/greystone.xpm", &mlx->tex[SOUTH].width, &mlx->tex[EAST].height);
+	mlx->tex[NORTH].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/wood.xpm", &mlx->tex[NORTH].width, &mlx->tex[EAST].height);
+	mlx->tex[CEILING].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/redbrick.xpm", &mlx->tex[EAST].width, &mlx->tex[EAST].height);
+	mlx->tex[FLOOR].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/bluestone.xpm", &mlx->tex[EAST].width, &mlx->tex[EAST].height);
+	mlx->tex[SPRITE].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/barrel.xpm", &mlx->tex[EAST].width, &mlx->tex[EAST].height);
 	mlx->tex[EAST].data = (int *)mlx_get_data_addr(mlx->tex[EAST].img_ptr, &mlx->tex[EAST].bpp, &mlx->tex[EAST].size_l, &mlx->tex[EAST].endian);
 	mlx->tex[WEST].data = (int *)mlx_get_data_addr(mlx->tex[WEST].img_ptr, &mlx->tex[WEST].bpp, &mlx->tex[WEST].size_l, &mlx->tex[WEST].endian);
 	mlx->tex[SOUTH].data = (int *)mlx_get_data_addr(mlx->tex[SOUTH].img_ptr, &mlx->tex[SOUTH].bpp, &mlx->tex[SOUTH].size_l, &mlx->tex[SOUTH].endian);
@@ -476,13 +473,13 @@ int initial_setting(t_mlx *mlx)
 	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "DomMorello");
 	mlx->img.img_ptr = mlx_new_image(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
 	mlx->img.data = (int *)mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size_l, &mlx->img.endian);
+	tmp_direction_tex(mlx); //일단 하드코딩으로 filepath를 넣어줬다.
 	mlx->game.posX = 11.5;
 	mlx->game.posY = 1.5;
 	mlx->game.dirX = -1;
 	mlx->game.dirY = 0;
 	mlx->game.planeX = 0;
 	mlx->game.planeY = 0.66;
-	tmp_direction_tex(mlx); //일단 하드코딩으로 filepath를 넣어줬다.
 	//sprite 일단 hardcoding으로
 	t_sprite *tmp;
 	tmp = (t_sprite *)malloc(sizeof(t_sprite) * 3);
@@ -499,7 +496,7 @@ int initial_setting(t_mlx *mlx)
 int main(int argc, char const *argv[])
 {
 	t_mlx mlx;
-
+ 
 	/* parsing map info */
 	initial_setting(&mlx);
 	mlx_hook(mlx.win_ptr, 2, 1L << 0, key_press2, &mlx);

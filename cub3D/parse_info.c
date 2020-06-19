@@ -449,6 +449,71 @@ int check_direction(t_mlx *mlx, int mapsizeY)
 	return (TRUE);
 }
 
+int count_sprite(char **map, int mapsizeY)
+{
+	int i;
+	int j;
+	int spriteNum;
+
+	i = 1;
+	spriteNum = 0;
+	while (i < mapsizeY - 1)
+	{
+		j = 0;
+		while (ft_isspace(map[i][j]))
+			j++;
+		while (map[i][j + 1])
+		{
+			if (map[i][j + 1] == '2')
+				spriteNum++;
+			j++;
+		}
+		i++;
+	}
+	return (spriteNum);
+}
+
+void	input_sprite(t_sprite *sprites, char **map, int mapsizeY)
+{
+	int i;
+	int j;
+	int idx;
+
+	i = 1;
+	idx = 0;
+	while (i < mapsizeY)
+	{
+		j = 0;
+		while (ft_isspace(map[i][j]))
+			j++;
+		while (map[i][j + 1])
+		{
+			if (map[i][j + 1] == '2')
+			{
+				sprites[idx].x = i + 0.5;
+				sprites[idx].y = j + 1.5;
+				idx++;
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
+int check_sprite(t_mlx *mlx, int mapsizeY)
+{
+	int spriteNum;
+	t_sprite *sprites;
+
+	spriteNum = count_sprite(mlx->map, mapsizeY);
+	if ((sprites = (t_sprite *)malloc(sizeof(t_sprite) * spriteNum)) == NULL)
+		return (error("Error\nmemory allocation fail"));
+	input_sprite(sprites, mlx->map, mapsizeY);
+	mlx->spriteNum = spriteNum;
+	mlx->sprite = sprites;
+	return (TRUE);
+}
+
 int parse_map(t_mlx *mlx)
 {
 	int mapsizeY;
@@ -462,8 +527,8 @@ int parse_map(t_mlx *mlx)
 		return (ERROR);
 	if (parse_contents(mlx->map, mapsizeY) == ERROR)
 		return (ERROR);
-	// count_sprite();
-	// sprite는 갯수를 센 다음에 malloc을 하고 그 이후에 값을 넣어야 한다. 
+	if (check_sprite(mlx, mapsizeY) == ERROR)
+		return (ERROR);
 	return (TRUE);
 }
 
@@ -489,6 +554,7 @@ int parse_info(char const *argv, t_mlx *mlx)
 		return (ERROR);
 	if (parse_map(mlx) == ERROR)
 		return (ERROR);
+	close(fd);
 	return (TRUE);
 }
 
@@ -543,7 +609,7 @@ int init_game(t_mlx *mlx)
 			tmp[ft_strlen(tmp) - 1] = 0;
 		if ((mlx->tex[i].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, tmp, &mlx->tex[i].width, &mlx->tex[i].height)) == NULL)
 			return (error("Error\nWrong filepath:fail to convert xpm file to image"));
-		mlx->tex[i].data = (int *)mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size_l, &mlx->img.endian);
+		mlx->tex[i].data = (int *)mlx_get_data_addr(mlx->tex[i].img_ptr, &mlx->tex[i].bpp, &mlx->tex[i].size_l, &mlx->tex[i].endian);
 		i++;
 	}
 }
@@ -567,6 +633,9 @@ int main(int argc, char const *argv[])
 	{
 		return (error("Error\nneed a map file"));
 	}
+	mlx_hook(mlx.win_ptr, 2, 1L << 0, key_press2, &mlx);
+	mlx_hook(mlx.win_ptr, 3, 1L << 1, key_release, &mlx);
+	mlx_loop_hook(mlx.mlx_ptr, run_game, &mlx);
 	mlx_loop(mlx.mlx_ptr);
 	return 0;
 }

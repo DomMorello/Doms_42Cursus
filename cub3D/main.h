@@ -137,4 +137,57 @@ typedef struct		s_mlx
 	int			winHeight;
 }					t_mlx;
 
+
+int key_release(int key, t_mlx *mlx);
+int key_press2(int key, t_mlx *mlx);
+int run_game(t_mlx *mlx);
+int render_sprite(t_mlx *mlx);
+int draw_sprite(t_mlx *mlx, t_sprite *sprite);
+int cal_sprite(t_mlx *mlx, t_sprite *sprite);
+int transform_sprite(t_mlx *mlx, t_game *game, t_sprite *sprite);
+void desc_sort(t_mlx *mlx);
+int draw_floor_ceiling(t_mlx *mlx);
+int key_press(t_mlx *mlx);
+int drawVertLine(t_mlx *mlx, int i);
+int get_side(t_mlx *mlx);
+int performDDA(t_mlx *mlx);
+void setDraw(t_mlx *mlx);
+int setVar(t_mlx *mlx, int i);
+int setSideDist(t_mlx *mlx);
+int init_game(t_mlx *mlx);
+int check_extension(char const *argv);
+char *ft_strfromend(char *str, int size);
+int parse_info(char const *argv, t_mlx *mlx);
+int parse_map(t_mlx *mlx);
+int check_sprite(t_mlx *mlx, int mapsizeY);
+void	input_sprite(t_sprite *sprites, char **map, int mapsizeY);
+int count_sprite(char **map, int mapsizeY);
+int check_direction(t_mlx *mlx, int mapsizeY);
+void input_direction(t_mlx *mlx, char direction, int x, int y);
+void set_playerpos(t_mlx *mlx, double x, double y);
+void set_plane(t_mlx *mlx, double planeX, double planeY);
+void set_dir(t_mlx *mlx, double dirX, double dirY);
+int parse_contents(char **map, int mapsizeY);
+int check_updown(int i, int j, char **map);
+int check_border(char **map, int mapsizeY);
+int check_rightside(char **map, int mapsizeY);
+int move_map_2d(t_mlx *mlx, int mapsizeY);
+int get_mapsizeY(t_mlx *mlx);
+int check_lastline(t_mlx *mlx, char *line);
+int parse_line(char *line, t_mlx *mlx);
+int copy_map(t_mlx *mlx, char *line);
+int is_valid_letter(char c);
+int ft_lstaddmap_back(t_map **lst, t_map *new, char *row);
+t_map *ft_lstnewmap(char *content);
+int check_order(t_mlx *mlx, char *line);
+int allset_filepath(t_mlx *mlx);
+int check_tex(t_mlx *mlx);
+int input_tex(t_mlx *mlx, int tex, char *line);
+int which_tex(char *line, t_mlx *mlx);
+int free_tex(t_mlx *mlx, int flag);
+int input_resolution(t_mlx *mlx, char *str);
+int free_2d_char(char **ret, int flag);
+int ft_isspace(char c);
+int error(char *str);
+
 # endif 
