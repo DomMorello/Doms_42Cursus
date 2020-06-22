@@ -34,14 +34,17 @@ void	clear_map(t_mlx *mlx)
 
 	i = 0;
 	ft_lstmapclear(&mlx->maplst);
-	while (mlx->map[i])
+	if (mlx->map)
 	{
-		free(mlx->map[i]);
-		mlx->map[i] = NULL;
-		i++;
+		while (mlx->map[i])
+		{
+			free(mlx->map[i]);
+			mlx->map[i] = NULL;
+			i++;
+		}
+		free(mlx->map);
+		mlx->map = NULL;
 	}
-	free(mlx->map);
-	mlx->map = NULL;
 }
 
 void	clear_tex(t_mlx *mlx)
@@ -73,9 +76,8 @@ void	clear_sprite(t_mlx *mlx)
 
 void clear_window(t_mlx *mlx)
 {
-	/* 문제가 있다.  */
-	// if (mlx->img.img_ptr)
-	// 	mlx_destroy_image(mlx->mlx_ptr, mlx->img.img_ptr);
+	if (mlx->img.img_ptr)
+		mlx_destroy_image(mlx->mlx_ptr, mlx->img.img_ptr);
 	if (mlx->mlx_ptr)
 	{
 		mlx_clear_window(mlx->mlx_ptr, mlx->win_ptr);
@@ -85,10 +87,10 @@ void clear_window(t_mlx *mlx)
 
 int error(char *str, t_mlx *mlx)
 {
+	clear_window(mlx);
 	clear_sprite(mlx);
 	clear_tex(mlx);
 	clear_map(mlx);
-	clear_window(mlx);
 	write(1, str, ft_strlen(str));
 	write(1, "\n", 1);
 	exit(ERROR);
@@ -193,7 +195,6 @@ int input_tex(t_mlx *mlx, int tex, char *line)
 
 int check_tex(t_mlx *mlx)
 {
-	/* file에 RGB값으로 들어오는 경우를 생각했을 때를 추가해야된다. */
 	int i;
 
 	i = 0;
@@ -223,9 +224,8 @@ int allset_filepath(t_mlx *mlx)
 
 int check_order(t_mlx *mlx, char *line)
 {
-	if (!allset_filepath(mlx))
-		if (line[0] == '1')
-			return (error("Error\nmap info must be located at the end of the file", mlx));
+	if (line[0] == '1' || line[0] == '0')
+		return (error("Error\nmap info must be located at the end of the file", mlx));
 	return (TRUE);
 }
 
@@ -679,7 +679,12 @@ int init_game(t_mlx *mlx)
 		if (tmp[ft_strlen(tmp) - 1] == '\r' || tmp[ft_strlen(tmp) - 1] == '\n')
 			tmp[ft_strlen(tmp) - 1] = 0;
 		if ((mlx->tex[i].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, tmp, &mlx->tex[i].width, &mlx->tex[i].height)) == NULL)
-			return (error("Error\nWrong filepath:fail to convert xpm file to image", mlx));
+		{
+			if (isRGBcolor())
+				input_color()	/* 여기서 rgb면 에러처리하지말고 값 대입하기 */
+			else
+				return (error("Error\nWrong filepath:fail to convert xpm file to image", mlx));
+		}
 		mlx->tex[i].data = (int *)mlx_get_data_addr(mlx->tex[i].img_ptr, &mlx->tex[i].bpp, &mlx->tex[i].size_l, &mlx->tex[i].endian);
 		i++;
 	}
