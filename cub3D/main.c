@@ -374,13 +374,14 @@ int run_game(t_mlx *mlx)
 	return 0;
 }
 
-int	exit_game(t_mlx *mlx)
-{
-	printf("here??\n");
-	mlx_destroy_image(mlx->mlx_ptr, mlx->img.img_ptr);
-	mlx_destroy_window(mlx->mlx_ptr, mlx->win_ptr);
-	exit(0);
-}
+// int	exit_game(t_mlx *mlx)
+// {
+// 	printf("here??\n");
+// 	// mlx_destroy_image(mlx->mlx_ptr, mlx->img.img_ptr);
+// 	// mlx_clear_window(mlx->mlx_ptr, mlx->win_ptr);
+// 	// mlx_destroy_window(mlx->mlx_ptr, mlx->win_ptr);
+// 	exit(0);
+// }
 
 int key_press2(int key, t_mlx *mlx)
 {
@@ -397,7 +398,7 @@ int key_press2(int key, t_mlx *mlx)
 	if (key == KEY_RIGHT)
 		mlx->game.rotate_r = 1;
 	if (key == KEY_ESC)
-		exit_game(mlx);
+		error("exit game", mlx);
 }
 
 int key_release(int key, t_mlx *mlx)
