@@ -13,8 +13,6 @@
 # define MIN_WIN_HEIGHT 240
 # define MAX_WIN_WIDTH 1280
 # define MAX_WIN_HEIGHT 720
-# define WIN_WIDTH 640
-# define WIN_HEIGHT 480
 # define TEX_WIDTH 64
 # define TEX_HEIGHT 64
 
@@ -23,21 +21,18 @@
 # define ERROR -1
 # define PASS 7
 
-#define mapWidth 24
-#define mapHeight 24
-
-enum	e_direction
+enum	e_textures
 {
 	EAST, WEST, SOUTH, NORTH, CEILING, FLOOR, SPRITE
 };
 
-// # define K_ESC 53
 # define KEY_A 97
 # define KEY_S 115
 # define KEY_D 100
 # define KEY_W 119
 # define KEY_LEFT 65361
 # define KEY_RIGHT 65363
+# define KEY_ESC 65307
 
 typedef struct      s_img
 {
@@ -189,5 +184,6 @@ int input_resolution(t_mlx *mlx, char *str);
 int free_2d_char(char **ret, int flag);
 int ft_isspace(char c);
 int error(char *str);
+int	exit_game(t_mlx *mlx);
 
 # endif 

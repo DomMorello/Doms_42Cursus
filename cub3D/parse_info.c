@@ -399,23 +399,23 @@ void input_direction(t_mlx *mlx, char direction, int x, int y)
 {
 	if (direction == 'N')
 	{
-		set_dir(mlx, 0, -1);
-		set_plane(mlx, 0.66, 0);
+		set_dir(mlx, -1, 0);
+		set_plane(mlx, 0, 0.66);
 	}
 	else if (direction == 'S')
 	{
-		set_dir(mlx, 0, 1);
-		set_plane(mlx, -0.66, 0);
+		set_dir(mlx, 1, 0);
+		set_plane(mlx, 0, -0.66);
 	}
 	else if (direction == 'E')
 	{
-		set_dir(mlx, 1, 0);
-		set_plane(mlx, 0, 0.66);
+		set_dir(mlx, 0, 1);
+		set_plane(mlx, 0.66, 0);
 	}
 	else if (direction == 'W')
 	{
-		set_dir(mlx, -1, 0);
-		set_plane(mlx, 0, -0.66);	
+		set_dir(mlx, 0, -1);
+		set_plane(mlx, -0.66, 0);	
 	}
 	set_playerpos(mlx, (double)x, (double)y);
 }
@@ -635,6 +635,7 @@ int main(int argc, char const *argv[])
 	}
 	mlx_hook(mlx.win_ptr, 2, 1L << 0, key_press2, &mlx);
 	mlx_hook(mlx.win_ptr, 3, 1L << 1, key_release, &mlx);
+	mlx_hook(mlx.win_ptr, 17, 1L << 17, exit_game, &mlx);
 	mlx_loop_hook(mlx.mlx_ptr, run_game, &mlx);
 	mlx_loop(mlx.mlx_ptr);
 	return 0;
