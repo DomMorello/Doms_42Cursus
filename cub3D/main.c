@@ -224,13 +224,19 @@ int draw_floor_ceiling(t_mlx *mlx)
 
 			int color;
 			// floor
-			color = mlx->tex[FLOOR].data[TEX_WIDTH * ty + tx];
+			if (mlx->tex[FLOOR].img_ptr != NULL)
+				color = mlx->tex[FLOOR].data[TEX_WIDTH * ty + tx];
+			else
+				color = mlx->tex[FLOOR].floorColor;
 			color = (color >> 1) & 8355711; // make a bit darker
 			mlx->img.data[x + mlx->winWidth * y] = color;
 
 			//ceiling (symmetrical, at screenHeight - y - 1 instead of y)
-			color = mlx->tex[CEILING].data[TEX_WIDTH * ty + tx];
-			color = (color >> 1) & 8355711; // make a bit darker
+			if (mlx->tex[CEILING].img_ptr != NULL)
+				color = mlx->tex[CEILING].data[TEX_WIDTH * ty + tx];
+			else
+				color = mlx->tex[CEILING].ceilingColor;
+			// color = (color >> 1) & 8355711; // make a bit darker
 			mlx->img.data[x + mlx->winWidth * (mlx->winHeight - y - 1)] = color;
 		}
 		y++;

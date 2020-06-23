@@ -133,8 +133,8 @@ int input_resolution(t_mlx *mlx, char *str)
 		return (error("Error\nmemory allocation fail", mlx));
 	check = ret[2];
 	if (check)
-		if (!(check[0] == '\0' || check[0] == '\r' || check[0] == '\n')) //OS에 따라 다르겠지.
-			return (free_2d_char(ret, error("Error\ninalid format", mlx)));
+		if (!(check[0] == '\0' || check[0] == '\r' || check[0] == '\n'))
+			return (free_2d_char(ret, error("Error\ninvalid format", mlx)));
 	mlx->winWidth = ft_atoi(ret[0]);
 	mlx->winHeight = ft_atoi(ret[1]);
 	if (mlx->winWidth > MAX_WIN_WIDTH)
@@ -663,30 +663,77 @@ int check_extension(char const *argv, t_mlx *mlx)
 	return (error("Error\ninvalid extension", mlx));
 }
 
+int	input_color(t_tex *tex, t_mlx *mlx, char **ret)
+{
+	int rgb[3];
+	int i;
+	int color;
+
+	color = 0;
+	i = 0;
+	while (i < 3)
+	{
+		rgb[i] = ft_atoi(ret[i]);
+		if (rgb[i] > 255 || rgb[i] < 0)
+			return (error("Error\nRGB Color value error", mlx));
+		i++;
+	}
+	color += rgb[0] << 16;
+	color += rgb[1] << 8;
+	color += rgb[2];
+	if (tex == &mlx->tex[FLOOR])
+		mlx->tex[FLOOR].floorColor = color;
+	if (tex == &mlx->tex[CEILING])
+		mlx->tex[CEILING].ceilingColor = color;
+	return (TRUE);
+}
+
+int isRGBcolor(t_tex *tex, t_mlx *mlx)
+{
+	char **ret;
+	int i;
+	char *check;
+
+	i = 0;
+	while (tex->filepath[i])
+	{
+		if (!ft_isdigit(tex->filepath[i]) && !ft_isspace(tex->filepath[i]))
+			return (FALSE);
+		i++;
+	}
+	if ((ret = ft_split(tex->filepath, ' ')) == NULL)
+		return (error("Error\nmemory allocation fail", mlx));
+	if (check)
+		if (!(check[0] == '\0' || check[0] == '\r' || check[0] == '\n'))
+			return (free_2d_char(ret, error("Error\ninvalid format", mlx)));
+	if (input_color(tex, mlx, ret) == ERROR)
+		return (FALSE);
+	return (TRUE);
+}
+
 int init_game(t_mlx *mlx)
 {
 	int i;
 	char *tmp;
 
-	i = 0;
+	i = -1;
 	mlx->mlx_ptr = mlx_init();
 	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr, mlx->winWidth, mlx->winHeight, "DomMorello");
 	mlx->img.img_ptr = mlx_new_image(mlx->mlx_ptr, mlx->winWidth, mlx->winHeight);
 	mlx->img.data = (int *)mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size_l, &mlx->img.endian);
-	while (i < 7)
+	while (++i < 7)
 	{
 		tmp = mlx->tex[i].filepath;
 		if (tmp[ft_strlen(tmp) - 1] == '\r' || tmp[ft_strlen(tmp) - 1] == '\n')
 			tmp[ft_strlen(tmp) - 1] = 0;
 		if ((mlx->tex[i].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, tmp, &mlx->tex[i].width, &mlx->tex[i].height)) == NULL)
 		{
-			if (isRGBcolor())
-				input_color()	/* 여기서 rgb면 에러처리하지말고 값 대입하기 */
+			if (isRGBcolor(&mlx->tex[i], mlx))
+				continue ;
 			else
 				return (error("Error\nWrong filepath:fail to convert xpm file to image", mlx));
 		}
 		mlx->tex[i].data = (int *)mlx_get_data_addr(mlx->tex[i].img_ptr, &mlx->tex[i].bpp, &mlx->tex[i].size_l, &mlx->tex[i].endian);
-		i++;
 	}
 }
 

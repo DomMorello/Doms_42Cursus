@@ -8,8 +8,10 @@ EA    ./textures/wood.xpm
        WE ./textures/greystone.xpm
   
 S    ./textures/barrel.xpm
-F       255 255 0
-C   ./textures/redbrick.xpm
+F       255 255 255  
+  
+
+C   255 0 0
  
    
 

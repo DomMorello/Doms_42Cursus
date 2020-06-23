@@ -23,7 +23,7 @@
 
 enum	e_textures
 {
-	EAST, WEST, SOUTH, NORTH, CEILING, FLOOR, SPRITE
+	EAST, WEST, SOUTH, NORTH, SPRITE, CEILING, FLOOR
 };
 
 # define KEY_A 97
@@ -54,6 +54,8 @@ typedef struct		s_tex
 	int		width;
 	int		height;
 	char	*filepath;
+	int		floorColor;
+	int		ceilingColor;
 }					t_tex;
 
 //t_game ==> t_ray 로 바꾸자.
@@ -187,6 +189,6 @@ int	exit_game(t_mlx *mlx);
 void clear_map(t_mlx *mlx);
 void	ft_lstmapclear(t_map **lst);
 void	ft_lstmapdelone(t_map *node);
-
+int isRGBcolor(t_tex *tex, t_mlx *mlx);
 
 # endif 
