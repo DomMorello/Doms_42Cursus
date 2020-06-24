@@ -740,14 +740,11 @@ int init_game(t_mlx *mlx)
 int save_bmp(t_mlx *mlx)
 {
 	int fd;
-	unsigned char bmfh[14];
-	unsigned char bmfh[40];
-	unsigned char *bmfh;
 
 	fd = open("capture", O_WRONLY | O_CREAT);
-	bmfh = {'B','M', 0,0,0,0, 0,0, 0,0, 54,0,0,0};
+	/* 구조체에 담아서 주소값을 write하면 되더라. */
 	close(fd);
-	return TRUE;
+	return (TRUE);
 }
 
 int main(int argc, char const *argv[])
@@ -776,5 +773,5 @@ int main(int argc, char const *argv[])
 	}
 	else
 		return (error("Error\nneed a map file", &mlx));
-	return 0;
+	return (0);
 }
