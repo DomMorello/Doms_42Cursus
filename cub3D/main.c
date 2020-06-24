@@ -228,7 +228,7 @@ int draw_floor_ceiling(t_mlx *mlx)
 				color = mlx->tex[FLOOR].data[TEX_WIDTH * ty + tx];
 			else
 				color = mlx->tex[FLOOR].floorColor;
-			color = (color >> 1) & 8355711; // make a bit darker
+			// color = (color >> 1) & 8355711; // make a bit darker
 			mlx->img.data[x + mlx->winWidth * y] = color;
 
 			//ceiling (symmetrical, at screenHeight - y - 1 instead of y)

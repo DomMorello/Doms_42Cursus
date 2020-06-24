@@ -190,5 +190,6 @@ void clear_map(t_mlx *mlx);
 void	ft_lstmapclear(t_map **lst);
 void	ft_lstmapdelone(t_map *node);
 int isRGBcolor(t_tex *tex, t_mlx *mlx);
+int save_bmp(t_mlx *mlx);
 
 # endif 

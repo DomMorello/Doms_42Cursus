@@ -1,7 +1,7 @@
 #include "./main.h"
 #include "./gnl/get_next_line.h"
 
-void	ft_lstmapdelone(t_map *node)
+void ft_lstmapdelone(t_map *node)
 {
 	if (node)
 	{
@@ -12,7 +12,7 @@ void	ft_lstmapdelone(t_map *node)
 	}
 }
 
-void	ft_lstmapclear(t_map **lst)
+void ft_lstmapclear(t_map **lst)
 {
 	t_map *tmp;
 
@@ -28,7 +28,7 @@ void	ft_lstmapclear(t_map **lst)
 	}
 }
 
-void	clear_map(t_mlx *mlx)
+void clear_map(t_mlx *mlx)
 {
 	int i;
 
@@ -47,7 +47,7 @@ void	clear_map(t_mlx *mlx)
 	}
 }
 
-void	clear_tex(t_mlx *mlx)
+void clear_tex(t_mlx *mlx)
 {
 	int i;
 
@@ -62,10 +62,10 @@ void	clear_tex(t_mlx *mlx)
 		if (mlx->tex[i].img_ptr)
 			mlx_destroy_image(mlx->mlx_ptr, mlx->tex[i].img_ptr);
 		i++;
-	}	
+	}
 }
 
-void	clear_sprite(t_mlx *mlx)
+void clear_sprite(t_mlx *mlx)
 {
 	if (mlx->sprite)
 	{
@@ -486,7 +486,7 @@ void input_direction(t_mlx *mlx, char direction, int x, int y)
 	else if (direction == 'W')
 	{
 		set_dir(mlx, 0, -1);
-		set_plane(mlx, -0.66, 0);	
+		set_plane(mlx, -0.66, 0);
 	}
 	set_playerpos(mlx, (double)x, (double)y);
 }
@@ -544,7 +544,7 @@ int count_sprite(char **map, int mapsizeY)
 	return (spriteNum);
 }
 
-void	input_sprite(t_sprite *sprites, char **map, int mapsizeY)
+void input_sprite(t_sprite *sprites, char **map, int mapsizeY)
 {
 	int i;
 	int j;
@@ -663,7 +663,7 @@ int check_extension(char const *argv, t_mlx *mlx)
 	return (error("Error\ninvalid extension", mlx));
 }
 
-int	input_color(t_tex *tex, t_mlx *mlx, char **ret)
+int input_color(t_tex *tex, t_mlx *mlx, char **ret)
 {
 	int rgb[3];
 	int i;
@@ -729,7 +729,7 @@ int init_game(t_mlx *mlx)
 		if ((mlx->tex[i].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, tmp, &mlx->tex[i].width, &mlx->tex[i].height)) == NULL)
 		{
 			if (isRGBcolor(&mlx->tex[i], mlx))
-				continue ;
+				continue;
 			else
 				return (error("Error\nWrong filepath:fail to convert xpm file to image", mlx));
 		}
@@ -737,29 +737,44 @@ int init_game(t_mlx *mlx)
 	}
 }
 
+int save_bmp(t_mlx *mlx)
+{
+	int fd;
+	unsigned char bmfh[14];
+	unsigned char bmfh[40];
+	unsigned char *bmfh;
+
+	fd = open("capture", O_WRONLY | O_CREAT);
+	bmfh = {'B','M', 0,0,0,0, 0,0, 0,0, 54,0,0,0};
+	close(fd);
+	return TRUE;
+}
+
 int main(int argc, char const *argv[])
 {
 	t_mlx mlx;
-	
-	if (argc == 2)
+
+	if (argv[1])
 	{
 		if (check_extension(argv[1], &mlx) == ERROR || parse_info(argv[1], &mlx) == ERROR)
 			return (ERROR);
 		if (init_game(&mlx) == ERROR)
 			return (ERROR);
-	}
-	else if (argc == 3)
-	{
-		/* bmp */
+		if (argv[2] && !ft_strncmp(argv[2], "--save", ft_strlen(argv[2])))
+		{
+			run_game(&mlx);
+			if (save_bmp(&mlx) == ERROR)
+				return (error("Error\nfail to save bmp file", &mlx));
+		}
+		else
+			return (error("Error\nwrong arguements", &mlx));
+		mlx_hook(mlx.win_ptr, 2, 1L << 0, key_press2, &mlx);
+		mlx_hook(mlx.win_ptr, 3, 1L << 1, key_release, &mlx);
+		mlx_hook(mlx.win_ptr, 17, 1L << 17, error, &mlx);
+		mlx_loop_hook(mlx.mlx_ptr, run_game, &mlx);
+		mlx_loop(mlx.mlx_ptr);
 	}
 	else
-	{
 		return (error("Error\nneed a map file", &mlx));
-	}
-	mlx_hook(mlx.win_ptr, 2, 1L << 0, key_press2, &mlx);
-	mlx_hook(mlx.win_ptr, 3, 1L << 1, key_release, &mlx);
-	mlx_hook(mlx.win_ptr, 17, 1L << 17, error, &mlx);
-	mlx_loop_hook(mlx.mlx_ptr, run_game, &mlx);
-	mlx_loop(mlx.mlx_ptr);
 	return 0;
 }
