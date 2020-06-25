@@ -16,6 +16,19 @@
 # define TEX_WIDTH 64
 # define TEX_HEIGHT 64
 
+# define ERR_MEM "Error\nmemory allocation fail"
+# define ERR_ARG "Error\nwrong arguements"
+# define ERR_MAP "Error\nneed a map file"
+# define ERR_OPEN "Error\ncan't open the file"
+# define ERR_PATH "Error\nwrong filepath:fail to convert xpm file to image"
+# define ERR_FORMAT "Error\ninvalid format"
+# define ERR_RGB "Error\nwrong RGB color value"
+# define ERR_EXT "Error\ninvalid extension"
+# define ERR_PLU "Error\nplayer position must be singular"
+# define ERR_MAP_SUR "Error\nmap is not entirely surrounded by walls"
+# define ERR_LETTER "Error\ninvalid format: invalid letter is included in the file"
+# define ERR_ORDER "Error\nmap info must be located at the end of the file"
+
 # define TRUE 1
 # define FALSE 0
 # define ERROR -1
@@ -128,12 +141,38 @@ typedef struct		s_mlx
 	t_sprite	*sprite;
 	t_map		*maplst;
 	char		**map;
-	double		zbuffer[MAX_WIN_WIDTH];	//맥스로 놔두면 되지 않을까?
+	double		zbuffer[MAX_WIN_WIDTH];
 	int			spriteNum;
 	int			winWidth;
 	int			winHeight;
 }					t_mlx;
 
+#pragma pack(push, 1)
+
+typedef struct 		s_bmfh
+{
+	char		bfType[2];
+	int			bfSize;
+	int			bfReserved;
+	int			bfOffBits;
+}					t_bmfh;
+
+typedef struct 		s_bmih
+{
+	int			biSize;
+	int			biWidth;
+	int			biHeight;
+	char		biPlanes[2];
+	char		biBitCount[2];
+	int			biCompression;
+	int			biSizeImage;
+	int			biXPelsPerMeter;
+	int			biYPelsPerMeter;
+	int			biClrUsed;
+	int			biClrImportant;
+}					t_bmih;
+
+#pragma pack(pop)
 
 int key_release(int key, t_mlx *mlx);
 int key_press2(int key, t_mlx *mlx);

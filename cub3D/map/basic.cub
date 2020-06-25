@@ -8,10 +8,10 @@ EA    ./textures/wood.xpm
        WE ./textures/greystone.xpm
   
 S    ./textures/barrel.xpm
-F       255 255 255  
+F       123 43 23
   
 
-C   23 65 14
+C   23 135 194
  
    
 

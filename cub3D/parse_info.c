@@ -128,13 +128,13 @@ int input_resolution(t_mlx *mlx, char *str)
 	i = 0;
 	while (str[++i])
 		if (!(ft_isdigit(str[i]) || ft_isspace(str[i])))
-			return (error("Error\ninvalid format", mlx));
+			return (error(ERR_FORMAT, mlx));
 	if ((ret = ft_split(&str[1], ' ')) == NULL)
-		return (error("Error\nmemory allocation fail", mlx));
+		return (error(ERR_MEM, mlx));
 	check = ret[2];
 	if (check)
 		if (!(check[0] == '\0' || check[0] == '\r' || check[0] == '\n'))
-			return (free_2d_char(ret, error("Error\ninvalid format", mlx)));
+			return (free_2d_char(ret, error(ERR_FORMAT, mlx)));
 	mlx->winWidth = ft_atoi(ret[0]);
 	mlx->winHeight = ft_atoi(ret[1]);
 	if (mlx->winWidth > MAX_WIN_WIDTH)
@@ -188,7 +188,7 @@ int input_tex(t_mlx *mlx, int tex, char *line)
 		while (ft_isspace(line[i]))
 			i++;
 		if ((mlx->tex[tex].filepath = ft_strdup(&line[i])) == NULL)
-			return (error("Error\nmemory allocation fail", mlx));
+			return (error(ERR_MEM, mlx));
 	}
 	return (TRUE);
 }
@@ -201,7 +201,7 @@ int check_tex(t_mlx *mlx)
 	while (i < 7)
 	{
 		if (mlx->tex[i].filepath == NULL)
-			return (error("Error\ninvalid format", mlx));
+			return (error(ERR_FORMAT, mlx));
 		i++;
 	}
 }
@@ -225,7 +225,7 @@ int allset_filepath(t_mlx *mlx)
 int check_order(t_mlx *mlx, char *line)
 {
 	if (line[0] == '1' || line[0] == '0')
-		return (error("Error\nmap info must be located at the end of the file", mlx));
+		return (error(ERR_ORDER, mlx));
 	return (TRUE);
 }
 
@@ -280,15 +280,15 @@ int copy_map(t_mlx *mlx, char *line)
 	if (line[i] == 0)
 		return (PASS);
 	if (line[i] != '1')
-		return (error("Error\nmap is not entirely surrounded by walls", mlx));
+		return (error(ERR_MAP_SUR, mlx));
 	while (line[i])
 	{
 		if (!is_valid_letter(line[i]))
-			return (error("Error\ninvalid letter is included in the map info", mlx));
+			return (error(ERR_LETTER, mlx));
 		i++;
 	}
 	if (ft_lstaddmap_back(&mlx->maplst, new, ft_strdup(line)) == ERROR)
-		return (error("Error\nmemory allocation fail", mlx));
+		return (error(ERR_MEM, mlx));
 }
 
 int parse_line(char *line, t_mlx *mlx)
@@ -307,7 +307,7 @@ int parse_line(char *line, t_mlx *mlx)
 			if ((input_resolution(mlx, &line[i])) == ERROR)
 				return (ERROR);
 		if ((tex = which_tex(&line[i], mlx)) == ERROR)
-			return (error("Error\ninvalid format:invalid letter is included in the file", mlx));
+			return (error(ERR_LETTER, mlx));
 		if (input_tex(mlx, tex, &line[i]) == ERROR)
 			return (ERROR);
 	}
@@ -352,7 +352,7 @@ int move_map_2d(t_mlx *mlx, int mapsizeY)
 
 	i = 0;
 	if ((mlx->map = (char **)malloc(sizeof(char *) * mapsizeY + 1)) == NULL)
-		return (error("Error\nmemory allocation fail", mlx));
+		return (error(ERR_MEM, mlx));
 	mlx->map[mapsizeY] = 0;
 	lst = mlx->maplst;
 	while (lst)
@@ -379,7 +379,7 @@ int check_rightside(t_mlx *mlx, int mapsizeY)
 		while (ft_isspace(mlx->map[i][j]))
 			j--;
 		if (mlx->map[i][j] != '1')
-			return (error("Error\nmap is not entirely surrounded by walls", mlx));
+			return (error(ERR_MAP_SUR, mlx));
 		i++;
 	}
 	return (TRUE);
@@ -393,14 +393,14 @@ int check_border(t_mlx *mlx, int mapsizeY)
 	while (mlx->map[0][i])
 	{
 		if (mlx->map[0][i] != '1' && !ft_isspace(mlx->map[0][i]))
-			return (error("Error\nmap is not entirely surrounded by walls", mlx));
+			return (error(ERR_MAP_SUR, mlx));
 		i++;
 	}
 	i = 0;
 	while (mlx->map[mapsizeY - 1][i])
 	{
 		if (mlx->map[mapsizeY - 1][i] != '1' && !ft_isspace(mlx->map[mapsizeY - 1][i]))
-			return (error("Error\nmap is not entirely surrounded by walls", mlx));
+			return (error(ERR_MAP_SUR, mlx));
 		i++;
 	}
 	if (check_rightside(mlx, mapsizeY) == ERROR)
@@ -411,14 +411,14 @@ int check_border(t_mlx *mlx, int mapsizeY)
 int check_updown(int i, int j, t_mlx *mlx)
 {
 	if (ft_isspace(mlx->map[i - 1][j + 1]))
-		return (error("Error\nmap is not entirely surrounded by walls", mlx));
+		return (error(ERR_MAP_SUR, mlx));
 	if (ft_strlen(mlx->map[i + 1]) > j + 1)
 	{
 		if (ft_isspace(mlx->map[i + 1][j + 1]))
-			return (error("Error\nmap is not entirely surrounded by walls", mlx));
+			return (error(ERR_MAP_SUR, mlx));
 	}
 	else
-		return (error("Error\nmap is not entirely surrounded by walls", mlx));
+		return (error(ERR_MAP_SUR, mlx));
 }
 
 int parse_contents(t_mlx *mlx, int mapsizeY)
@@ -439,7 +439,7 @@ int parse_contents(t_mlx *mlx, int mapsizeY)
 				if (check_updown(i, j, mlx) == ERROR)
 					return (ERROR);
 				if (ft_isspace(mlx->map[i][j]) || ft_isspace(mlx->map[i][j + 2]))
-					return (error("Error\nmap is not entirely surrounded by walls", mlx));
+					return (error(ERR_MAP_SUR, mlx));
 			}
 			j++;
 		}
@@ -516,7 +516,7 @@ int check_direction(t_mlx *mlx, int mapsizeY)
 		}
 	}
 	if (isPlural != 1)
-		return (error("Error\nplayer position must be singular", mlx));
+		return (error(ERR_PLU, mlx));
 	return (TRUE);
 }
 
@@ -578,7 +578,7 @@ int check_sprite(t_mlx *mlx, int mapsizeY)
 
 	spriteNum = count_sprite(mlx->map, mapsizeY);
 	if ((sprites = (t_sprite *)malloc(sizeof(t_sprite) * spriteNum)) == NULL)
-		return (error("Error\nmemory allocation fail", mlx));
+		return (error(ERR_MEM, mlx));
 	input_sprite(sprites, mlx->map, mapsizeY);
 	mlx->spriteNum = spriteNum;
 	mlx->sprite = sprites;
@@ -609,7 +609,7 @@ int parse_info(char const *argv, t_mlx *mlx)
 	char *line;
 
 	if ((fd = open(argv, O_RDONLY)) == -1)
-		return (error("Error\ncannot open the file", mlx));
+		return (error(ERR_OPEN, mlx));
 	while (get_next_line(fd, &line))
 	{
 		if (parse_line(line, mlx) == ERROR)
@@ -653,14 +653,14 @@ int check_extension(char const *argv, t_mlx *mlx)
 	char *extension;
 
 	if ((extension = ft_strfromend((char *)argv, 4)) == NULL)
-		return (error("Error\nmemory allocation fail", mlx));
+		return (error(ERR_MEM, mlx));
 	if (!ft_strncmp(extension, ".cub", 5))
 	{
 		free(extension);
 		return (TRUE);
 	}
 	free(extension);
-	return (error("Error\ninvalid extension", mlx));
+	return (error(ERR_EXT, mlx));
 }
 
 int input_color(t_tex *tex, t_mlx *mlx, char **ret)
@@ -675,7 +675,7 @@ int input_color(t_tex *tex, t_mlx *mlx, char **ret)
 	{
 		rgb[i] = ft_atoi(ret[i]);
 		if (rgb[i] > 255 || rgb[i] < 0)
-			return (error("Error\nRGB Color value error", mlx));
+			return (error(ERR_RGB, mlx));
 		i++;
 	}
 	color += rgb[0] << 16;
@@ -702,10 +702,10 @@ int isRGBcolor(t_tex *tex, t_mlx *mlx)
 		i++;
 	}
 	if ((ret = ft_split(tex->filepath, ' ')) == NULL)
-		return (error("Error\nmemory allocation fail", mlx));
+		return (error(ERR_MEM, mlx));
 	if (check)
 		if (!(check[0] == '\0' || check[0] == '\r' || check[0] == '\n'))
-			return (free_2d_char(ret, error("Error\ninvalid format", mlx)));
+			return (free_2d_char(ret, error(ERR_FORMAT, mlx)));
 	if (input_color(tex, mlx, ret) == ERROR)
 		return (FALSE);
 	return (TRUE);
@@ -731,18 +731,52 @@ int init_game(t_mlx *mlx)
 			if (isRGBcolor(&mlx->tex[i], mlx))
 				continue;
 			else
-				return (error("Error\nWrong filepath:fail to convert xpm file to image", mlx));
+				return (error(ERR_PATH, mlx));
 		}
 		mlx->tex[i].data = (int *)mlx_get_data_addr(mlx->tex[i].img_ptr, &mlx->tex[i].bpp, &mlx->tex[i].size_l, &mlx->tex[i].endian);
 	}
 }
 
+void	set_bmfh(t_bmfh *bmfh, t_mlx *mlx)
+{
+	bmfh->bfType[0] = 'B';
+	bmfh->bfType[1] = 'M';
+	bmfh->bfSize = 54 + 4 * mlx->winWidth * mlx->winHeight;
+	bmfh->bfReserved = 0;
+	bmfh->bfOffBits = 54;
+}
+
+void	set_bmih(t_bmih *bmih, t_mlx *mlx)
+{
+	bmih->biSize = 40;
+	bmih->biWidth = mlx->winWidth;
+	bmih->biHeight = -mlx->winHeight;
+	bmih->biPlanes[0] = 1;
+	bmih->biPlanes[1] = 0;
+	bmih->biBitCount[0] = 32;
+	bmih->biBitCount[1] = 0;
+	bmih->biCompression = 0;
+	bmih->biSizeImage = 4 * mlx->winWidth * mlx->winHeight;
+	bmih->biXPelsPerMeter = 0;
+	bmih->biYPelsPerMeter = 0;
+	bmih->biClrUsed = 0;
+	bmih->biClrImportant = 0;
+}
+
 int save_bmp(t_mlx *mlx)
 {
 	int fd;
+	t_bmfh bmfh;
+	t_bmih bmih;
 
-	fd = open("capture", O_WRONLY | O_CREAT);
-	/* 구조체에 담아서 주소값을 write하면 되더라. */
+
+	if ((fd = open("capture.bmp", O_WRONLY | O_CREAT)) == ERROR)
+		return (error(ERR_OPEN, mlx));
+	set_bmfh(&bmfh, mlx);
+	set_bmih(&bmih, mlx);
+	write(fd, &bmfh, sizeof(bmfh));
+	write(fd, &bmih, sizeof(bmih));
+	write(fd, mlx->img.data, bmih.biSizeImage);
 	close(fd);
 	return (TRUE);
 }
@@ -757,14 +791,17 @@ int main(int argc, char const *argv[])
 			return (ERROR);
 		if (init_game(&mlx) == ERROR)
 			return (ERROR);
-		if (argv[2] && !ft_strncmp(argv[2], "--save", ft_strlen(argv[2])))
+		if (argv[2])
 		{
-			run_game(&mlx);
-			if (save_bmp(&mlx) == ERROR)
-				return (error("Error\nfail to save bmp file", &mlx));
+			if (!ft_strncmp(argv[2], "--save", ft_strlen(argv[2])))
+			{
+				run_game(&mlx);
+				if (save_bmp(&mlx) == ERROR)
+					return (ERROR);
+			}
+			else
+				return (error(ERR_ARG, &mlx));
 		}
-		else
-			return (error("Error\nwrong arguements", &mlx));
 		mlx_hook(mlx.win_ptr, 2, 1L << 0, key_press2, &mlx);
 		mlx_hook(mlx.win_ptr, 3, 1L << 1, key_release, &mlx);
 		mlx_hook(mlx.win_ptr, 17, 1L << 17, error, &mlx);
@@ -772,6 +809,6 @@ int main(int argc, char const *argv[])
 		mlx_loop(mlx.mlx_ptr);
 	}
 	else
-		return (error("Error\nneed a map file", &mlx));
+		return (error(ERR_MAP, &mlx));
 	return (0);
 }
