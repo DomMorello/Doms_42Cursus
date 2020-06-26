@@ -121,7 +121,7 @@ int drawVertLine(t_mlx *mlx, int i)
 	}
 }
 
-int key_press(t_mlx *mlx)
+int key_event(t_mlx *mlx)
 {
 	double moveSpeed = 0.018; //the constant value is in squares/second
 	double rotSpeed = 0.009;  //the constant value is in radians/second
@@ -360,8 +360,9 @@ int run_game(t_mlx *mlx)
 
 	i = 0;
 	draw_floor_ceiling(mlx);
-	if (mlx->game.move_f || mlx->game.move_b || mlx->game.move_r || mlx->game.move_l || mlx->game.rotate_r || mlx->game.rotate_l)
-		key_press(mlx);
+	if (mlx->game.move_f || mlx->game.move_b || mlx->game.move_r ||
+		mlx->game.move_l || mlx->game.rotate_r || mlx->game.rotate_l)
+		key_event(mlx);
 	while (i < mlx->winWidth)
 	{
 		setVar(mlx, i);
@@ -375,7 +376,7 @@ int run_game(t_mlx *mlx)
 	return 0;
 }
 
-int key_press2(int key, t_mlx *mlx)
+int key_press(int key, t_mlx *mlx)
 {
 	if (key == KEY_W)
 		mlx->game.move_f = 1;

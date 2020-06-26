@@ -1,31 +1,7 @@
 #include "./main.h"
+#include "./gnl/get_next_line.h"
 
-int worldMap[mapWidth][mapHeight] =
-	{
-		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1},
-		{1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1},
-		{1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1},
-		{1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1},
-		{1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1},
-		{1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1},
-		{1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 5, 0, 0, 1, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1},
-		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
+#include "./main.h"
 
 int setSideDist(t_mlx *mlx)
 {
@@ -54,7 +30,7 @@ int setSideDist(t_mlx *mlx)
 
 int setVar(t_mlx *mlx, int i)
 {
-	mlx->game.cameraX = 2 * i / (double)WIN_WIDTH - 1;
+	mlx->game.cameraX = 2 * i / (double)mlx->winWidth - 1;
 	mlx->game.rayDirX = mlx->game.dirX + mlx->game.planeX * mlx->game.cameraX;
 	mlx->game.rayDirY = mlx->game.dirY + mlx->game.planeY * mlx->game.cameraX;
 	mlx->game.mapX = (int)mlx->game.posX;
@@ -68,13 +44,13 @@ int setVar(t_mlx *mlx, int i)
 
 void setDraw(t_mlx *mlx)
 {
-	mlx->game.lineHeight = (int)(WIN_HEIGHT / mlx->game.perpWallDist);
-	mlx->game.drawStart = -mlx->game.lineHeight / 2 + WIN_HEIGHT / 2;
+	mlx->game.lineHeight = (int)(mlx->winHeight / mlx->game.perpWallDist);
+	mlx->game.drawStart = -mlx->game.lineHeight / 2 + mlx->winHeight / 2;
 	if (mlx->game.drawStart < 0)
 		mlx->game.drawStart = 0;
-	mlx->game.drawEnd = mlx->game.lineHeight / 2 + WIN_HEIGHT / 2;
-	if (mlx->game.drawEnd >= WIN_HEIGHT)
-		mlx->game.drawEnd = WIN_HEIGHT - 1;
+	mlx->game.drawEnd = mlx->game.lineHeight / 2 + mlx->winHeight / 2;
+	if (mlx->game.drawEnd >= mlx->winHeight)
+		mlx->game.drawEnd = mlx->winHeight - 1;
 }
 
 int performDDA(t_mlx *mlx)
@@ -93,7 +69,7 @@ int performDDA(t_mlx *mlx)
 			mlx->game.mapY += mlx->game.stepY;
 			mlx->game.side = 1;
 		}
-		if (worldMap[mlx->game.mapX][mlx->game.mapY] > 0)
+		if (mlx->map[mlx->game.mapX][mlx->game.mapY] == '1')
 			mlx->game.hit = 1;
 	}
 	if (mlx->game.side == 0)
@@ -120,7 +96,6 @@ int get_side(t_mlx *mlx)
 
 int drawVertLine(t_mlx *mlx, int i)
 {
-	int texNum = worldMap[mlx->game.mapX][mlx->game.mapY] - 1;
 	double wallX;
 	if (mlx->game.side == 0)
 		wallX = mlx->game.posY + mlx->game.perpWallDist * mlx->game.rayDirY;
@@ -135,7 +110,7 @@ int drawVertLine(t_mlx *mlx, int i)
 		texX = TEX_WIDTH - texX - 1;
 
 	double step = 1.0 * TEX_HEIGHT / mlx->game.lineHeight;
-	double texPos = (mlx->game.drawStart - WIN_HEIGHT / 2 + mlx->game.lineHeight / 2) * step;
+	double texPos = (mlx->game.drawStart - mlx->winHeight / 2 + mlx->game.lineHeight / 2) * step;
 
 	int wall_side = get_side(mlx);
 	while (mlx->game.drawStart < mlx->game.drawEnd)
@@ -144,37 +119,37 @@ int drawVertLine(t_mlx *mlx, int i)
 		texPos += step;
 		int color = mlx->tex[wall_side].data[TEX_HEIGHT * texY + texX];
 		/* shading? */
-		mlx->img.data[i + WIN_WIDTH * mlx->game.drawStart] = color;
+		mlx->img.data[i + mlx->winWidth * mlx->game.drawStart] = color;
 		mlx->game.drawStart++;
 	}
 }
 
-int key_press(t_mlx *mlx)
+int key_event(t_mlx *mlx)
 {
 	double moveSpeed = 0.018; //the constant value is in squares/second
 	double rotSpeed = 0.009;  //the constant value is in radians/second
 	// move forward if no wall in front of you
 	if (mlx->game.move_f == 1)
 	{
-		if (worldMap[(int)(mlx->game.posX + mlx->game.dirX * moveSpeed)][(int)mlx->game.posY] == 0)
+		if (mlx->map[(int)(mlx->game.posX + mlx->game.dirX * moveSpeed)][(int)mlx->game.posY] == '0')
 			mlx->game.posX += mlx->game.dirX * moveSpeed;
-		if (worldMap[(int)mlx->game.posX][(int)(mlx->game.posY + mlx->game.dirY * moveSpeed)] == 0)
+		if (mlx->map[(int)mlx->game.posX][(int)(mlx->game.posY + mlx->game.dirY * moveSpeed)] == '0')
 			mlx->game.posY += mlx->game.dirY * moveSpeed;
 	}
 	//move backwards if no wall behind you
 	if (mlx->game.move_b == 1)
 	{
-		if (worldMap[(int)(mlx->game.posX - mlx->game.dirX * moveSpeed)][(int)mlx->game.posY] == 0)
+		if (mlx->map[(int)(mlx->game.posX - mlx->game.dirX * moveSpeed)][(int)mlx->game.posY] == '0')
 			mlx->game.posX -= mlx->game.dirX * moveSpeed;
-		if (worldMap[(int)mlx->game.posX][(int)(mlx->game.posY - mlx->game.dirY * moveSpeed)] == 0)
+		if (mlx->map[(int)mlx->game.posX][(int)(mlx->game.posY - mlx->game.dirY * moveSpeed)] == '0')
 			mlx->game.posY -= mlx->game.dirY * moveSpeed;
 	}
 	//move to the right
 	if (mlx->game.move_r == 1)
 	{
-		if (worldMap[(int)(mlx->game.posX + mlx->game.planeX * 0.01)][(int)mlx->game.posY] == 0)
+		if (mlx->map[(int)(mlx->game.posX + mlx->game.planeX * 0.01)][(int)mlx->game.posY] == '0')
 			mlx->game.posX += mlx->game.planeX * 0.01;
-		if (worldMap[(int)mlx->game.posX][(int)(mlx->game.posY + mlx->game.planeY * 0.01)] == 0)
+		if (mlx->map[(int)mlx->game.posX][(int)(mlx->game.posY + mlx->game.planeY * 0.01)] == '0')
 			mlx->game.posY += mlx->game.planeY * 0.01;
 	}
 	//rotate to the right
@@ -191,9 +166,9 @@ int key_press(t_mlx *mlx)
 	//move to the left
 	if (mlx->game.move_l == 1)
 	{
-		if (worldMap[(int)(mlx->game.posX - mlx->game.planeX * 0.01)][(int)mlx->game.posY] == 0)
+		if (mlx->map[(int)(mlx->game.posX - mlx->game.planeX * 0.01)][(int)mlx->game.posY] == '0')
 			mlx->game.posX -= mlx->game.planeX * 0.01;
-		if (worldMap[(int)mlx->game.posX][(int)(mlx->game.posY - mlx->game.planeY * 0.01)] == 0)
+		if (mlx->map[(int)mlx->game.posX][(int)(mlx->game.posY - mlx->game.planeY * 0.01)] == '0')
 			mlx->game.posY -= mlx->game.planeY * 0.01;
 	}
 	//rotate to the left
@@ -215,7 +190,7 @@ int draw_floor_ceiling(t_mlx *mlx)
 	int y;
 
 	y = 0;
-	while (y < WIN_HEIGHT)
+	while (y < mlx->winHeight)
 	{
 		// rayDir for leftmost ray (x = 0) and rightmost ray (x = w)
 		float rayDirX0 = mlx->game.dirX - mlx->game.planeX;
@@ -223,21 +198,21 @@ int draw_floor_ceiling(t_mlx *mlx)
 		float rayDirX1 = mlx->game.dirX + mlx->game.planeX;
 		float rayDirY1 = mlx->game.dirY + mlx->game.planeY;
 		// Current y position compared to the center of the screen (the horizon)
-		int p = y - WIN_HEIGHT / 2;
+		int p = y - mlx->winHeight / 2;
 		// Vertical position of the camera.
-		float posZ = 0.5 * WIN_HEIGHT;
+		float posZ = 0.5 * mlx->winHeight;
 		// Horizontal distance from the camera to the floor for the current row.
 		// 0.5 is the z position exactly in the middle between floor and ceiling.
 		float rowDistance = posZ / p;
 		// calculate the real world step vector we have to add for each x (parallel to camera plane)
 		// adding step by step avoids multiplications with a weight in the inner loop
-		float floorStepX = rowDistance * (rayDirX1 - rayDirX0) / WIN_WIDTH;
-		float floorStepY = rowDistance * (rayDirY1 - rayDirY0) / WIN_WIDTH;
+		float floorStepX = rowDistance * (rayDirX1 - rayDirX0) / mlx->winWidth;
+		float floorStepY = rowDistance * (rayDirY1 - rayDirY0) / mlx->winWidth;
 		// real world coordinates of the leftmost column. This will be updated as we step to the right.
 		float floorX = mlx->game.posX + rowDistance * rayDirX0;
 		float floorY = mlx->game.posY + rowDistance * rayDirY0;
 
-		for (int x = 0; x < WIN_WIDTH; ++x)
+		for (int x = 0; x < mlx->winWidth; ++x)
 		{
 			// the cell coord is simply got from the integer parts of floorX and floorY
 			int cellX = (int)floorX;
@@ -252,14 +227,20 @@ int draw_floor_ceiling(t_mlx *mlx)
 
 			int color;
 			// floor
-			color = mlx->tex[FLOOR].data[TEX_WIDTH * ty + tx];
-			color = (color >> 1) & 8355711; // make a bit darker
-			mlx->img.data[x + WIN_WIDTH * y] = color;
+			if (mlx->tex[FLOOR].img_ptr != NULL)
+				color = mlx->tex[FLOOR].data[TEX_WIDTH * ty + tx];
+			else
+				color = mlx->tex[FLOOR].floorColor;
+			// color = (color >> 1) & 8355711; // make a bit darker
+			mlx->img.data[x + mlx->winWidth * y] = color;
 
 			//ceiling (symmetrical, at screenHeight - y - 1 instead of y)
-			color = mlx->tex[CEILING].data[TEX_WIDTH * ty + tx];
-			color = (color >> 1) & 8355711; // make a bit darker
-			mlx->img.data[x + WIN_WIDTH * (WIN_HEIGHT - y - 1)] = color;
+			if (mlx->tex[CEILING].img_ptr != NULL)
+				color = mlx->tex[CEILING].data[TEX_WIDTH * ty + tx];
+			else
+				color = mlx->tex[CEILING].ceilingColor;
+			// color = (color >> 1) & 8355711; // make a bit darker
+			mlx->img.data[x + mlx->winWidth * (mlx->winHeight - y - 1)] = color;
 		}
 		y++;
 	}
@@ -301,30 +282,30 @@ int transform_sprite(t_mlx *mlx, t_game *game, t_sprite *sprite)
 	//this is actually the depth inside the screen, that what Z is in 3D
 	sprite->transformY = invDet * (-game->planeY * sprite->spriteX + game->planeX * sprite->spriteY);
 
-	sprite->spriteScreenX = (int)((WIN_WIDTH / 2) * (1 + sprite->transformX / sprite->transformY));
+	sprite->spriteScreenX = (int)((mlx->winWidth / 2) * (1 + sprite->transformX / sprite->transformY));
 }
 
 int cal_sprite(t_mlx *mlx, t_sprite *sprite)
 {
 	//calculate height of the sprite on screen
 	//using 'transformY' instead of the real distance prevents fisheye
-	sprite->spriteHeight = abs((int)(WIN_HEIGHT / (sprite->transformY)));
+	sprite->spriteHeight = abs((int)(mlx->winHeight / (sprite->transformY)));
 	//calculate lowest and highest pixel to fill in current stripe
-	sprite->drawStartY = -sprite->spriteHeight / 2 + WIN_HEIGHT / 2;
+	sprite->drawStartY = -sprite->spriteHeight / 2 + mlx->winHeight / 2;
 	if (sprite->drawStartY < 0)
 		sprite->drawStartY = 0;
-	sprite->drawEndY = sprite->spriteHeight / 2 + WIN_HEIGHT / 2;
-	if (sprite->drawEndY >= WIN_HEIGHT)
-		sprite->drawEndY = WIN_HEIGHT - 1;
+	sprite->drawEndY = sprite->spriteHeight / 2 + mlx->winHeight / 2;
+	if (sprite->drawEndY >= mlx->winHeight)
+		sprite->drawEndY = mlx->winHeight - 1;
 
 	//calculate width of the sprite
-	sprite->spriteWidth = abs((int)(WIN_HEIGHT / (sprite->transformY)));
+	sprite->spriteWidth = abs((int)(mlx->winHeight / (sprite->transformY)));
 	sprite->drawStartX = -sprite->spriteWidth / 2 + sprite->spriteScreenX;
 	if (sprite->drawStartX < 0)
 		sprite->drawStartX = 0;
 	sprite->drawEndX = sprite->spriteWidth / 2 + sprite->spriteScreenX;
-	if (sprite->drawEndX >= WIN_WIDTH)
-		sprite->drawEndX = WIN_WIDTH - 1;
+	if (sprite->drawEndX >= mlx->winWidth)
+		sprite->drawEndX = mlx->winWidth - 1;
 }
 
 // int draw_sprite(t_mlx *mlx, t_sprite *sprite, double *zbuffer
@@ -337,21 +318,18 @@ int draw_sprite(t_mlx *mlx, t_sprite *sprite)
 	while (stripe < sprite->drawEndX)
 	{
 		texX = (int)(256 * (stripe - (-sprite->spriteWidth / 2 + sprite->spriteScreenX)) * TEX_WIDTH / sprite->spriteWidth) / 256;
-		if (sprite->transformY > 0 && stripe > 0 && stripe < WIN_WIDTH && sprite->transformY < mlx->zbuffer[stripe])
+		if (sprite->transformY > 0 && stripe > 0 && stripe < mlx->winWidth && sprite->transformY < mlx->zbuffer[stripe])
 		{
 			int y = sprite->drawStartY;
 			while (y < sprite->drawEndY) //for every pixel of the current stripe
 			{
 				//256 and 128 factors to avoid floats
-				int d = (y) * 256 - WIN_HEIGHT * 128 + sprite->spriteHeight * 128;
+				int d = (y) * 256 - mlx->winHeight * 128 + sprite->spriteHeight * 128;
 				texY = ((d * TEX_HEIGHT) / sprite->spriteHeight) / 256;
 				//get current color from the texture
 				int color = mlx->tex[SPRITE].data[TEX_WIDTH * texY + texX];
 				if ((color & 0x00FFFFFF) != 0)
-				{
-					mlx->img.data[stripe + WIN_WIDTH * y] = color;
-					// printf("mlximgdata: %d\n", mlx->img.data[sprite->drawStartX + WIN_WIDTH * sprite->drawStartY]);
-				}
+					mlx->img.data[stripe + mlx->winWidth * y] = color;
 				//paint pixel if it isn't black, black is the invisible color
 				y++;
 			}
@@ -360,14 +338,11 @@ int draw_sprite(t_mlx *mlx, t_sprite *sprite)
 	}
 }
 
-// int render_sprite(t_mlx *mlx, double *zbuffer)
 int render_sprite(t_mlx *mlx)
 {
 	int i;
 
 	i = 0;
-	//일단은 하드코딩
-	mlx->spriteNum = 3;
 	for (size_t i = 0; i < mlx->spriteNum; i++)
 	{
 		mlx->sprite[i].dist = ((mlx->game.posX - mlx->sprite[i].x) * (mlx->game.posX - mlx->sprite[i].x) + (mlx->game.posY - mlx->sprite[i].y) * (mlx->game.posY - mlx->sprite[i].y));
@@ -377,7 +352,6 @@ int render_sprite(t_mlx *mlx)
 	{
 		transform_sprite(mlx, &mlx->game, &mlx->sprite[i]);
 		cal_sprite(mlx, &mlx->sprite[i]);
-		// draw_sprite(mlx, &mlx->sprite[i], zbuffer);
 		draw_sprite(mlx, &mlx->sprite[i]);
 		i++;
 	}
@@ -386,31 +360,26 @@ int render_sprite(t_mlx *mlx)
 int run_game(t_mlx *mlx)
 {
 	int i;
-	// double zbuffer[WIN_WIDTH];
 
 	i = 0;
-	mlx_destroy_image(mlx->mlx_ptr, mlx->img.img_ptr);
-	mlx->img.img_ptr = mlx_new_image(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
-	mlx->img.data = (int *)mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size_l, &mlx->img.endian);
 	draw_floor_ceiling(mlx);
-	if (mlx->game.move_f || mlx->game.move_b || mlx->game.move_r || mlx->game.move_l || mlx->game.rotate_r || mlx->game.rotate_l)
-		key_press(mlx);
-	while (i < WIN_WIDTH)
+	if (mlx->game.move_f || mlx->game.move_b || mlx->game.move_r ||
+		mlx->game.move_l || mlx->game.rotate_r || mlx->game.rotate_l)
+		key_event(mlx);
+	while (i < mlx->winWidth)
 	{
 		setVar(mlx, i);
 		performDDA(mlx);
 		drawVertLine(mlx, i);
-		// zbuffer[i] = mlx->game.perpWallDist;
 		mlx->zbuffer[i] = mlx->game.perpWallDist;
 		i++;
 	}
-	// render_sprite(mlx, zbuffer);
 	render_sprite(mlx);
 	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img.img_ptr, 0, 0);
 	return 0;
 }
 
-int key_press2(int key, t_mlx *mlx)
+int key_press(int key, t_mlx *mlx)
 {
 	if (key == KEY_W)
 		mlx->game.move_f = 1;
@@ -424,6 +393,8 @@ int key_press2(int key, t_mlx *mlx)
 		mlx->game.rotate_l = 1;
 	if (key == KEY_RIGHT)
 		mlx->game.rotate_r = 1;
+	if (key == KEY_ESC)
+		error("exit game", mlx);
 }
 
 int key_release(int key, t_mlx *mlx)
@@ -442,66 +413,811 @@ int key_release(int key, t_mlx *mlx)
 		mlx->game.rotate_r = 0;
 }
 
-void tmp_direction_tex(t_mlx *mlx)
+void ft_lstmapdelone(t_map *node)
 {
-	mlx->tex[EAST].filepath = "./textures/mossy.xpm";
-	mlx->tex[WEST].filepath = "./textures/choga.xpm";
-	mlx->tex[SOUTH].filepath = "./textures/greystone.xpm";
-	mlx->tex[NORTH].filepath = "./textures/wood.xpm";
-	mlx->tex[CEILING].filepath = "./textures/redbrick.xpm";
-	mlx->tex[FLOOR].filepath = "./textures/bluestone.xpm";
-	mlx->tex[SPRITE].filepath = "./textures/barrel.xpm";
-	mlx->tex[EAST].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/mossy.xpm", &mlx->tex[EAST].width, &mlx->tex[EAST].height);
-	mlx->tex[WEST].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/choga.xpm", &mlx->tex[WEST].width, &mlx->tex[EAST].height);
-	mlx->tex[SOUTH].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/greystone.xpm", &mlx->tex[SOUTH].width, &mlx->tex[EAST].height);
-	mlx->tex[NORTH].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/wood.xpm", &mlx->tex[NORTH].width, &mlx->tex[EAST].height);
-	mlx->tex[CEILING].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/redbrick.xpm", &mlx->tex[EAST].width, &mlx->tex[EAST].height);
-	mlx->tex[FLOOR].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/bluestone.xpm", &mlx->tex[EAST].width, &mlx->tex[EAST].height);
-	mlx->tex[SPRITE].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, "./textures/barrel.xpm", &mlx->tex[EAST].width, &mlx->tex[EAST].height);
-	mlx->tex[EAST].data = (int *)mlx_get_data_addr(mlx->tex[EAST].img_ptr, &mlx->tex[EAST].bpp, &mlx->tex[EAST].size_l, &mlx->tex[EAST].endian);
-	mlx->tex[WEST].data = (int *)mlx_get_data_addr(mlx->tex[WEST].img_ptr, &mlx->tex[WEST].bpp, &mlx->tex[WEST].size_l, &mlx->tex[WEST].endian);
-	mlx->tex[SOUTH].data = (int *)mlx_get_data_addr(mlx->tex[SOUTH].img_ptr, &mlx->tex[SOUTH].bpp, &mlx->tex[SOUTH].size_l, &mlx->tex[SOUTH].endian);
-	mlx->tex[NORTH].data = (int *)mlx_get_data_addr(mlx->tex[NORTH].img_ptr, &mlx->tex[NORTH].bpp, &mlx->tex[NORTH].size_l, &mlx->tex[NORTH].endian);
-	mlx->tex[CEILING].data = (int *)mlx_get_data_addr(mlx->tex[CEILING].img_ptr, &mlx->tex[CEILING].bpp, &mlx->tex[CEILING].size_l, &mlx->tex[CEILING].endian);
-	mlx->tex[FLOOR].data = (int *)mlx_get_data_addr(mlx->tex[FLOOR].img_ptr, &mlx->tex[FLOOR].bpp, &mlx->tex[FLOOR].size_l, &mlx->tex[FLOOR].endian);
-	mlx->tex[SPRITE].data = (int *)mlx_get_data_addr(mlx->tex[SPRITE].img_ptr, &mlx->tex[SPRITE].bpp, &mlx->tex[SPRITE].size_l, &mlx->tex[SPRITE].endian);
+	if (node)
+	{
+		free(node->row);
+		node->row = NULL;
+		free(node);
+		node = NULL;
+	}
 }
 
-int initial_setting(t_mlx *mlx)
+void ft_lstmapclear(t_map **lst)
 {
+	t_map *tmp;
+
+	if (lst && *lst)
+	{
+		while (*lst)
+		{
+			tmp = (*lst)->next;
+			ft_lstmapdelone(*lst);
+			(*lst) = tmp;
+		}
+		*lst = NULL;
+	}
+}
+
+void clear_map(t_mlx *mlx)
+{
+	int i;
+
+	i = 0;
+	ft_lstmapclear(&mlx->maplst);
+	if (mlx->map)
+	{
+		while (mlx->map[i])
+		{
+			free(mlx->map[i]);
+			mlx->map[i] = NULL;
+			i++;
+		}
+		free(mlx->map);
+		mlx->map = NULL;
+	}
+}
+
+void clear_tex(t_mlx *mlx)
+{
+	int i;
+
+	i = 0;
+	while (i < 7)
+	{
+		if (mlx->tex[i].filepath)
+		{
+			free(mlx->tex[i].filepath);
+			mlx->tex[i].filepath = NULL;
+		}
+		if (mlx->tex[i].img_ptr)
+			mlx_destroy_image(mlx->mlx_ptr, mlx->tex[i].img_ptr);
+		i++;
+	}
+}
+
+void clear_sprite(t_mlx *mlx)
+{
+	if (mlx->sprite)
+	{
+		free(mlx->sprite);
+		mlx->sprite = NULL;
+	}
+}
+
+void clear_window(t_mlx *mlx)
+{
+	if (mlx->img.img_ptr)
+		mlx_destroy_image(mlx->mlx_ptr, mlx->img.img_ptr);
+	if (mlx->mlx_ptr)
+	{
+		mlx_clear_window(mlx->mlx_ptr, mlx->win_ptr);
+		mlx_destroy_window(mlx->mlx_ptr, mlx->win_ptr);
+	}
+}
+
+int error(char *str, t_mlx *mlx)
+{
+	clear_window(mlx);
+	clear_sprite(mlx);
+	clear_tex(mlx);
+	clear_map(mlx);
+	write(1, str, ft_strlen(str));
+	write(1, "\n", 1);
+	exit(ERROR);
+	return (ERROR);
+}
+
+int ft_isspace(char c)
+{
+	if ((c >= 9 && c <= 13) || c == ' ')
+		return (TRUE);
+	return (FALSE);
+}
+
+int free_2d_char(char **ret, int flag)
+{
+	int i;
+
+	i = 0;
+	while (ret[i])
+	{
+		free(ret[i]);
+		i++;
+	}
+	free(ret);
+	ret = NULL;
+	return (flag);
+}
+
+int input_resolution(t_mlx *mlx, char *str)
+{
+	char **ret;
+	char *check;
+	int i;
+
+	i = 0;
+	while (str[++i])
+		if (!(ft_isdigit(str[i]) || ft_isspace(str[i])))
+			return (error(ERR_FORMAT, mlx));
+	if ((ret = ft_split(&str[1], ' ')) == NULL)
+		return (error(ERR_MEM, mlx));
+	check = ret[2];
+	if (check)
+		if (!(check[0] == '\0' || check[0] == '\r' || check[0] == '\n'))
+			return (free_2d_char(ret, error(ERR_FORMAT, mlx)));
+	mlx->winWidth = ft_atoi(ret[0]);
+	mlx->winHeight = ft_atoi(ret[1]);
+	if (mlx->winWidth > MAX_WIN_WIDTH)
+		mlx->winWidth = MAX_WIN_WIDTH;
+	if (mlx->winWidth < MIN_WIN_WIDTH)
+		mlx->winWidth = MIN_WIN_WIDTH;
+	if (mlx->winHeight > MAX_WIN_HEIGHT)
+		mlx->winHeight = MAX_WIN_HEIGHT;
+	if (mlx->winHeight < MIN_WIN_HEIGHT)
+		mlx->winHeight = MIN_WIN_HEIGHT;
+	return (free_2d_char(ret, TRUE));
+}
+
+int which_tex(char *line, t_mlx *mlx)
+{
+	if (line[0] == 'N' && line[1] == 'O')
+		return (NORTH);
+	else if (line[0] == 'S' && line[1] == 'O')
+		return (SOUTH);
+	else if (line[0] == 'W' && line[1] == 'E')
+		return (WEST);
+	else if (line[0] == 'E' && line[1] == 'A')
+		return (EAST);
+	else if (line[0] == 'S')
+		return (SPRITE);
+	else if (line[0] == 'F')
+		return (FLOOR);
+	else if (line[0] == 'C')
+		return (CEILING);
+	else if (line[0] == 0 || line[0] == '1' || line[0] == 'R')
+		return (PASS);
+	else
+		return (ERROR);
+}
+
+int input_tex(t_mlx *mlx, int tex, char *line)
+{
+	int space;
+	int i;
+	char *tmp;
+
+	i = 0;
+	if (tex != ERROR && tex != PASS)
+	{
+		if (tex >= 0 && tex <= 3)
+			space = 2;
+		else
+			space = 1;
+		while (space--)
+			i++;
+		while (ft_isspace(line[i]))
+			i++;
+		if ((mlx->tex[tex].filepath = ft_strdup(&line[i])) == NULL)
+			return (error(ERR_MEM, mlx));
+	}
+	return (TRUE);
+}
+
+int check_tex(t_mlx *mlx)
+{
+	int i;
+
+	i = 0;
+	while (i < 7)
+	{
+		if (mlx->tex[i].filepath == NULL)
+			return (error(ERR_FORMAT, mlx));
+		i++;
+	}
+}
+
+int allset_filepath(t_mlx *mlx)
+{
+	int allset;
+	int i;
+
+	allset = TRUE;
+	i = 0;
+	while (i < 7)
+	{
+		if (mlx->tex[i].filepath == NULL)
+			allset = FALSE;
+		i++;
+	}
+	return (allset);
+}
+
+int check_order(t_mlx *mlx, char *line)
+{
+	if (line[0] == '1' || line[0] == '0')
+		return (error(ERR_ORDER, mlx));
+	return (TRUE);
+}
+
+t_map *ft_lstnewmap(char *content)
+{
+	t_map *ret;
+
+	if ((ret = (t_map *)malloc(sizeof(ret))) == NULL)
+		return (NULL);
+	ret->next = NULL;
+	ret->row = content;
+	return (ret);
+}
+
+int ft_lstaddmap_back(t_map **lst, t_map *new, char *row)
+{
+	t_map *tmp;
+
+	if (lst)
+	{
+		if ((new = ft_lstnewmap(row)) == NULL)
+			return (ERROR);
+		tmp = *lst;
+		if (!tmp)
+			*lst = new;
+		else
+		{
+			while (tmp->next)
+				tmp = tmp->next;
+			tmp->next = new;
+		}
+	}
+}
+
+int is_valid_letter(char c)
+{
+	if (c == '0' || c == '1' || c == '2' || c == 'N' || c == 'S' || c == 'W' || c == 'E')
+		return (TRUE);
+	else if (ft_isspace(c) || c == '\r' || c == '\n')
+		return (TRUE);
+	return (FALSE);
+}
+
+int copy_map(t_mlx *mlx, char *line)
+{
+	int i;
+	t_map *new;
+
+	i = 0;
+	while (ft_isspace(line[i]))
+		i++;
+	if (line[i] == 0)
+		return (PASS);
+	if (line[i] != '1')
+		return (error(ERR_MAP_SUR, mlx));
+	while (line[i])
+	{
+		if (!is_valid_letter(line[i]))
+			return (error(ERR_LETTER, mlx));
+		i++;
+	}
+	if (ft_lstaddmap_back(&mlx->maplst, new, ft_strdup(line)) == ERROR)
+		return (error(ERR_MEM, mlx));
+}
+
+int parse_line(char *line, t_mlx *mlx)
+{
+	int i;
+	int tex;
+
+	i = 0;
+	if (!allset_filepath(mlx))
+	{
+		while (ft_isspace(line[i]))
+			i++;
+		if ((check_order(mlx, &line[i])) == ERROR)
+			return (ERROR);
+		if (line[i] == 'R')
+			if ((input_resolution(mlx, &line[i])) == ERROR)
+				return (ERROR);
+		if ((tex = which_tex(&line[i], mlx)) == ERROR)
+			return (error(ERR_LETTER, mlx));
+		if (input_tex(mlx, tex, &line[i]) == ERROR)
+			return (ERROR);
+	}
+	else if (copy_map(mlx, line) == ERROR)
+		return (ERROR);
+	return (TRUE);
+}
+
+int check_lastline(t_mlx *mlx, char *line)
+{
+	int i;
+	t_map *new;
+
+	i = 0;
+	while (ft_isspace(line[i]))
+		i++;
+	if (line[i] == '1')
+		if (ft_lstaddmap_back(&mlx->maplst, new, ft_strdup(line)) == ERROR)
+			return (ERROR);
+}
+
+int get_mapsizeY(t_mlx *mlx)
+{
+	int len;
+	t_map *tmp;
+
+	tmp = mlx->maplst;
+	len = 0;
+	while (tmp)
+	{
+		len++;
+		tmp = tmp->next;
+	}
+	return (len);
+}
+
+int move_map_2d(t_mlx *mlx, int mapsizeY)
+{
+	int i;
+	char *tmp;
+	t_map *lst;
+
+	i = 0;
+	if ((mlx->map = (char **)malloc(sizeof(char *) * mapsizeY + 1)) == NULL)
+		return (error(ERR_MEM, mlx));
+	mlx->map[mapsizeY] = 0;
+	lst = mlx->maplst;
+	while (lst)
+	{
+		tmp = lst->row;
+		if (tmp[ft_strlen(tmp) - 1] == '\r' || tmp[ft_strlen(tmp) - 1] == '\n')
+			tmp[ft_strlen(tmp) - 1] = 0;
+		mlx->map[i] = tmp;
+		lst = lst->next;
+		i++;
+	}
+	return (TRUE);
+}
+
+int check_rightside(t_mlx *mlx, int mapsizeY)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (i < mapsizeY)
+	{
+		j = ft_strlen(mlx->map[i]) - 1;
+		while (ft_isspace(mlx->map[i][j]))
+			j--;
+		if (mlx->map[i][j] != '1')
+			return (error(ERR_MAP_SUR, mlx));
+		i++;
+	}
+	return (TRUE);
+}
+
+int check_border(t_mlx *mlx, int mapsizeY)
+{
+	int i;
+
+	i = 0;
+	while (mlx->map[0][i])
+	{
+		if (mlx->map[0][i] != '1' && !ft_isspace(mlx->map[0][i]))
+			return (error(ERR_MAP_SUR, mlx));
+		i++;
+	}
+	i = 0;
+	while (mlx->map[mapsizeY - 1][i])
+	{
+		if (mlx->map[mapsizeY - 1][i] != '1' && !ft_isspace(mlx->map[mapsizeY - 1][i]))
+			return (error(ERR_MAP_SUR, mlx));
+		i++;
+	}
+	if (check_rightside(mlx, mapsizeY) == ERROR)
+		return (ERROR);
+	return (TRUE);
+}
+
+int check_updown(int i, int j, t_mlx *mlx)
+{
+	if (ft_isspace(mlx->map[i - 1][j + 1]))
+		return (error(ERR_MAP_SUR, mlx));
+	if (ft_strlen(mlx->map[i + 1]) > j + 1)
+	{
+		if (ft_isspace(mlx->map[i + 1][j + 1]))
+			return (error(ERR_MAP_SUR, mlx));
+	}
+	else
+		return (error(ERR_MAP_SUR, mlx));
+}
+
+int parse_contents(t_mlx *mlx, int mapsizeY)
+{
+	int i;
+	int j;
+
+	i = 1;
+	while (i < mapsizeY - 1)
+	{
+		j = 0;
+		while (ft_isspace(mlx->map[i][j]))
+			j++;
+		while (j < ft_strlen(mlx->map[i]) - 1)
+		{
+			if (mlx->map[i][j + 1] == '0')
+			{
+				if (check_updown(i, j, mlx) == ERROR)
+					return (ERROR);
+				if (ft_isspace(mlx->map[i][j]) || ft_isspace(mlx->map[i][j + 2]))
+					return (error(ERR_MAP_SUR, mlx));
+			}
+			j++;
+		}
+		i++;
+	}
+	return (TRUE);
+}
+
+void set_dir(t_mlx *mlx, double dirX, double dirY)
+{
+	mlx->game.dirX = dirX;
+	mlx->game.dirY = dirY;
+}
+
+void set_plane(t_mlx *mlx, double planeX, double planeY)
+{
+	mlx->game.planeX = planeX;
+	mlx->game.planeY = planeY;
+}
+
+void set_playerpos(t_mlx *mlx, double x, double y)
+{
+	mlx->game.posX = x + 0.5;
+	mlx->game.posY = y + 0.5;
+}
+
+void input_direction(t_mlx *mlx, char direction, int x, int y)
+{
+	if (direction == 'N')
+	{
+		set_dir(mlx, -1, 0);
+		set_plane(mlx, 0, 0.66);
+	}
+	else if (direction == 'S')
+	{
+		set_dir(mlx, 1, 0);
+		set_plane(mlx, 0, -0.66);
+	}
+	else if (direction == 'E')
+	{
+		set_dir(mlx, 0, 1);
+		set_plane(mlx, 0.66, 0);
+	}
+	else if (direction == 'W')
+	{
+		set_dir(mlx, 0, -1);
+		set_plane(mlx, -0.66, 0);
+	}
+	set_playerpos(mlx, (double)x, (double)y);
+}
+
+int check_direction(t_mlx *mlx, int mapsizeY)
+{
+	int i;
+	int j;
+	int isPlural;
+
+	i = 0;
+	isPlural = 0;
+	while (++i < mapsizeY - 1)
+	{
+		j = 0;
+		while (ft_isspace(mlx->map[i][j]))
+			j++;
+		while (j < ft_strlen(mlx->map[i]) - 1)
+		{
+			if (mlx->map[i][j] == 'N' || mlx->map[i][j] == 'S' || mlx->map[i][j] == 'E' || mlx->map[i][j] == 'W')
+			{
+				input_direction(mlx, mlx->map[i][j], i, j);
+				mlx->map[i][j] = '0';
+				isPlural++;
+			}
+			j++;
+		}
+	}
+	if (isPlural != 1)
+		return (error(ERR_PLU, mlx));
+	return (TRUE);
+}
+
+int count_sprite(char **map, int mapsizeY)
+{
+	int i;
+	int j;
+	int spriteNum;
+
+	i = 1;
+	spriteNum = 0;
+	while (i < mapsizeY - 1)
+	{
+		j = 0;
+		while (ft_isspace(map[i][j]))
+			j++;
+		while (map[i][j + 1])
+		{
+			if (map[i][j + 1] == '2')
+				spriteNum++;
+			j++;
+		}
+		i++;
+	}
+	return (spriteNum);
+}
+
+void input_sprite(t_sprite *sprites, char **map, int mapsizeY)
+{
+	int i;
+	int j;
+	int idx;
+
+	i = 1;
+	idx = 0;
+	while (i < mapsizeY)
+	{
+		j = 0;
+		while (ft_isspace(map[i][j]))
+			j++;
+		while (map[i][j + 1])
+		{
+			if (map[i][j + 1] == '2')
+			{
+				sprites[idx].x = i + 0.5;
+				sprites[idx].y = j + 1.5;
+				idx++;
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
+int check_sprite(t_mlx *mlx, int mapsizeY)
+{
+	int spriteNum;
+	t_sprite *sprites;
+
+	spriteNum = count_sprite(mlx->map, mapsizeY);
+	if ((sprites = (t_sprite *)malloc(sizeof(t_sprite) * spriteNum)) == NULL)
+		return (error(ERR_MEM, mlx));
+	input_sprite(sprites, mlx->map, mapsizeY);
+	mlx->spriteNum = spriteNum;
+	mlx->sprite = sprites;
+	return (TRUE);
+}
+
+int parse_map(t_mlx *mlx)
+{
+	int mapsizeY;
+
+	mapsizeY = get_mapsizeY(mlx);
+	if (move_map_2d(mlx, mapsizeY) == ERROR)
+		return (ERROR);
+	if (check_direction(mlx, mapsizeY) == ERROR)
+		return (ERROR);
+	if (check_border(mlx, mapsizeY) == ERROR)
+		return (ERROR);
+	if (parse_contents(mlx, mapsizeY) == ERROR)
+		return (ERROR);
+	if (check_sprite(mlx, mapsizeY) == ERROR)
+		return (ERROR);
+	return (TRUE);
+}
+
+int parse_info(char const *argv, t_mlx *mlx)
+{
+	int fd;
+	char *line;
+
+	if ((fd = open(argv, O_RDONLY)) == -1)
+		return (error(ERR_OPEN, mlx));
+	while (get_next_line(fd, &line))
+	{
+		if (parse_line(line, mlx) == ERROR)
+		{
+			free(line);
+			return (ERROR);
+		}
+		free(line);
+	}
+	if (check_tex(mlx) == ERROR)
+		return (ERROR);
+	if (check_lastline(mlx, line) == ERROR)
+		return (ERROR);
+	if (parse_map(mlx) == ERROR)
+		return (ERROR);
+	close(fd);
+	return (TRUE);
+}
+
+char *ft_strfromend(char *str, int size)
+{
+	int len;
+	int i;
+	char *copy;
+
+	if ((copy = (char *)malloc(sizeof(char) * size + 1)) == NULL)
+		return (NULL);
+	len = ft_strlen(str);
+	i = 0;
+	while (size)
+	{
+		copy[i++] = str[len - size];
+		size--;
+	}
+	copy[i] = '\0';
+	return (copy);
+}
+
+void check_extension(char const *argv, t_mlx *mlx)
+{
+	char *extension;
+
+	if ((extension = ft_strfromend((char *)argv, 4)) == NULL)
+		error(ERR_MEM, mlx);
+	if (ft_strncmp(extension, ".cub", 5))
+	{
+		free(extension);
+		error(ERR_EXT, mlx);
+	}
+}
+
+int input_color(t_tex *tex, t_mlx *mlx, char **ret)
+{
+	int rgb[3];
+	int i;
+	int color;
+
+	color = 0;
+	i = 0;
+	while (i < 3)
+	{
+		rgb[i] = ft_atoi(ret[i]);
+		if (rgb[i] > 255 || rgb[i] < 0)
+			return (error(ERR_RGB, mlx));
+		i++;
+	}
+	color += rgb[0] << 16;
+	color += rgb[1] << 8;
+	color += rgb[2];
+	if (tex == &mlx->tex[FLOOR])
+		mlx->tex[FLOOR].floorColor = color;
+	if (tex == &mlx->tex[CEILING])
+		mlx->tex[CEILING].ceilingColor = color;
+	return (TRUE);
+}
+
+int isRGBcolor(t_tex *tex, t_mlx *mlx)
+{
+	char **ret;
+	int i;
+	char *check;
+
+	i = 0;
+	while (tex->filepath[i])
+	{
+		if (!ft_isdigit(tex->filepath[i]) && !ft_isspace(tex->filepath[i]))
+			return (FALSE);
+		i++;
+	}
+	if ((ret = ft_split(tex->filepath, ' ')) == NULL)
+		return (error(ERR_MEM, mlx));
+	if (check)
+		if (!(check[0] == '\0' || check[0] == '\r' || check[0] == '\n'))
+			return (free_2d_char(ret, error(ERR_FORMAT, mlx)));
+	if (input_color(tex, mlx, ret) == ERROR)
+		return (FALSE);
+	return (TRUE);
+}
+
+int init_game(t_mlx *mlx)
+{
+	int i;
+	char *tmp;
+
+	i = -1;
 	mlx->mlx_ptr = mlx_init();
-	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "DomMorello");
-	mlx->img.img_ptr = mlx_new_image(mlx->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
+	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr, mlx->winWidth, mlx->winHeight, "DomMorello");
+	mlx->img.img_ptr = mlx_new_image(mlx->mlx_ptr, mlx->winWidth, mlx->winHeight);
 	mlx->img.data = (int *)mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size_l, &mlx->img.endian);
-	tmp_direction_tex(mlx); //일단 하드코딩으로 filepath를 넣어줬다.
-	mlx->game.posX = 11.5;
-	mlx->game.posY = 1.5;
-	mlx->game.dirX = -1;
-	mlx->game.dirY = 0;
-	mlx->game.planeX = 0;
-	mlx->game.planeY = 0.66;
-	//sprite 일단 hardcoding으로
-	t_sprite *tmp;
-	tmp = (t_sprite *)malloc(sizeof(t_sprite) * 3);
-	tmp[0].x = 8;
-	tmp[0].y = 1.5;
-	tmp[1].x = 11.5;
-	tmp[1].y = 5;
-	tmp[2].x = 10.5;
-	tmp[2].y = 2.5;
-	mlx->sprite = tmp;
-	return 0;
+	while (++i < 7)
+	{
+		tmp = mlx->tex[i].filepath;
+		if (tmp[ft_strlen(tmp) - 1] == '\r' || tmp[ft_strlen(tmp) - 1] == '\n')
+			tmp[ft_strlen(tmp) - 1] = 0;
+		if ((mlx->tex[i].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, tmp, &mlx->tex[i].width, &mlx->tex[i].height)) == NULL)
+		{
+			if (isRGBcolor(&mlx->tex[i], mlx))
+				continue;
+			else
+				return (error(ERR_PATH, mlx));
+		}
+		mlx->tex[i].data = (int *)mlx_get_data_addr(mlx->tex[i].img_ptr, &mlx->tex[i].bpp, &mlx->tex[i].size_l, &mlx->tex[i].endian);
+	}
+}
+
+void	set_bmfh(t_bmfh *bmfh, t_mlx *mlx)
+{
+	bmfh->bfType[0] = 'B';
+	bmfh->bfType[1] = 'M';
+	bmfh->bfSize = 54 + 4 * mlx->winWidth * mlx->winHeight;
+	bmfh->bfReserved = 0;
+	bmfh->bfOffBits = 54;
+}
+
+void	set_bmih(t_bmih *bmih, t_mlx *mlx)
+{
+	bmih->biSize = 40;
+	bmih->biWidth = mlx->winWidth;
+	bmih->biHeight = -mlx->winHeight;
+	bmih->biPlanes[0] = 1;
+	bmih->biPlanes[1] = 0;
+	bmih->biBitCount[0] = 32;
+	bmih->biBitCount[1] = 0;
+	bmih->biCompression = 0;
+	bmih->biSizeImage = 4 * mlx->winWidth * mlx->winHeight;
+	bmih->biXPelsPerMeter = 0;
+	bmih->biYPelsPerMeter = 0;
+	bmih->biClrUsed = 0;
+	bmih->biClrImportant = 0;
+}
+
+int save_bmp(t_mlx *mlx)
+{
+	int fd;
+	t_bmfh bmfh;
+	t_bmih bmih;
+
+	if ((fd = open("capture.bmp", O_WRONLY | O_CREAT)) == ERROR)
+		return (error(ERR_OPEN, mlx));
+	set_bmfh(&bmfh, mlx);
+	set_bmih(&bmih, mlx);
+	write(fd, &bmfh, sizeof(bmfh));
+	write(fd, &bmih, sizeof(bmih));
+	write(fd, mlx->img.data, bmih.biSizeImage);
+	close(fd);
+	return (TRUE);
 }
 
 int main(int argc, char const *argv[])
 {
 	t_mlx mlx;
- 
-	/* parsing map info */
-	initial_setting(&mlx);
-	mlx_hook(mlx.win_ptr, 2, 1L << 0, key_press2, &mlx);
-	mlx_hook(mlx.win_ptr, 3, 1L << 1, key_release, &mlx);
-	mlx_loop_hook(mlx.mlx_ptr, run_game, &mlx);
-	mlx_loop(mlx.mlx_ptr);
-	return 0;
+
+	if (argv[1])
+	{
+		check_extension(argv[1], &mlx);
+		parse_info(argv[1], &mlx);
+		if (init_game(&mlx) == ERROR)
+			return (ERROR);
+		if (argv[2])
+		{
+			if (!ft_strncmp(argv[2], "--save", ft_strlen(argv[2])))
+			{
+				run_game(&mlx);
+				if (save_bmp(&mlx) == ERROR)
+					return (ERROR);
+			}
+			else
+				return (error(ERR_ARG, &mlx));
+		}
+		mlx_hook(mlx.win_ptr, 2, 1L << 0, key_press2, &mlx);
+		mlx_hook(mlx.win_ptr, 3, 1L << 1, key_release, &mlx);
+		mlx_hook(mlx.win_ptr, 17, 1L << 17, error, &mlx);
+		mlx_loop_hook(mlx.mlx_ptr, run_game, &mlx);
+		mlx_loop(mlx.mlx_ptr);
+	}
+	else
+		return (error(ERR_MAP, &mlx));
+	return (0);
 }
