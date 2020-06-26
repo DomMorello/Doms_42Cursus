@@ -182,62 +182,66 @@ int key_event(t_mlx *mlx)
 	return 0;
 }
 
+void get_position(t_mlx *mlx, int y)
+{
+	int p;
+	float posZ;
+	float rowDistance;
+
+	p = y - mlx->winHeight / 2;
+	posZ = 0.5 * mlx->winHeight;
+	rowDistance = posZ / p;
+	mlx->fc.floorStepX = rowDistance *
+						 (mlx->fc.rayDirX1 - mlx->fc.rayDirX0) / mlx->winWidth;
+	mlx->fc.floorStepY = rowDistance *
+						 (mlx->fc.rayDirY1 - mlx->fc.rayDirY0) / mlx->winWidth;
+	mlx->fc.floorX = mlx->game.posX + rowDistance * mlx->fc.rayDirX0;
+	mlx->fc.floorY = mlx->game.posY + rowDistance * mlx->fc.rayDirY0;
+}
+
+void draw_fc(t_mlx *mlx, int x, int y)
+{
+	int tx;
+	int ty;
+	int color;
+
+	tx = (int)(TEX_WIDTH *
+			(mlx->fc.floorX - (int)mlx->fc.floorX)) & (TEX_WIDTH - 1);
+	ty = (int)(TEX_HEIGHT *
+			(mlx->fc.floorY - (int)mlx->fc.floorY)) & (TEX_HEIGHT - 1);
+	mlx->fc.floorX += mlx->fc.floorStepX;
+	mlx->fc.floorY += mlx->fc.floorStepY;
+	if (mlx->tex[FLOOR].img_ptr != NULL)
+		color = mlx->tex[FLOOR].data[TEX_WIDTH * ty + tx];
+	else
+		color = mlx->tex[FLOOR].floorColor;
+	mlx->img.data[x + mlx->winWidth * y] = color;
+	if (mlx->tex[CEILING].img_ptr != NULL)
+		color = mlx->tex[CEILING].data[TEX_WIDTH * ty + tx];
+	else
+		color = mlx->tex[CEILING].ceilingColor;
+	mlx->img.data[x + mlx->winWidth * (mlx->winHeight - y - 1)] = color;
+}
+
 int draw_floor_ceiling(t_mlx *mlx)
 {
 	int y;
+	int x;
 
 	y = 0;
 	while (y < mlx->winHeight)
 	{
 		// rayDir for leftmost ray (x = 0) and rightmost ray (x = w)
-		float rayDirX0 = mlx->game.dirX - mlx->game.planeX;
-		float rayDirY0 = mlx->game.dirY - mlx->game.planeY;
-		float rayDirX1 = mlx->game.dirX + mlx->game.planeX;
-		float rayDirY1 = mlx->game.dirY + mlx->game.planeY;
-		// Current y position compared to the center of the screen (the horizon)
-		int p = y - mlx->winHeight / 2;
-		// Vertical position of the camera.
-		float posZ = 0.5 * mlx->winHeight;
-		// Horizontal distance from the camera to the floor for the current row.
-		// 0.5 is the z position exactly in the middle between floor and ceiling.
-		float rowDistance = posZ / p;
-		// calculate the real world step vector we have to add for each x (parallel to camera plane)
-		// adding step by step avoids multiplications with a weight in the inner loop
-		float floorStepX = rowDistance * (rayDirX1 - rayDirX0) / mlx->winWidth;
-		float floorStepY = rowDistance * (rayDirY1 - rayDirY0) / mlx->winWidth;
-		// real world coordinates of the leftmost column. This will be updated as we step to the right.
-		float floorX = mlx->game.posX + rowDistance * rayDirX0;
-		float floorY = mlx->game.posY + rowDistance * rayDirY0;
-
-		for (int x = 0; x < mlx->winWidth; ++x)
+		mlx->fc.rayDirX0 = mlx->game.dirX - mlx->game.planeX;
+		mlx->fc.rayDirY0 = mlx->game.dirY - mlx->game.planeY;
+		mlx->fc.rayDirX1 = mlx->game.dirX + mlx->game.planeX;
+		mlx->fc.rayDirY1 = mlx->game.dirY + mlx->game.planeY;
+		get_position(mlx, y);
+		x = 0;
+		while (x < mlx->winWidth)
 		{
-			// the cell coord is simply got from the integer parts of floorX and floorY
-			int cellX = (int)floorX;
-			int cellY = (int)floorY;
-
-			// get the texture coordinate from the fractional part
-			int tx = (int)(TEX_WIDTH * (floorX - cellX)) & (TEX_WIDTH - 1);
-			int ty = (int)(TEX_HEIGHT * (floorY - cellY)) & (TEX_HEIGHT - 1);
-
-			floorX += floorStepX;
-			floorY += floorStepY;
-
-			int color;
-			// floor
-			if (mlx->tex[FLOOR].img_ptr != NULL)
-				color = mlx->tex[FLOOR].data[TEX_WIDTH * ty + tx];
-			else
-				color = mlx->tex[FLOOR].floorColor;
-			// color = (color >> 1) & 8355711; // make a bit darker
-			mlx->img.data[x + mlx->winWidth * y] = color;
-
-			//ceiling (symmetrical, at screenHeight - y - 1 instead of y)
-			if (mlx->tex[CEILING].img_ptr != NULL)
-				color = mlx->tex[CEILING].data[TEX_WIDTH * ty + tx];
-			else
-				color = mlx->tex[CEILING].ceilingColor;
-			// color = (color >> 1) & 8355711; // make a bit darker
-			mlx->img.data[x + mlx->winWidth * (mlx->winHeight - y - 1)] = color;
+			draw_fc(mlx, x, y);
+			x++;
 		}
 		y++;
 	}
@@ -321,7 +325,7 @@ int draw_sprite(t_mlx *mlx, t_sprite *sprite)
 			while (y < sprite->drawEndY) //for every pixel of the current stripe
 			{
 				//256 and 128 factors to avoid floats
-				int d = (y) * 256 - mlx->winHeight * 128 + sprite->spriteHeight * 128;
+				int d = (y)*256 - mlx->winHeight * 128 + sprite->spriteHeight * 128;
 				texY = ((d * TEX_HEIGHT) / sprite->spriteHeight) / 256;
 				//get current color from the texture
 				int color = mlx->tex[SPRITE].data[TEX_WIDTH * texY + texX];

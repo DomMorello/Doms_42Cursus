@@ -413,6 +413,9 @@ int key_release(int key, t_mlx *mlx)
 		mlx->game.rotate_r = 0;
 }
 
+#include "./main.h"
+#include "./gnl/get_next_line.h"
+
 void ft_lstmapdelone(t_map *node)
 {
 	if (node)
@@ -497,6 +500,13 @@ void clear_window(t_mlx *mlx)
 	}
 }
 
+int error_msg(char *str)
+{
+	write(1, str, ft_strlen(str));
+	write(1, "\n", 1);
+	return (ERROR);
+}
+
 int error(char *str, t_mlx *mlx)
 {
 	clear_window(mlx);
@@ -540,13 +550,13 @@ int input_resolution(t_mlx *mlx, char *str)
 	i = 0;
 	while (str[++i])
 		if (!(ft_isdigit(str[i]) || ft_isspace(str[i])))
-			return (error(ERR_FORMAT, mlx));
+			return (error_msg(ERR_FORMAT));
 	if ((ret = ft_split(&str[1], ' ')) == NULL)
-		return (error(ERR_MEM, mlx));
+		return (error_msg(ERR_MEM));
 	check = ret[2];
 	if (check)
 		if (!(check[0] == '\0' || check[0] == '\r' || check[0] == '\n'))
-			return (free_2d_char(ret, error(ERR_FORMAT, mlx)));
+			return (free_2d_char(ret, error_msg(ERR_FORMAT)));
 	mlx->winWidth = ft_atoi(ret[0]);
 	mlx->winHeight = ft_atoi(ret[1]);
 	if (mlx->winWidth > MAX_WIN_WIDTH)
@@ -605,7 +615,7 @@ int input_tex(t_mlx *mlx, int tex, char *line)
 	return (TRUE);
 }
 
-int check_tex(t_mlx *mlx)
+void check_tex(t_mlx *mlx)
 {
 	int i;
 
@@ -613,7 +623,7 @@ int check_tex(t_mlx *mlx)
 	while (i < 7)
 	{
 		if (mlx->tex[i].filepath == NULL)
-			return (error(ERR_FORMAT, mlx));
+			error(ERR_FORMAT, mlx);
 		i++;
 	}
 }
@@ -637,7 +647,7 @@ int allset_filepath(t_mlx *mlx)
 int check_order(t_mlx *mlx, char *line)
 {
 	if (line[0] == '1' || line[0] == '0')
-		return (error(ERR_ORDER, mlx));
+		error(ERR_ORDER, mlx);
 	return (TRUE);
 }
 
@@ -674,7 +684,8 @@ int ft_lstaddmap_back(t_map **lst, t_map *new, char *row)
 
 int is_valid_letter(char c)
 {
-	if (c == '0' || c == '1' || c == '2' || c == 'N' || c == 'S' || c == 'W' || c == 'E')
+	if (c == '0' || c == '1' || c == '2' || c == 'N' ||
+		c == 'S' || c == 'W' || c == 'E')
 		return (TRUE);
 	else if (ft_isspace(c) || c == '\r' || c == '\n')
 		return (TRUE);
@@ -713,8 +724,7 @@ int parse_line(char *line, t_mlx *mlx)
 	{
 		while (ft_isspace(line[i]))
 			i++;
-		if ((check_order(mlx, &line[i])) == ERROR)
-			return (ERROR);
+		check_order(mlx, &line[i]);
 		if (line[i] == 'R')
 			if ((input_resolution(mlx, &line[i])) == ERROR)
 				return (ERROR);
@@ -728,7 +738,7 @@ int parse_line(char *line, t_mlx *mlx)
 	return (TRUE);
 }
 
-int check_lastline(t_mlx *mlx, char *line)
+void check_lastline(t_mlx *mlx, char *line)
 {
 	int i;
 	t_map *new;
@@ -738,7 +748,7 @@ int check_lastline(t_mlx *mlx, char *line)
 		i++;
 	if (line[i] == '1')
 		if (ft_lstaddmap_back(&mlx->maplst, new, ft_strdup(line)) == ERROR)
-			return (ERROR);
+			error(ERR_MEM, mlx);
 }
 
 int get_mapsizeY(t_mlx *mlx)
@@ -756,7 +766,7 @@ int get_mapsizeY(t_mlx *mlx)
 	return (len);
 }
 
-int move_map_2d(t_mlx *mlx, int mapsizeY)
+void move_map_2d(t_mlx *mlx, int mapsizeY)
 {
 	int i;
 	char *tmp;
@@ -764,7 +774,7 @@ int move_map_2d(t_mlx *mlx, int mapsizeY)
 
 	i = 0;
 	if ((mlx->map = (char **)malloc(sizeof(char *) * mapsizeY + 1)) == NULL)
-		return (error(ERR_MEM, mlx));
+		error(ERR_MEM, mlx);
 	mlx->map[mapsizeY] = 0;
 	lst = mlx->maplst;
 	while (lst)
@@ -776,10 +786,9 @@ int move_map_2d(t_mlx *mlx, int mapsizeY)
 		lst = lst->next;
 		i++;
 	}
-	return (TRUE);
 }
 
-int check_rightside(t_mlx *mlx, int mapsizeY)
+void check_rightside(t_mlx *mlx, int mapsizeY)
 {
 	int i;
 	int j;
@@ -791,13 +800,12 @@ int check_rightside(t_mlx *mlx, int mapsizeY)
 		while (ft_isspace(mlx->map[i][j]))
 			j--;
 		if (mlx->map[i][j] != '1')
-			return (error(ERR_MAP_SUR, mlx));
+			error(ERR_MAP_SUR, mlx);
 		i++;
 	}
-	return (TRUE);
 }
 
-int check_border(t_mlx *mlx, int mapsizeY)
+void check_border(t_mlx *mlx, int mapsizeY)
 {
 	int i;
 
@@ -805,35 +813,33 @@ int check_border(t_mlx *mlx, int mapsizeY)
 	while (mlx->map[0][i])
 	{
 		if (mlx->map[0][i] != '1' && !ft_isspace(mlx->map[0][i]))
-			return (error(ERR_MAP_SUR, mlx));
+			error(ERR_MAP_SUR, mlx);
 		i++;
 	}
 	i = 0;
 	while (mlx->map[mapsizeY - 1][i])
 	{
 		if (mlx->map[mapsizeY - 1][i] != '1' && !ft_isspace(mlx->map[mapsizeY - 1][i]))
-			return (error(ERR_MAP_SUR, mlx));
+			error(ERR_MAP_SUR, mlx);
 		i++;
 	}
-	if (check_rightside(mlx, mapsizeY) == ERROR)
-		return (ERROR);
-	return (TRUE);
+	check_rightside(mlx, mapsizeY);
 }
 
-int check_updown(int i, int j, t_mlx *mlx)
+void check_updown(int i, int j, t_mlx *mlx)
 {
 	if (ft_isspace(mlx->map[i - 1][j + 1]))
-		return (error(ERR_MAP_SUR, mlx));
+		error(ERR_MAP_SUR, mlx);
 	if (ft_strlen(mlx->map[i + 1]) > j + 1)
 	{
 		if (ft_isspace(mlx->map[i + 1][j + 1]))
-			return (error(ERR_MAP_SUR, mlx));
+			error(ERR_MAP_SUR, mlx);
 	}
 	else
-		return (error(ERR_MAP_SUR, mlx));
+		error(ERR_MAP_SUR, mlx);
 }
 
-int parse_contents(t_mlx *mlx, int mapsizeY)
+void parse_contents(t_mlx *mlx, int mapsizeY)
 {
 	int i;
 	int j;
@@ -848,16 +854,15 @@ int parse_contents(t_mlx *mlx, int mapsizeY)
 		{
 			if (mlx->map[i][j + 1] == '0')
 			{
-				if (check_updown(i, j, mlx) == ERROR)
-					return (ERROR);
-				if (ft_isspace(mlx->map[i][j]) || ft_isspace(mlx->map[i][j + 2]))
-					return (error(ERR_MAP_SUR, mlx));
+				check_updown(i, j, mlx);
+				if (ft_isspace(mlx->map[i][j]) ||
+					ft_isspace(mlx->map[i][j + 2]))
+					error(ERR_MAP_SUR, mlx);
 			}
 			j++;
 		}
 		i++;
 	}
-	return (TRUE);
 }
 
 void set_dir(t_mlx *mlx, double dirX, double dirY)
@@ -903,7 +908,7 @@ void input_direction(t_mlx *mlx, char direction, int x, int y)
 	set_playerpos(mlx, (double)x, (double)y);
 }
 
-int check_direction(t_mlx *mlx, int mapsizeY)
+void check_direction(t_mlx *mlx, int mapsizeY)
 {
 	int i;
 	int j;
@@ -918,7 +923,8 @@ int check_direction(t_mlx *mlx, int mapsizeY)
 			j++;
 		while (j < ft_strlen(mlx->map[i]) - 1)
 		{
-			if (mlx->map[i][j] == 'N' || mlx->map[i][j] == 'S' || mlx->map[i][j] == 'E' || mlx->map[i][j] == 'W')
+			if (mlx->map[i][j] == 'N' || mlx->map[i][j] == 'S' ||
+				mlx->map[i][j] == 'E' || mlx->map[i][j] == 'W')
 			{
 				input_direction(mlx, mlx->map[i][j], i, j);
 				mlx->map[i][j] = '0';
@@ -928,8 +934,7 @@ int check_direction(t_mlx *mlx, int mapsizeY)
 		}
 	}
 	if (isPlural != 1)
-		return (error(ERR_PLU, mlx));
-	return (TRUE);
+		error(ERR_PLU, mlx);
 }
 
 int count_sprite(char **map, int mapsizeY)
@@ -983,36 +988,29 @@ void input_sprite(t_sprite *sprites, char **map, int mapsizeY)
 	}
 }
 
-int check_sprite(t_mlx *mlx, int mapsizeY)
+void check_sprite(t_mlx *mlx, int mapsizeY)
 {
 	int spriteNum;
 	t_sprite *sprites;
 
 	spriteNum = count_sprite(mlx->map, mapsizeY);
 	if ((sprites = (t_sprite *)malloc(sizeof(t_sprite) * spriteNum)) == NULL)
-		return (error(ERR_MEM, mlx));
+		error(ERR_MEM, mlx);
 	input_sprite(sprites, mlx->map, mapsizeY);
 	mlx->spriteNum = spriteNum;
 	mlx->sprite = sprites;
-	return (TRUE);
 }
 
-int parse_map(t_mlx *mlx)
+void parse_map(t_mlx *mlx)
 {
 	int mapsizeY;
 
 	mapsizeY = get_mapsizeY(mlx);
-	if (move_map_2d(mlx, mapsizeY) == ERROR)
-		return (ERROR);
-	if (check_direction(mlx, mapsizeY) == ERROR)
-		return (ERROR);
-	if (check_border(mlx, mapsizeY) == ERROR)
-		return (ERROR);
-	if (parse_contents(mlx, mapsizeY) == ERROR)
-		return (ERROR);
-	if (check_sprite(mlx, mapsizeY) == ERROR)
-		return (ERROR);
-	return (TRUE);
+	move_map_2d(mlx, mapsizeY);
+	check_direction(mlx, mapsizeY);
+	check_border(mlx, mapsizeY);
+	parse_contents(mlx, mapsizeY);
+	check_sprite(mlx, mapsizeY);
 }
 
 int parse_info(char const *argv, t_mlx *mlx)
@@ -1020,8 +1018,8 @@ int parse_info(char const *argv, t_mlx *mlx)
 	int fd;
 	char *line;
 
-	if ((fd = open(argv, O_RDONLY)) == -1)
-		return (error(ERR_OPEN, mlx));
+	if ((fd = open(argv, O_RDONLY)) == ERROR)
+		error(ERR_OPEN, mlx);
 	while (get_next_line(fd, &line))
 	{
 		if (parse_line(line, mlx) == ERROR)
@@ -1031,12 +1029,10 @@ int parse_info(char const *argv, t_mlx *mlx)
 		}
 		free(line);
 	}
-	if (check_tex(mlx) == ERROR)
-		return (ERROR);
-	if (check_lastline(mlx, line) == ERROR)
-		return (ERROR);
-	if (parse_map(mlx) == ERROR)
-		return (ERROR);
+	check_tex(mlx);
+	check_lastline(mlx, line);
+	parse_map(mlx);
+	free(line);
 	close(fd);
 	return (TRUE);
 }
@@ -1071,9 +1067,10 @@ void check_extension(char const *argv, t_mlx *mlx)
 		free(extension);
 		error(ERR_EXT, mlx);
 	}
+	free(extension);
 }
 
-int input_color(t_tex *tex, t_mlx *mlx, char **ret)
+void input_color(t_tex *tex, t_mlx *mlx, char **ret)
 {
 	int rgb[3];
 	int i;
@@ -1085,7 +1082,7 @@ int input_color(t_tex *tex, t_mlx *mlx, char **ret)
 	{
 		rgb[i] = ft_atoi(ret[i]);
 		if (rgb[i] > 255 || rgb[i] < 0)
-			return (error(ERR_RGB, mlx));
+			error(ERR_RGB, mlx);
 		i++;
 	}
 	color += rgb[0] << 16;
@@ -1095,7 +1092,7 @@ int input_color(t_tex *tex, t_mlx *mlx, char **ret)
 		mlx->tex[FLOOR].floorColor = color;
 	if (tex == &mlx->tex[CEILING])
 		mlx->tex[CEILING].ceilingColor = color;
-	return (TRUE);
+	free_2d_char(ret, TRUE);
 }
 
 int isRGBcolor(t_tex *tex, t_mlx *mlx)
@@ -1112,38 +1109,52 @@ int isRGBcolor(t_tex *tex, t_mlx *mlx)
 		i++;
 	}
 	if ((ret = ft_split(tex->filepath, ' ')) == NULL)
-		return (error(ERR_MEM, mlx));
+		error(ERR_MEM, mlx);
 	if (check)
+	{
 		if (!(check[0] == '\0' || check[0] == '\r' || check[0] == '\n'))
-			return (free_2d_char(ret, error(ERR_FORMAT, mlx)));
-	if (input_color(tex, mlx, ret) == ERROR)
-		return (FALSE);
+		{
+			free_2d_char(ret, ERROR);
+			error(ERR_FORMAT, mlx);
+		}
+	}
+	input_color(tex, mlx, ret);
 	return (TRUE);
 }
 
-int init_game(t_mlx *mlx)
+void init_mlx(t_mlx *mlx)
+{
+	mlx->mlx_ptr = mlx_init();
+	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr, mlx->winWidth,
+									mlx->winHeight, "DomMorello");
+	mlx->img.img_ptr = mlx_new_image(mlx->mlx_ptr, mlx->winWidth,
+													mlx->winHeight);
+	mlx->img.data = (int *)mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp,
+										&mlx->img.size_l, &mlx->img.endian);	
+}
+
+void init_game(t_mlx *mlx)
 {
 	int i;
 	char *tmp;
 
 	i = -1;
-	mlx->mlx_ptr = mlx_init();
-	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr, mlx->winWidth, mlx->winHeight, "DomMorello");
-	mlx->img.img_ptr = mlx_new_image(mlx->mlx_ptr, mlx->winWidth, mlx->winHeight);
-	mlx->img.data = (int *)mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, &mlx->img.size_l, &mlx->img.endian);
+	init_mlx(mlx);
 	while (++i < 7)
 	{
 		tmp = mlx->tex[i].filepath;
 		if (tmp[ft_strlen(tmp) - 1] == '\r' || tmp[ft_strlen(tmp) - 1] == '\n')
 			tmp[ft_strlen(tmp) - 1] = 0;
-		if ((mlx->tex[i].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr, tmp, &mlx->tex[i].width, &mlx->tex[i].height)) == NULL)
+		if ((mlx->tex[i].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr,
+				tmp, &mlx->tex[i].width, &mlx->tex[i].height)) == NULL)
 		{
 			if (isRGBcolor(&mlx->tex[i], mlx))
 				continue;
 			else
-				return (error(ERR_PATH, mlx));
+				error(ERR_PATH, mlx);
 		}
-		mlx->tex[i].data = (int *)mlx_get_data_addr(mlx->tex[i].img_ptr, &mlx->tex[i].bpp, &mlx->tex[i].size_l, &mlx->tex[i].endian);
+		mlx->tex[i].data = (int *)mlx_get_data_addr(mlx->tex[i].img_ptr,
+				&mlx->tex[i].bpp, &mlx->tex[i].size_l, &mlx->tex[i].endian);
 	}
 }
 
@@ -1180,7 +1191,7 @@ int save_bmp(t_mlx *mlx)
 	t_bmih bmih;
 
 	if ((fd = open("capture.bmp", O_WRONLY | O_CREAT)) == ERROR)
-		return (error(ERR_OPEN, mlx));
+		return (error_msg(ERR_OPEN));
 	set_bmfh(&bmfh, mlx);
 	set_bmih(&bmih, mlx);
 	write(fd, &bmfh, sizeof(bmfh));
@@ -1188,6 +1199,15 @@ int save_bmp(t_mlx *mlx)
 	write(fd, mlx->img.data, bmih.biSizeImage);
 	close(fd);
 	return (TRUE);
+}
+
+void mlx_event(t_mlx *mlx)
+{
+	mlx_hook(mlx->win_ptr, 2, 1L << 0, key_press, mlx);
+	mlx_hook(mlx->win_ptr, 3, 1L << 1, key_release, mlx);
+	mlx_hook(mlx->win_ptr, 17, 1L << 17, error, mlx);
+	mlx_loop_hook(mlx->mlx_ptr, run_game, mlx);
+	mlx_loop(mlx->mlx_ptr);
 }
 
 int main(int argc, char const *argv[])
@@ -1198,24 +1218,18 @@ int main(int argc, char const *argv[])
 	{
 		check_extension(argv[1], &mlx);
 		parse_info(argv[1], &mlx);
-		if (init_game(&mlx) == ERROR)
-			return (ERROR);
+		init_game(&mlx);
 		if (argv[2])
 		{
 			if (!ft_strncmp(argv[2], "--save", ft_strlen(argv[2])))
 			{
 				run_game(&mlx);
-				if (save_bmp(&mlx) == ERROR)
-					return (ERROR);
+				save_bmp(&mlx);
 			}
 			else
 				return (error(ERR_ARG, &mlx));
 		}
-		mlx_hook(mlx.win_ptr, 2, 1L << 0, key_press2, &mlx);
-		mlx_hook(mlx.win_ptr, 3, 1L << 1, key_release, &mlx);
-		mlx_hook(mlx.win_ptr, 17, 1L << 17, error, &mlx);
-		mlx_loop_hook(mlx.mlx_ptr, run_game, &mlx);
-		mlx_loop(mlx.mlx_ptr);
+		mlx_event(&mlx);
 	}
 	else
 		return (error(ERR_MAP, &mlx));

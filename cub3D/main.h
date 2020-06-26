@@ -130,6 +130,18 @@ typedef struct		s_map
 	struct s_map	*next;
 }					t_map;
 
+typedef struct 		s_fc
+{
+	float rayDirX0;
+	float rayDirY0;
+	float rayDirX1;
+	float rayDirY1;
+	float floorStepX;
+	float floorStepY;
+	float floorX;
+	float floorY;
+}					t_fc;
+
 //mlx->game으로 바꾸자.
 typedef struct		s_mlx
 {
@@ -140,6 +152,7 @@ typedef struct		s_mlx
 	t_tex		tex[7];
 	t_sprite	*sprite;
 	t_map		*maplst;
+	t_fc		fc;
 	char		**map;
 	double		zbuffer[MAX_WIN_WIDTH];
 	int			spriteNum;
