@@ -27,8 +27,8 @@
 # define ERR_EXT "Error\ninvalid extension"
 # define ERR_PLU "Error\nplayer position must be singular"
 # define ERR_MAP_SUR "Error\nmap is not entirely surrounded by walls"
-# define ERR_LETTER "Error\ninvalid format: invalid letter is included in the\
-						file"
+# define ERR_LETTER "Error\ninvalid format: invalid letter is included\
+						in the file"
 # define ERR_ORDER "Error\nmap info must be located at the end of the file"
 # define ERR_TOOMANY "Error\ntoo many arguements"
 
