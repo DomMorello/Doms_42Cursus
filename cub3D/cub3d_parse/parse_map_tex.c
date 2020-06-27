@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_map_tex.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/06/28 01:43:37 by donglee           #+#    #+#             */
+/*   Updated: 2020/06/28 01:44:08 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../main.h"
 
 int		which_tex(char *line)
@@ -46,8 +58,8 @@ int		input_tex(t_mlx *mlx, int tex, char *line)
 
 int		copy_map(t_mlx *mlx, char *line)
 {
-	int i;
-	t_map *new;
+	int		i;
+	t_map	*new;
 
 	i = 0;
 	new = NULL;
