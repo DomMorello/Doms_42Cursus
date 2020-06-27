@@ -1,6 +1,6 @@
 #include "../main.h"
 
-void check_tex(t_mlx *mlx)
+void	check_tex(t_mlx *mlx)
 {
 	int i;
 
@@ -13,11 +13,12 @@ void check_tex(t_mlx *mlx)
 	}
 }
 
-void check_lastline(t_mlx *mlx, char *line)
+void	check_lastline(t_mlx *mlx, char *line)
 {
-	int i;
-	t_map *new;
+	int		i;
+	t_map	*new;
 
+	new = NULL;
 	i = 0;
 	while (ft_isspace(line[i]))
 		i++;

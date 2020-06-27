@@ -30,6 +30,7 @@
 # define ERR_LETTER "Error\ninvalid format: invalid letter is included in the\
 						file"
 # define ERR_ORDER "Error\nmap info must be located at the end of the file"
+# define ERR_TOOMANY "Error\ntoo many arguements"
 
 # define TRUE 1
 # define FALSE 0
@@ -191,11 +192,11 @@ int		key_release(int key, t_mlx *mlx);
 int		key_press(int key, t_mlx *mlx);
 int		run_game(t_mlx *mlx);
 void	render_sprite(t_mlx *mlx);
-int		draw_sprite(t_mlx *mlx, t_sprite *sprite);
+void	draw_sprite(t_mlx *mlx, t_sprite *sprite);
 void 	cal_sprite(t_mlx *mlx, t_sprite *sprite);
 void 	transform_sprite(t_mlx *mlx, t_game *game, t_sprite *sprite);
 void 	desc_sort(t_mlx *mlx);
-int 	draw_floor_ceiling(t_mlx *mlx);
+void 	draw_floor_ceiling(t_mlx *mlx);
 void 	key_event(t_mlx *mlx);
 void 	draw_vertline(t_mlx *mlx, int i);
 int 	get_side(t_mlx *mlx);
@@ -232,7 +233,7 @@ int 	check_order(t_mlx *mlx, char *line);
 int 	allset_filepath(t_mlx *mlx);
 void 	check_tex(t_mlx *mlx);
 int 	input_tex(t_mlx *mlx, int tex, char *line);
-int 	which_tex(char *line, t_mlx *mlx);
+int 	which_tex(char *line);
 int 	input_resolution(t_mlx *mlx, char *str);
 int 	free_2d_char(char **ret, int flag);
 int 	ft_isspace(char c);
@@ -245,10 +246,10 @@ void	ft_lstmapclear(t_map **lst);
 void	ft_lstmapdelone(t_map *node);
 int 	isRGBcolor(t_tex *tex, t_mlx *mlx);
 int 	save_bmp(t_mlx *mlx);
-void 	move_forback(t_mlx *mlx, double moveSpeed, double rotSpeed);
-void 	move_side(t_mlx *mlx, double moveSpeed, double rotSpeed);
-void 	rotate_right(t_mlx *mlx, double moveSpeed, double rotSpeed);
-void 	rotate_left(t_mlx *mlx, double moveSpeed, double rotSpeed);
+void 	move_forback(t_mlx *mlx, double moveSpeed);
+void 	move_side(t_mlx *mlx);
+void 	rotate_right(t_mlx *mlx, double rotSpeed);
+void 	rotate_left(t_mlx *mlx, double rotSpeed);
 void 	input_verline(t_mlx *mlx, int texX, int i);
 void 	draw_spriteY(t_mlx *mlx, t_sprite *sprite, int texX, int stripe);
 

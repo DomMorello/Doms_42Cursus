@@ -1,6 +1,6 @@
 #include "../main.h"
 
-void clear_map(t_mlx *mlx)
+void	clear_map(t_mlx *mlx)
 {
 	int i;
 
@@ -19,7 +19,7 @@ void clear_map(t_mlx *mlx)
 	}
 }
 
-void clear_tex(t_mlx *mlx)
+void	clear_tex(t_mlx *mlx)
 {
 	int i;
 
@@ -37,7 +37,7 @@ void clear_tex(t_mlx *mlx)
 	}
 }
 
-void clear_sprite(t_mlx *mlx)
+void	clear_sprite(t_mlx *mlx)
 {
 	if (mlx->sprite)
 	{
@@ -46,7 +46,7 @@ void clear_sprite(t_mlx *mlx)
 	}
 }
 
-void clear_window(t_mlx *mlx)
+void	clear_window(t_mlx *mlx)
 {
 	if (mlx->img.img_ptr)
 		mlx_destroy_image(mlx->mlx_ptr, mlx->img.img_ptr);
@@ -57,7 +57,7 @@ void clear_window(t_mlx *mlx)
 	}
 }
 
-int error(char *str, t_mlx *mlx)
+int		error(char *str, t_mlx *mlx)
 {
 	clear_window(mlx);
 	clear_sprite(mlx);

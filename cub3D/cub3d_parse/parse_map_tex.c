@@ -1,6 +1,6 @@
 #include "../main.h"
 
-int which_tex(char *line, t_mlx *mlx)
+int		which_tex(char *line)
 {
 	if (line[0] == 'N' && line[1] == 'O')
 		return (NORTH);
@@ -22,11 +22,10 @@ int which_tex(char *line, t_mlx *mlx)
 		return (ERROR);
 }
 
-int input_tex(t_mlx *mlx, int tex, char *line)
+int		input_tex(t_mlx *mlx, int tex, char *line)
 {
 	int space;
 	int i;
-	char *tmp;
 
 	i = 0;
 	if (tex != ERROR && tex != PASS)
@@ -45,12 +44,13 @@ int input_tex(t_mlx *mlx, int tex, char *line)
 	return (TRUE);
 }
 
-int copy_map(t_mlx *mlx, char *line)
+int		copy_map(t_mlx *mlx, char *line)
 {
 	int i;
 	t_map *new;
 
 	i = 0;
+	new = NULL;
 	while (ft_isspace(line[i]))
 		i++;
 	if (line[i] == 0)
@@ -65,9 +65,10 @@ int copy_map(t_mlx *mlx, char *line)
 	}
 	if (ft_lstaddmap_back(&mlx->maplst, new, ft_strdup(line)) == ERROR)
 		return (error(ERR_MEM, mlx));
+	return (TRUE);
 }
 
-int is_valid_letter(char c)
+int		is_valid_letter(char c)
 {
 	if (c == '0' || c == '1' || c == '2' || c == 'N' ||
 		c == 'S' || c == 'W' || c == 'E')
@@ -77,7 +78,7 @@ int is_valid_letter(char c)
 	return (FALSE);
 }
 
-int ft_lstaddmap_back(t_map **lst, t_map *new, char *row)
+int		ft_lstaddmap_back(t_map **lst, t_map *new, char *row)
 {
 	t_map *tmp;
 
@@ -95,4 +96,5 @@ int ft_lstaddmap_back(t_map **lst, t_map *new, char *row)
 			tmp->next = new;
 		}
 	}
+	return (TRUE);
 }

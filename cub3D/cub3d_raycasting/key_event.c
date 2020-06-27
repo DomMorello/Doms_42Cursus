@@ -1,6 +1,6 @@
 #include "../main.h"
 
-int key_press(int key, t_mlx *mlx)
+int		key_press(int key, t_mlx *mlx)
 {
 	if (key == KEY_W)
 		mlx->game.move_f = 1;
@@ -16,9 +16,10 @@ int key_press(int key, t_mlx *mlx)
 		mlx->game.rotate_r = 1;
 	if (key == KEY_ESC)
 		error("exit game", mlx);
+	return (TRUE);
 }
 
-int key_release(int key, t_mlx *mlx)
+int		key_release(int key, t_mlx *mlx)
 {
 	if (key == KEY_W)
 		mlx->game.move_f = 0;
@@ -32,17 +33,18 @@ int key_release(int key, t_mlx *mlx)
 		mlx->game.rotate_l = 0;
 	if (key == KEY_RIGHT)
 		mlx->game.rotate_r = 0;
+	return (TRUE);
 }
 
-void key_event(t_mlx *mlx)
+void	key_event(t_mlx *mlx)
 {
 	double moveSpeed;
 	double rotSpeed;
 
 	moveSpeed = 0.018;
 	rotSpeed = 0.009;
-	move_forback(mlx, moveSpeed, rotSpeed);
-	move_side(mlx, moveSpeed, rotSpeed);
-	rotate_right(mlx, moveSpeed, rotSpeed);
-	rotate_left(mlx, moveSpeed, rotSpeed);
+	move_forback(mlx, moveSpeed);
+	move_side(mlx);
+	rotate_right(mlx, rotSpeed);
+	rotate_left(mlx, rotSpeed);
 }

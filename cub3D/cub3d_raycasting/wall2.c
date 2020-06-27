@@ -1,6 +1,6 @@
 #include "../main.h"
 
-int get_side(t_mlx *mlx)
+int		get_side(t_mlx *mlx)
 {
 	int wall_side;
 
@@ -15,11 +15,13 @@ int get_side(t_mlx *mlx)
 	return (wall_side);
 }
 
-void input_verline(t_mlx *mlx, int texX, int i)
+void	input_verline(t_mlx *mlx, int texX, int i)
 {
-	double step;
-	double texPos;
-	int wallSide;
+	double	step;
+	double	texPos;
+	int		wallSide;
+	int		texY;
+	int		color;
 
 	step = 1.0 * TEX_HEIGHT / mlx->game.lineHeight;
 	texPos = (mlx->game.drawStart - mlx->winHeight / 2 +
@@ -27,9 +29,9 @@ void input_verline(t_mlx *mlx, int texX, int i)
 	wallSide = get_side(mlx);
 	while (mlx->game.drawStart < mlx->game.drawEnd)
 	{
-		int texY = (int)texPos & (TEX_HEIGHT - 1);
+		texY = (int)texPos & (TEX_HEIGHT - 1);
 		texPos += step;
-		int color = mlx->tex[wallSide].data[TEX_HEIGHT * texY + texX];
+		color = mlx->tex[wallSide].data[TEX_HEIGHT * texY + texX];
 		mlx->img.data[i + mlx->winWidth * mlx->game.drawStart] = color;
 		mlx->game.drawStart++;
 	}

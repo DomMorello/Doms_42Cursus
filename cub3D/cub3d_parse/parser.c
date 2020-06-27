@@ -1,10 +1,10 @@
 #include "../main.h"
 
-int input_resolution(t_mlx *mlx, char *str)
+int		input_resolution(t_mlx *mlx, char *str)
 {
-	char **ret;
-	char *check;
-	int i;
+	char	**ret;
+	char	*check;
+	int		i;
 
 	i = 0;
 	while (str[++i])
@@ -29,14 +29,14 @@ int input_resolution(t_mlx *mlx, char *str)
 	return (free_2d_char(ret, TRUE));
 }
 
-int check_order(t_mlx *mlx, char *line)
+int		check_order(t_mlx *mlx, char *line)
 {
 	if (line[0] == '1' || line[0] == '0')
 		error(ERR_ORDER, mlx);
 	return (TRUE);
 }
 
-int allset_filepath(t_mlx *mlx)
+int		allset_filepath(t_mlx *mlx)
 {
 	int allset;
 	int i;
@@ -52,7 +52,7 @@ int allset_filepath(t_mlx *mlx)
 	return (allset);
 }
 
-int parse_line(char *line, t_mlx *mlx)
+int		parse_line(char *line, t_mlx *mlx)
 {
 	int i;
 	int tex;
@@ -66,7 +66,7 @@ int parse_line(char *line, t_mlx *mlx)
 		if (line[i] == 'R')
 			if ((input_resolution(mlx, &line[i])) == ERROR)
 				return (ERROR);
-		if ((tex = which_tex(&line[i], mlx)) == ERROR)
+		if ((tex = which_tex(&line[i])) == ERROR)
 			return (error(ERR_LETTER, mlx));
 		if (input_tex(mlx, tex, &line[i]) == ERROR)
 			return (ERROR);
@@ -76,10 +76,10 @@ int parse_line(char *line, t_mlx *mlx)
 	return (TRUE);
 }
 
-int parse_info(char const *argv, t_mlx *mlx)
+int		parse_info(char const *argv, t_mlx *mlx)
 {
-	int fd;
-	char *line;
+	int		fd;
+	char	*line;
 
 	if ((fd = open(argv, O_RDONLY)) == ERROR)
 		error(ERR_OPEN, mlx);

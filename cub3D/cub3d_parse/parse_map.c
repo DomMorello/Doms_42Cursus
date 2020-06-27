@@ -1,6 +1,6 @@
 #include "../main.h"
 
-void check_border(t_mlx *mlx, int mapsizeY)
+void	check_border(t_mlx *mlx, int mapsizeY)
 {
 	int i;
 
@@ -22,7 +22,7 @@ void check_border(t_mlx *mlx, int mapsizeY)
 	check_rightside(mlx, mapsizeY);
 }
 
-void check_direction(t_mlx *mlx, int mapsizeY)
+void	check_direction(t_mlx *mlx, int mapsizeY)
 {
 	int i;
 	int j;
@@ -35,7 +35,7 @@ void check_direction(t_mlx *mlx, int mapsizeY)
 		j = 0;
 		while (ft_isspace(mlx->map[i][j]))
 			j++;
-		while (j < ft_strlen(mlx->map[i]) - 1)
+		while (j < (int)ft_strlen(mlx->map[i]) - 1)
 		{
 			if (mlx->map[i][j] == 'N' || mlx->map[i][j] == 'S' ||
 				mlx->map[i][j] == 'E' || mlx->map[i][j] == 'W')
@@ -51,11 +51,11 @@ void check_direction(t_mlx *mlx, int mapsizeY)
 		error(ERR_PLU, mlx);
 }
 
-void move_map_2d(t_mlx *mlx, int mapsizeY)
+void	move_map_2d(t_mlx *mlx, int mapsizeY)
 {
-	int i;
-	char *tmp;
-	t_map *lst;
+	int		i;
+	char	*tmp;
+	t_map	*lst;
 
 	i = 0;
 	if ((mlx->map = (char **)malloc(sizeof(char *) * mapsizeY + 1)) == NULL)
@@ -73,10 +73,10 @@ void move_map_2d(t_mlx *mlx, int mapsizeY)
 	}
 }
 
-int get_mapsizeY(t_mlx *mlx)
+int		get_mapsizeY(t_mlx *mlx)
 {
-	int len;
-	t_map *tmp;
+	int		len;
+	t_map	*tmp;
 
 	tmp = mlx->maplst;
 	len = 0;
@@ -88,7 +88,7 @@ int get_mapsizeY(t_mlx *mlx)
 	return (len);
 }
 
-void parse_map(t_mlx *mlx)
+void	parse_map(t_mlx *mlx)
 {
 	int mapsizeY;
 

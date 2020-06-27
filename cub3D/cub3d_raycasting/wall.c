@@ -1,16 +1,15 @@
 #include "../main.h"
 
-void draw_vertline(t_mlx *mlx, int i)
+void	draw_vertline(t_mlx *mlx, int i)
 {
-	double wallX;
-	int texX;
+	double	wallX;
+	int		texX;
 
 	if (mlx->game.side == 0)
 		wallX = mlx->game.posY + mlx->game.perpWallDist * mlx->game.rayDirY;
 	else
 		wallX = mlx->game.posX + mlx->game.perpWallDist * mlx->game.rayDirX;
 	wallX -= floor(wallX);
-
 	texX = (int)(wallX * (double)TEX_WIDTH);
 	if (mlx->game.side == 0 && mlx->game.rayDirX > 0)
 		texX = TEX_WIDTH - texX - 1;
@@ -19,7 +18,7 @@ void draw_vertline(t_mlx *mlx, int i)
 	input_verline(mlx, texX, i);
 }
 
-void set_draw(t_mlx *mlx)
+void	set_draw(t_mlx *mlx)
 {
 	mlx->game.lineHeight = (int)(mlx->winHeight / mlx->game.perpWallDist);
 	mlx->game.drawStart = -mlx->game.lineHeight / 2 + mlx->winHeight / 2;
@@ -30,7 +29,7 @@ void set_draw(t_mlx *mlx)
 		mlx->game.drawEnd = mlx->winHeight - 1;
 }
 
-void perform_DDA(t_mlx *mlx)
+void	perform_DDA(t_mlx *mlx)
 {
 	while (mlx->game.hit == 0)
 	{
@@ -58,7 +57,7 @@ void perform_DDA(t_mlx *mlx)
 	set_draw(mlx);
 }
 
-void set_side_dist(t_mlx *mlx)
+void	set_side_dist(t_mlx *mlx)
 {
 	if (mlx->game.rayDirX < 0)
 	{
@@ -86,7 +85,7 @@ void set_side_dist(t_mlx *mlx)
 	}
 }
 
-void set_var(t_mlx *mlx, int i)
+void	set_var(t_mlx *mlx, int i)
 {
 	mlx->game.cameraX = 2 * i / (double)mlx->winWidth - 1;
 	mlx->game.rayDirX = mlx->game.dirX + mlx->game.planeX * mlx->game.cameraX;

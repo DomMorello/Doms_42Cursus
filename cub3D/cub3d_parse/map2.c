@@ -1,6 +1,6 @@
 #include "../main.h"
 
-t_map *ft_lstnewmap(char *content)
+t_map	*ft_lstnewmap(char *content)
 {
 	t_map *ret;
 
@@ -11,11 +11,11 @@ t_map *ft_lstnewmap(char *content)
 	return (ret);
 }
 
-void check_updown(int i, int j, t_mlx *mlx)
+void	check_updown(int i, int j, t_mlx *mlx)
 {
 	if (ft_isspace(mlx->map[i - 1][j + 1]))
 		error(ERR_MAP_SUR, mlx);
-	if (ft_strlen(mlx->map[i + 1]) > j + 1)
+	if ((int)ft_strlen(mlx->map[i + 1]) > j + 1)
 	{
 		if (ft_isspace(mlx->map[i + 1][j + 1]))
 			error(ERR_MAP_SUR, mlx);
@@ -24,7 +24,7 @@ void check_updown(int i, int j, t_mlx *mlx)
 		error(ERR_MAP_SUR, mlx);
 }
 
-void parse_contents(t_mlx *mlx, int mapsizeY)
+void	parse_contents(t_mlx *mlx, int mapsizeY)
 {
 	int i;
 	int j;
@@ -35,7 +35,7 @@ void parse_contents(t_mlx *mlx, int mapsizeY)
 		j = 0;
 		while (ft_isspace(mlx->map[i][j]))
 			j++;
-		while (j < ft_strlen(mlx->map[i]) - 1)
+		while (j < (int)ft_strlen(mlx->map[i]) - 1)
 		{
 			if (mlx->map[i][j + 1] == '0')
 			{
@@ -50,7 +50,7 @@ void parse_contents(t_mlx *mlx, int mapsizeY)
 	}
 }
 
-void check_rightside(t_mlx *mlx, int mapsizeY)
+void	check_rightside(t_mlx *mlx, int mapsizeY)
 {
 	int i;
 	int j;

@@ -1,6 +1,6 @@
 #include "../main.h"
 
-void input_sprite(t_sprite *sprites, char **map, int mapsizeY)
+void	input_sprite(t_sprite *sprites, char **map, int mapsizeY)
 {
 	int i;
 	int j;
@@ -27,7 +27,7 @@ void input_sprite(t_sprite *sprites, char **map, int mapsizeY)
 	}
 }
 
-int count_sprite(char **map, int mapsizeY)
+int		count_sprite(char **map, int mapsizeY)
 {
 	int i;
 	int j;
@@ -51,10 +51,10 @@ int count_sprite(char **map, int mapsizeY)
 	return (spriteNum);
 }
 
-void check_sprite(t_mlx *mlx, int mapsizeY)
+void	check_sprite(t_mlx *mlx, int mapsizeY)
 {
-	int spriteNum;
-	t_sprite *sprites;
+	int			spriteNum;
+	t_sprite	*sprites;
 
 	spriteNum = count_sprite(mlx->map, mapsizeY);
 	if ((sprites = (t_sprite *)malloc(sizeof(t_sprite) * spriteNum)) == NULL)

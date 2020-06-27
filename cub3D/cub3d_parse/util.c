@@ -1,6 +1,6 @@
 #include "../main.h"
 
-void ft_lstmapdelone(t_map *node)
+void	ft_lstmapdelone(t_map *node)
 {
 	if (node)
 	{
@@ -11,7 +11,7 @@ void ft_lstmapdelone(t_map *node)
 	}
 }
 
-void ft_lstmapclear(t_map **lst)
+void	ft_lstmapclear(t_map **lst)
 {
 	t_map *tmp;
 
@@ -27,21 +27,21 @@ void ft_lstmapclear(t_map **lst)
 	}
 }
 
-int error_msg(char *str)
+int		error_msg(char *str)
 {
 	write(1, str, ft_strlen(str));
 	write(1, "\n", 1);
 	return (ERROR);
 }
 
-int ft_isspace(char c)
+int		ft_isspace(char c)
 {
 	if ((c >= 9 && c <= 13) || c == ' ')
 		return (TRUE);
 	return (FALSE);
 }
 
-int free_2d_char(char **ret, int flag)
+int		free_2d_char(char **ret, int flag)
 {
 	int i;
 

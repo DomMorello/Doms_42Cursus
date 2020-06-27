@@ -28,9 +28,9 @@ void	set_bmih(t_bmih *bmih, t_mlx *mlx)
 
 int save_bmp(t_mlx *mlx)
 {
-	int fd;
-	t_bmfh bmfh;
-	t_bmih bmih;
+	int		fd;
+	t_bmfh	bmfh;
+	t_bmih	bmih;
 
 	if ((fd = open("../capture.bmp", O_WRONLY | O_CREAT)) == ERROR)
 		return (error_msg(ERR_OPEN));

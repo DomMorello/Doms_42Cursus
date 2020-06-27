@@ -1,24 +1,24 @@
 #include "../main.h"
 
-void set_dir(t_mlx *mlx, double dirX, double dirY)
+void	set_dir(t_mlx *mlx, double dirX, double dirY)
 {
 	mlx->game.dirX = dirX;
 	mlx->game.dirY = dirY;
 }
 
-void set_plane(t_mlx *mlx, double planeX, double planeY)
+void	set_plane(t_mlx *mlx, double planeX, double planeY)
 {
 	mlx->game.planeX = planeX;
 	mlx->game.planeY = planeY;
 }
 
-void set_playerpos(t_mlx *mlx, double x, double y)
+void	set_playerpos(t_mlx *mlx, double x, double y)
 {
 	mlx->game.posX = x + 0.5;
 	mlx->game.posY = y + 0.5;
 }
 
-void input_direction(t_mlx *mlx, char direction, int x, int y)
+void	input_direction(t_mlx *mlx, char direction, int x, int y)
 {
 	if (direction == 'N')
 	{

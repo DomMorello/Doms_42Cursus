@@ -1,9 +1,9 @@
 #include "../main.h"
 
-void init_game(t_mlx *mlx)
+void	init_game(t_mlx *mlx)
 {
-	int i;
-	char *tmp;
+	int		i;
+	char	*tmp;
 
 	i = -1;
 	init_mlx(mlx);

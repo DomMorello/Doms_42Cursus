@@ -1,6 +1,6 @@
 #include "../main.h"
 
-void input_color(t_tex *tex, t_mlx *mlx, char **ret)
+void	input_color(t_tex *tex, t_mlx *mlx, char **ret)
 {
 	int rgb[3];
 	int i;
@@ -25,13 +25,14 @@ void input_color(t_tex *tex, t_mlx *mlx, char **ret)
 	free_2d_char(ret, TRUE);
 }
 
-int isRGBcolor(t_tex *tex, t_mlx *mlx)
+int		isRGBcolor(t_tex *tex, t_mlx *mlx)
 {
-	char **ret;
-	int i;
-	char *check;
+	char	**ret;
+	int		i;
+	char	*check;
 
 	i = 0;
+	check = NULL;
 	while (tex->filepath[i])
 	{
 		if (!ft_isdigit(tex->filepath[i]) && !ft_isspace(tex->filepath[i]))

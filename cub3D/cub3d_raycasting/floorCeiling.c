@@ -1,6 +1,6 @@
 #include "../main.h"
 
-void draw_fc(t_mlx *mlx, int x, int y)
+void	draw_fc(t_mlx *mlx, int x, int y)
 {
 	int tx;
 	int ty;
@@ -24,11 +24,11 @@ void draw_fc(t_mlx *mlx, int x, int y)
 	mlx->img.data[x + mlx->winWidth * (mlx->winHeight - y - 1)] = color;
 }
 
-void get_position(t_mlx *mlx, int y)
+void	get_position(t_mlx *mlx, int y)
 {
-	int p;
-	float posZ;
-	float rowDistance;
+	int		p;
+	float	posZ;
+	float	rowDistance;
 
 	p = y - mlx->winHeight / 2;
 	posZ = 0.5 * mlx->winHeight;
@@ -41,7 +41,7 @@ void get_position(t_mlx *mlx, int y)
 	mlx->fc.floorY = mlx->game.posY + rowDistance * mlx->fc.rayDirY0;
 }
 
-int draw_floor_ceiling(t_mlx *mlx)
+void	draw_floor_ceiling(t_mlx *mlx)
 {
 	int y;
 	int x;
@@ -64,7 +64,7 @@ int draw_floor_ceiling(t_mlx *mlx)
 	}
 }
 
-int run_game(t_mlx *mlx)
+int		run_game(t_mlx *mlx)
 {
 	int i;
 
@@ -83,5 +83,5 @@ int run_game(t_mlx *mlx)
 	}
 	render_sprite(mlx);
 	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img.img_ptr, 0, 0);
-	return 0;
+	return (TRUE);
 }

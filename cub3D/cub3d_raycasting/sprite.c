@@ -1,6 +1,6 @@
 #include "../main.h"
 
-void transform_sprite(t_mlx *mlx, t_game *game, t_sprite *sprite)
+void	transform_sprite(t_mlx *mlx, t_game *game, t_sprite *sprite)
 {
 	double invDet;
 
@@ -11,12 +11,11 @@ void transform_sprite(t_mlx *mlx, t_game *game, t_sprite *sprite)
 						game->dirX * sprite->spriteY);
 	sprite->transformY = invDet *
 			(-game->planeY * sprite->spriteX + game->planeX * sprite->spriteY);
-
 	sprite->spriteScreenX = (int)((mlx->winWidth / 2) *
 							(1 + sprite->transformX / sprite->transformY));
 }
 
-void cal_sprite(t_mlx *mlx, t_sprite *sprite)
+void	cal_sprite(t_mlx *mlx, t_sprite *sprite)
 {
 	sprite->spriteHeight = abs((int)(mlx->winHeight / (sprite->transformY)));
 	sprite->drawStartY = -sprite->spriteHeight / 2 + mlx->winHeight / 2;
@@ -34,7 +33,7 @@ void cal_sprite(t_mlx *mlx, t_sprite *sprite)
 		sprite->drawEndX = mlx->winWidth - 1;
 }
 
-void draw_spriteY(t_mlx *mlx, t_sprite *sprite, int texX, int stripe)
+void	draw_spriteY(t_mlx *mlx, t_sprite *sprite, int texX, int stripe)
 {
 	int texY;
 	int y;
@@ -53,7 +52,7 @@ void draw_spriteY(t_mlx *mlx, t_sprite *sprite, int texX, int stripe)
 	}
 }
 
-int draw_sprite(t_mlx *mlx, t_sprite *sprite)
+void	draw_sprite(t_mlx *mlx, t_sprite *sprite)
 {
 	int texX;
 	int stripe;
@@ -70,7 +69,7 @@ int draw_sprite(t_mlx *mlx, t_sprite *sprite)
 	}
 }
 
-void render_sprite(t_mlx *mlx)
+void	render_sprite(t_mlx *mlx)
 {
 	int i;
 

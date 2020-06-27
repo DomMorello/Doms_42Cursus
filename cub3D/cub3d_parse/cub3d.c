@@ -1,11 +1,11 @@
 #include "../main.h"
 #include "../gnl/get_next_line.h"
 
-char *ft_strfromend(char *str, int size)
+char	*ft_strfromend(char *str, int size)
 {
-	int len;
-	int i;
-	char *copy;
+	int		len;
+	int		i;
+	char	*copy;
 
 	if ((copy = (char *)malloc(sizeof(char) * size + 1)) == NULL)
 		return (NULL);
@@ -20,7 +20,7 @@ char *ft_strfromend(char *str, int size)
 	return (copy);
 }
 
-void check_extension(char const *argv, t_mlx *mlx)
+void 	check_extension(char const *argv, t_mlx *mlx)
 {
 	char *extension;
 
@@ -34,7 +34,7 @@ void check_extension(char const *argv, t_mlx *mlx)
 	free(extension);
 }
 
-void init_mlx(t_mlx *mlx)
+void	init_mlx(t_mlx *mlx)
 {
 	mlx->mlx_ptr = mlx_init();
 	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr, mlx->winWidth,
@@ -45,7 +45,7 @@ void init_mlx(t_mlx *mlx)
 										&mlx->img.size_l, &mlx->img.endian);	
 }
 
-void mlx_event(t_mlx *mlx)
+void	mlx_event(t_mlx *mlx)
 {
 	mlx_hook(mlx->win_ptr, 2, 1L << 0, key_press, mlx);
 	mlx_hook(mlx->win_ptr, 3, 1L << 1, key_release, mlx);
@@ -54,10 +54,12 @@ void mlx_event(t_mlx *mlx)
 	mlx_loop(mlx->mlx_ptr);
 }
 
-int main(int argc, char const *argv[])
+int		main(int argc, char const *argv[])
 {
 	t_mlx mlx;
 
+	if (argc > 3)
+		error_msg(ERR_TOOMANY);
 	if (argv[1])
 	{
 		check_extension(argv[1], &mlx);

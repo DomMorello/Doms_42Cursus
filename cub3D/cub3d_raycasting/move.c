@@ -1,8 +1,9 @@
 #include "../main.h"
 
-void rotate_right(t_mlx *mlx, double moveSpeed, double rotSpeed)
+void	rotate_right(t_mlx *mlx, double rotSpeed)
 {
 	double oldDirX;
+	double oldPlaneX;
 
 	if (mlx->game.rotate_r == 1)
 	{
@@ -11,7 +12,7 @@ void rotate_right(t_mlx *mlx, double moveSpeed, double rotSpeed)
 							mlx->game.dirY * sin(-rotSpeed);
 		mlx->game.dirY = oldDirX * sin(-rotSpeed) +
 							mlx->game.dirY * cos(-rotSpeed);
-		double oldPlaneX = mlx->game.planeX;
+		oldPlaneX = mlx->game.planeX;
 		mlx->game.planeX = mlx->game.planeX * cos(-rotSpeed) -
 							mlx->game.planeY * sin(-rotSpeed);
 		mlx->game.planeY = oldPlaneX * sin(-rotSpeed) +
@@ -19,9 +20,10 @@ void rotate_right(t_mlx *mlx, double moveSpeed, double rotSpeed)
 	}
 }
 
-void rotate_left(t_mlx *mlx, double moveSpeed, double rotSpeed)
+void	rotate_left(t_mlx *mlx, double rotSpeed)
 {
 	double oldDirX;
+	double oldPlaneX;
 
 	if (mlx->game.rotate_l == 1)
 	{
@@ -30,7 +32,7 @@ void rotate_left(t_mlx *mlx, double moveSpeed, double rotSpeed)
 							mlx->game.dirY * sin(rotSpeed);
 		mlx->game.dirY = oldDirX * sin(rotSpeed) +
 							mlx->game.dirY * cos(rotSpeed);
-		double oldPlaneX = mlx->game.planeX;
+		oldPlaneX = mlx->game.planeX;
 		mlx->game.planeX = mlx->game.planeX * cos(rotSpeed) -
 							mlx->game.planeY * sin(rotSpeed);
 		mlx->game.planeY = oldPlaneX * sin(rotSpeed) +
@@ -38,7 +40,7 @@ void rotate_left(t_mlx *mlx, double moveSpeed, double rotSpeed)
 	}
 }
 
-void move_side(t_mlx *mlx, double moveSpeed, double rotSpeed)
+void	move_side(t_mlx *mlx)
 {
 	if (mlx->game.move_r == 1)
 	{
@@ -60,7 +62,7 @@ void move_side(t_mlx *mlx, double moveSpeed, double rotSpeed)
 	}
 }
 
-void move_forback(t_mlx *mlx, double moveSpeed, double rotSpeed)
+void	move_forback(t_mlx *mlx, double moveSpeed)
 {
 	if (mlx->game.move_f == 1)
 	{
@@ -71,7 +73,6 @@ void move_forback(t_mlx *mlx, double moveSpeed, double rotSpeed)
 			[(int)(mlx->game.posY + mlx->game.dirY * moveSpeed)] == '0')
 			mlx->game.posY += mlx->game.dirY * moveSpeed;
 	}
-	//move backwards if no wall behind you
 	if (mlx->game.move_b == 1)
 	{
 		if (mlx->map[(int)(mlx->game.posX - mlx->game.dirX * moveSpeed)]

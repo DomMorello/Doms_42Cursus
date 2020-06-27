@@ -1,10 +1,10 @@
 #include "../main.h"
 
-void desc_sort(t_mlx *mlx)
+void	desc_sort(t_mlx *mlx)
 {
-	int i;
-	int j;
-	t_sprite tmp;
+	int			i;
+	int			j;
+	t_sprite	tmp;
 
 	i = 0;
 	while (i < mlx->spriteNum)
