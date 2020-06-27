@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sprite.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/06/28 01:09:55 by donglee           #+#    #+#             */
+/*   Updated: 2020/06/28 01:12:33 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../main.h"
 
 void	transform_sprite(t_mlx *mlx, t_game *game, t_sprite *sprite)
@@ -39,7 +51,7 @@ void	draw_spriteY(t_mlx *mlx, t_sprite *sprite, int texX, int stripe)
 	int y;
 	int d;
 	int color;
-	
+
 	y = sprite->drawStartY;
 	while (y < sprite->drawEndY)
 	{
@@ -56,7 +68,7 @@ void	draw_sprite(t_mlx *mlx, t_sprite *sprite)
 {
 	int texX;
 	int stripe;
-	
+
 	stripe = sprite->drawStartX;
 	while (stripe < sprite->drawEndX)
 	{

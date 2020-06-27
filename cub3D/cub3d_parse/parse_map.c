@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_map.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/06/28 01:42:20 by donglee           #+#    #+#             */
+/*   Updated: 2020/06/28 01:42:48 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../main.h"
 
 void	check_border(t_mlx *mlx, int mapsizeY)
@@ -99,4 +111,3 @@ void	parse_map(t_mlx *mlx)
 	parse_contents(mlx, mapsizeY);
 	check_sprite(mlx, mapsizeY);
 }
-

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   bmp.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/06/28 01:38:45 by donglee           #+#    #+#             */
+/*   Updated: 2020/06/28 01:39:18 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../main.h"
 
 void	set_bmfh(t_bmfh *bmfh, t_mlx *mlx)
@@ -26,7 +38,7 @@ void	set_bmih(t_bmih *bmih, t_mlx *mlx)
 	bmih->biClrImportant = 0;
 }
 
-int save_bmp(t_mlx *mlx)
+int		save_bmp(t_mlx *mlx)
 {
 	int		fd;
 	t_bmfh	bmfh;

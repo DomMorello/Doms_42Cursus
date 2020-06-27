@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub3d.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/06/28 01:39:33 by donglee           #+#    #+#             */
+/*   Updated: 2020/06/28 01:40:56 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../main.h"
 #include "../gnl/get_next_line.h"
 
@@ -20,7 +32,7 @@ char	*ft_strfromend(char *str, int size)
 	return (copy);
 }
 
-void 	check_extension(char const *argv, t_mlx *mlx)
+void	check_extension(char const *argv, t_mlx *mlx)
 {
 	char *extension;
 
@@ -42,7 +54,7 @@ void	init_mlx(t_mlx *mlx)
 	mlx->img.img_ptr = mlx_new_image(mlx->mlx_ptr, mlx->winWidth,
 													mlx->winHeight);
 	mlx->img.data = (int *)mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp,
-										&mlx->img.size_l, &mlx->img.endian);	
+										&mlx->img.size_l, &mlx->img.endian);
 }
 
 void	mlx_event(t_mlx *mlx)
