@@ -190,19 +190,19 @@ typedef struct 		s_bmih
 int key_release(int key, t_mlx *mlx);
 int key_press(int key, t_mlx *mlx);
 int run_game(t_mlx *mlx);
-int render_sprite(t_mlx *mlx);
+void render_sprite(t_mlx *mlx);
 int draw_sprite(t_mlx *mlx, t_sprite *sprite);
-int cal_sprite(t_mlx *mlx, t_sprite *sprite);
-int transform_sprite(t_mlx *mlx, t_game *game, t_sprite *sprite);
+void cal_sprite(t_mlx *mlx, t_sprite *sprite);
+void transform_sprite(t_mlx *mlx, t_game *game, t_sprite *sprite);
 void desc_sort(t_mlx *mlx);
 int draw_floor_ceiling(t_mlx *mlx);
-int key_event(t_mlx *mlx);
-int drawVertLine(t_mlx *mlx, int i);
+void key_event(t_mlx *mlx);
+void draw_vertline(t_mlx *mlx, int i);
 int get_side(t_mlx *mlx);
-int performDDA(t_mlx *mlx);
-void setDraw(t_mlx *mlx);
-int setVar(t_mlx *mlx, int i);
-int setSideDist(t_mlx *mlx);
+void perform_DDA(t_mlx *mlx);
+void set_draw(t_mlx *mlx);
+void set_var(t_mlx *mlx, int i);
+void set_side_dist(t_mlx *mlx);
 void init_game(t_mlx *mlx);
 void check_extension(char const *argv, t_mlx *mlx);
 char *ft_strfromend(char *str, int size);
@@ -245,5 +245,12 @@ void	ft_lstmapclear(t_map **lst);
 void	ft_lstmapdelone(t_map *node);
 int isRGBcolor(t_tex *tex, t_mlx *mlx);
 int save_bmp(t_mlx *mlx);
+void move_forback(t_mlx *mlx, double moveSpeed, double rotSpeed);
+void move_side(t_mlx *mlx, double moveSpeed, double rotSpeed);
+void rotate_right(t_mlx *mlx, double moveSpeed, double rotSpeed);
+void rotate_left(t_mlx *mlx, double moveSpeed, double rotSpeed);
+void input_verline(t_mlx *mlx, int texX, int i);
+void draw_spriteY(t_mlx *mlx, t_sprite *sprite, int texX, int stripe);
+
 
 # endif 
