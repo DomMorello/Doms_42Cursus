@@ -6,28 +6,28 @@
 /*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:42:58 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 01:43:01 by donglee          ###   ########.fr       */
+/*   Updated: 2020/06/28 19:49:31 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../main.h"
 
-void	set_dir(t_mlx *mlx, double dirX, double dirY)
+void	set_dir(t_mlx *mlx, double dirx, double diry)
 {
-	mlx->game.dirX = dirX;
-	mlx->game.dirY = dirY;
+	mlx->game.dirx = dirx;
+	mlx->game.diry = diry;
 }
 
-void	set_plane(t_mlx *mlx, double planeX, double planeY)
+void	set_plane(t_mlx *mlx, double planex, double planey)
 {
-	mlx->game.planeX = planeX;
-	mlx->game.planeY = planeY;
+	mlx->game.planex = planex;
+	mlx->game.planey = planey;
 }
 
 void	set_playerpos(t_mlx *mlx, double x, double y)
 {
-	mlx->game.posX = x + 0.5;
-	mlx->game.posY = y + 0.5;
+	mlx->game.posx = x + 0.5;
+	mlx->game.posy = y + 0.5;
 }
 
 void	input_direction(t_mlx *mlx, char direction, int x, int y)

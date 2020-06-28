@@ -6,7 +6,7 @@
 /*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 00:37:38 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 01:08:00 by donglee          ###   ########.fr       */
+/*   Updated: 2020/06/28 19:59:22 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,35 +86,35 @@ typedef struct		s_tex
 	int				width;
 	int				height;
 	char			*filepath;
-	int				floorColor;
-	int				ceilingColor;
+	int				floor_color;
+	int				ceiling_color;
 }					t_tex;
 
 typedef struct		s_game
 {
-	double			posX;
-	double			posY;
-	double			dirX;
-	double			dirY;
-	double			planeX;
-	double			planeY;
-	int				mapX;
-	int				mapY;
-	double			sideDistX;
-	double			sideDistY;
-	double			deltaDistX;
-	double			deltaDistY;
-	double			perpWallDist;
-	int				stepX;
-	int				stepY;
+	double			posx;
+	double			posy;
+	double			dirx;
+	double			diry;
+	double			planex;
+	double			planey;
+	int				mapx;
+	int				mapy;
+	double			side_distx;
+	double			side_disty;
+	double			delta_distx;
+	double			delta_disty;
+	double			perp_wall_dist;
+	int				stepx;
+	int				stepy;
 	int				hit;
 	int				side;
-	double			cameraX;
-	double			rayDirX;
-	double			rayDirY;
-	int				drawStart;
-	int				drawEnd;
-	int				lineHeight;
+	double			camerax;
+	double			ray_dirx;
+	double			ray_diry;
+	int				draw_start;
+	int				draw_end;
+	int				line_height;
 	int				move_f;
 	int				move_b;
 	int				move_r;
@@ -127,19 +127,19 @@ typedef struct		s_sprite
 {
 	double			x;
 	double			y;
-	double			spriteX;
-	double			spriteY;
-	double			transformX;
-	double			transformY;
-	double			spriteScreenX;
-	int				perpWallDist;
+	double			spritex;
+	double			spritey;
+	double			transformx;
+	double			transformy;
+	double			sprite_screenx;
+	int				perp_wall_dist;
 	double			dist;
-	double			spriteHeight;
-	double			spriteWidth;
-	int				drawStartX;
-	int				drawEndX;
-	int				drawStartY;
-	int				drawEndY;
+	double			sprite_height;
+	double			sprite_width;
+	int				draw_startx;
+	int				draw_endx;
+	int				draw_starty;
+	int				draw_endy;
 }					t_sprite;
 
 typedef struct		s_map
@@ -150,14 +150,14 @@ typedef struct		s_map
 
 typedef struct		s_fc
 {
-	float			rayDirX0;
-	float			rayDirY0;
-	float			rayDirX1;
-	float			rayDirY1;
-	float			floorStepX;
-	float			floorStepY;
-	float			floorX;
-	float			floorY;
+	float			ray_dirx0;
+	float			ray_diry0;
+	float			ray_dirx1;
+	float			ray_diry1;
+	float			floor_stepx;
+	float			floor_stepy;
+	float			floorx;
+	float			floory;
 }					t_fc;
 
 typedef struct		s_mlx
@@ -172,34 +172,34 @@ typedef struct		s_mlx
 	t_fc			fc;
 	char			**map;
 	double			zbuffer[MAX_WIN_WIDTH];
-	int				spriteNum;
-	int				winWidth;
-	int				winHeight;
+	int				sprite_num;
+	int				win_width;
+	int				win_height;
 }					t_mlx;
 
 # pragma pack(push, 1)
 
 typedef struct		s_bmfh
 {
-	char			bfType[2];
-	int				bfSize;
-	int				bfReserved;
-	int				bfOffBits;
+	char			bf_type[2];
+	int				bf_size;
+	int				bf_reserved;
+	int				bf_off_bits;
 }					t_bmfh;
 
 typedef struct		s_bmih
 {
-	int				biSize;
-	int				biWidth;
-	int				biHeight;
-	char			biPlanes[2];
-	char			biBitCount[2];
-	int				biCompression;
-	int				biSizeImage;
-	int				biXPelsPerMeter;
-	int				biYPelsPerMeter;
-	int				biClrUsed;
-	int				biClrImportant;
+	int				bi_size;
+	int				bi_width;
+	int				bi_height;
+	char			bi_planes[2];
+	char			bi_bit_count[2];
+	int				bi_compression;
+	int				bi_size_image;
+	int				bix_pels_per_meter;
+	int				biy_pels_per_meter;
+	int				bi_clr_used;
+	int				bi_clr_important;
 }					t_bmih;
 
 # pragma pack(pop)
@@ -218,7 +218,7 @@ void				draw_floor_ceiling(t_mlx *mlx);
 void				key_event(t_mlx *mlx);
 void				draw_vertline(t_mlx *mlx, int i);
 int					get_side(t_mlx *mlx);
-void				perform_DDA(t_mlx *mlx);
+void				perform_dda(t_mlx *mlx);
 void				set_draw(t_mlx *mlx);
 void				set_var(t_mlx *mlx, int i);
 void				set_side_dist(t_mlx *mlx);
@@ -227,20 +227,20 @@ void				check_extension(char const *argv, t_mlx *mlx);
 char				*ft_strfromend(char *str, int size);
 int					parse_info(char const *argv, t_mlx *mlx);
 void				parse_map(t_mlx *mlx);
-void				check_sprite(t_mlx *mlx, int mapsizeY);
-void				input_sprite(t_sprite *sprites, char **map, int mapsizeY);
-int					count_sprite(char **map, int mapsizeY);
-void				check_direction(t_mlx *mlx, int mapsizeY);
+void				check_sprite(t_mlx *mlx, int mapsizey);
+void				input_sprite(t_sprite *sprites, char **map, int mapsizey);
+int					count_sprite(char **map, int mapsizey);
+void				check_direction(t_mlx *mlx, int mapsizey);
 void				input_direction(t_mlx *mlx, char direction, int x, int y);
 void				set_playerpos(t_mlx *mlx, double x, double y);
-void				set_plane(t_mlx *mlx, double planeX, double planeY);
-void				set_dir(t_mlx *mlx, double dirX, double dirY);
-void				parse_contents(t_mlx *mlx, int mapsizeY);
+void				set_plane(t_mlx *mlx, double planex, double planey);
+void				set_dir(t_mlx *mlx, double dirx, double diry);
+void				parse_contents(t_mlx *mlx, int mapsizey);
 void				check_updown(int i, int j, t_mlx *mlx);
-void				check_border(t_mlx *mlx, int mapsizeY);
-void				check_rightside(t_mlx *mlx, int mapsizeY);
-void				move_map_2d(t_mlx *mlx, int mapsizeY);
-int					get_mapsizeY(t_mlx *mlx);
+void				check_border(t_mlx *mlx, int mapsizey);
+void				check_rightside(t_mlx *mlx, int mapsizey);
+void				move_map_2d(t_mlx *mlx, int mapsizey);
+int					get_mapsizey(t_mlx *mlx);
 void				check_lastline(t_mlx *mlx, char *line);
 int					parse_line(char *line, t_mlx *mlx);
 int					copy_map(t_mlx *mlx, char *line);
@@ -262,14 +262,14 @@ void				clear_map(t_mlx *mlx);
 void				input_color(t_tex *tex, t_mlx *mlx, char **ret);
 void				ft_lstmapclear(t_map **lst);
 void				ft_lstmapdelone(t_map *node);
-int					isRGBcolor(t_tex *tex, t_mlx *mlx);
+int					is_rgbcolor(t_tex *tex, t_mlx *mlx);
 int					save_bmp(t_mlx *mlx);
-void				move_forback(t_mlx *mlx, double moveSpeed);
+void				move_forback(t_mlx *mlx, double move_speed);
 void				move_side(t_mlx *mlx);
-void				rotate_right(t_mlx *mlx, double rotSpeed);
-void				rotate_left(t_mlx *mlx, double rotSpeed);
-void				input_verline(t_mlx *mlx, int texX, int i);
-void				draw_spriteY(t_mlx *mlx, t_sprite *sprite,
-								int texX, int stripe);
+void				rotate_right(t_mlx *mlx, double rot_speed);
+void				rotate_left(t_mlx *mlx, double rot_speed);
+void				input_verline(t_mlx *mlx, int texx, int i);
+void				draw_spritey(t_mlx *mlx, t_sprite *sprite,
+								int texx, int stripe);
 
 #endif

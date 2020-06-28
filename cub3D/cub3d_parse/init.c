@@ -6,7 +6,7 @@
 /*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:43:22 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 01:43:26 by donglee          ###   ########.fr       */
+/*   Updated: 2020/06/28 19:51:29 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	init_game(t_mlx *mlx)
 		if ((mlx->tex[i].img_ptr = mlx_xpm_file_to_image(mlx->mlx_ptr,
 				tmp, &mlx->tex[i].width, &mlx->tex[i].height)) == NULL)
 		{
-			if (isRGBcolor(&mlx->tex[i], mlx))
+			if (is_rgbcolor(&mlx->tex[i], mlx))
 				continue;
 			else
 				error(ERR_PATH, mlx);

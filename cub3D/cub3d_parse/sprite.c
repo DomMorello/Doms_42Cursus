@@ -6,13 +6,13 @@
 /*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:44:25 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 01:44:28 by donglee          ###   ########.fr       */
+/*   Updated: 2020/06/28 19:53:29 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../main.h"
 
-void	input_sprite(t_sprite *sprites, char **map, int mapsizeY)
+void	input_sprite(t_sprite *sprites, char **map, int mapsizey)
 {
 	int i;
 	int j;
@@ -20,7 +20,7 @@ void	input_sprite(t_sprite *sprites, char **map, int mapsizeY)
 
 	i = 1;
 	idx = 0;
-	while (i < mapsizeY)
+	while (i < mapsizey)
 	{
 		j = 0;
 		while (ft_isspace(map[i][j]))
@@ -39,15 +39,15 @@ void	input_sprite(t_sprite *sprites, char **map, int mapsizeY)
 	}
 }
 
-int		count_sprite(char **map, int mapsizeY)
+int		count_sprite(char **map, int mapsizey)
 {
 	int i;
 	int j;
-	int spriteNum;
+	int sprite_num;
 
 	i = 1;
-	spriteNum = 0;
-	while (i < mapsizeY - 1)
+	sprite_num = 0;
+	while (i < mapsizey - 1)
 	{
 		j = 0;
 		while (ft_isspace(map[i][j]))
@@ -55,23 +55,23 @@ int		count_sprite(char **map, int mapsizeY)
 		while (map[i][j + 1])
 		{
 			if (map[i][j + 1] == '2')
-				spriteNum++;
+				sprite_num++;
 			j++;
 		}
 		i++;
 	}
-	return (spriteNum);
+	return (sprite_num);
 }
 
-void	check_sprite(t_mlx *mlx, int mapsizeY)
+void	check_sprite(t_mlx *mlx, int mapsizey)
 {
-	int			spriteNum;
+	int			sprite_num;
 	t_sprite	*sprites;
 
-	spriteNum = count_sprite(mlx->map, mapsizeY);
-	if ((sprites = (t_sprite *)malloc(sizeof(t_sprite) * spriteNum)) == NULL)
+	sprite_num = count_sprite(mlx->map, mapsizey);
+	if ((sprites = (t_sprite *)malloc(sizeof(t_sprite) * sprite_num)) == NULL)
 		error(ERR_MEM, mlx);
-	input_sprite(sprites, mlx->map, mapsizeY);
-	mlx->spriteNum = spriteNum;
+	input_sprite(sprites, mlx->map, mapsizey);
+	mlx->sprite_num = sprite_num;
 	mlx->sprite = sprites;
 }

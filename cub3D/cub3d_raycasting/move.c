@@ -6,49 +6,49 @@
 /*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:09:33 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 01:09:37 by donglee          ###   ########.fr       */
+/*   Updated: 2020/06/28 15:16:18 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../main.h"
 
-void	rotate_right(t_mlx *mlx, double rotSpeed)
+void	rotate_right(t_mlx *mlx, double rot_speed)
 {
-	double oldDirX;
-	double oldPlaneX;
+	double old_dirx;
+	double old_planex;
 
 	if (mlx->game.rotate_r == 1)
 	{
-		oldDirX = mlx->game.dirX;
-		mlx->game.dirX = mlx->game.dirX * cos(-rotSpeed) -
-							mlx->game.dirY * sin(-rotSpeed);
-		mlx->game.dirY = oldDirX * sin(-rotSpeed) +
-							mlx->game.dirY * cos(-rotSpeed);
-		oldPlaneX = mlx->game.planeX;
-		mlx->game.planeX = mlx->game.planeX * cos(-rotSpeed) -
-							mlx->game.planeY * sin(-rotSpeed);
-		mlx->game.planeY = oldPlaneX * sin(-rotSpeed) +
-							mlx->game.planeY * cos(-rotSpeed);
+		old_dirx = mlx->game.dirx;
+		mlx->game.dirx = mlx->game.dirx * cos(-rot_speed) -
+							mlx->game.diry * sin(-rot_speed);
+		mlx->game.diry = old_dirx * sin(-rot_speed) +
+							mlx->game.diry * cos(-rot_speed);
+		old_planex = mlx->game.planex;
+		mlx->game.planex = mlx->game.planex * cos(-rot_speed) -
+							mlx->game.planey * sin(-rot_speed);
+		mlx->game.planey = old_planex * sin(-rot_speed) +
+							mlx->game.planey * cos(-rot_speed);
 	}
 }
 
-void	rotate_left(t_mlx *mlx, double rotSpeed)
+void	rotate_left(t_mlx *mlx, double rot_speed)
 {
-	double oldDirX;
-	double oldPlaneX;
+	double old_dirx;
+	double old_planex;
 
 	if (mlx->game.rotate_l == 1)
 	{
-		oldDirX = mlx->game.dirX;
-		mlx->game.dirX = mlx->game.dirX * cos(rotSpeed) -
-							mlx->game.dirY * sin(rotSpeed);
-		mlx->game.dirY = oldDirX * sin(rotSpeed) +
-							mlx->game.dirY * cos(rotSpeed);
-		oldPlaneX = mlx->game.planeX;
-		mlx->game.planeX = mlx->game.planeX * cos(rotSpeed) -
-							mlx->game.planeY * sin(rotSpeed);
-		mlx->game.planeY = oldPlaneX * sin(rotSpeed) +
-							mlx->game.planeY * cos(rotSpeed);
+		old_dirx = mlx->game.dirx;
+		mlx->game.dirx = mlx->game.dirx * cos(rot_speed) -
+							mlx->game.diry * sin(rot_speed);
+		mlx->game.diry = old_dirx * sin(rot_speed) +
+							mlx->game.diry * cos(rot_speed);
+		old_planex = mlx->game.planex;
+		mlx->game.planex = mlx->game.planex * cos(rot_speed) -
+							mlx->game.planey * sin(rot_speed);
+		mlx->game.planey = old_planex * sin(rot_speed) +
+							mlx->game.planey * cos(rot_speed);
 	}
 }
 
@@ -56,42 +56,42 @@ void	move_side(t_mlx *mlx)
 {
 	if (mlx->game.move_r == 1)
 	{
-		if (mlx->map[(int)(mlx->game.posX + mlx->game.planeX * 0.01)]
-			[(int)mlx->game.posY] == '0')
-			mlx->game.posX += mlx->game.planeX * 0.01;
-		if (mlx->map[(int)mlx->game.posX]
-			[(int)(mlx->game.posY + mlx->game.planeY * 0.01)] == '0')
-			mlx->game.posY += mlx->game.planeY * 0.01;
+		if (mlx->map[(int)(mlx->game.posx + mlx->game.planex * 0.01)]
+			[(int)mlx->game.posy] == '0')
+			mlx->game.posx += mlx->game.planex * 0.01;
+		if (mlx->map[(int)mlx->game.posx]
+			[(int)(mlx->game.posy + mlx->game.planey * 0.01)] == '0')
+			mlx->game.posy += mlx->game.planey * 0.01;
 	}
 	if (mlx->game.move_l == 1)
 	{
-		if (mlx->map[(int)(mlx->game.posX - mlx->game.planeX * 0.01)]
-			[(int)mlx->game.posY] == '0')
-			mlx->game.posX -= mlx->game.planeX * 0.01;
-		if (mlx->map[(int)mlx->game.posX]
-			[(int)(mlx->game.posY - mlx->game.planeY * 0.01)] == '0')
-			mlx->game.posY -= mlx->game.planeY * 0.01;
+		if (mlx->map[(int)(mlx->game.posx - mlx->game.planex * 0.01)]
+			[(int)mlx->game.posy] == '0')
+			mlx->game.posx -= mlx->game.planex * 0.01;
+		if (mlx->map[(int)mlx->game.posx]
+			[(int)(mlx->game.posy - mlx->game.planey * 0.01)] == '0')
+			mlx->game.posy -= mlx->game.planey * 0.01;
 	}
 }
 
-void	move_forback(t_mlx *mlx, double moveSpeed)
+void	move_forback(t_mlx *mlx, double move_speed)
 {
 	if (mlx->game.move_f == 1)
 	{
-		if (mlx->map[(int)(mlx->game.posX + mlx->game.dirX * moveSpeed)]
-			[(int)mlx->game.posY] == '0')
-			mlx->game.posX += mlx->game.dirX * moveSpeed;
-		if (mlx->map[(int)mlx->game.posX]
-			[(int)(mlx->game.posY + mlx->game.dirY * moveSpeed)] == '0')
-			mlx->game.posY += mlx->game.dirY * moveSpeed;
+		if (mlx->map[(int)(mlx->game.posx + mlx->game.dirx * move_speed)]
+			[(int)mlx->game.posy] == '0')
+			mlx->game.posx += mlx->game.dirx * move_speed;
+		if (mlx->map[(int)mlx->game.posx]
+			[(int)(mlx->game.posy + mlx->game.diry * move_speed)] == '0')
+			mlx->game.posy += mlx->game.diry * move_speed;
 	}
 	if (mlx->game.move_b == 1)
 	{
-		if (mlx->map[(int)(mlx->game.posX - mlx->game.dirX * moveSpeed)]
-			[(int)mlx->game.posY] == '0')
-			mlx->game.posX -= mlx->game.dirX * moveSpeed;
-		if (mlx->map[(int)mlx->game.posX]
-			[(int)(mlx->game.posY - mlx->game.dirY * moveSpeed)] == '0')
-			mlx->game.posY -= mlx->game.dirY * moveSpeed;
+		if (mlx->map[(int)(mlx->game.posx - mlx->game.dirx * move_speed)]
+			[(int)mlx->game.posy] == '0')
+			mlx->game.posx -= mlx->game.dirx * move_speed;
+		if (mlx->map[(int)mlx->game.posx]
+			[(int)(mlx->game.posy - mlx->game.diry * move_speed)] == '0')
+			mlx->game.posy -= mlx->game.diry * move_speed;
 	}
 }

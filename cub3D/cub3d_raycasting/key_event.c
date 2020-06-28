@@ -6,7 +6,7 @@
 /*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:09:19 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 01:09:23 by donglee          ###   ########.fr       */
+/*   Updated: 2020/06/28 15:11:09 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,13 @@ int		key_release(int key, t_mlx *mlx)
 
 void	key_event(t_mlx *mlx)
 {
-	double moveSpeed;
-	double rotSpeed;
+	double move_speed;
+	double rot_speed;
 
-	moveSpeed = 0.018;
-	rotSpeed = 0.009;
-	move_forback(mlx, moveSpeed);
+	move_speed = 0.018;
+	rot_speed = 0.009;
+	move_forback(mlx, move_speed);
 	move_side(mlx);
-	rotate_right(mlx, rotSpeed);
-	rotate_left(mlx, rotSpeed);
+	rotate_right(mlx, rot_speed);
+	rotate_left(mlx, rot_speed);
 }

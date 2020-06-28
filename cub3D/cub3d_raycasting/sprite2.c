@@ -6,7 +6,7 @@
 /*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:12:45 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 01:12:50 by donglee          ###   ########.fr       */
+/*   Updated: 2020/06/28 15:22:43 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ void	desc_sort(t_mlx *mlx)
 	t_sprite	tmp;
 
 	i = 0;
-	while (i < mlx->spriteNum)
+	while (i < mlx->sprite_num)
 	{
 		j = i;
-		while (j < mlx->spriteNum)
+		while (j < mlx->sprite_num)
 		{
 			if (mlx->sprite[i].dist < mlx->sprite[j].dist)
 			{
