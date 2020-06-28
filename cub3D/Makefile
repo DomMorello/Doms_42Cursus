@@ -10,7 +10,7 @@ SRCS = ./cub3d_parse/bmp.c ./cub3d_parse/check_exception.c ./cub3d_parse/color.c
 	./cub3d_raycasting/move.c ./cub3d_raycasting/sprite.c\
 	./cub3d_raycasting/sprite2.c ./cub3d_raycasting/wall.c\
 	./cub3d_raycasting/wall2.c\
-	./gnl/get_next_line.c ./gnl/get_next_line_util.c\
+	./gnl/get_next_line.c ./gnl/get_next_line_utils.c
 
 OBJS = $(SRCS:%.c=%.o)
 
@@ -22,9 +22,8 @@ all : $(NAME)
 
 $(NAME) : $(OBJS) cub3d.h ./gnl/get_next_line.h
 	@make -C libft
-	cp libft/libft.a ./$(NAME)
-	$(CC) $(CFLAGS) -c $(SRCS)
-	@ar rsc $(NAME) $(OBJS)
+	cp libft/libft.a ./
+	$(CC) $(SRCS) libft.a $(CFLAGS) -o $(NAME)
 
 clean :
 	cd ./libft; make clean
@@ -34,6 +33,7 @@ fclean :
 	cd ./libft; make fclean
 	rm -f $(OBJS)
 	rm -f $(NAME)
+	rm -f libft.a
 
 norm :
 	norminette -R CheckForbiddenSourceHeader ./.c ./.h
