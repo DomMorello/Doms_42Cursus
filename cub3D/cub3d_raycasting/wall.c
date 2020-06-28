@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wall.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:12:59 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 01:13:03 by donglee          ###   ########.fr       */
+/*   Updated: 2020/06/28 14:57:43 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,10 +104,16 @@ void	set_var(t_mlx *mlx, int i)
 	mlx->game.rayDirY = mlx->game.dirY + mlx->game.planeY * mlx->game.cameraX;
 	mlx->game.mapX = (int)mlx->game.posX;
 	mlx->game.mapY = (int)mlx->game.posY;
-	mlx->game.deltaDistX = (mlx->game.rayDirY == 0) ? 0 :
-			((mlx->game.rayDirX == 0) ? 1 : fabs(1 / mlx->game.rayDirX));
-	mlx->game.deltaDistY = (mlx->game.rayDirX == 0) ? 0 :
-			((mlx->game.rayDirY == 0) ? 1 : fabs(1 / mlx->game.rayDirY));
+	if (mlx->game.rayDirY == 0)
+		mlx->game.deltaDistX = 0;
+	else
+		mlx->game.deltaDistX = (mlx->game.rayDirX == 0) ? 1 :
+							fabs(1 / mlx->game.rayDirX);
+	if (mlx->game.rayDirX == 0)
+		mlx->game.deltaDistY = 0;
+	else
+		mlx->game.deltaDistY = (mlx->game.rayDirY == 0) ? 1 :
+							fabs(1 / mlx->game.rayDirY);
 	mlx->game.hit = 0;
 	set_side_dist(mlx);
 }
