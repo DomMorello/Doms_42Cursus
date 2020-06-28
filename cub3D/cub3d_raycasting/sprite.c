@@ -6,7 +6,7 @@
 /*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:09:55 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 15:22:16 by donglee          ###   ########.fr       */
+/*   Updated: 2020/06/28 20:09:59 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	draw_sprite(t_mlx *mlx, t_sprite *sprite)
 			sprite->sprite_screenx)) * TEX_WIDTH / sprite->sprite_width) / 256;
 		if (sprite->transformy > 0 && stripe > 0 && stripe <
 				mlx->win_width && sprite->transformy < mlx->zbuffer[stripe])
-			draw_spritey(mlx, sprite, texX, stripe);
+			draw_spritey(mlx, sprite, texx, stripe);
 		stripe++;
 	}
 }

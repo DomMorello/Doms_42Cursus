@@ -6,7 +6,7 @@
 /*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:08:58 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 15:10:15 by donglee          ###   ########.fr       */
+/*   Updated: 2020/06/28 20:07:51 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ void	draw_fc(t_mlx *mlx, int x, int y)
 			(mlx->fc.floorx - (int)mlx->fc.floorx)) & (TEX_WIDTH - 1);
 	ty = (int)(TEX_HEIGHT *
 			(mlx->fc.floory - (int)mlx->fc.floory)) & (TEX_HEIGHT - 1);
-	mlx->fc.floorx += mlx->fc.floorStepx;
-	mlx->fc.floory += mlx->fc.floorStepy;
+	mlx->fc.floorx += mlx->fc.floor_stepx;
+	mlx->fc.floory += mlx->fc.floor_stepy;
 	if (mlx->tex[FLOOR].img_ptr != NULL)
 		color = mlx->tex[FLOOR].data[TEX_WIDTH * ty + tx];
 	else
@@ -46,7 +46,7 @@ void	get_position(t_mlx *mlx, int y)
 	posz = 0.5 * mlx->win_height;
 	row_distance = posz / p;
 	mlx->fc.floor_stepx = row_distance *
-						 (mlx->fc.ray_Dirx1 - mlx->fc.ray_dirx0) / mlx->win_width;
+						 (mlx->fc.ray_dirx1 - mlx->fc.ray_dirx0) / mlx->win_width;
 	mlx->fc.floor_stepy = row_distance *
 						 (mlx->fc.ray_diry1 - mlx->fc.ray_diry0) / mlx->win_width;
 	mlx->fc.floorx = mlx->game.posx + row_distance * mlx->fc.ray_dirx0;
