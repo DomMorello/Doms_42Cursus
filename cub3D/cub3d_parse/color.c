@@ -6,7 +6,7 @@
 /*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:43:10 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 01:43:13 by donglee          ###   ########.fr       */
+/*   Updated: 2020/06/28 19:51:08 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,13 @@ void	input_color(t_tex *tex, t_mlx *mlx, char **ret)
 	color += rgb[1] << 8;
 	color += rgb[2];
 	if (tex == &mlx->tex[FLOOR])
-		mlx->tex[FLOOR].floorColor = color;
+		mlx->tex[FLOOR].floor_color = color;
 	if (tex == &mlx->tex[CEILING])
-		mlx->tex[CEILING].ceilingColor = color;
+		mlx->tex[CEILING].ceiling_color = color;
 	free_2d_char(ret, TRUE);
 }
 
-int		isRGBcolor(t_tex *tex, t_mlx *mlx)
+int		is_rgbcolor(t_tex *tex, t_mlx *mlx)
 {
 	char	**ret;
 	int		i;

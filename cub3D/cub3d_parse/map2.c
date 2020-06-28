@@ -6,7 +6,7 @@
 /*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:41:04 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 01:41:08 by donglee          ###   ########.fr       */
+/*   Updated: 2020/06/28 15:41:34 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,13 @@ void	check_updown(int i, int j, t_mlx *mlx)
 		error(ERR_MAP_SUR, mlx);
 }
 
-void	parse_contents(t_mlx *mlx, int mapsizeY)
+void	parse_contents(t_mlx *mlx, int mapsizey)
 {
 	int i;
 	int j;
 
 	i = 1;
-	while (i < mapsizeY - 1)
+	while (i < mapsizey - 1)
 	{
 		j = 0;
 		while (ft_isspace(mlx->map[i][j]))
@@ -62,13 +62,13 @@ void	parse_contents(t_mlx *mlx, int mapsizeY)
 	}
 }
 
-void	check_rightside(t_mlx *mlx, int mapsizeY)
+void	check_rightside(t_mlx *mlx, int mapsizey)
 {
 	int i;
 	int j;
 
 	i = 0;
-	while (i < mapsizeY)
+	while (i < mapsizey)
 	{
 		j = ft_strlen(mlx->map[i]) - 1;
 		while (ft_isspace(mlx->map[i][j]))

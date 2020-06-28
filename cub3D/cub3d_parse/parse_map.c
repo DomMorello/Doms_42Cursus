@@ -6,13 +6,13 @@
 /*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:42:20 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 01:42:48 by donglee          ###   ########.fr       */
+/*   Updated: 2020/06/28 19:48:45 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../main.h"
 
-void	check_border(t_mlx *mlx, int mapsizeY)
+void	check_border(t_mlx *mlx, int mapsizey)
 {
 	int i;
 
@@ -24,25 +24,25 @@ void	check_border(t_mlx *mlx, int mapsizeY)
 		i++;
 	}
 	i = 0;
-	while (mlx->map[mapsizeY - 1][i])
+	while (mlx->map[mapsizey - 1][i])
 	{
-		if (mlx->map[mapsizeY - 1][i] != '1' &&
-			!ft_isspace(mlx->map[mapsizeY - 1][i]))
+		if (mlx->map[mapsizey - 1][i] != '1' &&
+			!ft_isspace(mlx->map[mapsizey - 1][i]))
 			error(ERR_MAP_SUR, mlx);
 		i++;
 	}
-	check_rightside(mlx, mapsizeY);
+	check_rightside(mlx, mapsizey);
 }
 
-void	check_direction(t_mlx *mlx, int mapsizeY)
+void	check_direction(t_mlx *mlx, int mapsizey)
 {
 	int i;
 	int j;
-	int isPlural;
+	int is_plural;
 
 	i = 0;
-	isPlural = 0;
-	while (++i < mapsizeY - 1)
+	is_plural = 0;
+	while (++i < mapsizey - 1)
 	{
 		j = 0;
 		while (ft_isspace(mlx->map[i][j]))
@@ -54,25 +54,25 @@ void	check_direction(t_mlx *mlx, int mapsizeY)
 			{
 				input_direction(mlx, mlx->map[i][j], i, j);
 				mlx->map[i][j] = '0';
-				isPlural++;
+				is_plural++;
 			}
 			j++;
 		}
 	}
-	if (isPlural != 1)
+	if (is_plural != 1)
 		error(ERR_PLU, mlx);
 }
 
-void	move_map_2d(t_mlx *mlx, int mapsizeY)
+void	move_map_2d(t_mlx *mlx, int mapsizey)
 {
 	int		i;
 	char	*tmp;
 	t_map	*lst;
 
 	i = 0;
-	if ((mlx->map = (char **)malloc(sizeof(char *) * mapsizeY + 1)) == NULL)
+	if ((mlx->map = (char **)malloc(sizeof(char *) * mapsizey + 1)) == NULL)
 		error(ERR_MEM, mlx);
-	mlx->map[mapsizeY] = 0;
+	mlx->map[mapsizey] = 0;
 	lst = mlx->maplst;
 	while (lst)
 	{
@@ -85,7 +85,7 @@ void	move_map_2d(t_mlx *mlx, int mapsizeY)
 	}
 }
 
-int		get_mapsizeY(t_mlx *mlx)
+int		get_mapsizey(t_mlx *mlx)
 {
 	int		len;
 	t_map	*tmp;
@@ -102,12 +102,12 @@ int		get_mapsizeY(t_mlx *mlx)
 
 void	parse_map(t_mlx *mlx)
 {
-	int mapsizeY;
+	int mapsizey;
 
-	mapsizeY = get_mapsizeY(mlx);
-	move_map_2d(mlx, mapsizeY);
-	check_direction(mlx, mapsizeY);
-	check_border(mlx, mapsizeY);
-	parse_contents(mlx, mapsizeY);
-	check_sprite(mlx, mapsizeY);
+	mapsizey = get_mapsizey(mlx);
+	move_map_2d(mlx, mapsizey);
+	check_direction(mlx, mapsizey);
+	check_border(mlx, mapsizey);
+	parse_contents(mlx, mapsizey);
+	check_sprite(mlx, mapsizey);
 }
