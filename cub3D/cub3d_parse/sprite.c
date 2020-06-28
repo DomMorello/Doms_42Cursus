@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   sprite.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:44:25 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 19:53:29 by donglee          ###   ########.fr       */
+/*   Updated: 2020/06/28 20:36:16 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../main.h"
+#include "../cub3d.h"
 
 void	input_sprite(t_sprite *sprites, char **map, int mapsizey)
 {

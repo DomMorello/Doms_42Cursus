@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   move.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:09:33 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 15:16:18 by donglee          ###   ########.fr       */
+/*   Updated: 2020/06/28 20:36:34 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../main.h"
+#include "../cub3d.h"
 
 void	rotate_right(t_mlx *mlx, double rot_speed)
 {

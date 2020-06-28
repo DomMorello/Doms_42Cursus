@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   color.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:43:10 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 19:51:08 by donglee          ###   ########.fr       */
+/*   Updated: 2020/06/28 20:35:33 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../main.h"
+#include "../cub3d.h"
 
 void	input_color(t_tex *tex, t_mlx *mlx, char **ret)
 {

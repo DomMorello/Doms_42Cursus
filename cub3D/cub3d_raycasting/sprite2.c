@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   sprite2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:12:45 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 15:22:43 by donglee          ###   ########.fr       */
+/*   Updated: 2020/06/28 20:36:42 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../main.h"
+#include "../cub3d.h"
 
 void	desc_sort(t_mlx *mlx)
 {

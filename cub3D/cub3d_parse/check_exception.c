@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   check_exception.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:41:50 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 01:41:55 by donglee          ###   ########.fr       */
+/*   Updated: 2020/06/28 20:35:29 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../main.h"
+#include "../cub3d.h"
 
 void	check_tex(t_mlx *mlx)
 {

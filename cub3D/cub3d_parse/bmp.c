@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   bmp.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:38:45 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 15:39:57 by donglee          ###   ########.fr       */
+/*   Updated: 2020/06/28 20:35:24 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../main.h"
+#include "../cub3d.h"
 
 void	set_bmfh(t_bmfh *bmfh, t_mlx *mlx)
 {

@@ -6,11 +6,11 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:12:59 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 20:00:58 by marvin           ###   ########.fr       */
+/*   Updated: 2020/06/28 20:36:46 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../main.h"
+#include "../cub3d.h"
 
 void	draw_vertline(t_mlx *mlx, int i)
 {

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   map2.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:41:04 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 15:41:34 by donglee          ###   ########.fr       */
+/*   Updated: 2020/06/28 20:35:54 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../main.h"
+#include "../cub3d.h"
 
 t_map	*ft_lstnewmap(char *content)
 {

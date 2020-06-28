@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   floorCeiling.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:08:58 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 20:07:51 by donglee          ###   ########.fr       */
+/*   Updated: 2020/06/28 20:36:27 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../main.h"
+#include "../cub3d.h"
 
 void	draw_fc(t_mlx *mlx, int x, int y)
 {
