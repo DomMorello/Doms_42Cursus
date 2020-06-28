@@ -6,12 +6,12 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 00:37:38 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 20:04:38 by marvin           ###   ########.fr       */
+/*   Updated: 2020/06/28 20:44:26 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MAIN_H
-# define MAIN_H
+#ifndef CUB3D_H
+# define CUB3D_H
 
 # include <math.h>
 # include <stdio.h>
