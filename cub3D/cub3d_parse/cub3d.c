@@ -6,7 +6,7 @@
 /*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:39:33 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 01:40:56 by donglee          ###   ########.fr       */
+/*   Updated: 2020/06/28 15:40:53 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,10 @@ void	check_extension(char const *argv, t_mlx *mlx)
 void	init_mlx(t_mlx *mlx)
 {
 	mlx->mlx_ptr = mlx_init();
-	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr, mlx->winWidth,
-									mlx->winHeight, "DomMorello");
-	mlx->img.img_ptr = mlx_new_image(mlx->mlx_ptr, mlx->winWidth,
-													mlx->winHeight);
+	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr, mlx->win_width,
+									mlx->win_height, "DomMorello");
+	mlx->img.img_ptr = mlx_new_image(mlx->mlx_ptr, mlx->win_width,
+													mlx->win_height);
 	mlx->img.data = (int *)mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp,
 										&mlx->img.size_l, &mlx->img.endian);
 }

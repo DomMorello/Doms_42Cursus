@@ -6,7 +6,7 @@
 /*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:38:45 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 01:39:18 by donglee          ###   ########.fr       */
+/*   Updated: 2020/06/28 15:39:57 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,28 @@
 
 void	set_bmfh(t_bmfh *bmfh, t_mlx *mlx)
 {
-	bmfh->bfType[0] = 'B';
-	bmfh->bfType[1] = 'M';
-	bmfh->bfSize = 54 + 4 * mlx->winWidth * mlx->winHeight;
-	bmfh->bfReserved = 0;
-	bmfh->bfOffBits = 54;
+	bmfh->bf_type[0] = 'B';
+	bmfh->bf_type[1] = 'M';
+	bmfh->bf_size = 54 + 4 * mlx->win_width * mlx->win_height;
+	bmfh->bf_reserved = 0;
+	bmfh->bf_off_bits = 54;
 }
 
 void	set_bmih(t_bmih *bmih, t_mlx *mlx)
 {
-	bmih->biSize = 40;
-	bmih->biWidth = mlx->winWidth;
-	bmih->biHeight = -mlx->winHeight;
-	bmih->biPlanes[0] = 1;
-	bmih->biPlanes[1] = 0;
-	bmih->biBitCount[0] = 32;
-	bmih->biBitCount[1] = 0;
-	bmih->biCompression = 0;
-	bmih->biSizeImage = 4 * mlx->winWidth * mlx->winHeight;
-	bmih->biXPelsPerMeter = 0;
-	bmih->biYPelsPerMeter = 0;
-	bmih->biClrUsed = 0;
-	bmih->biClrImportant = 0;
+	bmih->bi_size = 40;
+	bmih->bi_width = mlx->win_width;
+	bmih->bi_height = -mlx->win_height;
+	bmih->bi_planes[0] = 1;
+	bmih->bi_planes[1] = 0;
+	bmih->bi_bit_count[0] = 32;
+	bmih->bi_bit_count[1] = 0;
+	bmih->bi_compression = 0;
+	bmih->bi_size_image = 4 * mlx->win_width * mlx->win_height;
+	bmih->bix_pels_per_meter = 0;
+	bmih->biy_pels_per_meter = 0;
+	bmih->bi_clr_used = 0;
+	bmih->bi_clr_important = 0;
 }
 
 int		save_bmp(t_mlx *mlx)
@@ -50,7 +50,7 @@ int		save_bmp(t_mlx *mlx)
 	set_bmih(&bmih, mlx);
 	write(fd, &bmfh, sizeof(bmfh));
 	write(fd, &bmih, sizeof(bmih));
-	write(fd, mlx->img.data, bmih.biSizeImage);
+	write(fd, mlx->img.data, bmih.bi_size_image);
 	close(fd);
 	return (TRUE);
 }

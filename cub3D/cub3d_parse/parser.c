@@ -6,7 +6,7 @@
 /*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:41:21 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 01:41:27 by donglee          ###   ########.fr       */
+/*   Updated: 2020/06/28 15:42:56 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,16 @@ int		input_resolution(t_mlx *mlx, char *str)
 	if (check)
 		if (!(check[0] == '\0' || check[0] == '\r' || check[0] == '\n'))
 			return (free_2d_char(ret, error_msg(ERR_FORMAT)));
-	mlx->winWidth = ft_atoi(ret[0]);
-	mlx->winHeight = ft_atoi(ret[1]);
-	if (mlx->winWidth > MAX_WIN_WIDTH)
-		mlx->winWidth = MAX_WIN_WIDTH;
-	if (mlx->winWidth < MIN_WIN_WIDTH)
-		mlx->winWidth = MIN_WIN_WIDTH;
-	if (mlx->winHeight > MAX_WIN_HEIGHT)
-		mlx->winHeight = MAX_WIN_HEIGHT;
-	if (mlx->winHeight < MIN_WIN_HEIGHT)
-		mlx->winHeight = MIN_WIN_HEIGHT;
+	mlx->win_width = ft_atoi(ret[0]);
+	mlx->win_height = ft_atoi(ret[1]);
+	if (mlx->win_width > MAX_WIN_WIDTH)
+		mlx->win_width = MAX_WIN_WIDTH;
+	if (mlx->win_width < MIN_WIN_WIDTH)
+		mlx->win_width = MIN_WIN_WIDTH;
+	if (mlx->win_height > MAX_WIN_HEIGHT)
+		mlx->win_height = MAX_WIN_HEIGHT;
+	if (mlx->win_height < MIN_WIN_HEIGHT)
+		mlx->win_height = MIN_WIN_HEIGHT;
 	return (free_2d_char(ret, TRUE));
 }
 
