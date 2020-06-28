@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 00:37:38 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 20:44:26 by donglee          ###   ########.fr       */
+/*   Updated: 2020/06/28 21:53:34 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <fcntl.h>
 # include "./libft/libft.h"
 # include "./gnl/get_next_line.h"
-# include "./minilibx_linux/mlx.h"
+# include "./minilibx/mlx.h"
 
 # define MIN_WIN_WIDTH 320
 # define MIN_WIN_HEIGHT 240
