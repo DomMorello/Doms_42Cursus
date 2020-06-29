@@ -6,11 +6,25 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:41:04 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 20:35:54 by marvin           ###   ########.fr       */
+/*   Updated: 2020/06/29 20:25:27 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
+
+int			is_end_line(char *line)
+{
+	int i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] != '1' && !ft_isspace(line[i]))
+			return (FALSE);
+		i++;
+	}
+	return (TRUE);
+}
 
 t_map	*ft_lstnewmap(char *content)
 {

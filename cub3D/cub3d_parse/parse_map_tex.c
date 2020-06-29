@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:43:37 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/29 20:05:03 by marvin           ###   ########.fr       */
+/*   Updated: 2020/06/29 20:25:10 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,20 +52,6 @@ int		input_tex(t_mlx *mlx, int tex, char *line)
 			i++;
 		if ((mlx->tex[tex].filepath = ft_strdup(&line[i])) == NULL)
 			return (error(ERR_MEM, mlx));
-	}
-	return (TRUE);
-}
-
-int			is_end_line(char *line)
-{
-	int i;
-
-	i = 0;
-	while (line[i])
-	{
-		if (line[i] != '1' && !ft_isspace(line[i]))
-			return (FALSE);
-		i++;
 	}
 	return (TRUE);
 }

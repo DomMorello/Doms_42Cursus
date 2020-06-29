@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:41:21 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/29 19:28:31 by marvin           ###   ########.fr       */
+/*   Updated: 2020/06/29 20:13:54 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,10 @@ int		input_resolution(t_mlx *mlx, char *str)
 	return (free_2d_char(ret, TRUE));
 }
 
-int		check_order(t_mlx *mlx, char *line)
+void	check_order(t_mlx *mlx, char *line)
 {
 	if (line[0] == '1' || line[0] == '0')
 		error(ERR_ORDER, mlx);
-	return (TRUE);
 }
 
 int		allset_filepath(t_mlx *mlx)

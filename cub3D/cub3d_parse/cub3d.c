@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:39:33 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 20:35:39 by marvin           ###   ########.fr       */
+/*   Updated: 2020/06/29 20:36:44 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,8 @@ int		main(int argc, char const *argv[])
 	if (argv[1])
 	{
 		check_extension(argv[1], &mlx);
-		parse_info(argv[1], &mlx);
+		if (parse_info(argv[1], &mlx) == ERROR)
+			return (ERROR);
 		init_game(&mlx);
 		if (argv[2])
 		{

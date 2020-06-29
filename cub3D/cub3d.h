@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 00:37:38 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/29 19:29:47 by marvin           ###   ########.fr       */
+/*   Updated: 2020/06/29 20:25:05 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,7 +247,7 @@ void				copy_map(t_mlx *mlx, char *line);
 int					is_valid_letter(char c);
 int					ft_lstaddmap_back(t_map **lst, t_map *new, char *row);
 t_map				*ft_lstnewmap(char *content);
-int					check_order(t_mlx *mlx, char *line);
+void				check_order(t_mlx *mlx, char *line);
 int					allset_filepath(t_mlx *mlx);
 void				check_tex(t_mlx *mlx);
 int					input_tex(t_mlx *mlx, int tex, char *line);
@@ -271,5 +271,6 @@ void				rotate_left(t_mlx *mlx, double rot_speed);
 void				input_verline(t_mlx *mlx, int texx, int i);
 void				draw_spritey(t_mlx *mlx, t_sprite *sprite,
 								int texx, int stripe);
+int					is_end_line(char *line);
 
 #endif
