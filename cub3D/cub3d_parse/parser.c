@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:41:21 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 20:36:08 by marvin           ###   ########.fr       */
+/*   Updated: 2020/06/29 19:28:31 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,8 @@ int		parse_line(char *line, t_mlx *mlx)
 		if (input_tex(mlx, tex, &line[i]) == ERROR)
 			return (ERROR);
 	}
-	else if (copy_map(mlx, line) == ERROR)
-		return (ERROR);
+	else
+		copy_map(mlx, line);
 	return (TRUE);
 }
 

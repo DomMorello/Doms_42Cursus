@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 00:37:38 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/29 18:12:21 by marvin           ###   ########.fr       */
+/*   Updated: 2020/06/29 19:29:47 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,7 +243,7 @@ void				move_map_2d(t_mlx *mlx, int mapsizey);
 int					get_mapsizey(t_mlx *mlx);
 void				check_lastline(t_mlx *mlx, char *line);
 int					parse_line(char *line, t_mlx *mlx);
-int					copy_map(t_mlx *mlx, char *line);
+void				copy_map(t_mlx *mlx, char *line);
 int					is_valid_letter(char c);
 int					ft_lstaddmap_back(t_map **lst, t_map *new, char *row);
 t_map				*ft_lstnewmap(char *content);

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:43:37 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 20:35:59 by marvin           ###   ########.fr       */
+/*   Updated: 2020/06/29 20:05:03 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,28 +56,47 @@ int		input_tex(t_mlx *mlx, int tex, char *line)
 	return (TRUE);
 }
 
-int		copy_map(t_mlx *mlx, char *line)
+int			is_end_line(char *line)
 {
-	int		i;
-	t_map	*new;
+	int i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] != '1' && !ft_isspace(line[i]))
+			return (FALSE);
+		i++;
+	}
+	return (TRUE);
+}
+
+void		copy_map(t_mlx *mlx, char *line)
+{
+	int			i;
+	t_map		*new;
+	static int	start_end = 0;
 
 	i = 0;
 	new = NULL;
 	while (ft_isspace(line[i]))
 		i++;
-	if (line[i] == 0)
-		return (PASS);
+	if ((start_end == 0 && line[i] == 0))
+		return ;
+	if (start_end == 1 && line[i] == 0)
+		error(ERR_MAP_SUR, mlx);
 	if (line[i] != '1')
-		return (error(ERR_MAP_SUR, mlx));
+		error(ERR_MAP_SUR, mlx);
+	else
+		start_end = 1;
+	if (start_end == 1 && is_end_line(&line[i]))
+		start_end = 0;
 	while (line[i])
 	{
-		if (!is_valid_letter(line[i]))
-			return (error(ERR_LETTER, mlx));
-		i++;
+		if (!is_valid_letter(line[i++]))
+			error(ERR_LETTER, mlx);
 	}
 	if (ft_lstaddmap_back(&mlx->maplst, new, ft_strdup(line)) == ERROR)
-		return (error(ERR_MEM, mlx));
-	return (TRUE);
+		error(ERR_MEM, mlx);
 }
 
 int		is_valid_letter(char c)
