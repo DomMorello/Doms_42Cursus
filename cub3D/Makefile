@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -I ./minilibx_linux/ -L ./minilibx_linux/ -lm -lmlx -lX11 -lXext -D BUFFER_SIZE=10 -Wall -Wextra -Werror
+CFLAGS = -I ./minilibx-linux/ -L ./minilibx-linux/ -lm -lmlx -lX11 -lXext -D BUFFER_SIZE=10 -Wall -Wextra -Werror
 MLX = libmlx.a
 
 SRCS = ./cub3d_parse/bmp.c ./cub3d_parse/check_exception.c ./cub3d_parse/color.c\
@@ -23,19 +23,19 @@ all : $(NAME)
 
 $(NAME) : $(OBJS) cub3d.h ./gnl/get_next_line.h
 	@make -C libft
-	@make -C minilibx_linux
-	cp minilibx_linux/$(MLX) ./
+	@make -C minilibx-linux
+	cp minilibx-linux/$(MLX) ./
 	cp libft/libft.a ./
 	$(CC) $(SRCS) libft.a $(MLX) $(CFLAGS) -o $(NAME)
 
 clean :
 	cd ./libft; make clean
-	cd ./minilibx_linux; make clean
+	cd ./minilibx-linux; make clean
 	rm -f $(OBJS)
 
 fclean :
 	cd ./libft; make fclean
-	cd ./minilibx_linux; make clean
+	cd ./minilibx-linux; make clean
 	rm -f $(OBJS)
 	rm -f $(NAME)
 	rm -f libft.a
