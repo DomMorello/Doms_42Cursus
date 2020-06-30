@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:39:33 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/30 21:15:43 by marvin           ###   ########.fr       */
+/*   Updated: 2020/06/30 22:14:38 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ void	init_null(t_mlx *mlx)
 	}
 	mlx->map = NULL;
 	mlx->maplst = NULL;
+	// mlx->sprite = NULL;
 }
 
 int		main(int argc, char const *argv[])
