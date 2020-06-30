@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:39:33 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/29 20:36:44 by marvin           ###   ########.fr       */
+/*   Updated: 2020/06/30 19:18:28 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,28 @@ void	mlx_event(t_mlx *mlx)
 	mlx_loop(mlx->mlx_ptr);
 }
 
+void	init_null(t_mlx *mlx)
+{
+	int i;
+
+	i = 0;
+	mlx->mlx_ptr = NULL;
+	mlx->win_ptr = NULL;
+	mlx->img.img_ptr = NULL;
+	while (i < 7)
+	{
+		mlx->tex[i].filepath = NULL;
+		mlx->tex[i].img_ptr = NULL;
+		i++;
+	}
+	mlx->map = NULL;
+}
+
 int		main(int argc, char const *argv[])
 {
 	t_mlx mlx;
 
+	init_null(&mlx);
 	if (argc > 3)
 		error_msg(ERR_TOOMANY);
 	if (argv[1])
