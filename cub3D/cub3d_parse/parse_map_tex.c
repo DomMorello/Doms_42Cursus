@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_map_tex.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:43:37 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/30 21:09:42 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/01 15:37:18 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int		input_tex(t_mlx *mlx, int tex, char *line)
 	return (TRUE);
 }
 
-void		copy_map(t_mlx *mlx, char *line)
+void	copy_map(t_mlx *mlx, char *line)
 {
 	int			i;
 	t_map		*new;

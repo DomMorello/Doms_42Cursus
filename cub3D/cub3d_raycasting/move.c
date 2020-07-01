@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   move.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:09:33 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 20:36:34 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/01 16:24:46 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,21 +56,21 @@ void	move_side(t_mlx *mlx)
 {
 	if (mlx->game.move_r == 1)
 	{
-		if (mlx->map[(int)(mlx->game.posx + mlx->game.planex * 0.01)]
+		if (mlx->map[(int)(mlx->game.posx + mlx->game.planex * 0.04)]
 			[(int)mlx->game.posy] == '0')
-			mlx->game.posx += mlx->game.planex * 0.01;
+			mlx->game.posx += mlx->game.planex * 0.04;
 		if (mlx->map[(int)mlx->game.posx]
-			[(int)(mlx->game.posy + mlx->game.planey * 0.01)] == '0')
-			mlx->game.posy += mlx->game.planey * 0.01;
+			[(int)(mlx->game.posy + mlx->game.planey * 0.04)] == '0')
+			mlx->game.posy += mlx->game.planey * 0.04;
 	}
 	if (mlx->game.move_l == 1)
 	{
-		if (mlx->map[(int)(mlx->game.posx - mlx->game.planex * 0.01)]
+		if (mlx->map[(int)(mlx->game.posx - mlx->game.planex * 0.04)]
 			[(int)mlx->game.posy] == '0')
-			mlx->game.posx -= mlx->game.planex * 0.01;
+			mlx->game.posx -= mlx->game.planex * 0.04;
 		if (mlx->map[(int)mlx->game.posx]
-			[(int)(mlx->game.posy - mlx->game.planey * 0.01)] == '0')
-			mlx->game.posy -= mlx->game.planey * 0.01;
+			[(int)(mlx->game.posy - mlx->game.planey * 0.04)] == '0')
+			mlx->game.posy -= mlx->game.planey * 0.04;
 	}
 }
 

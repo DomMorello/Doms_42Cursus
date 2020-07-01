@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   map2.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:41:04 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/30 15:53:35 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/01 15:36:58 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-int			is_end_line(char *line)
+int		is_end_line(char *line)
 {
 	int i;
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:43:22 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/29 20:38:05 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/01 15:36:13 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,4 +35,23 @@ void	init_game(t_mlx *mlx)
 		mlx->tex[i].data = (int *)mlx_get_data_addr(mlx->tex[i].img_ptr,
 				&mlx->tex[i].bpp, &mlx->tex[i].size_l, &mlx->tex[i].endian);
 	}
+}
+
+void	init_null(t_mlx *mlx)
+{
+	int i;
+
+	i = 0;
+	mlx->mlx_ptr = NULL;
+	mlx->win_ptr = NULL;
+	mlx->img.img_ptr = NULL;
+	while (i < 7)
+	{
+		mlx->tex[i].filepath = NULL;
+		mlx->tex[i].img_ptr = NULL;
+		i++;
+	}
+	mlx->map = NULL;
+	mlx->maplst = NULL;
+	mlx->sprite = NULL;
 }
