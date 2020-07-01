@@ -6,7 +6,7 @@
 /*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:43:22 by donglee           #+#    #+#             */
-/*   Updated: 2020/07/01 15:36:13 by donglee          ###   ########.fr       */
+/*   Updated: 2020/07/01 18:56:49 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,9 @@ void	init_null(t_mlx *mlx)
 	mlx->map = NULL;
 	mlx->maplst = NULL;
 	mlx->sprite = NULL;
+}
+
+int		exit_hook(t_mlx *mlx)
+{
+	return (error("exit game", mlx));
 }

@@ -6,7 +6,7 @@
 /*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:39:33 by donglee           #+#    #+#             */
-/*   Updated: 2020/07/01 16:37:53 by donglee          ###   ########.fr       */
+/*   Updated: 2020/07/01 18:56:09 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	mlx_event(t_mlx *mlx)
 {
 	mlx_hook(mlx->win_ptr, 2, 1L << 0, key_press, mlx);
 	mlx_hook(mlx->win_ptr, 3, 1L << 1, key_release, mlx);
-	mlx_hook(mlx->win_ptr, 17, 1L << 17, error, mlx);
+	mlx_hook(mlx->win_ptr, 17, 1L << 17, exit_hook, mlx);
 	mlx_loop_hook(mlx->mlx_ptr, run_game, mlx);
 	mlx_loop(mlx->mlx_ptr);
 }
@@ -90,7 +90,5 @@ int		main(int argc, char const *argv[])
 		}
 		mlx_event(&mlx);
 	}
-	// else
-	// 	return (error(ERR_MAP, &mlx));
 	return (0);
 }

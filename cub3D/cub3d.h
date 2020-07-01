@@ -6,7 +6,7 @@
 /*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 00:37:38 by donglee           #+#    #+#             */
-/*   Updated: 2020/07/01 16:11:01 by donglee          ###   ########.fr       */
+/*   Updated: 2020/07/01 18:56:01 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,7 +264,7 @@ int					free_2d_char(char **ret, int flag);
 int					ft_isspace(char c);
 int					error_msg(char *str);
 int					error(char *str, t_mlx *mlx);
-int					exit_game(t_mlx *mlx);
+int					exit_hook(t_mlx *mlx);
 void				clear_map(t_mlx *mlx);
 void				input_color(t_tex *tex, t_mlx *mlx, char **ret);
 void				ft_lstmapclear(t_map **lst);
