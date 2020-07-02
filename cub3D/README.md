@@ -9,8 +9,8 @@ first person perspective by using the algorithm of ray casting.<br>
 
 ## Compile
 the program works only in MacOS
-- `git clone ????`
-- `cd ????`
+- `git clone https://github.com/DomMorello/cub3d.git`
+- `cd cub3d`
 - `make`
 - `./cub3d ./map/valid_basic.cub`
 - if you want to save a screenshot `./cub3d ./map/valid_basic.cub --save`<br>
