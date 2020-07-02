@@ -99,3 +99,5 @@ If any misconfiguration of any kind is encountered in the file, the program retu
 - Raycasting algorithm in c++ (https://lodev.org/cgtutor/raycasting.html)<br>
 - Raycasting basics in JavaScript (https://courses.pikuma.com/courses/raycasting)<br>
 - Raycasting Tutorial (https://permadi.com/1996/05/ray-casting-tutorial-table-of-contents/)<br>
+
+#### Contact: zuzudnf@gmail.com
