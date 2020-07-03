@@ -20,6 +20,12 @@ as the buffer size for the read calls in your get_next_line.
 - 예를 들어, 파일 디스크립터가 3, 4, 5에 파일을 읽을 수 있도록 되어 있고 이 함수를 사용해서 3번을 읽다가 4번을 읽고 다시 3번을 읽다가 5번을 읽었을 때 각각의 파일을 읽는데 전혀 지장이 없이 순서대로 작동합니다. 
 
 ## Run
+```
+git clone https://github.com/DomMorello/get_next_line.git
+cd get_next_line
+touch test.c
+touch test.txt
+```
 This repo does not have Makefile so you have to compile all the c files.<br>
 To test, you should make c file for test in the root directory like this:<br><br>
 이 저장소에는 Makefile이 없으므로 모든 c 파일을 직접 컴파일 해줘야 합니다.<br>
