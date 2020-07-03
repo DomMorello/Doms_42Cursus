@@ -1,11 +1,12 @@
 # libft
 
 ## Subject
-To make my own c library which has many useful functions for the future projects<br><br>
+>To make my own c library which has many useful functions for the future projects<br><br>
 앞으로의 프로젝트에서 요긴하게 사용될 유용한 함수들의 라이브러리 만들기.<br>
 
 ## Run
-To test, you should make your own c file like this:<br><br>
+>To test, you should make your own c file like this:<br>
+
 test.c
 ```
 #include "./libft.h"
@@ -24,7 +25,7 @@ int main(void)
     return (0);
 }
 ```
-To compile,
+>To compile,
 ```
 git clone https://github.com/DomMorello/libft.git
 cd libft
@@ -32,7 +33,7 @@ make
 touch test.c
 gcc -Wall -Wextra -Werror test.c libft.a %% ./a.out
 ```
-It should give back:
+>It should give back:
 ```
 11
 ```
@@ -40,7 +41,7 @@ It should give back:
 ## Functions
 
 ### #Part 1
-Re-code a set of libc functions as defined in their man. Those function's prototype is exactly same as original ones. <br><br>
+>Re-code a set of libc functions as defined in their man. Those function's prototype is exactly same as original ones. <br><br>
 스탠다드 c 라이브러리에 포함된 다음 함수들을 재구현한 라이브러리 입니다.
 이 함수들의 선언부는 원래의 함수들과 완전히 같습니다. <br>
 
@@ -70,7 +71,7 @@ Re-code a set of libc functions as defined in their man. Those function's protot
 - strdup
 
 ### #Part 2
-A set of functions that are either not included in the libc, or included in a different form.<br><br>
+>A set of functions that are either not included in the libc, or included in a different form.<br><br>
 libc에 포함돼있지 않거나 다른 형태로 포함돼있는 함수들.
 
 #### ft_substr
@@ -208,7 +209,7 @@ descriptor.
 
 ### #Bonus
 
-Making list
+>Making list
 <br><br>
 리스트 만들기
 
@@ -219,15 +220,15 @@ typedef struct      s_list
     struct s_list   *next;
 }                   t_list;
 ```
-The struct above is defined in the libft.h file.<br>
-- **content** : The data contained in the element. The void * allows to store any kind
+>The struct above is defined in the libft.h file.<br>
+>- **content** : The data contained in the element. The void * allows to store any kind
 of data.
-- **next** : The next element’s address or NULL if it’s the last element.
-<br><br>
+>- **next** : The next element’s address or NULL if it’s the last element.
+<br>
 
-위에 묘사된 구조체는 libft.h 헤더파일에 정의되어 있습니다.<br>
-- **content** : 각 요소가 갖고 있는 데이터. void *타입인 이유는 어떤 종류의 데이터 타입도 담을 수 있게 하기 위함입니다.
-- **next** : 리스트에서 다음 요소를 가리키는 포인터입니다. 만약 마지막 요소라면 이 값은 NULL입니다.
+>위에 묘사된 구조체는 libft.h 헤더파일에 정의되어 있습니다.<br>
+>- **content** : 각 요소가 갖고 있는 데이터. void *타입인 이유는 어떤 종류의 데이터 타입도 담을 수 있게 하기 위함입니다.
+>- **next** : 리스트에서 다음 요소를 가리키는 포인터입니다. 만약 마지막 요소라면 이 값은 NULL입니다.
 
 #### ft_lstnew
 - **Prototype(선언부)**: t_list *ft_lstnew(void *content);
