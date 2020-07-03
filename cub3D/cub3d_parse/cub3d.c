@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:39:33 by donglee           #+#    #+#             */
-/*   Updated: 2020/07/01 13:19:39 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/03 15:59:57 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,28 +60,9 @@ void	mlx_event(t_mlx *mlx)
 {
 	mlx_hook(mlx->win_ptr, 2, 1L << 0, key_press, mlx);
 	mlx_hook(mlx->win_ptr, 3, 1L << 1, key_release, mlx);
-	mlx_hook(mlx->win_ptr, 17, 1L << 17, error, mlx);
+	mlx_hook(mlx->win_ptr, 17, 1L << 17, exit_hook, mlx);
 	mlx_loop_hook(mlx->mlx_ptr, run_game, mlx);
 	mlx_loop(mlx->mlx_ptr);
-}
-
-void	init_null(t_mlx *mlx)
-{
-	int i;
-
-	i = 0;
-	mlx->mlx_ptr = NULL;
-	mlx->win_ptr = NULL;
-	mlx->img.img_ptr = NULL;
-	while (i < 7)
-	{
-		mlx->tex[i].filepath = NULL;
-		mlx->tex[i].img_ptr = NULL;
-		i++;
-	}
-	mlx->map = NULL;
-	mlx->maplst = NULL;
-	mlx->sprite = NULL;
 }
 
 int		main(int argc, char const *argv[])
@@ -89,8 +70,8 @@ int		main(int argc, char const *argv[])
 	t_mlx mlx;
 
 	init_null(&mlx);
-	if (argc > 3)
-		error_msg(ERR_TOOMANY);
+	if (argc != 2 && argc != 3)
+		return (error_msg(ERR_TOOMANY));
 	if (argv[1])
 	{
 		check_extension(argv[1], &mlx);
@@ -109,7 +90,5 @@ int		main(int argc, char const *argv[])
 		}
 		mlx_event(&mlx);
 	}
-	else
-		return (error(ERR_MAP, &mlx));
 	return (0);
 }

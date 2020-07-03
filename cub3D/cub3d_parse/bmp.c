@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bmp.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:38:45 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 21:11:22 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/01 16:59:01 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int		save_bmp(t_mlx *mlx)
 	t_bmfh	bmfh;
 	t_bmih	bmih;
 
-	if ((fd = open("./capture.bmp", O_WRONLY | O_CREAT)) == ERROR)
+	if ((fd = open("capture.bmp", O_WRONLY | O_CREAT)) == ERROR)
 		return (error_msg(ERR_OPEN));
 	set_bmfh(&bmfh, mlx);
 	set_bmih(&bmih, mlx);

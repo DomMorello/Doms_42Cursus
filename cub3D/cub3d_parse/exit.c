@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:42:04 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/29 20:27:51 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/01 15:32:08 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,6 @@ void	clear_map(t_mlx *mlx)
 
 	i = 0;
 	ft_lstmapclear(&mlx->maplst);
-	if (mlx->map)
-	{
-		while (mlx->map[i])
-		{
-			free(mlx->map[i]);
-			mlx->map[i] = NULL;
-			i++;
-		}
-		free(mlx->map);
-		mlx->map = NULL;
-	}
 }
 
 void	clear_tex(t_mlx *mlx)

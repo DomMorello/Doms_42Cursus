@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 00:37:38 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/30 16:19:56 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/01 18:56:01 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <fcntl.h>
 # include "./libft/libft.h"
 # include "./gnl/get_next_line.h"
-# include "./minilibx-linux/mlx.h"
+# include "./mlx/mlx.h"
 
 # define MIN_WIN_WIDTH 320
 # define MIN_WIN_HEIGHT 240
@@ -41,20 +41,27 @@
 # define ERR_MAP_SUR "Error\nmap is not entirely surrounded by walls"
 # define ERR_LETTER "Error\ninvalid letter is included in the file"
 # define ERR_ORDER "Error\nmap info must be located at the end of the file"
-# define ERR_TOOMANY "Error\ntoo many arguements"
+# define ERR_TOOMANY "Error\ntoo many or few arguements"
 
 # define TRUE 1
 # define FALSE 0
 # define ERROR -1
 # define PASS 7
 
-# define KEY_A 97
-# define KEY_S 115
-# define KEY_D 100
-# define KEY_W 119
-# define KEY_LEFT 65361
-# define KEY_RIGHT 65363
-# define KEY_ESC 65307
+# define LINUX_KEY_A 97
+# define LINUX_KEY_S 115
+# define LINUX_KEY_D 100
+# define LINUX_KEY_W 119
+# define LINUX_KEY_LEFT 65361
+# define LINUX_KEY_RIGHT 65363
+# define LINUX_KEY_ESC 65307
+# define MAC_KEY_A 0
+# define MAC_KEY_S 1
+# define MAC_KEY_D 2
+# define MAC_KEY_W 13
+# define MAC_KEY_LEFT 123
+# define MAC_KEY_RIGHT 124
+# define MAC_KEY_ESC 53
 
 enum				e_textures
 {
@@ -257,7 +264,7 @@ int					free_2d_char(char **ret, int flag);
 int					ft_isspace(char c);
 int					error_msg(char *str);
 int					error(char *str, t_mlx *mlx);
-int					exit_game(t_mlx *mlx);
+int					exit_hook(t_mlx *mlx);
 void				clear_map(t_mlx *mlx);
 void				input_color(t_tex *tex, t_mlx *mlx, char **ret);
 void				ft_lstmapclear(t_map **lst);
@@ -272,5 +279,6 @@ void				input_verline(t_mlx *mlx, int texx, int i);
 void				draw_spritey(t_mlx *mlx, t_sprite *sprite,
 								int texx, int stripe);
 int					is_end_line(char *line);
+void				init_null(t_mlx *mlx);
 
 #endif
