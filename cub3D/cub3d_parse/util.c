@@ -6,11 +6,15 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:41:39 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 20:36:20 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/04 14:52:02 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
+
+/*
+** delete a node from a list 
+*/
 
 void	ft_lstmapdelone(t_map *node)
 {
@@ -22,6 +26,10 @@ void	ft_lstmapdelone(t_map *node)
 		node = NULL;
 	}
 }
+
+/*
+** clear the list of map 
+*/
 
 void	ft_lstmapclear(t_map **lst)
 {
@@ -38,6 +46,10 @@ void	ft_lstmapclear(t_map **lst)
 		*lst = NULL;
 	}
 }
+
+/*
+** returns -1(ERROR) and outputs the string of 'str'
+*/
 
 int		error_msg(char *str)
 {

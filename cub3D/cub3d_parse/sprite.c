@@ -6,11 +6,15 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:44:25 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 20:36:16 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/04 14:50:36 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
+
+/*
+** According the map, decides the position of the sprites
+*/
 
 void	input_sprite(t_sprite *sprites, char **map, int mapsizey)
 {
@@ -38,6 +42,11 @@ void	input_sprite(t_sprite *sprites, char **map, int mapsizey)
 		i++;
 	}
 }
+
+/*
+** Counts the number of sprites in the map contents
+** This is used to compare distance from the player to the sprites 
+*/
 
 int		count_sprite(char **map, int mapsizey)
 {

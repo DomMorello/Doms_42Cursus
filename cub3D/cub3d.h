@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 00:37:38 by donglee           #+#    #+#             */
-/*   Updated: 2020/07/01 18:56:01 by donglee          ###   ########.fr       */
+/*   Updated: 2020/07/03 20:06:30 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,10 @@
 # define MAC_KEY_LEFT 123
 # define MAC_KEY_RIGHT 124
 # define MAC_KEY_ESC 53
+
+/*
+** enum initializes the value 0 to 6 
+*/
 
 enum				e_textures
 {
@@ -149,11 +153,21 @@ typedef struct		s_sprite
 	int				draw_endy;
 }					t_sprite;
 
+/*
+** since I can't know the height of the map
+** before the program read the scene description file
+** I put map lines into the list
+*/
+
 typedef struct		s_map
 {
 	char			*row;
 	struct s_map	*next;
 }					t_map;
+
+/*
+**	t_fc for floor ceiling rendering 
+*/
 
 typedef struct		s_fc
 {
@@ -166,6 +180,11 @@ typedef struct		s_fc
 	float			floorx;
 	float			floory;
 }					t_fc;
+
+/*
+** t_mlx has all the strcuts defined above
+** t_tex[7] for north, south, west, east, floor, ceiling and sprite 
+*/
 
 typedef struct		s_mlx
 {
@@ -183,6 +202,10 @@ typedef struct		s_mlx
 	int				win_width;
 	int				win_height;
 }					t_mlx;
+
+/*
+** pragma for allocating memory esxactly same size as the data type has  
+*/
 
 # pragma pack(push, 1)
 

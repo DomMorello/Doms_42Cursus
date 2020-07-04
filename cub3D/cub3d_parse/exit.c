@@ -3,14 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:42:04 by donglee           #+#    #+#             */
-/*   Updated: 2020/07/01 15:32:08 by donglee          ###   ########.fr       */
+/*   Updated: 2020/07/04 13:14:10 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
+
+/*
+** Clears the map list 
+*/
 
 void	clear_map(t_mlx *mlx)
 {
@@ -19,6 +23,11 @@ void	clear_map(t_mlx *mlx)
 	i = 0;
 	ft_lstmapclear(&mlx->maplst);
 }
+
+/*
+** Clears the allocated memory on the string of filepath
+** and destroys the image of textures 
+*/
 
 void	clear_tex(t_mlx *mlx)
 {
@@ -57,6 +66,10 @@ void	clear_window(t_mlx *mlx)
 		mlx_destroy_window(mlx->mlx_ptr, mlx->win_ptr);
 	}
 }
+
+/*
+** the function exit will return all the allocated memory on the heap 
+*/
 
 int		error(char *str, t_mlx *mlx)
 {

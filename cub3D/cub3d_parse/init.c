@@ -3,14 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:43:22 by donglee           #+#    #+#             */
-/*   Updated: 2020/07/01 18:56:49 by donglee          ###   ########.fr       */
+/*   Updated: 2020/07/04 13:23:18 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
+
+/*
+** Initializes the mlx and parses the information in the file
+** related with textures. Converts texture xpm files to images.
+*/
 
 void	init_game(t_mlx *mlx)
 {
@@ -55,6 +60,13 @@ void	init_null(t_mlx *mlx)
 	mlx->maplst = NULL;
 	mlx->sprite = NULL;
 }
+
+/*
+** If you code like "mlx_hook(mlx->win_ptr, 17, 1L << 17, error, mlx);",
+** It will make error on your program when you click the red x button.
+** So I made this function of which prototype is "int function(void *param)"
+** And it works fine
+*/
 
 int		exit_hook(t_mlx *mlx)
 {

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:42:58 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 20:36:12 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/04 14:49:15 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,11 @@ void	set_playerpos(t_mlx *mlx, double x, double y)
 	mlx->game.posx = x + 0.5;
 	mlx->game.posy = y + 0.5;
 }
+
+/*
+** According to the player's direction, input the initial value
+** to the players variables
+*/
 
 void	input_direction(t_mlx *mlx, char direction, int x, int y)
 {

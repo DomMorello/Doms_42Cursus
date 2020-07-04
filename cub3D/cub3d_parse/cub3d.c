@@ -6,11 +6,17 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:39:33 by donglee           #+#    #+#             */
-/*   Updated: 2020/07/03 15:59:57 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/04 13:10:58 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
+
+/*
+** the function allocates the string(copy) and return it 
+** exactly as much as 'size' from the end of the string(str)
+** this is uesd for checking extension
+*/
 
 char	*ft_strfromend(char *str, int size)
 {
@@ -30,6 +36,10 @@ char	*ft_strfromend(char *str, int size)
 	copy[i] = '\0';
 	return (copy);
 }
+
+/*
+** Checks if the file extension is ".cub"
+*/
 
 void	check_extension(char const *argv, t_mlx *mlx)
 {
@@ -56,6 +66,10 @@ void	init_mlx(t_mlx *mlx)
 										&mlx->img.size_l, &mlx->img.endian);
 }
 
+/*
+** main algorithm, key_press, key_release, and a red x button hooks 
+*/
+
 void	mlx_event(t_mlx *mlx)
 {
 	mlx_hook(mlx->win_ptr, 2, 1L << 0, key_press, mlx);
@@ -64,6 +78,15 @@ void	mlx_event(t_mlx *mlx)
 	mlx_loop_hook(mlx->mlx_ptr, run_game, mlx);
 	mlx_loop(mlx->mlx_ptr);
 }
+
+
+/*
+** The main flow of the program
+** first, initializes the members in the struct to NULL 
+** checks extension and starts parse the scene description file
+** based on the result of parsing, inputs proper data in the variables
+** runs the ray casting algorithm with the data from the file
+*/
 
 int		main(int argc, char const *argv[])
 {

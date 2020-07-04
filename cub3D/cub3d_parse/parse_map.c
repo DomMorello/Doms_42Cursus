@@ -3,14 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   parse_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:42:20 by donglee           #+#    #+#             */
-/*   Updated: 2020/07/01 13:54:49 by donglee          ###   ########.fr       */
+/*   Updated: 2020/07/04 14:48:12 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
+
+/*
+** In the map part, the first and last line must be full of '1' or space
+*/
 
 void	check_border(t_mlx *mlx, int mapsizey)
 {
@@ -33,6 +37,12 @@ void	check_border(t_mlx *mlx, int mapsizey)
 	}
 	check_rightside(mlx, mapsizey);
 }
+
+
+/*
+** reads the file and decides what the direction is
+** direction element must be singular
+*/
 
 void	check_direction(t_mlx *mlx, int mapsizey)
 {
@@ -63,6 +73,11 @@ void	check_direction(t_mlx *mlx, int mapsizey)
 		error(ERR_PLU, mlx);
 }
 
+/*
+** Moves the data stored in the list of maplst to the two dimensional
+** char array for my convenience
+*/
+
 void	move_map_2d(t_mlx *mlx, int mapsizey)
 {
 	int		i;
@@ -84,6 +99,11 @@ void	move_map_2d(t_mlx *mlx, int mapsizey)
 		i++;
 	}
 }
+
+/*
+** to move list that contains map info to the two dimensional char array,
+** counts the height of the array 
+*/
 
 int		get_mapsizey(t_mlx *mlx)
 {

@@ -6,11 +6,17 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:41:50 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/28 20:35:29 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/04 13:01:15 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
+
+/*
+** All the texture struct have to have a filapath(string) 
+** If the file has a RGB color like this: F 23 0  234 then the filepath will be
+** "23 0  234" and it will be parsed properly later.
+*/
 
 void	check_tex(t_mlx *mlx)
 {
@@ -24,6 +30,11 @@ void	check_tex(t_mlx *mlx)
 		i++;
 	}
 }
+
+/*
+** get_next_line function in the loop can't handle the last line in the loop
+** So the last line of the file needs to be handled seperately with this function  
+*/
 
 void	check_lastline(t_mlx *mlx, char *line)
 {

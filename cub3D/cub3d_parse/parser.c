@@ -6,11 +6,16 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:41:21 by donglee           #+#    #+#             */
-/*   Updated: 2020/06/29 20:13:54 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/03 20:29:31 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
+
+/*
+** Inputs resolution info from the file to the varaibles in the struct
+** If it exceed the valid range it will be adjusted to the maximum(minimum) value
+*/
 
 int		input_resolution(t_mlx *mlx, char *str)
 {
@@ -41,11 +46,24 @@ int		input_resolution(t_mlx *mlx, char *str)
 	return (free_2d_char(ret, TRUE));
 }
 
+/*
+** If the map info is located between other elements like R, NO, S etc,
+** the program returns error
+** map info must be end of the file.
+*/
+
 void	check_order(t_mlx *mlx, char *line)
 {
 	if (line[0] == '1' || line[0] == '0')
 		error(ERR_ORDER, mlx);
 }
+
+/*
+** Checks if the texture's filepath is fully defined
+** If it isn't, returns false otherwise true
+** This is used to make sure map info is located in the end of the file.
+** Only after all the texture's filepath is fully defined it reads map info.
+*/
 
 int		allset_filepath(t_mlx *mlx)
 {
@@ -86,6 +104,13 @@ int		parse_line(char *line, t_mlx *mlx)
 		copy_map(mlx, line);
 	return (TRUE);
 }
+
+
+/*
+** opens and reads the file and input the information in the file 
+** to the proper variables in the structs.
+** At the same time, it checks whether the file has errors in it
+*/
 
 int		parse_info(char const *argv, t_mlx *mlx)
 {

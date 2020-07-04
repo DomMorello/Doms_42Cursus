@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_map_tex.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:43:37 by donglee           #+#    #+#             */
-/*   Updated: 2020/07/01 15:37:18 by donglee          ###   ########.fr       */
+/*   Updated: 2020/07/04 14:16:21 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,11 @@ int		which_tex(char *line)
 		return (ERROR);
 }
 
+/*
+** In the file, reads the texture part and stores the filepath
+** in the struct of textures
+*/
+
 int		input_tex(t_mlx *mlx, int tex, char *line)
 {
 	int space;
@@ -55,6 +60,16 @@ int		input_tex(t_mlx *mlx, int tex, char *line)
 	}
 	return (TRUE);
 }
+
+/*
+** The variable static int start_end will let the program know whether
+** the get_next_line funtion starts to read map part of the file
+** or it reads the last line of the map contents.
+** If there is a empty line between map contents, returns an error.
+** Checks if invalid letters is included in the map contents
+** If there's no error in the map contents,
+** copy the line in the list called maplst
+*/
 
 void	copy_map(t_mlx *mlx, char *line)
 {
@@ -85,6 +100,10 @@ void	copy_map(t_mlx *mlx, char *line)
 		error(ERR_MEM, mlx);
 }
 
+/*
+** In the map contents, only below letters are valid
+*/
+
 int		is_valid_letter(char c)
 {
 	if (c == '0' || c == '1' || c == '2' || c == 'N' ||
@@ -94,6 +113,10 @@ int		is_valid_letter(char c)
 		return (TRUE);
 	return (FALSE);
 }
+
+/*
+** Adds the new node to the end of the list 
+*/
 
 int		ft_lstaddmap_back(t_map **lst, t_map *new, char *row)
 {
