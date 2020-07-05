@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   floor_ceiling.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:08:58 by donglee           #+#    #+#             */
-/*   Updated: 2020/07/01 18:42:46 by donglee          ###   ########.fr       */
+/*   Updated: 2020/07/05 19:33:46 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,12 @@ void	draw_floor_ceiling(t_mlx *mlx)
 		y++;
 	}
 }
+
+/*
+** Draws floor, ceiling first and renders wall.
+** handles key events to move and roate.
+** Lastly, draws sprites 
+*/
 
 int		run_game(t_mlx *mlx)
 {
