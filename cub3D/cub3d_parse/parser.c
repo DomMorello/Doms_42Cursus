@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:41:21 by donglee           #+#    #+#             */
-/*   Updated: 2020/07/03 20:29:31 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/06 16:26:40 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 /*
 ** Inputs resolution info from the file to the varaibles in the struct
-** If it exceed the valid range it will be adjusted to the maximum(minimum) value
+** If it exceed the valid range it will be adjusted
+** to the maximum(minimum) value
 */
 
 int		input_resolution(t_mlx *mlx, char *str)
@@ -105,9 +106,8 @@ int		parse_line(char *line, t_mlx *mlx)
 	return (TRUE);
 }
 
-
 /*
-** opens and reads the file and input the information in the file 
+** opens and reads the file and input the information in the file
 ** to the proper variables in the structs.
 ** At the same time, it checks whether the file has errors in it
 */

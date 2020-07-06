@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:42:20 by donglee           #+#    #+#             */
-/*   Updated: 2020/07/04 14:48:12 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/06 16:22:44 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ void	check_border(t_mlx *mlx, int mapsizey)
 	}
 	check_rightside(mlx, mapsizey);
 }
-
 
 /*
 ** reads the file and decides what the direction is
@@ -102,7 +101,7 @@ void	move_map_2d(t_mlx *mlx, int mapsizey)
 
 /*
 ** to move list that contains map info to the two dimensional char array,
-** counts the height of the array 
+** counts the height of the array
 */
 
 int		get_mapsizey(t_mlx *mlx)

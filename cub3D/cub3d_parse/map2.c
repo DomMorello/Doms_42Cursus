@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:41:04 by donglee           #+#    #+#             */
-/*   Updated: 2020/07/04 13:43:22 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/06 16:20:39 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /*
 ** Checks if the line is the last line of the map info
-** All the characters of the last line must be 1 or space 
+** All the characters of the last line must be 1 or space
 */
 
 int		is_end_line(char *line)
@@ -32,7 +32,7 @@ int		is_end_line(char *line)
 }
 
 /*
-** Makes a new node in the list with the given content as a parameter 
+** Makes a new node in the list with the given content as a parameter
 */
 
 t_map	*ft_lstnewmap(char *content)
@@ -49,7 +49,7 @@ t_map	*ft_lstnewmap(char *content)
 /*
 ** The algorithm which checks if the map contents is valid
 ** if there is a vacant space right above and below 0
-** it is not a wall surrounded map that is, returns error 
+** it is not a wall surrounded map that is, returns error
 */
 
 void	check_updown(int i, int j, t_mlx *mlx)
@@ -93,7 +93,7 @@ void	parse_contents(t_mlx *mlx, int mapsizey)
 
 /*
 ** In the map contents, right side of the map must ends with '1'
-** If not, it is not a wall surrounded map 
+** If not, it is not a wall surrounded map
 */
 
 void	check_rightside(t_mlx *mlx, int mapsizey)

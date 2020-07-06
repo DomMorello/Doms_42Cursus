@@ -6,14 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:39:33 by donglee           #+#    #+#             */
-/*   Updated: 2020/07/04 13:10:58 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/06 16:24:09 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
 /*
-** the function allocates the string(copy) and return it 
+** the function allocates the string(copy) and return it
 ** exactly as much as 'size' from the end of the string(str)
 ** this is uesd for checking extension
 */
@@ -67,7 +67,7 @@ void	init_mlx(t_mlx *mlx)
 }
 
 /*
-** main algorithm, key_press, key_release, and a red x button hooks 
+** main algorithm, key_press, key_release, and a red x button hooks
 */
 
 void	mlx_event(t_mlx *mlx)
@@ -79,10 +79,9 @@ void	mlx_event(t_mlx *mlx)
 	mlx_loop(mlx->mlx_ptr);
 }
 
-
 /*
 ** The main flow of the program
-** first, initializes the members in the struct to NULL 
+** first, initializes the members in the struct to NULL
 ** checks extension and starts parse the scene description file
 ** based on the result of parsing, inputs proper data in the variables
 ** runs the ray casting algorithm with the data from the file

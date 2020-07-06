@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 00:37:38 by donglee           #+#    #+#             */
-/*   Updated: 2020/07/03 20:06:30 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/06 16:17:12 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@
 # define MAC_KEY_ESC 53
 
 /*
-** enum initializes the value 0 to 6 
+** enum initializes the value 0 to 6
 */
 
 enum				e_textures
@@ -166,7 +166,7 @@ typedef struct		s_map
 }					t_map;
 
 /*
-**	t_fc for floor ceiling rendering 
+**	t_fc for floor ceiling rendering
 */
 
 typedef struct		s_fc
@@ -183,7 +183,7 @@ typedef struct		s_fc
 
 /*
 ** t_mlx has all the strcuts defined above
-** t_tex[7] for north, south, west, east, floor, ceiling and sprite 
+** t_tex[7] for north, south, west, east, floor, ceiling and sprite
 */
 
 typedef struct		s_mlx
@@ -204,7 +204,7 @@ typedef struct		s_mlx
 }					t_mlx;
 
 /*
-** pragma for allocating memory esxactly same size as the data type has  
+** pragma for allocating memory esxactly same size as the data type has
 */
 
 # pragma pack(push, 1)

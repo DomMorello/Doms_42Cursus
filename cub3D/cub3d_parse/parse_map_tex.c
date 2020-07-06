@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:43:37 by donglee           #+#    #+#             */
-/*   Updated: 2020/07/04 14:16:21 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/06 16:24:39 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ int		is_valid_letter(char c)
 }
 
 /*
-** Adds the new node to the end of the list 
+** Adds the new node to the end of the list
 */
 
 int		ft_lstaddmap_back(t_map **lst, t_map *new, char *row)

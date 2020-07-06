@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:38:45 by donglee           #+#    #+#             */
-/*   Updated: 2020/07/04 12:52:46 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/06 16:18:27 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	set_bmfh(t_bmfh *bmfh, t_mlx *mlx)
 }
 
 /*
-** contains bmp info header elements 
+** contains bmp info header elements
 */
 
 void	set_bmih(t_bmih *bmih, t_mlx *mlx)

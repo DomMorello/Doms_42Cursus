@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:43:10 by donglee           #+#    #+#             */
-/*   Updated: 2020/07/04 13:08:58 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/06 16:21:32 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*
 ** RGB color value is seperately stored in the array of int rgb[3]
 ** So they must be converted to a single variable int color.
-** With bit operation below, the three r,g,b colors can be one integer value.  
+** With bit operation below, the three r,g,b colors can be one integer value.
 */
 
 void	input_color(t_tex *tex, t_mlx *mlx, char **ret)

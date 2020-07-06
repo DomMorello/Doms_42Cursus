@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:44:25 by donglee           #+#    #+#             */
-/*   Updated: 2020/07/04 14:50:36 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/06 16:21:05 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	input_sprite(t_sprite *sprites, char **map, int mapsizey)
 
 /*
 ** Counts the number of sprites in the map contents
-** This is used to compare distance from the player to the sprites 
+** This is used to compare distance from the player to the sprites
 */
 
 int		count_sprite(char **map, int mapsizey)

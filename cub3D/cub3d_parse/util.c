@@ -6,14 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:41:39 by donglee           #+#    #+#             */
-/*   Updated: 2020/07/04 14:52:02 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/06 16:23:19 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
 /*
-** delete a node from a list 
+** delete a node from a list
 */
 
 void	ft_lstmapdelone(t_map *node)
@@ -28,7 +28,7 @@ void	ft_lstmapdelone(t_map *node)
 }
 
 /*
-** clear the list of map 
+** clear the list of map
 */
 
 void	ft_lstmapclear(t_map **lst)

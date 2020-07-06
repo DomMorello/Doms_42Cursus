@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:12:45 by donglee           #+#    #+#             */
-/*   Updated: 2020/07/05 19:36:57 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/06 16:17:49 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /*
 ** Sorts the arrrays of sprites accoding to the distance from player
-** so that the near sprite will block the farther one   
+** so that the near sprite will block the farther one
 */
 
 void	desc_sort(t_mlx *mlx)

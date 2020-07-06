@@ -6,14 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 01:42:04 by donglee           #+#    #+#             */
-/*   Updated: 2020/07/04 13:14:10 by marvin           ###   ########.fr       */
+/*   Updated: 2020/07/06 16:25:18 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
 /*
-** Clears the map list 
+** Clears the map list
 */
 
 void	clear_map(t_mlx *mlx)
@@ -26,7 +26,7 @@ void	clear_map(t_mlx *mlx)
 
 /*
 ** Clears the allocated memory on the string of filepath
-** and destroys the image of textures 
+** and destroys the image of textures
 */
 
 void	clear_tex(t_mlx *mlx)
@@ -68,7 +68,7 @@ void	clear_window(t_mlx *mlx)
 }
 
 /*
-** the function exit will return all the allocated memory on the heap 
+** the function exit will return all the allocated memory on the heap
 */
 
 int		error(char *str, t_mlx *mlx)
