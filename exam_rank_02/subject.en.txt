@@ -1,0 +1,67 @@
+Assignment name  : get_next_line
+Expected files   : get_next_line.c get_next_line.h
+Allowed functions: read, free, malloc
+--------------------------------------------------------------------------------
+
+Write a function will store, in the parameter "line", a line that has been read from the file descriptor 0.
+
+Your function must be prototyped as follows: int get_next_line(char **line);
+
+Your function should be memory leak free.
+
+What we call a "line that has been read" is a succession of 0 to n characters that end with '\n' (ascii code 0x0a) or with End Of File (EOF).
+
+The string stored in the parameter "line" should not contained any '\n'.
+
+The parameter is the address of a pointer to a character that will be used to store the line read.
+
+The return value can be 1, 0 or -1 depending on whether a line has been read, when the reading has been completed (meaning read has returned 0), or if an error has happened respectively.
+
+When you've reached the End Of File, you must store the current buffer in "line". If the buffer is empty you must store an empty string in "line".
+
+When you've reached the End Of File, your function should keep 0 memory allocated with malloc except the last buffer that you should have stored in "line".
+
+What you've stored in "line" should be free-able.
+
+Calling your function get_next_line in a loop will therefore allow you to read the text available on a file descriptor one line at a time until the end of the text, no matter the size of either the text or one of its lines.
+
+Make sure that your function behaves well when it reads from a file, from the standard output, from a redirection etc.
+
+No call to another function will be done on the file descriptor between 2 calls of get_next_line.
+
+Finally we consider that get_next_line has an undefined behavior when reading from a binary file.
+
+You should use the test.sh to help you test your get_next_line.
+
+매개변수 "line"에 파일디스크립터 0으로부터 읽어온 한 줄의 내용을 저장하는 함수를 작성하시오.
+
+당신의 함수 선언부는 다음과 같아야 합니다. : int get_next_line(char **line);
+
+당신의 함수에서 메모리릭이 발생해서는 안 됩니다.
+
+한 줄의 내용이라고 함은 그 줄의 첫 위치부터 개행(아스키코드: 0x0a)까지 혹은 EOF(파일의 끝)을 말합니다.
+
+매개변수인 "line"에 저장되는 내용에는 개행문자('\n')가 포함돼있으면 안 됩니다.
+
+매개변수는 읽어온 한 줄을 저장하기 위한 문자열 포인터의 주소값을 의미합니다. 
+
+한 줄을 다 읽었을 때는 1을 반환하고 파일의 끝까지 전부 다 읽었을 때는 0을 반환하고 에러가 발생했을 경우에는 -1을 반환합니다.
+
+파일의 끝까지 다 읽었을 때는(EOF를 읽었을 때) 현재 버퍼에 담겨있는 데이터를 "line"에 저장해야 합니다. 만약 이 때 버퍼가 비어있으면 빈 문자열을 "line"에 저장해야 합니다.
+
+파일의 끝까지 다 읽었을 때는(EOF를 읽었을 때) 마지막 "line"에 저장할 버퍼에 담긴 데이터를 위한 메모리를 제외하고 나머지 동적으로 힙 영역에 할당된 메모리는 0이어야 합니다.
+
+"line"에 저장된 문자열은 메모리 해제할 수 있어야 합니다. (동적할당으로 구현해라)
+
+그러므로 반복문 안에서 get_next_line함수를 호출하면 해당 파일이 몇 줄이 되든 그 줄의 문자열 길이가 얼마나 길든 상관없이 파일을 읽어오는 파일 디스크립터에서 한 번에 한 줄을 읽고 파일의 끝까지 읽을 수 있어야 합니다.
+
+당신의 함수는 파일을 읽을 때 표준입력으로 읽거나 리다이렉션으로 읽을 때 상관없이 정상적으로 작동해야 합니다. 
+
+get_next_line 함수를 호출할 때 그 사이에 파일 디스크립터에 작동하는 다른 함수를 실행되지 않을 것입니다. (기존의 보너스는 구현하지 않아도 된다)
+
+이진 파일을 읽을 때는 get_next_line 함수가 정의되지 않은 행동을 해도 무방합니다.
+
+디렉토리에 미리 저장돼있는 test.sh 파일을 이용해 당신의 함수를 테스트 해보셔야 합니다. 
+
+
+
