@@ -9,6 +9,33 @@ void ft_strdel(char **str)
 	}
 }
 
+int ft_strlen(char *s)
+{
+	int len = 0;
+	
+	while (s[len])
+		len++;
+	return (len);
+}
+
+char *ft_strdup(char *s)
+{
+	char *ret = NULL;
+	int len = 0;
+	int i = 0;
+
+	len = ft_strlen(s);
+	if ((ret = (char *)malloc(sizeof(char) * len + 1)) == NULL)
+		return (NULL);
+	while (s[i])
+	{
+		ret[i] = s[i];
+		i++;
+	}
+	ret[i] = 0;
+	return ret;
+}
+
 int ft_strlcpy(char *dst, char *src, int size)
 {
 	char *ret = NULL;
@@ -26,7 +53,7 @@ int ft_strlcpy(char *dst, char *src, int size)
 		i++;
 	}
 	dst[i] = 0;
-	return (ret);
+	return (s_len);
 }
 
 char *ft_strjoindel(char *save, char *buf)
@@ -37,7 +64,7 @@ char *ft_strjoindel(char *save, char *buf)
 
 	if (save)
 		len1 = ft_strlen(save);
-	if ((ret = (char *)malloc(sizeof(char) * (len1 + len2 + 1)) == NULL))
+	if ((ret = (char *)malloc(sizeof(char) * (len1 + len2 + 1))) == NULL)
 		return (NULL);
 	if (save)
 	{
@@ -45,6 +72,39 @@ char *ft_strjoindel(char *save, char *buf)
 		ft_strdel(&save);
 	}
 	ft_strlcpy(ret + len1, buf, len2 + 1);
+	return (ret);
+}
+
+char *ft_substr(char *s, int start, int len)
+{
+	char *ret = NULL;
+	int s_len = 0;
+	int i = 0;
+
+	s_len = ft_strlen(s);
+	if ((ret = (char *)malloc(sizeof(char) * s_len + 1)) == NULL)
+		return (NULL);
+	while (i < len && start < s_len)
+	{
+		ret[i] = s[start];
+		i++;
+		start++;
+	}
+	ret[i] = 0;
+	return (ret);
+}
+
+char *ft_strchr(char *save, int c)
+{
+	char *ret = NULL;
+
+	ret = save;
+	while (*ret != c)
+	{
+		if (!*ret)
+			return (NULL);
+		ret++;
+	}
 	return (ret);
 }
 
@@ -69,17 +129,17 @@ int get_next_line(char **line)
 {
 	int fd = 0;
 	static char *save = NULL;
-	char buf[10 + 1] = NULL;
+	char buf[10 + 1];
 	int ret = 0;
 
 	if (!line)
 		return (-1);
 	if (save && is_newline(save, line))
 		return (1);	
-	while ((ret = read(fd, buf, sizeof(buf))) > 0)
+	while ((ret = read(fd, buf, 10)) > 0)
 	{
 		buf[ret] = 0;
-		if (!ft_strjoindel(save, buf))
+		if (!(save = ft_strjoindel(save, buf)))
 			return (-1);
 		if (is_newline(save, line))
 			return 1;
@@ -94,16 +154,16 @@ int get_next_line(char **line)
 
 int main()
 {
-	char *line = NULL;
-	int ret = 0;
+	char *line;
+	int ret;
 
 	while ((ret = get_next_line(&line)) > 0)
 	{
-		printf("line:%s\n", line);
+		printf("ret: %d line:%s\n", ret, line);
 		free(line);
 		line = NULL;
 	}
-	printf("line:%s\n", line);\
+	printf("ret: %d line:%s\n", ret, line);
 	free(line);
 	line = NULL;
 	return 0;

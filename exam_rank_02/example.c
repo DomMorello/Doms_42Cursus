@@ -1,8 +1,8 @@
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *s)
+int	ft_strlen(char *s)
 {
-	size_t len;
+	int len;
 
 	len = 0;
 	while (s[len])
@@ -10,7 +10,7 @@ size_t	ft_strlen(const char *s)
 	return (len);
 }
 
-char	*ft_strchr(const char *s, int c)
+char	*ft_strchr(char *s, int c)
 {
 	char *result;
 
@@ -24,11 +24,11 @@ char	*ft_strchr(const char *s, int c)
 	return (result);
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*ft_substr(char *s, int start, int len)
 {
 	char			*result;
-	unsigned int	i;
-	unsigned int	str_len;
+	int	i;
+	int	str_len;
 
 	str_len = ft_strlen(s);
 	i = 0;
@@ -44,11 +44,11 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	return (result);
 }
 
-char	*ft_strdup(const char *s1)
+char	*ft_strdup(char *s1)
 {
 	char	*result;
-	size_t	len;
-	size_t	i;
+	int	len;
+	int	i;
 
 	i = 0;
 	len = ft_strlen(s1);
@@ -72,10 +72,10 @@ void	ft_strdel(char **as)
 	}
 }
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+int	ft_strlcpy(char *dst, char *src, int dstsize)
 {
-	size_t src_len;
-	size_t i;
+	int src_len;
+	int i;
 
 	src_len = 0;
 	i = 0;
@@ -95,9 +95,9 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 char	*ft_strjoindel(char *s1, char *s2)
 {
 	char	*ret;
-	size_t	len_s1;
-	size_t	len_s2;
-	size_t	len;
+	int	len_s1;
+	int	len_s2;
+	int	len;
 
 	len_s1 = 0;
 	len_s2 = ft_strlen(s2);
@@ -118,8 +118,8 @@ char	*ft_strjoindel(char *s1, char *s2)
 int		is_newline(char *save, char **line)
 {
 	char	*found;
-	size_t	end;
-	size_t	len;
+	int	end;
+	int	len;
 
 	len = 0;
 	found = NULL;
