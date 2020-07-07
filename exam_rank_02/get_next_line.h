@@ -8,11 +8,11 @@
 int		is_newline(char *save, char **line);
 int		get_next_line(char **line);
 char	*ft_strjoindel(char *s1, char *s2);
-size_t	ft_strlcpy(char *dst, char const *src, size_t size);
-size_t	ft_strlen(char const *s);
-char	*ft_strchr(char const *s, int c);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
-char	*ft_strdup(char const *s1);
+int	    ft_strlcpy(char *dst, char *src, int size);
+int	    ft_strlen(char *s);
+char	*ft_strchr(char *s, int c);
+char	*ft_substr(char *s, int start, int len);
+char	*ft_strdup(char *s1);
 void	ft_strdel(char **as);
 
 #endif
