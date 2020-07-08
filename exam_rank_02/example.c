@@ -1,6 +1,6 @@
 #include "get_next_line.h"
 
-int	ft_strlen(char *s)
+int ft_strlen(char *s)
 {
 	int len;
 
@@ -10,7 +10,7 @@ int	ft_strlen(char *s)
 	return (len);
 }
 
-char	*ft_strchr(char *s, int c)
+char *ft_strchr(char *s, int c)
 {
 	char *result;
 
@@ -24,11 +24,11 @@ char	*ft_strchr(char *s, int c)
 	return (result);
 }
 
-char	*ft_substr(char *s, int start, int len)
+char *ft_substr(char *s, int start, int len)
 {
-	char			*result;
-	int	i;
-	int	str_len;
+	char *result;
+	int i;
+	int str_len;
 
 	str_len = ft_strlen(s);
 	i = 0;
@@ -44,11 +44,11 @@ char	*ft_substr(char *s, int start, int len)
 	return (result);
 }
 
-char	*ft_strdup(char *s1)
+char *ft_strdup(char *s1)
 {
-	char	*result;
-	int	len;
-	int	i;
+	char *result;
+	int len;
+	int i;
 
 	i = 0;
 	len = ft_strlen(s1);
@@ -63,7 +63,7 @@ char	*ft_strdup(char *s1)
 	return (result);
 }
 
-void	ft_strdel(char **as)
+void ft_strdel(char **as)
 {
 	if (as && *as)
 	{
@@ -72,7 +72,7 @@ void	ft_strdel(char **as)
 	}
 }
 
-int	ft_strlcpy(char *dst, char *src, int dstsize)
+int ft_strlcpy(char *dst, char *src, int dstsize)
 {
 	int src_len;
 	int i;
@@ -92,12 +92,12 @@ int	ft_strlcpy(char *dst, char *src, int dstsize)
 	return (src_len);
 }
 
-char	*ft_strjoindel(char *s1, char *s2)
+char *ft_strjoindel(char *s1, char *s2)
 {
-	char	*ret;
-	int	len_s1;
-	int	len_s2;
-	int	len;
+	char *ret;
+	int len_s1;
+	int len_s2;
+	int len;
 
 	len_s1 = 0;
 	len_s2 = ft_strlen(s2);
@@ -115,11 +115,11 @@ char	*ft_strjoindel(char *s1, char *s2)
 	return (ret);
 }
 
-int		is_newline(char *save, char **line)
+int is_newline(char *save, char **line)
 {
-	char	*found;
-	int	end;
-	int	len;
+	char *found;
+	int end;
+	int len;
 
 	len = 0;
 	found = NULL;
@@ -134,11 +134,11 @@ int		is_newline(char *save, char **line)
 	return (0);
 }
 
-int		get_next_line(char **line)
+int get_next_line(char **line)
 {
-	int			bytes_read;
-	static char	*save;
-	char		buf[10 + 1];
+	int bytes_read;
+	static char *save;
+	char buf[10 + 1];
 
 	if (!line)
 		return (-1);
@@ -162,16 +162,16 @@ int		get_next_line(char **line)
 
 int main()
 {
-	char *line;
-	int ret;
+	char *line = NULL;
+	int ret = 0;
 
 	while ((ret = get_next_line(&line)) > 0)
 	{
-		printf("ret: %d line:%s\n", ret, line);
+		printf("line:%s\n", line);
 		free(line);
 		line = NULL;
 	}
-	printf("ret: %d line:%s\n", ret, line);
+	printf("line:%s\n", line);
 	free(line);
 	line = NULL;
 	return 0;
