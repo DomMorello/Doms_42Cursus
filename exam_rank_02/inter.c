@@ -51,13 +51,20 @@ int main(int argc, char *argv[])
             {
                 save[s_idx] = argv[1][i];
                 s_idx++;
+                break ;
             }
             j++;
         }
         i++;
     }
-    
-    
-    
+    printf("save: %s\n", save);
+    len = ft_strlen(save);
+    char ret[len];
+    ft_bzero(ret, len);
+    int r_idx = 0;
+    int flag = 0;
+    i = 0;
+
+    // fuck it
     return 0;
 }
