@@ -3,7 +3,7 @@
 #include <errno.h>
 #include <fcntl.h>
 
-// ssize_t ft_write(int fd, const void *buf, size_t count);
+ssize_t ft_write(int fd, const void *buf, size_t count);
 
 int main(void)
 {
@@ -11,10 +11,15 @@ int main(void)
 
     if ((fd = open("./test.txt", O_RDWR)) < 0)
     {    
-        printf("error!!!\n");
+        printf("error!!! errno: %d\n", errno);
         return 0;
     }
-    write(fd, "hello", 5);
+    int ret = 0;
+    if ((ret = ft_write(fd, "hello", 5)) == -1)
+    {
+        printf("write error errno: %d\n", errno);
+        return 0;
+    }
     close(fd);
 	return 0;
 }
