@@ -21,7 +21,9 @@ int main(void)
     //    return 0;
     //}
     //close(fd);
-	int ret = write(1, "hello", 53244154124142);
-	printf("ret:%d\n", ret);
+	int ret = write(1, "hello", 123456789);
+	printf("ret sys:%d\n", ret);
+	int ret2 = ft_write(1, "hello", 123456789);
+	printf("ret ft:%d\n", ret2);
 	return 0;
 }
