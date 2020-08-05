@@ -10,9 +10,9 @@ char *ft_strcpy(char *dest, const char *src);
 
 int main(void)
 {
-	char *s = "adfadfadfafds!!";
+	char *s = "";
 	char d[6] = "world";
 	ft_strcpy(d, s);
-	printf("%s\n", d);
+	printf("%d\n", d[0]);
 	return 0;
 }
