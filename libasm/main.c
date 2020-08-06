@@ -26,5 +26,6 @@ int main(void)
 
 	r[3] = 'a';
 	printf("ft %s\n", r);
+
 	return 0;
 }
