@@ -7,29 +7,11 @@
 // ssize_t ft_write(int fd, const void *buf, size_t count);
 // size_t ft_strlen(const char *s);
 // char *ft_strcpy(char *dest, const char *src);
-int ft_strcmp(const char *s1, const char *s2);
+//int ft_strcmp(const char *s1, const char *s2);
+ssize_t read(int fd, void *buf, size_t count);
 
 int main(void)
 {
-	char *s1 = "dffd";
-	char *s2 = "";
-	int ret1 = ft_strcmp(s1, s2);
-	int ret2 = strcmp(s1, s2);
-	printf("ret1:%d ret2:%d\n", ret1, ret2);
+	
 	return 0;
 }
-
-// int		ft_strcmp(char *s1, char *s2)
-// {
-// 	int i;
-
-// 	i = 0;
-// 	while (s1[i] != '\0' && s2[i] != '\0')
-// 	{
-// 		if (s1[i] == s2[i])
-// 			i++;
-// 		if (s1[i] < s2[i] || s1[i] > s2[i])
-// 			return (s1[i] - s2[i]);
-// 	}
-// 	return (0);
-// }
