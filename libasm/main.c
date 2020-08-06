@@ -12,23 +12,6 @@ ssize_t ft_read(int fd, void *buf, size_t count);
 
 int main(void)
 {
-	int fd = 0;
-    if ((fd = open("./test.txt", O_RDONLY)) == -1)
-    {
-        printf("open error! %d\n", errno);
-        close(fd);
-        return 0;
-    }
 
-    char buf[10] = {0,};
-    int ret = 1;
-
-    while ((ret = read(fd, buf, sizeof(buf))) > 0)
-    {
-        if (errno > 0)
-            printf("error! %d\n", errno);
-        printf("%s\n", buf);
-    }
-    close(fd);
 	return 0;
 }
