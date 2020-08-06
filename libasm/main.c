@@ -13,19 +13,20 @@ char *ft__strdup(const char *s);
 
 int main(void)
 {
-	char *str = "hello world";
-	char *ret = strdup(str);
-	printf("lib %s\n", ret);
+	// char *str = "hello world";
+	// char *ret = strdup(str);
+	// printf("lib %s\n", ret);
 
-	ret[3] = 'a';
-	printf("lib %s\n", ret);
+	// ret[3] = 'a';
+	// printf("lib %s\n", ret);
 
-	char *s1 = "hello world";
-	char *r = ft_strdup(s1);
-	printf("ft %s\n", r);
+	// char *s1 = "hello world";
+	// char *r = ft_strdup(s1);
+	// printf("ft %s\n", r);
 
-	r[3] = 'a';
-	printf("ft %s\n", r);
-
+	// r[3] = 'a';
+	// printf("ft %s\n", r);
+    int a = ft_strdup("hello");
+    printf("%d\n", a);
 	return 0;
 }
