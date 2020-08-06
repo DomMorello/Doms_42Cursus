@@ -7,28 +7,24 @@
 // ssize_t ft_write(int fd, const void *buf, size_t count);
 // size_t ft_strlen(const char *s);
 // char *ft_strcpy(char *dest, const char *src);
-//int ft_strcmp(const char *s1, const char *s2);
-ssize_t ft_read(int fd, void *buf, size_t count);
+// int ft_strcmp(const char *s1, const char *s2);
+// ssize_t ft_read(int fd, void *buf, size_t count);
+char *ft__strdup(const char *s);
 
 int main(void)
 {
-	int fd = 0;
-    if ((fd = open("./test.txt", O_RDONLY)) == -1)
-    {
-        printf("open error! %d\n", errno);
-        close(fd);
-        return 0;
-    }
+	char *str = "hello world";
+	char *ret = strdup(str);
+	printf("lib %s\n", ret);
 
-    char buf[10] = {0,};
-    int ret = 1;
+	ret[3] = 'a';
+	printf("lib %s\n", ret);
 
-    while ((ret = read(fd, buf, sizeof(buf))) > 0)
-    {
-        if (errno > 0)
-            printf("error! %d\n", errno);
-        printf("%s\n", buf);
-    }
-    close(fd);
+	char *s1 = "hello world";
+	char *r = ft_strdup(s1);
+	printf("ft %s\n", r);
+
+	r[3] = 'a';
+	printf("ft %s\n", r);
 	return 0;
 }
