@@ -11,10 +11,11 @@ int ft_strcmp(const char *s1, const char *s2);
 
 int main(void)
 {
-	char *s1 = "";
+	char *s1 = "dffd";
 	char *s2 = "";
-	int ret = ft_strcmp(s1, s2);
-	printf("%d\n", ret);
+	int ret1 = ft_strcmp(s1, s2);
+	int ret2 = strcmp(s1, s2);
+	printf("ret1:%d ret2:%d\n", ret1, ret2);
 	return 0;
 }
 
