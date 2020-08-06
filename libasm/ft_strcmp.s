@@ -1,5 +1,17 @@
-    global _ft_strcmp
-    section .text
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    ft_strcmp.s                                        :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/08/06 17:17:50 by donglee           #+#    #+#              #
+#    Updated: 2020/08/06 17:19:11 by donglee          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+    
+	global	_ft_strcmp
+    section	.text
 										;int ft_strcmp(const char *s1, const char *s2);
 _ft_strcmp: xor rcx, rcx				;initializes rcx to 0(:int i = 0)
 
