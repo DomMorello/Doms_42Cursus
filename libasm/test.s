@@ -1,21 +1,11 @@
 	global	_test
-	extern 	_malloc
+	extern	_ft_strlen
+	extern	_malloc
 	section .text
 
-_test:	mov		rbx, 5h
-		push	rbx			;push rbx essentail! align stack!
-		mov		rdi, rbx
+_test:	call	_ft_strlen
+		mov		rdi, rax
+		push	r8
 		call	_malloc
-		mov		dword [rax], 68h
-		inc		rax
-		mov		dword [rax], 65h
-		inc		rax
-		mov		dword [rax], 6ch
-		inc		rax
-		mov		dword [rax], 6fh
-		dec		rax
-		dec		rax
-		dec		rax
-		pop		rbx
+		pop		r8
 		ret
-
