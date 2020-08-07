@@ -14,16 +14,16 @@ char *ft_strdup(const char *s);
 
 int main(void)
 {
- char *s = "hello";
- char *r = strdup(s);
- printf("%s\n", r);
- r[7] = 'g';
- printf("%s\n", r);
+    char *s = "hello";
+    char *r = strdup(s);
+    printf("%s\n", r);
+    r[7] = 'g';
+    printf("%s\n", r);
 
- char *s1 = "hello";
- char *r1 = ft_strdup(s1);
- printf("%s\n", r1);
- r[7] = 'g';
- printf("%s\n", r1);
-	return 0;
+    char *s1 = "hello";
+    char *r1 = ft_strdup(s1);
+    printf("%s\n", r1);
+    r[7] = 'g';
+    printf("%s\n", r1);
+    return 0;
 }
