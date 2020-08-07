@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <errno.h>
+#include <stdlib.h>
 #include <fcntl.h>
 #include <string.h>
 
@@ -13,18 +14,16 @@ char *ft_strdup(const char *s);
 
 int main(void)
 {
-	char *str = "hello world";
-	char *ret = strdup(str);
-	printf("lib %s\n", ret);
+    // char *s = "hello";
+    // char *r = strdup(s);
+    // printf("%s\n", r);
+    // r[7] = 'g';
+    // printf("%s\n", r);
 
-	ret[23] = 'a';
-	printf("lib %s\n", ret);
-
-	char *s1 = "hello world";
-	char *r = ft_strdup(s1);
-	printf("ft %s\n", r);
-
-	r[100000000] = 'a';
-	printf("ft %s\n", r);
+    // char *s1 = "hello";
+    // char *r1 = ft_strdup(s1);
+    // printf("%s\n", r1);
+    // r[7] = 'g';
+    // printf("%s\n", r1);
 	return 0;
 }
