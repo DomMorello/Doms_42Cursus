@@ -64,23 +64,23 @@ int     test_strcpy(void)
 }
 
 
-// int     test_strcmp(void)
-// {
-//     printf("\n");
-//     printf("------------------------------------------\n");
-//     printf("*               test_strcmp              *\n");
-//     printf("------------------------------------------\n");
-//     printf("strcmp:		%d\nft_strcmp:	%d\n__\n",strcmp("a",""),ft_strcmp("a",""));
-//     printf("strcmp:		%d\nft_strcmp:	%d\n__\n",strcmp("hey",""),ft_strcmp("hey",""));
-// 	printf("strcmp:		%d\nft_strcmp:	%d\n__\n",strcmp("c?lestin  le peetit coquin","c?lestin  le petit coquin"),ft_strcmp("c?lestin  le peetit coquin","c?lestin  le petit coquin"));
-// 	printf("strcmp:		%d\nft_strcmp:	%d\n__\n",strcmp("c?lestin  le petit coquin","c?lestin  le petit coquin"),ft_strcmp("c?lestin  le petit coquin","c?lestin  le petit coquin"));
-// 	printf("strcmp:		%d\nft_strcmp:	%d\n__\n",strcmp("ho","ho"),ft_strcmp("ho","ho"));
-// 	printf("strcmp:		%d\nft_strcmp:	%d\n__\n",strcmp("",""),ft_strcmp("",""));
-// 	printf("strcmp:		%d\nft_strcmp:	%d\n__\n",strcmp("hey","ho"),ft_strcmp("hey","ho"));
-// 	printf("strcmp:		%d\nft_strcmp:	%d\n__\n",strcmp("c?lestin  le ptit coquin","c?lestin  le petit coquin"),ft_strcmp("c?lestin  le ptit coquin","c?lestin  le petit coquin"));
-// 	printf("strcmp:		%d\nft_strcmp:	%d\n__\n",ft_strcmp(NULL, NULL),ft_strcmp(NULL, NULL));
-//     return(0);
-// }
+int     test_strcmp(void)
+{
+    printf("\n");
+    printf("------------------------------------------\n");
+    printf("*               test_strcmp              *\n");
+    printf("------------------------------------------\n");
+    printf("strcmp:		%d\nft_strcmp:	%d\n__\n",strcmp("a",""),ft_strcmp("a",""));
+    printf("strcmp:		%d\nft_strcmp:	%d\n__\n",strcmp("hey",""),ft_strcmp("hey",""));
+	printf("strcmp:		%d\nft_strcmp:	%d\n__\n",strcmp("c?lestin  le peetit coquin","c?lestin  le petit coquin"),ft_strcmp("c?lestin  le peetit coquin","c?lestin  le petit coquin"));
+	printf("strcmp:		%d\nft_strcmp:	%d\n__\n",strcmp("c?lestin  le petit coquin","c?lestin  le petit coquin"),ft_strcmp("c?lestin  le petit coquin","c?lestin  le petit coquin"));
+	printf("strcmp:		%d\nft_strcmp:	%d\n__\n",strcmp("ho","ho"),ft_strcmp("ho","ho"));
+	printf("strcmp:		%d\nft_strcmp:	%d\n__\n",strcmp("",""),ft_strcmp("",""));
+	printf("strcmp:		%d\nft_strcmp:	%d\n__\n",strcmp("hey","ho"),ft_strcmp("hey","ho"));
+	printf("strcmp:		%d\nft_strcmp:	%d\n__\n",strcmp("c?lestin  le ptit coquin","c?lestin  le petit coquin"),ft_strcmp("c?lestin  le ptit coquin","c?lestin  le petit coquin"));
+	printf("strcmp:		%d\nft_strcmp:	%d\n__\n",ft_strcmp(NULL, NULL),ft_strcmp(NULL, NULL));
+    return(0);
+}
 
 int     test_strdup(void)
 {
@@ -185,12 +185,12 @@ int     test_write(void)
 
 int     main(void)
 {
-    test_strlen();
+    // test_strlen();
     test_strcpy();
     // test_strcmp();
-    test_strdup();
-    test_read();
-    test_write();
+    // test_strdup();
+    // test_read();
+    // test_write();
     return(0);
 }
 
