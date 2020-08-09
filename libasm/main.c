@@ -185,12 +185,12 @@ int     test_write(void)
 
 int     main(void)
 {
-    // test_strlen();
+    test_strlen();
     test_strcpy();
-    // test_strcmp();
-    // test_strdup();
-    // test_read();
-    // test_write();
+    test_strcmp();
+    test_strdup();
+    test_read();
+    test_write();
     return(0);
 }
 
