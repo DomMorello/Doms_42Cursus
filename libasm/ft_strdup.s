@@ -17,7 +17,7 @@
 											;char *ft_strdup(const char *s)
 _ft_strdup: xor     rcx, rcx				;initializes rcx to 0(int i = 0)
 			mov		rbx, rdi				;stores string s in rbx(tmp) to use it later
-            call    _ft_strlen				;the string s will be sent to the first parameter of ft_strlen
+            ;call    _ft_strlen				;the string s will be sent to the first parameter of ft_strlen
 			push	rbx						;through ft_strlen, the length of string s will be stored in rax
 			inc		rax						;to add null pointer at the end of the string, increases 1(len + 1)
 			mov		rdi, rax				;to call malloc, send rax(len + 1) to the fisrt parameter(rdi) of func malloc

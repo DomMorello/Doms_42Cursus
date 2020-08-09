@@ -25,5 +25,6 @@ int main(void)
     printf("%s\n", r1);
     r[7] = 'g';
     printf("%s\n", r1);
-    return 0;
+    
+	return 0;
 }
