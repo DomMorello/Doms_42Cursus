@@ -11,6 +11,7 @@
 ; **************************************************************************** ;
 
     global	_ft_write
+	extern	___error
     section .text
                                     ;ssize_t ft_write(int fd, const void *buf, size_t count);
 _ft_write:  mov     rax, 0x02000004	;write system call number
@@ -18,5 +19,10 @@ _ft_write:  mov     rax, 0x02000004	;write system call number
             jc		error			;in FreeBSD, if syscall has an error, carry flag sets to 1
 			ret
 
-error:		mov		rax, -1			;rax has return value. -1 in error
+error:		push	rbx
+			mov		rbx, rax
+			call	___error
+			mov		[rax], rbx
+			mov		rax, -1			;rax has return value. -1 in error
+			pop		rbx
 			ret
