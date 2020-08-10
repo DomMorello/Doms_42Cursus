@@ -127,9 +127,9 @@ int     test_read(void)
     char ft_buffer[bufferlen + 1];
     buffer[bufferlen] = '\0';
     ft_buffer[bufferlen] = '\0';
-    printf("read - %zd:         %s\n", read(fd_1, buffer, -5), buffer);
+    printf("ft_read - %zd:         %s\n", ft_read(fd_ft_1, ft_buffer, -5), ft_buffer);
     printf("value of errno: %d\n", errno);
-    printf("ft_read - %zd:      %s\n", ft_read(fd_ft_1, ft_buffer, -5), ft_buffer);
+    printf("read - %zd:      %s\n", read(fd_1, buffer, -5), buffer);
     printf("value of errno: %d\n", errno);
     printf("read - %zd:         %s\n", read(fd_1, buffer, bufferlen), buffer);
     printf("ft_read - %zd:      %s\n", ft_read(fd_ft_1, ft_buffer, bufferlen), ft_buffer);
@@ -147,6 +147,14 @@ int     test_write(void)
     char *c = NULL;
     char *d = "hey";
 
+	printf("---------errno test-----------\n");
+	printf("ft_write errno:     \n");
+	ft_write(100, "hello", 5);
+	printf("\nft errno: %d\n", errno);
+	printf("write errno:       \n");
+	write(100, "hello", 5);
+	printf("\nlib errno: %d\n", errno);
+	printf("------------------------------\n");
     printf("\n");
     printf("write a:    ");
     printf("\n");
