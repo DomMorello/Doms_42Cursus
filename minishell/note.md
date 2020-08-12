@@ -32,5 +32,7 @@ waitpid를 대신 쓰는 것이 좋다고 한다. <br>
 (https://bodamnury.tistory.com/37)unix stat 함수 설명 블로그 -> 대충 오케이<br>
 (https://linux.die.net/man/2/stat)stat man page<br>
 - (https://www.it-note.kr/173)stat 함수에 대한 블로그 설명 글 -> stat함수를 사용할 때 printf 로 출력하는 좋은 예시가 있다. 파일에 대해서 어떻게 출력할지 궁금할 때 참고하면 좋음 <br>
+- (https://www.it-note.kr/157)execve 함수에 대한 설명 -> 기본적인 사용방법 참고하기 좋음<br>
+
 
 
