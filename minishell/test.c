@@ -1,16 +1,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <errno.h>
 
 int main(int argc, char *argv[])
 {
-	int x =0;
-
-	pid_t pid = fork();
-	printf("%d %d\n", getpid(), pid);
-	while (1)
-	{
-		
-	}
+	char *str = getcwd(NULL, 255);
+	printf("%s\n", str);
 	return 0;
 }
