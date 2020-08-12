@@ -14,16 +14,10 @@ char *alloc(void)
 
 int main(int argc, char *argv[])
 {
-//	char buf[5];
-
-	char *buf = getcwd(buf, 1);
-	char *err = strerror(errno);
-	printf("error: %s\n", err);
-	printf("%s\n", buf);
-	buf = NULL;
-	while (1)
-	{
-		;
-	}
+	char *s = getcwd(NULL, 0);
+	printf("%s\n", s);
+	int ret = chdir("..");
+	s = getcwd(NULL, 0);
+	printf("%s\n", s);
 	return 0;
 }
