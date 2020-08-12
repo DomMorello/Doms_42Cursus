@@ -29,4 +29,5 @@ waitpid를 대신 쓰는 것이 좋다고 한다. <br>
 (https://stackoverflow.com/questions/16535335/what-does-least-significant-byte-mean)the least significant byte 설명 스택오버플로<br>
 (https://minimonk.net/m/1539?category=309376)getcwd, chdir 함수에 대한 설명 블로그 -> 간단함.<br>
 (https://linux.die.net/man/3/getcwd)man getcwd<br>
-
+(https://bodamnury.tistory.com/37)unix stat 함수 설명 블로그 -> 대충 오케이<br>
+(https://linux.die.net/man/2/stat)stat man page
