@@ -1,9 +1,16 @@
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 int main(int argc, char *argv[])
 {
-	/* IO 에러 처리 */
-	/* 명령어별 분기문 */
+	int x =0;
+
+	pid_t pid = fork();
+	printf("%d %d\n", getpid(), pid);
+	while (1)
+	{
+		
+	}
 	return 0;
 }

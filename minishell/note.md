@@ -12,5 +12,5 @@
 (https://superuser.com/questions/169051/whats-the-difference-between-c-and-d-for-unix-mac-os-x-terminal)ctrl d ctrl c 차이점 스택오버플로 -> 시그널 키워드를 얻음<br>
 (https://en.wikipedia.org/wiki/Signal_(IPC)#SIGQUIT)시그널 관련한 설명 위키피디아 -> 공부함<br>
 (https://man7.org/linux/man-pages/man2/fork.2.html) man fork<br>
-
+(https://codetravel.tistory.com/23)fork 함수 블로그 -> <br>
 
