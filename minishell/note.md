@@ -30,4 +30,5 @@ waitpid를 대신 쓰는 것이 좋다고 한다. <br>
 (https://minimonk.net/m/1539?category=309376)getcwd, chdir 함수에 대한 설명 블로그 -> 간단함.<br>
 (https://linux.die.net/man/3/getcwd)man getcwd<br>
 (https://bodamnury.tistory.com/37)unix stat 함수 설명 블로그 -> 대충 오케이<br>
-(https://linux.die.net/man/2/stat)stat man page
+(https://linux.die.net/man/2/stat)stat man page<br>
+(https://www.it-note.kr/173)stat 함수에 대한 블로그 설명 글 -> <br>
