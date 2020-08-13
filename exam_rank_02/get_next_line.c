@@ -1,4 +1,5 @@
-#include "./get_next_line.h"
+#include <unistd.h>
+#include <stdlin.h>
 
 int ft_strlen(char *s)
 {
@@ -39,22 +40,6 @@ char *ft_substr(char *s, int start, int len)
 	return ret;
 }
 
-int ft_strlcpy(char *dst, char *src, int size)
-{
-	int i = 0;
-	int s_len = ft_strlen(src);
-	
-	if (size == 0)
-		return s_len;
-	while (i < size - 1 && src[i])
-	{
-		dst[i] = src[i];
-		i++;
-	}
-	dst[i] = 0;
-	return s_len;
-}
-
 void ft_strdel(char **s)
 {
 	if (s && *s)
@@ -64,28 +49,44 @@ void ft_strdel(char **s)
 	}
 }
 
-char *ft_strdup(char *s)
+char *ft_strdup(char *str)
 {
-	int len = ft_strlen(s);
-	int i = 0;
+	int len = ft_strlen(str);
 	char *ret = NULL;
+	int i = 0;
 
 	if ((ret = (char *)malloc(sizeof(char) * len + 1)) == NULL)
 		return NULL;
-	while (s[i])
+	while (str[i])
 	{
-		ret[i] = s[i];
+		ret[i] = str[i];
 		i++;
 	}
 	ret[i] = 0;
 	return ret;
 }
 
+int ft_strlcpy(char *dst, char *src, int size)
+{
+	int i = 0;
+	int s_len = ft_strlen(src);
+
+	if (size == 0)
+		return s_len;
+	while (i < size -1 && src[i])
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = 0;
+	return s_len;
+}
+
 int is_newline(char *save, char **line)
 {
-	char *found = NULL;
 	int end = 0;
 	int len = 0;
+	char *found = NULL;
 
 	if ((found = ft_strchr(save, '\n')))
 	{
@@ -100,9 +101,9 @@ int is_newline(char *save, char **line)
 
 char *ft_strjoindel(char *save, char *buf)
 {
-	char *ret = NULL;
 	int len1 = 0;
 	int len2 = ft_strlen(buf);
+	char *ret = NULL;
 	if (save)
 		len1 = ft_strlen(save);
 	if ((ret = (char *)malloc(sizeof(char) * (len1 + len2 + 1))) == NULL)
@@ -141,21 +142,4 @@ int get_next_line(char **line)
 		*line = ft_strdup("");
 	ft_strdel(&save);
 	return ret;
-}
-
-int main()
-{
-	char *line = NULL;
-	int ret = 0;
-
-	while ((ret = get_next_line(&line)) > 0)
-	{
-		printf("line:%s\n", line);
-		free(line);
-		line = NULL;
-	}
-	printf("line:%s\n", line);
-	free(line);
-	line = NULL;
-	return 0;
 }
