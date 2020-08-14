@@ -7,13 +7,11 @@
 #include <sys/types.h>
 #include <time.h>
 #include <fcntl.h>
+#include <dirent.h>
 
 int main(int argc, char *argv[])
 {
-	printf("test start!!!!\n");
-
-	execve("sub", NULL, NULL);
-
-	printf("workign??\n");
+	
+	
 	return 0;
 }

@@ -38,5 +38,9 @@ waitpid를 대신 쓰는 것이 좋다고 한다. <br>
 - (https://stackoverflow.com/questions/29615540/using-execve-in-c)execve 에서 세 번째 매개변수인 환경변수 이차원 배열 사용하는 방법에 대한 질문글. 이 링크가 나중에 필요할진 모르겠지만 아무튼 키 밸유 쌍으로 "PATH=/Users/donglee" 처럼 선언이 돼있어야 된다는 사실을 언급하고 있다. <br>
 
 (https://ehclub.co.kr/1321)dup함수에 대한 설명 블로그 -> ㅇㅋ<br>
+- (https://reakwon.tistory.com/80)pipe 함수 블로그 -> 기본 사용법 참고<br>
+- (https://man7.org/linux/man-pages/man2/pipe.2.html)man pipe<br>
+- (https://www.it-note.kr/24)opendir, readdir, closedir 함수 설명 -> 간단한 사용방법<br>
+
 
 
