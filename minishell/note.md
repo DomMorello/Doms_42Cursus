@@ -38,5 +38,12 @@ waitpid를 대신 쓰는 것이 좋다고 한다. <br>
 - (https://stackoverflow.com/questions/29615540/using-execve-in-c)execve 에서 세 번째 매개변수인 환경변수 이차원 배열 사용하는 방법에 대한 질문글. 이 링크가 나중에 필요할진 모르겠지만 아무튼 키 밸유 쌍으로 "PATH=/Users/donglee" 처럼 선언이 돼있어야 된다는 사실을 언급하고 있다. <br>
 
 (https://ehclub.co.kr/1321)dup함수에 대한 설명 블로그 -> ㅇㅋ<br>
+- (https://reakwon.tistory.com/80)pipe 함수 블로그 -> 기본 사용법 참고<br>
+- (https://man7.org/linux/man-pages/man2/pipe.2.html)man pipe<br>
+- (https://www.it-note.kr/24)opendir, readdir, closedir 함수 설명 -> 간단한 사용방법<br>
 
+(https://stackoverflow.com/questions/3740504/why-doesnt-the-cd-command-work-in-my-shell-program)cd관련 스택오버플로 질문 -> 모르겠다<br>
+- (https://harm-smits.github.io/42docs/projects/minishell)42docs -> 조언<br>
 
+(https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf)writing your own shell pdf -> 모르겠다 <br>
+- (https://pubs.opengroup.org/onlinepubs/009695399/utilities/xcu_chap02.html) shell 공식문서 참고할 사항들이 있을 거임 <br>
