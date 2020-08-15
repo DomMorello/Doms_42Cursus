@@ -14,7 +14,7 @@ void	ft_putstr_fd(char *s, int fd)
 
 void parse_line(char *line)
 {
-	
+			
 }
 
 int main(int argc, char *argv[])
@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
 	while (1)
 	{
 		ft_putstr_fd("\033[31mbash\033[0m\033[32m-\033[0m\033[33m3.2\033[0m$ ", 1);
-		if (ret = get_next_line(0, &line) < 0)
+		if ((ret = get_next_line(0, &line)) < 0)
 		{
 			printf("gnl error\n");
 			exit(0);	
