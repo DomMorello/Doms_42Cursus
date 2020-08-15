@@ -13,10 +13,10 @@
 #include <fcntl.h>
 #include <dirent.h>
 
-# define GREEN "\033[0;32m"
-# define LIGHT_BLUE "\033[0;34m"
-# define YELLOW "\033[0;33m"
-# define NC "\033[0m"
+// # define GREEN "\033[0;32m"
+// # define LIGHT_BLUE "\033[0;34m"
+// # define YELLOW "\033[0;33m"
+// # define NC "\033[0m"
 
 # define TRUE 1
 # define FALSE 0

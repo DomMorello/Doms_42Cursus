@@ -25,6 +25,7 @@ int parse_line(char *line)
 	int i;
 	int ret;
 	struct stat file;
+	char *cwd;
 
 	i = 0;
 	while (ft_isspace(line[i]))
@@ -36,13 +37,17 @@ int parse_line(char *line)
 			i++;
 		if ((ret = stat(&line[i], &file)) == -1)
 			return -1;
-		printf("%d\n", S_ISDIR(file.st_mode));
+		if (S_ISDIR(file.st_mode))
+			if ((ret = chdir(&line[i])) == -1)
+				return -1;
+		cwd = getcwd(buf, sizeof(buf));
+		printf("cwd: %s\n", cwd);
 	}
 	else
 	{
 		printf("command not found : %s\n", &line[i]);
 	}
-	
+	/* 어떻게 하면 space를 기준으로 명령어 토큰을 나눌 수 있을까를 생각해라 */
 	return 1;
 }
 
