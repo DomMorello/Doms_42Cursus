@@ -18,4 +18,6 @@
 # define YELLOW "\033[0;33m"
 # define NC "\033[0m"
 
+int get_next_line(int fd, char **line);
+
 #endif
