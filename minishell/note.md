@@ -42,5 +42,8 @@ waitpid를 대신 쓰는 것이 좋다고 한다. <br>
 - (https://man7.org/linux/man-pages/man2/pipe.2.html)man pipe<br>
 - (https://www.it-note.kr/24)opendir, readdir, closedir 함수 설명 -> 간단한 사용방법<br>
 
+(https://stackoverflow.com/questions/3740504/why-doesnt-the-cd-command-work-in-my-shell-program)cd관련 스택오버플로 질문 -> 모르겠다<br>
+- (https://harm-smits.github.io/42docs/projects/minishell)42docs -> 조언<br>
 
-
+(https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf)writing your own shell pdf -> 모르겠다 <br>
+- (https://pubs.opengroup.org/onlinepubs/009695399/utilities/xcu_chap02.html) shell 공식문서 참고할 사항들이 있을 거임 <br>
