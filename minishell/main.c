@@ -12,9 +12,38 @@ void	ft_putstr_fd(char *s, int fd)
 	}
 }
 
-void parse_line(char *line)
+int	ft_isspace(char c)
 {
-			
+	if (c == '\t' || c == ' ')
+		return (TRUE);
+	return (FALSE);
+}
+
+int parse_line(char *line)
+{
+	char buf[100];
+	int i;
+	int ret;
+	struct stat file;
+
+	i = 0;
+	while (ft_isspace(line[i]))
+		i++;
+	if (line[i] == 'c' && line[i + 1] == 'd' && ft_isspace(line[i + 2]))
+	{
+		i += 3;
+		while (ft_isspace(line[i]))
+			i++;
+		if ((ret = stat(&line[i], &file)) == -1)
+			return -1;
+		printf("%d\n", S_ISDIR(file.st_mode));
+	}
+	else
+	{
+		printf("command not found : %s\n", &line[i]);
+	}
+	
+	return 1;
 }
 
 int main(int argc, char *argv[])
