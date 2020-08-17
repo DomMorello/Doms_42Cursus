@@ -45,7 +45,7 @@ waitpid를 대신 쓰는 것이 좋다고 한다. <br>
 (https://stackoverflow.com/questions/3740504/why-doesnt-the-cd-command-work-in-my-shell-program)cd관련 스택오버플로 질문 -> 모르겠다<br>
 - (https://harm-smits.github.io/42docs/projects/minishell)42docs -> 조언<br>
 
-(https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf)writing your own shell pdf -> 모르겠다 <br>
+- (https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf)writing your own shell pdf -> 이 방식으로 구현을 하자 이게 본질인 것 같다.<br>
 - (https://pubs.opengroup.org/onlinepubs/009695399/utilities/xcu_chap02.html) shell 공식문서 참고할 사항들이 있을 거임 <br>
 
 (https://stackoverflow.com/questions/13656344/c-minishell-need-to-kill-zombies-for-pipeline-implementation)about zombie process issue -> <br>
