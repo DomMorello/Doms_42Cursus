@@ -151,6 +151,7 @@ int main(int argc, char *argv[], char *env[])
 	char *line;
 	char **commands;
 	int i = 0;
+	int j = 0;
 
 	ret = 0;
 	while (1)
@@ -169,6 +170,14 @@ int main(int argc, char *argv[], char *env[])
 			printf("%s\n", commands[i]);
 			i++;
 		}
+		j = 0;
+		while (commands[j])
+		{
+			free(commands[j]);
+			j++;
+		}
+		free(commands);
+		free(line);
 	}
 	return 0;
 }
