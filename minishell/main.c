@@ -20,7 +20,7 @@ int	ft_isspace(char c)
 }
 
 // cd 명령어 구현. 
-// int parse_line(char *line)
+// int cd(char *line)
 // {
 // 	char buf[100];
 // 	int i;
@@ -162,22 +162,8 @@ int main(int argc, char *argv[], char *env[])
 			printf("gnl error\n");
 			exit(0);	
 		}
-		// parse_line(line);
-		commands = ft_split(line, ';');
-		i = 0;
-		while (commands[i])
-		{
-			printf("%s\n", commands[i]);
-			i++;
-		}
-		j = 0;
-		while (commands[j])
-		{
-			free(commands[j]);
-			j++;
-		}
-		free(commands);
-		free(line);
+		// cd(line); cd 기초
+		
 	}
 	return 0;
 }
