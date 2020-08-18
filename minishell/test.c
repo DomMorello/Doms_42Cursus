@@ -37,10 +37,5 @@ int	main(int argc, char *argv[], char *env[])
 	// }
 	// printf("this is not exec\n");
 
-    char buf[100];
-    chdir("gnls");
-    printf("errno: %d\n", errno);
-    printf("err msg: %s\n", strerror(errno));
-    printf("%s\n", getcwd(buf, sizeof(buf)));
 	return (0);
 }

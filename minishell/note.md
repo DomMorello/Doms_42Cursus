@@ -51,3 +51,4 @@ waitpid를 대신 쓰는 것이 좋다고 한다. <br>
 (https://stackoverflow.com/questions/13656344/c-minishell-need-to-kill-zombies-for-pipeline-implementation)about zombie process issue -> <br>
 (http://forum.falinux.com/zbxe/index.php?document_srl=413254&mid=C_LIB)signal 함수에 대해서 블로그 -> 장황함<br>
 (https://badayak.com/4381)setenv -> 필요없음<br>
+- (https://stackoverflow.com/questions/5491775/how-to-write-a-shell-lexer-by-hand)lexer by hand stack overflow<br>
