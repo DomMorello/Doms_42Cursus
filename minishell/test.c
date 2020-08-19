@@ -6,6 +6,7 @@
 
 int	main(int argc, char *argv[], char *env[])
 {
+    
     // execve 이용한 bin 실행파일 구현
 	// char	**new_argv;
 	// char	*command;
@@ -36,6 +37,6 @@ int	main(int argc, char *argv[], char *env[])
 	// 	return (1);
 	// }
 	// printf("this is not exec\n");
-
+    
 	return (0);
 }

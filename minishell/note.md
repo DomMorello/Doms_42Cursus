@@ -56,4 +56,6 @@ waitpid를 대신 쓰는 것이 좋다고 한다. <br>
 - (https://pubs.opengroup.org/onlinepubs/009695399/utilities/xcu_chap02.html#tag_02_10)shell grammar 관련 lexer만들때 참고해야 할 것 같다. <br>
 
 (https://en.wikipedia.org/wiki/Abstract_syntax_tree)abstract syntax tree<br>
-(https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form)backus-Naur form 이게 뭘까? -> <br>
+(https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form)backus-Naur form 이게 뭘까? -> 몰라<br>
+
+- (https://www.gnu.org/software/bash/manual/html_node/Definitions.html#Definitions)shell terms definition -> 참고하자.<br>
