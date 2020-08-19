@@ -53,3 +53,7 @@ waitpid를 대신 쓰는 것이 좋다고 한다. <br>
 (https://badayak.com/4381)setenv -> 필요없음<br>
 - (https://stackoverflow.com/questions/5491775/how-to-write-a-shell-lexer-by-hand)lexer by hand stack overflow<br>
 - (https://stackoverflow.com/questions/13636252/c-minishell-adding-pipelines/13640308#13640308)pipeline sof 모르겠지만 일단 그냥 남겨둔다.<br>
+- (https://pubs.opengroup.org/onlinepubs/009695399/utilities/xcu_chap02.html#tag_02_10)shell grammar 관련 lexer만들때 참고해야 할 것 같다. <br>
+
+(https://en.wikipedia.org/wiki/Abstract_syntax_tree)abstract syntax tree<br>
+(https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form)backus-Naur form 이게 뭘까? -> <br>
