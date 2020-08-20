@@ -1,18 +1,8 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <string.h>
-#include <errno.h>
-#include <stdlib.h>
+#include "minishell.h"
 
 int	main(int argc, char *argv[], char *env[])
 {
-    int a = 3;
-    int b = 4;
 
-    int *c = NULL;
-    int *d = NULL;
-    if ((c = &a, d = NULL) != NULL)
-        printf("what the fuck??\n");
     // execve 이용한 bin 실행파일 구현
 	// char	**new_argv;
 	// char	*command;
