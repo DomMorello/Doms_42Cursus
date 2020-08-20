@@ -59,3 +59,4 @@ waitpid를 대신 쓰는 것이 좋다고 한다. <br>
 (https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form)backus-Naur form 이게 뭘까? -> 몰라<br>
 
 - (https://www.gnu.org/software/bash/manual/html_node/Definitions.html#Definitions)shell terms definition -> 참고하자.<br>
+(http://keepcalmswag.blogspot.com/2018/06/linux-unix-export-echo_49.html)export 문법<br>
