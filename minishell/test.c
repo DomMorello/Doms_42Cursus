@@ -4,7 +4,7 @@ extern char **environ;
 
 int	main(int argc, char *argv[], char *env[])
 {
-	while ()
+	
 	
     // // execve 이용한 bin 실행파일 구현
 	// char	**new_argv;
