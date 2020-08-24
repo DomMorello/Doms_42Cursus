@@ -62,3 +62,4 @@ waitpid를 대신 쓰는 것이 좋다고 한다. <br>
 (http://keepcalmswag.blogspot.com/2018/06/linux-unix-export-echo_49.html)export 문법<br>
 (http://ehpub.co.kr/tag/environ-%EB%B3%80%EC%88%98/)c environ 변수에 대한 공부 <br>
 (http://throughkim.kr/2016/12/22/linux-4/)export 명령어<br>
+(https://man7.org/linux/man-pages/man1/env.1.html)env man <br>
