@@ -4,8 +4,6 @@ extern char **environ;
 
 int	main(int argc, char *argv[], char *env[])
 {
-	
-	
      // execve 이용한 bin 실행파일 구현
 	 char	**new_argv;
 	 char	*command;
@@ -28,7 +26,7 @@ int	main(int argc, char *argv[], char *env[])
 	 	idx++;
 	 }
 	 new_argv[argc] = NULL;
-	
+
 	 // 명령어 실행!
 	 if (execve(absolute_path, new_argv, env) == -1)
 	 {
