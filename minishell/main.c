@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+extern char **environ;
+
 static int	ft_isspace(char c)
 {
 	if (c == '\t' || c == ' ')
@@ -7,6 +9,22 @@ static int	ft_isspace(char c)
 	return (FALSE);
 }
 
+int ft_env(char *line)
+{
+	/* 우선 environ에 있는 것들을 list에 전부 복제한다. */
+	int i;
+	t_list envlist;
+
+	i = 0;
+	while (environ[i])
+	{
+
+		i++;
+	}
+	
+}
+
+//pwd 구현 
 int pwd(char *line)
 {
 	char *cwd;
@@ -58,7 +76,7 @@ int cd(char *line)
 	return 1;
 }
 
-int main(int argc, char *argv[], char *env[])
+int main(int argc, char *argv[])
 {
 	char buf[100];
 	int ret;
@@ -79,6 +97,7 @@ int main(int argc, char *argv[], char *env[])
 		}
 		cd(line); //cd 기초
 		pwd(line);	//pwd 기초
+		ft_env(line);
 	}
 	return 0;
 }
