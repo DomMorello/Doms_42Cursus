@@ -35,26 +35,5 @@ int	main(int argc, char *argv[])
 	//  }
 	//  printf("this is not exec\n");
 	
-	int i = 1;
-	t_list head;
-	head.content = environ[0];
-	head.next = NULL;
-	t_list *list = &head;
-
-	while (environ[i])
-	{
-		t_list *tmp = ft_lstnew(environ[i]);
-		ft_lstadd_back(&list, tmp);
-		i++;
-	}
-	
-
-
-
-
-
-	
-
-	
 	return (0);
 }

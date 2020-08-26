@@ -9,19 +9,36 @@ static int	ft_isspace(char c)
 	return (FALSE);
 }
 
-int ft_env(char *line)
+// export basic 
+int ft_export(char *line, t_list *list)
 {
-	/* 우선 environ에 있는 것들을 list에 전부 복제한다. */
-	int i;
-	t_list envlist;
+	int i = 0;
 
-	i = 0;
-	while (environ[i])
+	if (!ft_strncmp(line, "export", ft_strlen("export")))
 	{
-
-		i++;
+		// if (!ft_isspace(line[i + ft_strlen("export")]))
+		// 	return 0;
+		while (list)
+		{
+			write(1, "declare -x ", 11);
+			printf("%s\n", (char *)list->content);
+			list = list->next;
+		}
 	}
-	
+}
+
+// env basic
+int ft_env(char *line, t_list *list)
+{
+	if (line[0] == 'e' && line[1] == 'n' && line[2] == 'v')
+	{
+		/* env 현재 파일 출력 */
+		while (list)
+		{
+			printf("%s\n", (char *)list->content);
+			list = list->next;
+		}
+	}
 }
 
 //pwd 구현 
@@ -32,9 +49,7 @@ int pwd(char *line)
 	int i;
 
 	i = 0;
-	while (ft_isspace(line[i]))
-		i++;
-	if (line[i] == 'p' && line[i + 1] == 'w' && line[i + 2] == 'd')
+	if (line[0] == 'p' && line[1] == 'w' && line[2] == 'd')
 	{
 		cwd = getcwd(buf, sizeof(buf));
 		printf("%s\n", cwd);
@@ -52,12 +67,9 @@ int cd(char *line)
 	struct stat file;
 	char *cwd;
 
-	i = 0;
-	while (ft_isspace(line[i]))
-		i++;
-	if (line[i] == 'c' && line[i + 1] == 'd' && ft_isspace(line[i + 2]))
+	if (line[0] == 'c' && line[1] == 'd' && ft_isspace(line[2]))
 	{
-		i += 3;
+		i = 3;
 		while (ft_isspace(line[i]))
 			i++;
 		if ((ret = stat(&line[i], &file)) == -1)
@@ -78,13 +90,28 @@ int cd(char *line)
 
 int main(int argc, char *argv[])
 {
+	/* env linked list 부분 일단 */
+	t_list head;
+	head.content = environ[0];
+	head.next = NULL;
+	t_list *list = &head;
+
+	int i = 1;
+	while (environ[i])
+	{
+		t_list *tmp = ft_lstnew(environ[i]);
+		ft_lstadd_back(&list, tmp);
+		i++;
+	}
+	/* env ------------------- */
+
 	char buf[100];
 	int ret;
 	char *line;
 	char **commands;
-	int i = 0;
+	i = 0;
 	int j = 0;
-
+	
 	ret = 0;
 	while (1)
 	{
@@ -95,9 +122,12 @@ int main(int argc, char *argv[])
 			free(line);
 			exit(0);
 		}
-		cd(line); //cd 기초
-		pwd(line);	//pwd 기초
-		ft_env(line);
+		while (ft_isspace(line[i]))
+			i++;
+		cd(&line[i]);
+		pwd(&line[i]);
+		ft_env(&line[i], list);
+		ft_export(&line[i], list);
 	}
 	return 0;
 }
