@@ -7,6 +7,24 @@ static int	ft_isspace(char c)
 	return (FALSE);
 }
 
+int pwd(char *line)
+{
+	char *cwd;
+	char buf[100];
+	int i;
+
+	i = 0;
+	while (ft_isspace(line[i]))
+		i++;
+	if (line[i] == 'p' && line[i + 1] == 'w' && line[i + 2] == 'd')
+	{
+		cwd = getcwd(buf, sizeof(buf));
+		printf("%s\n", cwd);
+		return 1;
+	}
+	return 0;
+}
+
 // cd 명령어 구현. 
 int cd(char *line)
 {
@@ -32,10 +50,10 @@ int cd(char *line)
 		cwd = getcwd(buf, sizeof(buf));
 		printf("cwd: %s\n", cwd);
 	}
-	else
-	{
-		printf("command not found : %s\n", &line[i]);
-	}
+	// else
+	// {
+	// 	printf("command not found : %s\n", &line[i]);
+	// }
 	/* 어떻게 하면 space를 기준으로 명령어 토큰을 나눌 수 있을까를 생각해라 */
 	return 1;
 }
@@ -60,6 +78,7 @@ int main(int argc, char *argv[], char *env[])
 			exit(0);
 		}
 		cd(line); //cd 기초
+		pwd(line);	//pwd 기초
 	}
 	return 0;
 }

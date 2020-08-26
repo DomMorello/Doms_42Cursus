@@ -67,4 +67,4 @@ waitpid를 대신 쓰는 것이 좋다고 한다. <br>
 (https://ko.wikipedia.org/wiki/%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4)프로세스 위키<br>
 (http://blog.naver.com/PostView.nhn?blogId=syg7949&logNo=221537683493&parentCategoryNo=&categoryNo=12&viewDate=&isShowPopularPosts=true&from=search)프로세스 공부<br>
 - (http://www.sarathlakshman.com/2012/09/24/implementation-overview-of-redirection-and-pipe-operators-in-shell)redirection 예제 <br>
-
+(https://codetravel.tistory.com/42)waitpid wait비교 <br>
