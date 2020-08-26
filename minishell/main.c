@@ -18,12 +18,15 @@ int ft_export(char *line, t_list *list)
 	{
 		// if (!ft_isspace(line[i + ft_strlen("export")]))
 		// 	return 0;
-		while (list)
-		{
-			write(1, "declare -x ", 11);
-			printf("%s\n", (char *)list->content);
-			list = list->next;
-		}
+		// while (list)
+		// {
+		// 	write(1, "declare -x ", 11);
+		// 	printf("%s\n", (char *)list->content);
+		// 	list = list->next;
+		// }
+		printf("%s\n", (char *)list->content);
+		((char *)list->content)[0] = 'd';
+		printf("%s\n", (char *)list->content);
 	}
 }
 

@@ -34,6 +34,8 @@ int	main(int argc, char *argv[])
 	//  	return (1);
 	//  }
 	//  printf("this is not exec\n");
+	char *s = "hello";
+	s[3] = 'g';
 	
 	return (0);
 }
