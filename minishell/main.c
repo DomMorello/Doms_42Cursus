@@ -9,6 +9,22 @@ static int	ft_isspace(char c)
 	return (FALSE);
 }
 
+int update_cwd(t_list **list)
+{
+	t_list *tmp;
+	char *cur_cwd;
+	char buf[100];
+
+	tmp = *list;
+	cur_cwd = getcwd(buf, sizeof(buf));
+	
+}
+
+// void	sort_export(t_list *list)
+// {
+
+// }
+
 // export basic 
 int ft_export(char *line, t_list *list)
 {
@@ -16,17 +32,13 @@ int ft_export(char *line, t_list *list)
 
 	if (!ft_strncmp(line, "export", ft_strlen("export")))
 	{
-		// if (!ft_isspace(line[i + ft_strlen("export")]))
-		// 	return 0;
+		update_cwd(&list);
 		// while (list)
 		// {
 		// 	write(1, "declare -x ", 11);
 		// 	printf("%s\n", (char *)list->content);
 		// 	list = list->next;
 		// }
-		printf("%s\n", (char *)list->content);
-		((char *)list->content)[0] = 'd';
-		printf("%s\n", (char *)list->content);
 	}
 }
 
@@ -78,9 +90,11 @@ int cd(char *line)
 		if ((ret = stat(&line[i], &file)) == -1)
 			return -1;
 		if (S_ISDIR(file.st_mode))
+		{
 			if ((ret = chdir(&line[i])) == -1)
 				return -1;
-		cwd = getcwd(buf, sizeof(buf));
+			cwd = getcwd(buf, sizeof(buf));
+		}
 		printf("cwd: %s\n", cwd);
 	}
 	// else
