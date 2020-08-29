@@ -34,8 +34,9 @@ int	main(int argc, char *argv[])
 	//  	return (1);
 	//  }
 	//  printf("this is not exec\n");
-	char *s = "hello";
-	s[3] = 'g';
+	char *s1 = "hello";
+	char *s2 = malloc(15);
 	
+	printf("%d\n", _msize(s2));
 	return (0);
 }

@@ -2,6 +2,9 @@
 
 extern char **environ;
 
+# define PWD "PWD="
+# define OLDPWD "OLDPWD="
+
 static int	ft_isspace(char c)
 {
 	if (c == '\t' || c == ' ')
@@ -17,6 +20,17 @@ int update_cwd(t_list **list)
 
 	tmp = *list;
 	cur_cwd = getcwd(buf, sizeof(buf));
+	while (tmp)
+	{
+		if (!ft_strncmp((char *)tmp->content, PWD, ft_strlen(PWD)))
+		{
+			ft_strlcpy(tmp->content + ft_strlen(PWD), cur_cwd, ft_strlen(cur_cwd) + 1);
+		}
+		// if (!ft_strncmp((char *)tmp->content, OLDPWD, ft_strlen(OLDPWD)))
+		// 	printf("%s\n", (char *)tmp->content);
+		tmp = tmp->next;
+	}
+	
 	
 }
 
@@ -33,12 +47,12 @@ int ft_export(char *line, t_list *list)
 	if (!ft_strncmp(line, "export", ft_strlen("export")))
 	{
 		update_cwd(&list);
-		// while (list)
-		// {
-		// 	write(1, "declare -x ", 11);
-		// 	printf("%s\n", (char *)list->content);
-		// 	list = list->next;
-		// }
+		while (list)
+		{
+			write(1, "declare -x ", 11);
+			printf("%s\n", (char *)list->content);
+			list = list->next;
+		}
 	}
 }
 
