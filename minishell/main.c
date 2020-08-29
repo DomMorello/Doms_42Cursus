@@ -19,10 +19,6 @@ int update_cwd(t_list **list)
 	char buf[100];
 
 	tmp = *list;
-	// if (!ft_strncmp((char *)tmp->content, OLDPWD, ft_strlen(OLDPWD)))
-	// {
-			
-	// }
 	cur_cwd = getcwd(buf, sizeof(buf));
 	while (tmp)
 	{
@@ -91,16 +87,27 @@ int pwd(char *line)
 }
 
 // cd 명령어 구현. 
-int cd(char *line)
+int cd(char *line, t_list **list)
 {
 	char buf[100];
 	int i;
 	int ret;
 	struct stat file;
 	char *cwd;
+	t_list *tmp;
+	tmp = *list;
 
 	if (line[0] == 'c' && line[1] == 'd' && ft_isspace(line[2]))
 	{
+		cwd = getcwd(buf, sizeof(buf));
+		while (tmp)
+		{
+			if (!ft_strncmp((char *)tmp->content, OLDPWD, ft_strlen(OLDPWD)))
+			{
+				ft_strlcpy((char *)tmp->content + ft_strlen(OLDPWD), cwd, ft_strlen(cwd) + 1);
+			}
+			tmp = tmp->next;
+		}
 		i = 3;
 		while (ft_isspace(line[i]))
 			i++;
@@ -158,7 +165,7 @@ int main(int argc, char *argv[])
 		}
 		while (ft_isspace(line[i]))
 			i++;
-		cd(&line[i]);
+		cd(&line[i], &list);
 		pwd(&line[i]);
 		ft_env(&line[i], list);
 		ft_export(&line[i], list);
