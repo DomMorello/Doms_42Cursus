@@ -19,6 +19,10 @@ int update_cwd(t_list **list)
 	char buf[100];
 
 	tmp = *list;
+	// if (!ft_strncmp((char *)tmp->content, OLDPWD, ft_strlen(OLDPWD)))
+	// {
+			
+	// }
 	cur_cwd = getcwd(buf, sizeof(buf));
 	while (tmp)
 	{
@@ -26,8 +30,7 @@ int update_cwd(t_list **list)
 		{
 			ft_strlcpy(tmp->content + ft_strlen(PWD), cur_cwd, ft_strlen(cur_cwd) + 1);
 		}
-		// if (!ft_strncmp((char *)tmp->content, OLDPWD, ft_strlen(OLDPWD)))
-		// 	printf("%s\n", (char *)tmp->content);
+		
 		tmp = tmp->next;
 	}
 	
