@@ -23,16 +23,12 @@ int update_cwd(t_list **list)
 	while (tmp)
 	{
 		if (!ft_strncmp((char *)tmp->content, PWD, ft_strlen(PWD)))
-		{
 			ft_strlcpy(tmp->content + ft_strlen(PWD), cur_cwd, ft_strlen(cur_cwd) + 1);
-		}
-		
 		tmp = tmp->next;
 	}
-	
-	
 }
 
+/* 연결리스트 정렬하는 알고리즘을 적용해서 알파벳순으로 정렬을 해야 한다. */
 // void	sort_export(t_list *list)
 // {
 
@@ -99,6 +95,7 @@ int cd(char *line, t_list **list)
 
 	if (line[0] == 'c' && line[1] == 'd' && ft_isspace(line[2]))
 	{
+		/* OLDPWD를 업데이트 하기 위해서는 디렉토리를 변경하기 전에 현재 cwd를 넣어준다 */
 		cwd = getcwd(buf, sizeof(buf));
 		while (tmp)
 		{
