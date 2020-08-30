@@ -34,5 +34,39 @@ int	main(int argc, char *argv[])
 	//  	return (1);
 	//  }
 	//  printf("this is not exec\n");
+
+	t_list head;
+	head.content = "ceiling";
+	head.next = NULL;
+	t_list *list = &head;
+
+	t_list *p1 = ft_lstnew("abortion");
+	ft_lstadd_back(&list, p1);
+	t_list *p2 = ft_lstnew("delight");
+	ft_lstadd_back(&list, p2);
+	t_list *p3 = ft_lstnew("boring");
+	ft_lstadd_back(&list, p3);
+
+	int swapped = 1;
+	t_list *tmp;
+	t_list *lptr = NULL;
+
+	while (swapped)
+	{
+		swapped = 0;
+		tmp = list;
+		while (tmp->next != lptr)
+		{
+			if (ft_strncmp(tmp->content, tmp->next->content, ft_strlen(tmp->content)) >= 0)
+			{
+				char *tmp = tmp->content;
+				tmp->content = tmp->next->content;
+				tmp->next->content = tmp;
+				swapped = 1;
+			}
+			tmp = tmp->next;
+		}
+		lptr = tmp;
+	}
 	return (0);
 }

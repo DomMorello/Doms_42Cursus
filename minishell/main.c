@@ -28,13 +28,12 @@ int update_cwd(t_list **list)
 	}
 }
 
-/* 연결리스트 정렬하는 알고리즘을 적용해서 알파벳순으로 정렬을 해야 한다. */
-// void	sort_export(t_list *list)
-// {
+void	sort_export(t_list **list)
+{
 
-// }
+}
 
-// export basic 
+// export basic
 int ft_export(char *line, t_list *list)
 {
 	int i = 0;
@@ -56,7 +55,7 @@ int ft_env(char *line, t_list *list)
 {
 	if (line[0] == 'e' && line[1] == 'n' && line[2] == 'v')
 	{
-		/* env 현재 파일 출력 */
+		update_cwd(&list);
 		while (list)
 		{
 			printf("%s\n", (char *)list->content);
