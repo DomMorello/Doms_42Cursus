@@ -48,25 +48,25 @@ int	main(int argc, char *argv[])
 	ft_lstadd_back(&list, p3);
 
 	int swapped = 1;
-	t_list *tmp;
+	t_list *ptr1;
 	t_list *lptr = NULL;
 
 	while (swapped)
 	{
 		swapped = 0;
-		tmp = list;
-		while (tmp->next != lptr)
+		ptr1 = list;
+		while (ptr1->next != lptr)
 		{
-			if (ft_strncmp(tmp->content, tmp->next->content, ft_strlen(tmp->content)) >= 0)
+			if (ft_strncmp(ptr1->content, ptr1->next->content, ft_strlen(ptr1->content)) >= 0)
 			{
-				char *tmp = tmp->content;
-				tmp->content = tmp->next->content;
-				tmp->next->content = tmp;
+				char *tmp = ptr1->content;
+				ptr1->content = ptr1->next->content;
+				ptr1->next->content = tmp;
 				swapped = 1;
 			}
-			tmp = tmp->next;
+			ptr1 = ptr1->next;
 		}
-		lptr = tmp;
+		lptr = ptr1;
 	}
 	return (0);
 }
