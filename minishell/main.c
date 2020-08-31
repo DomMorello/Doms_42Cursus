@@ -30,7 +30,27 @@ int update_cwd(t_list **list)
 
 void	sort_export(t_list **list)
 {
-
+	int swapped = 1;
+	t_list *ptr1;
+	t_list *lptr = NULL;
+	
+	while (swapped)
+	{
+		swapped = 0;
+		ptr1 = *list;
+		while (ptr1->next != lptr)
+		{
+			if (ft_strncmp(ptr1->content, ptr1->next->content, ft_strlen(ptr1->content)) > 0)
+			{
+				char *tmp = ptr1->content;
+				ptr1->content = ptr1->next->content;
+				ptr1->next->content = tmp;
+				swapped = 1;
+			}
+			ptr1 = ptr1->next;
+		}
+		lptr = ptr1;
+	}
 }
 
 // export basic
@@ -41,6 +61,7 @@ int ft_export(char *line, t_list *list)
 	if (!ft_strncmp(line, "export", ft_strlen("export")))
 	{
 		update_cwd(&list);
+		sort_export(&list);
 		while (list)
 		{
 			write(1, "declare -x ", 11);
