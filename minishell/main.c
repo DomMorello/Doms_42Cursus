@@ -116,19 +116,25 @@ int add_quot(t_list **list)
 	return 1;
 }
 
-void	alloc_update(char *cwd, char **content)
+void	alloc_update(char *cwd, t_list *node)
 {
 	int len;
 	char *ret;
 	int i;
 	int j;
+	char *pwd;
 
 	len = ft_strlen(cwd);
 	if ((ret = (char *)malloc(sizeof(char) * (len + ft_strlen(PWD) + 2) + 1)) == NULL)
+	{
+		printf("malloc fucked up!! \n");
 		exit(0);
+	}
 	i = 0;
-	j = ft_strlen(PWD);
-	ft_strlcpy(ret, PWD, ft_strlen(PWD));
+	j = 0;
+	pwd = PWD;
+	while (ret[j])
+		ret[j] = pwd[j++];
 	ret[j] = '\"';
 	j++;
 	while (cwd[i])
@@ -138,9 +144,10 @@ void	alloc_update(char *cwd, char **content)
 		j++;
 	}
 	ret[j] = '\"';
-	ret[j] = 0;
-	*content = ret;
-	/* fuck ! !! ! ! ! !! 왜 안나오지 */
+	ret[j + 1] = 0;
+	node->content = ret;
+
+	printf("%p %s\n", node->content, node->content);
 }
 
 int update_exp_cwd(t_list **list)
@@ -154,7 +161,11 @@ int update_exp_cwd(t_list **list)
 	while (tmp)
 	{
 		if (!ft_strncmp((char *)tmp->content, PWD, ft_strlen(PWD)))
-			alloc_update(cur_cwd, (char **)&(*list)->content);
+		{
+			alloc_update(cur_cwd, tmp);
+			printf("%p %s\n", tmp->content, tmp->content);
+		}
+		// printf("hoolA!!! %s\n", tmp->content);
 		tmp = tmp->next;
 	}
 }
