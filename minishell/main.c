@@ -53,9 +53,66 @@ void	sort_export(t_list **list)
 	}
 }
 
-void add_quot(t_list **list)
+int find_equal(char *s)
 {
-	
+	int i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == '=')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int alloc_quote(char **s)
+{
+	int len;
+	char *ret;
+	int i;
+	int j;
+	int flag;
+
+	len = ft_strlen(*s);
+	if ((ret = (char *)malloc(sizeof(char) * (len + 2) + 1)) == NULL)
+		return -1;
+	i = 0;
+	j = 0;
+	flag = 0;
+	while ((*s)[i])
+	{
+		ret[j] = (*s)[i];
+		if ((*s)[i] == '=' && flag == 0)
+		{
+			j++;
+			ret[j] = '\"';
+			flag = 1;
+		}
+		i++;
+		j++;
+	}
+	printf("i: %d, j: %d len: %d\n", i, j, len);
+	ret[j] = '\"';
+	ret[j + 1] = 0;
+	*s = ret;
+	return 1;
+}
+
+int add_quot(t_list **list)
+{
+	t_list *tmp;
+
+	tmp = *list;
+	while (tmp)
+	{
+		if (find_equal((char *)tmp->content))
+			if (alloc_quote((char **)&tmp->content) == -1)
+				return -1;
+		tmp = tmp->next;
+	}
+	return 1;
 }
 
 // export basic
@@ -67,7 +124,11 @@ int ft_export(char *line, t_list *list)
 	{
 		update_cwd(&list);
 		sort_export(&list);
-		add_quot(&list);
+		if (add_quot(&list) == -1)
+		{
+			printf("fucked up by malloc\n");
+			exit(0);
+		}
 		while (list)
 		{
 			write(1, "declare -x ", 11);
@@ -142,7 +203,6 @@ int cd(char *line, t_list **list)
 				return -1;
 			cwd = getcwd(buf, sizeof(buf));
 		}
-		printf("cwd: %s\n", cwd);
 	}
 	// else
 	// {
@@ -167,7 +227,7 @@ int main(int argc, char *argv[])
 		ft_lstadd_back(&list, tmp);
 		i++;
 	}
-	/* env ------------------- */
+	/* env --------------------- */
 
 	char buf[100];
 	int ret;
