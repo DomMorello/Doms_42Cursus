@@ -53,39 +53,9 @@ void	sort_export(t_list **list)
 	}
 }
 
-int find_equl(char *s)
-{
-	int i;
-
-	i = 0;
-	while (s[i])
-	{
-		if (s[i] == '=')
-			return (i);
-		i++;
-	}
-	return 0;
-}
-
 void add_quot(t_list **list)
 {
-	t_list *tmp;
-	char *str;
-	int len;
-	int start;
-
-	tmp = *list;
-	while (tmp)
-	{
-		str = (char *)tmp->content;
-		len = ft_strlen(str);
-		if ((start = find_equl(str)))
-		{
-			str[start - 1] = "\"";
-			str[len] = "\"";
-		}
-		tmp = tmp->next;
-	}
+	
 }
 
 // export basic
