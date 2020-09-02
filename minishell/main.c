@@ -93,7 +93,6 @@ int alloc_quote(char **s)
 		i++;
 		j++;
 	}
-	printf("i: %d, j: %d len: %d\n", i, j, len);
 	ret[j] = '\"';
 	ret[j + 1] = 0;
 	*s = ret;
@@ -103,16 +102,61 @@ int alloc_quote(char **s)
 int add_quot(t_list **list)
 {
 	t_list *tmp;
+	static int flag = 0;
 
 	tmp = *list;
-	while (tmp)
+	while (tmp && flag == 0)
 	{
 		if (find_equal((char *)tmp->content))
 			if (alloc_quote((char **)&tmp->content) == -1)
 				return -1;
 		tmp = tmp->next;
 	}
+	flag = 1;
 	return 1;
+}
+
+void	alloc_update(char *cwd, char **content)
+{
+	int len;
+	char *ret;
+	int i;
+	int j;
+
+	len = ft_strlen(cwd);
+	if ((ret = (char *)malloc(sizeof(char) * (len + ft_strlen(PWD) + 2) + 1)) == NULL)
+		exit(0);
+	i = 0;
+	j = ft_strlen(PWD);
+	ft_strlcpy(ret, PWD, ft_strlen(PWD));
+	ret[j] = '\"';
+	j++;
+	while (cwd[i])
+	{
+		ret[j] = cwd[i];
+		i++;
+		j++;
+	}
+	ret[j] = '\"';
+	ret[j] = 0;
+	*content = ret;
+	/* fuck ! !! ! ! ! !! 왜 안나오지 */
+}
+
+int update_exp_cwd(t_list **list)
+{
+	t_list *tmp;
+	char *cur_cwd;
+	char buf[100];
+
+	tmp = *list;
+	cur_cwd = getcwd(buf, sizeof(buf));
+	while (tmp)
+	{
+		if (!ft_strncmp((char *)tmp->content, PWD, ft_strlen(PWD)))
+			alloc_update(cur_cwd, (char **)&(*list)->content);
+		tmp = tmp->next;
+	}
 }
 
 // export basic
@@ -122,19 +166,19 @@ int ft_export(char *line, t_list *list)
 
 	if (!ft_strncmp(line, "export", ft_strlen("export")))
 	{
-		update_cwd(&list);
-		sort_export(&list);
-		if (add_quot(&list) == -1)
-		{
-			printf("fucked up by malloc\n");
-			exit(0);
-		}
-		while (list)
-		{
-			write(1, "declare -x ", 11);
-			printf("%s\n", (char *)list->content);
-			list = list->next;
-		}
+		update_exp_cwd(&list);
+		// sort_export(&list);
+		// if (add_quot(&list) == -1)
+		// {
+		// 	printf("fucked up by malloc\n");
+		// 	exit(0);
+		// }
+		// while (list)
+		// {
+		// 	write(1, "declare -x ", 11);
+		// 	printf("%s\n", (char *)list->content);
+		// 	list = list->next;
+		// }
 	}
 }
 
@@ -170,7 +214,7 @@ int pwd(char *line)
 }
 
 // cd 명령어 구현. 
-int cd(char *line, t_list **list)
+int cd(char *line, t_list **env_list, t_list **exp_list)
 {
 	char buf[100];
 	int i;
@@ -178,7 +222,8 @@ int cd(char *line, t_list **list)
 	struct stat file;
 	char *cwd;
 	t_list *tmp;
-	tmp = *list;
+	tmp = *env_list;
+	/* export update 하는 부분 구현해야 한다. */
 
 	if (line[0] == 'c' && line[1] == 'd' && ft_isspace(line[2]))
 	{
@@ -215,19 +260,34 @@ int cd(char *line, t_list **list)
 int main(int argc, char *argv[])
 {
 	/* env linked list 부분 일단 */
-	t_list head;
-	head.content = environ[0];
-	head.next = NULL;
-	t_list *list = &head;
+	t_list env_head;
+	env_head.content = environ[0];
+	env_head.next = NULL;
+	t_list *env_list = &env_head;
 
 	int i = 1;
 	while (environ[i])
 	{
-		t_list *tmp = ft_lstnew(environ[i]);
-		ft_lstadd_back(&list, tmp);
+		t_list *tmp1 = ft_lstnew(environ[i]);
+		ft_lstadd_back(&env_list, tmp1);
 		i++;
 	}
 	/* env --------------------- */
+
+	/* export linked list 부분 일단 */
+	t_list exp_head;
+	exp_head.content = environ[0];
+	exp_head.next = NULL;
+	t_list *exp_list = &exp_head;
+
+	i = 1;
+	while (environ[i])
+	{
+		t_list *tmp2 = ft_lstnew(environ[i]);
+		ft_lstadd_back(&exp_list, tmp2);
+		i++;
+	}
+	/* export --------------------- */
 
 	char buf[100];
 	int ret;
@@ -248,10 +308,10 @@ int main(int argc, char *argv[])
 		}
 		while (ft_isspace(line[i]))
 			i++;
-		cd(&line[i], &list);
+		cd(&line[i], &env_list, &exp_list);
 		pwd(&line[i]);
-		ft_env(&line[i], list);
-		ft_export(&line[i], list);
+		ft_env(&line[i], env_list);
+		ft_export(&line[i], exp_list);
 	}
 	return 0;
 }
