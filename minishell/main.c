@@ -146,7 +146,7 @@ void	alloc_update(char *cwd, t_list *node)
 	ret[j] = '\"';
 	ret[j + 1] = 0;
 	node->content = ret;
-
+	
 	printf("%p %s\n", node->content, node->content);
 }
 
