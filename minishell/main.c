@@ -160,6 +160,7 @@ int update_exp_cwd(t_list **list)
 	cur_cwd = getcwd(buf, sizeof(buf));
 	while (tmp)
 	{
+		/* 큰 따옴표를 추가해버려서 그 다음부터는 "PWD= 가 돼버려서 조건문에 안 들어온다. */
 		if (!ft_strncmp((char *)tmp->content, PWD, ft_strlen(PWD)))
 		{
 			alloc_update(cur_cwd, tmp);
