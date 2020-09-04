@@ -4,6 +4,16 @@ extern char **environ;
 
 int	main(int argc, char *argv[])
 {
+	char *s = "hello";
+	s = malloc(sizeof(char) * 10);
+	s = "world";
+	s = malloc(sizeof(char) * 14);
+	s = "fsdjsdj";
+	free(s)
+	while (1)
+	{
+		;
+	}
     //  // execve 이용한 bin 실행파일 구현
 	//  char	**new_argv;
 	//  char	*command;
