@@ -2,14 +2,34 @@
 
 extern char **environ;
 
+char *test(char *s)
+{
+	char *ret = malloc(sizeof(char) * 10);
+	int i = 10;
+	while (i--)
+	{
+		ret[i] = 'a';
+	}
+	return ret;
+}
+
+char *test2(char *s)
+{
+	char *ret = malloc(sizeof(char) * 14);
+	int i = 14;
+	while (i--)
+	{
+		ret[i] = 'b';
+	}
+	return ret;
+}
+
 int	main(int argc, char *argv[])
 {
 	char *s = "hello";
-	s = malloc(sizeof(char) * 10);
-	s = "world";
-	s = malloc(sizeof(char) * 14);
-	s = "fsdjsdj";
-	free(s)
+	s = test(s);
+	s = test2(s);
+	free(s);
 	while (1)
 	{
 		;
