@@ -323,6 +323,12 @@ int main(int argc, char *argv[])
 		pwd(&line[i]);
 		ft_env(&line[i], env_list);
 		ft_export(&line[i], exp_list);
+		free(line);
+	}
+
+	while (1)
+	{
+		;
 	}
 	return 0;
 }
