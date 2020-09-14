@@ -276,6 +276,7 @@ int main(int argc, char *argv[])
 	env_head.content = environ[0];
 	env_head.next = NULL;
 	t_list *env_list = &env_head;
+	// 이 부분 lstnew 이용해서 할 수 있지 않을까?
 
 	int i = 1;
 	while (environ[i])
