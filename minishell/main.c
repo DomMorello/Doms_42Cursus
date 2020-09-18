@@ -21,7 +21,8 @@ void start(char *argv[])
             {
                 if (fork() == 0)
                 {
-                    
+                    /* 이중으로 fork를 하면 어떻게 해야 할까
+                    redirection을 하려면 이중 fork를 해야 하나? */
                 }
             }
             else
