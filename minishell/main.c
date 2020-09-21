@@ -8,25 +8,24 @@ void start(char *argv[])
     {
         pid_t pid;
         int status;
-
+        
         if ((pid = fork()) == 0)
         {
             /* child */
             char buf[100];
+            int back_fd;
 
             getcwd(buf, sizeof(buf));
             if (argv[2] && !strcmp(argv[2], ">"))
             {
-                int fd;
-
-                fd = open(argv[3], O_WRONLY | O_CREAT);
-                dup2(fd, 1);
-                close(fd);
+                int fd = open(argv[3], O_WRONLY | O_CREAT);
+                /* 다시 잘 생각해보자 어떻게 되돌리는지 */
                 printf("%s\n", buf);
             }
             else
-                printf("%s\n", buf);            
-            sleep(3);
+                printf("%s\n", buf);
+
+            exit(1);
         }
         else if (pid > 0)
         {
@@ -36,6 +35,10 @@ void start(char *argv[])
         }
     }
 }
+
+/* 번뜩이는 아이디어! 표준출력이 있는 명령어들을 전부 다 실행을 하고 
+redirection이나 pipe가 있으면 출력할 문자열을 넘겨서 처리해주는 함수를 만들자.
+이렇게 하면 구조적으로 잘 될 것 같은데? */
 
 int main(int argc, char *argv[])
 {

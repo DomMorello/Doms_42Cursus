@@ -4,23 +4,6 @@ extern char **environ;
 
 int	main(int argc, char *argv[])
 {
-	int status;
-	printf("main start!\n");
-	pid_t pid = fork();
-
-	if (pid == 0)
-	{
-		//child
-		printf("chuild start\n");
-		printf("chuild end\n");
-	}
-	else if (pid > 0)
-	{
-		printf("parent start\n");
-		wait(&status);
-		printf("parent end\n");
-	}
-	printf("main end\n");
 
     //  // execve 이용한 bin 실행파일 구현
 	//  char	**new_argv;
