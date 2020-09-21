@@ -2,38 +2,26 @@
 
 extern char **environ;
 
-char *test(char *s)
-{
-	char *ret = malloc(sizeof(char) * 10);
-	int i = 10;
-	while (i--)
-	{
-		ret[i] = 'a';
-	}
-	return ret;
-}
-
-char *test2(char *s)
-{
-	char *ret = malloc(sizeof(char) * 14);
-	int i = 14;
-	while (i--)
-	{
-		ret[i] = 'b';
-	}
-	return ret;
-}
-
 int	main(int argc, char *argv[])
 {
-	char *s = "hello";
-	s = test(s);
-	s = test2(s);
-	free(s);
-	while (1)
+	int status;
+	printf("main start!\n");
+	pid_t pid = fork();
+
+	if (pid == 0)
 	{
-		;
+		//child
+		printf("chuild start\n");
+		printf("chuild end\n");
 	}
+	else if (pid > 0)
+	{
+		printf("parent start\n");
+		wait(&status);
+		printf("parent end\n");
+	}
+	printf("main end\n");
+
     //  // execve 이용한 bin 실행파일 구현
 	//  char	**new_argv;
 	//  char	*command;
