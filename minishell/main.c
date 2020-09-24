@@ -65,7 +65,7 @@ void pipeline(char** cmd)
         return; 
     } 
     p1 = fork(); 
-    if (p1 < 0) { 
+    if (p1 < 0) {
         printf("\nCould not fork"); 
         return; 
     } 
@@ -73,11 +73,11 @@ void pipeline(char** cmd)
     if (p1 == 0) { 
         // Child 1 executing.. 
         // It only needs to write at the write end 
-        close(fd[0]); 
-        dup2(fd[1], 1); 
         close(fd[1]); 
+        dup2(fd[0], 0); 
+        close(fd[0]); 
   
-        if (execlp("ls", "ls", "-al", NULL) < 0) { 
+        if (execlp("grep", "grep", "h", NULL) < 0) { 
             printf("\nCould not execute command 1.."); 
             exit(0); 
         } 
@@ -93,10 +93,10 @@ void pipeline(char** cmd)
         // Child 2 executing.. 
         // It only needs to read at the read end 
         if (p2 == 0) { 
-            close(fd[1]); 
-            dup2(fd[0], 0); 
             close(fd[0]); 
-            if (execlp("grep", "grep", "h", NULL) < 0) { 
+            dup2(fd[1], 1); 
+            close(fd[1]); 
+            if (execlp("ls", "ls", "-al", NULL) < 0) { 
                 printf("\nCould not execute command 2.."); 
                 exit(0); 
             } 
@@ -141,6 +141,20 @@ int main(int argc, char *argv[])
     /* 명령어가 정확한 포맷을 갖췄는지 에러를 검사하고(;|/> 등이 먼저 나오면 안 된다) */
     /* 시그널이 들어왔을 때 어떻게 하는지는 나중에 생각하자 */
     /* 출력이 있는 경우 process로 나눠서 */
-    test();
+    // test();
+    int fd[2];
+    pid_t pid1, pid2;
+
+    pid1 = fork();
+    if (pid1 == 0)
+    {
+        // child
+        
+    }
+    else
+    {
+        //parent
+
+    }
     return 0;
 }
