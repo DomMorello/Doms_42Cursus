@@ -73,6 +73,7 @@ void parse_redirection(char *cmd[])
     if (red_idx)
     {
         set_red_out(cmd, red_idx);
+        /* 한 줄이 끝나고 red가 세팅돼있으면 원래대로 돌려놔야 할 것 같다 */
     }
 }
 
@@ -81,8 +82,7 @@ void test(void)
     char *cmd[8] = {"ls", "-al", "|", "grep", "h", ">", "test", NULL};
 
     parse_redirection(cmd);
-    printf("hello world!\n");
-    // parse_pipe(cmd);
+    parse_pipe(cmd);
     // exec_cmd(cmd, &i);
 }
 
