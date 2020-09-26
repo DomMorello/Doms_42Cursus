@@ -40,7 +40,7 @@ void parse_pipe(char *cmd[], int *i)
     pipe_idx = is_pipe(cmd);
     if (pipe_idx)
     {
-        set_pipe(cmd);
+        set_pipe(cmd); /* 어떻게 하면 좋을까? */
     }
 }
 
