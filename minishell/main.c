@@ -46,20 +46,6 @@ void parse_pipe(char *cmd[], int *pipe)
     }
 }
 
-int find_redirection_out(char *cmd[])
-{
-    int i;
-
-    i = 0;
-    while (cmd[i])
-    {
-        if (!strcmp(cmd[i], ">"))
-            return i;
-        i++;
-    }
-    return 0;
-}
-
 void set_red_out(char *cmd[], int red_idx)
 {
     g_red_out_fd = open(cmd[red_idx + 1], O_CREAT | O_RDWR);
@@ -68,15 +54,24 @@ void set_red_out(char *cmd[], int red_idx)
     close(g_red_out_fd);
 }
 
+int is_red_out(char *cmd)
+{
+    if (!strcmp(cmd, ">"))
+        return (TRUE);
+    return (FALSE);
+}
+
 void parse_redirection(char *cmd[])
 {
     int red_idx;
+    int i;
 
-    red_idx = find_redirection_out(cmd);
-    if (red_idx)
+    i = 0;
+    while (cmd[i])
     {
-        set_red_out(cmd, red_idx);
-        /* 입력 한 줄이 끝나고 red가 세팅돼있으면 원래대로 돌려놔야 할 것 같다 */
+        if (is_red_out(cmd[i]))
+            set_red_out(cmd, i);
+        i++;
     }
 }
 
@@ -106,7 +101,7 @@ void test(void)
 
     is_pipe = 0;
     parse_redirection(cmd);
-    parse_pipe(cmd, &is_pipe); /* 명령어를 나눠서 실행을 반복해야 된다. */
+    // parse_pipe(cmd, &is_pipe); /* 명령어를 나눠서 실행을 반복해야 된다. */
     exec_cmd(cmd, is_pipe);
 }
 
