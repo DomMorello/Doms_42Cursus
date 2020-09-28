@@ -46,34 +46,34 @@ void parse_pipe(char *cmd[], int *pipe)
     }
 }
 
-void set_red_out(char *cmd[], int red_idx)
-{
-    g_red_out_fd = open(cmd[red_idx + 1], O_CREAT | O_RDWR);
-    /* 이렇게 하면 > 가 여러개 나오더라도 마지막에 나온 fd가 복제되니까 괜찮겠찌? */
-    dup2(g_red_out_fd, 1);
-    close(g_red_out_fd);
-}
+// void set_red_out(char *cmd[], int red_idx)
+// {
+//     g_red_out_fd = open(cmd[red_idx + 1], O_CREAT | O_RDWR);
+//     /* 이렇게 하면 > 가 여러개 나오더라도 마지막에 나온 fd가 복제되니까 괜찮겠찌? */
+//     dup2(g_red_out_fd, 1);
+//     close(g_red_out_fd);
+// }
 
-int is_red_out(char *cmd)
-{
-    if (!strcmp(cmd, ">"))
-        return (TRUE);
-    return (FALSE);
-}
+// int is_red_out(char *cmd)
+// {
+//     if (!strcmp(cmd, ">"))
+//         return (TRUE);
+//     return (FALSE);
+// }
 
-void parse_redirection(char *cmd[])
-{
-    int red_idx;
-    int i;
+// void parse_redirection(char *cmd[])
+// {
+//     int red_idx;
+//     int i;
 
-    i = 0;
-    while (cmd[i])
-    {
-        if (is_red_out(cmd[i]))
-            set_red_out(cmd, i);
-        i++;
-    }
-}
+//     i = 0;
+//     while (cmd[i])
+//     {
+//         if (is_red_out(cmd[i]))
+//             set_red_out(cmd, i);
+//         i++;
+//     }
+// }
 
 void exec_cmd(char *cmd[], int is_pipe)
 {
@@ -96,13 +96,15 @@ void exec_cmd(char *cmd[], int is_pipe)
 
 void test(void)
 {
+    /* ;콜론으로 나눠진 것이 여기로 들어왔다고 가정하자! */
     int is_pipe;
-    char *cmd[9] = {"ls", "-al", ">", "a", ">", "b", ">", "c", NULL};
+    char *cmd[10] = {"ls", "-al", "|", "grep", "h", "|", "wc", ">", "hello", NULL};
 
     is_pipe = 0;
-    parse_redirection(cmd);
-    // parse_pipe(cmd, &is_pipe); /* 명령어를 나눠서 실행을 반복해야 된다. */
-    exec_cmd(cmd, is_pipe);
+    // parse_redirection(cmd);
+    split_cmd(cmd);
+    // parse_pipe(cmd, is_pipe); /* 명령어를 나눠서 실행을 반복해야 된다. */
+    // exec_cmd(cmd, is_pipe);
 }
 
 int main(int argc, char *argv[])
