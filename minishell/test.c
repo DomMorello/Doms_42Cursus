@@ -34,8 +34,49 @@ int	main(int argc, char *argv[])
 	//  	return (1);
 	//  }
 	//  printf("this is not exec\n");
-	
-	
+	int fd[2];
+	pipe(fd);
+	pid_t pid = fork();
+	if (pid == 0)
+	{
+		close(fd[0]);
+		dup2(fd[1], 1);
+		close(fd[1]);
+		execlp("ls", "ls", "-al", NULL);
+		exit(1);
+	}
+	else
+	{
+		wait(NULL);
+		close(fd[1]);
+		dup2(fd[0], 0);
+		close(fd[0]);
+		/* ls -al */
+		pipe(fd);
+		pid_t pid2 = fork();
+		if (pid2 == 0)
+		{
+			close(fd[0]);
+			perror("1 close");
+			dup2(fd[1], 1);
+			perror("2 dup2");
+			close(fd[1]);
+			perror("3 close");
+			execlp("grep", "grep", "Sep", NULL);
+			exit(1);
+		}
+		else
+		{
+			wait(NULL);
+			close(fd[1]);
+			perror("4 close");
+			dup2(fd[0], 0);
+			perror("5 dup2");
+			close(fd[0]);
+			perror("6 close");
+			execlp("wc", "wc", NULL);
+		}
+	}
 	return (0);
 }
 //execlp("grep", "grep", "Sep", NULL);
