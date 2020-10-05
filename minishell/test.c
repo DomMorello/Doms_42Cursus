@@ -2,6 +2,30 @@
 
 extern char **environ;
 
+int g_fd[2];
+int g_red_out;
+
+void set_prev_pipe()
+{
+	close(g_fd[1]);
+	dup2(g_fd[0], 0);
+	close(g_fd[0]);
+}
+
+void set_post_pipe()
+{
+	close(g_fd[0]);
+	dup2(g_fd[1], 1);
+	close(g_fd[1]);
+}
+
+void set_red_out(char *title)
+{
+	g_red_out = open(title, O_CREAT | O_RDWR);
+	dup2(g_red_out, 1);
+	close(g_red_out);
+}
+
 int	main(int argc, char *argv[])
 {
     //  // execve 이용한 bin 실행파일 구현
@@ -35,44 +59,33 @@ int	main(int argc, char *argv[])
 	//  }
 	//  printf("this is not exec\n");
 	
-	int fd[2];
-	pipe(fd);
+	// ls -al | grep Sep > hello1 | echo hi > hello2
+	pipe(g_fd);
 	pid_t pid1 = fork();
 	if (pid1 == 0)
 	{
-		close(fd[0]);
-		dup2(fd[1], 1);
-		close(fd[1]);
+		set_post_pipe();
 		execlp("ls", "ls", "-al", NULL);
 	}
 	else
 	{
 		wait(NULL);
-		close(fd[1]);
-		dup2(fd[0], 0);
-		close(fd[0]);
-
-		pipe(fd);
-		pid_t pid2 = fork();
-		if (pid2 == 0)
-		{
-			close(fd[0]);
-			dup2(fd[1], 1);
-			close(fd[1]);
-
-			int rfd = open("hello", O_CREAT | O_RDWR);
-			dup2(rfd, 1);
-			close(rfd);
-			execlp("grep", "grep", "Sep", NULL);
-		}
-		else
-		{
-			wait(NULL);
-			printf("hello\n");
-		}
-		
 	}
 	
+	set_prev_pipe();
+
+	pipe(g_fd);
+	pid_t pid2 = fork();
+	if (pid2 == 0)
+	{
+		set_post_pipe();
+		set_red_out("hello1");
+		execlp("grep", "grep", "Sep", NULL);
+	}
+	else
+	{
+		wait(NULL);
+	}
 
 	/*
 	int fd[2];
