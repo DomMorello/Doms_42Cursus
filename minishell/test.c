@@ -34,6 +34,47 @@ int	main(int argc, char *argv[])
 	//  	return (1);
 	//  }
 	//  printf("this is not exec\n");
+	
+	int fd[2];
+	pipe(fd);
+	pid_t pid1 = fork();
+	if (pid1 == 0)
+	{
+		close(fd[0]);
+		dup2(fd[1], 1);
+		close(fd[1]);
+		execlp("ls", "ls", "-al", NULL);
+	}
+	else
+	{
+		wait(NULL);
+		close(fd[1]);
+		dup2(fd[0], 0);
+		close(fd[0]);
+
+		pipe(fd);
+		pid_t pid2 = fork();
+		if (pid2 == 0)
+		{
+			close(fd[0]);
+			dup2(fd[1], 1);
+			close(fd[1]);
+
+			int rfd = open("hello", O_CREAT | O_RDWR);
+			dup2(rfd, 1);
+			close(rfd);
+			execlp("grep", "grep", "Sep", NULL);
+		}
+		else
+		{
+			wait(NULL);
+			printf("hello\n");
+		}
+		
+	}
+	
+
+	/*
 	int fd[2];
 	pipe(fd);
 	pid_t pid = fork();
@@ -51,7 +92,7 @@ int	main(int argc, char *argv[])
 		close(fd[1]);
 		dup2(fd[0], 0);
 		close(fd[0]);
-		/* ls -al */
+		
 		pipe(fd);
 		pid_t pid2 = fork();
 		if (pid2 == 0)
@@ -77,6 +118,7 @@ int	main(int argc, char *argv[])
 			execlp("wc", "wc", NULL);
 		}
 	}
+	*/
 	return (0);
 }
 //execlp("grep", "grep", "Sep", NULL);
