@@ -87,6 +87,19 @@ int	main(int argc, char *argv[])
 		wait(NULL);
 	}
 
+	set_prev_pipe();
+
+	pid_t pid3 = fork();
+	if (pid3 == 0)
+	{
+		set_red_out("hello2");
+		execlp("echo", "echo", "hi", NULL);
+	}
+	else
+	{
+		wait(NULL);	
+	}
+	
 	/*
 	int fd[2];
 	pipe(fd);
