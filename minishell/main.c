@@ -14,8 +14,56 @@ int g_red_in_fd;
 //     close(g_red_out_fd);
 // }
 
-void process_cmd(char *cmd[])
+void set_prev_pipe()
 {
+	close(g_pipe_fd[1]);
+	dup2(g_pipe_fd[0], 0);
+	close(g_pipe_fd[0]);
+}
+
+void set_post_pipe()
+{
+	close(g_pipe_fd[0]);
+	dup2(g_pipe_fd[1], 1);
+	close(g_pipe_fd[1]);
+}
+
+void set_red_out(char *title)
+{
+	g_red_out_fd = open(title, O_CREAT | O_RDWR);
+	dup2(g_red_out_fd, 1);
+	close(g_red_out_fd);
+}
+
+void set_pipe(char *cmd[], int pipe_idx)
+{
+    pid_t pid;
+    static int i = 0;
+
+    i++;
+    pipe(g_pipe_fd);
+    pid = fork();
+    wait(NULL);
+    if (pid == 0)
+    {
+        close(g_pipe_fd[0]);
+        dup2(g_pipe_fd[1], 1);
+        close(g_pipe_fd[1]);
+        if (i == 1)
+            execlp("ls", "ls", "-al", NULL);
+        if (i == 2)
+            execlp("grep", "grep", "Sep", NULL);
+    }
+    close(g_pipe_fd[1]);
+    dup2(g_pipe_fd[0], 0);
+    close(g_pipe_fd[0]);
+}
+
+void test(void)
+{
+    /* ;콜론으로 나눠진 것이 여기로 들어왔다고 가정하자! */
+    char *cmd[6] = {"ls", "-al", "|", "grep", "Sep", NULL};
+    /* 위에 짠 걸로 이렇게만이라도 되나 한 번 해보자 */
     int i;
 
     i = 0;
@@ -24,22 +72,10 @@ void process_cmd(char *cmd[])
         if (!strcmp(cmd[i], "|"))
             set_pipe(cmd, i);
         if (!strcmp(cmd[i], ">"))
-            set_red_out(cmd, i);    //이렇게 명령어를 쭉 읽으면서 해야할까
-                                    //아님 먼저 세팅을 하고 해야 하나?
-                                    //일단 어떤 식으로 되는지를 한 번 보자
+            set_red_out(cmd[i + 1]);
         i++;
     }
-}
-
-void test(void)
-{
-    /* ;콜론으로 나눠진 것이 여기로 들어왔다고 가정하자! */
-    int is_pipe;
-    char *cmd[15] = {"ls", "-al", "|", "grep", "Sep", ">", "hello1", "|", "ls", "-al", "|", "wc", ">", "hello2", NULL};
-
-    is_pipe = 0;
-    process_cmd(cmd);
-
+    
 }
 
 int main(int argc, char *argv[])
