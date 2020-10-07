@@ -13,7 +13,7 @@ void set_red_out(char *title)
 	close(g_red_out_fd);
 }
 
-void set_pipe_child(char *cmd[], int pipe_idx)
+void set_pipe(char *cmd[], int pipe_idx)
 {
     pid_t pid;
     static int i = 0;
@@ -27,30 +27,33 @@ void set_pipe_child(char *cmd[], int pipe_idx)
         close(g_pipe_fd[0]);
         dup2(g_pipe_fd[1], 1);
         close(g_pipe_fd[1]);
-        execlp("ls", "ls", "-al", NULL);
-       
+        if (i == 1)
+            execlp("ls", "ls", "-al", NULL);
+        if (i == 2)
+            execlp("grep", "grep", "Sep", NULL);
     }
-    // if (i == 2)
-    // {
-    //     char buf[1000];
-    //     read(g_pipe_fd[0], buf, sizeof(buf));
-    //     perror("read");
-    //     printf("%s\n", buf);
-    // }
+    close(g_pipe_fd[1]);
+    dup2(g_pipe_fd[0], 0);
+    close(g_pipe_fd[0]);
 }
 
 void set_pipe_parent(char *cmd[], int pipe_idx)
 {
-    close(g_pipe_fd[1]);
-    dup2(g_pipe_fd[0], 0);
-    close(g_pipe_fd[0]);
-    execlp("grep", "grep", "Sep", NULL);
+    // close(g_pipe_fd[1]);
+    // dup2(g_pipe_fd[0], 0);
+    // close(g_pipe_fd[0]);
+}
+
+void exec_cmd(char *cmd[])
+{
+    execlp("wc", "wc", NULL);
 }
 
 void test(void)
 {
     /* ;콜론으로 나눠진 것이 여기로 들어왔다고 가정하자! */
-    char *cmd[6] = {"ls", "-al", "|", "grep", "Sep", NULL};
+    char *cmd[15] = {"ls", "-al", "|", "grep", "Sep", "|", "wc", ">", "hello",
+                     "|", "echo", "hi", ">", "hello2", NULL};
     
     int i;
     int is_pipe;
@@ -60,19 +63,12 @@ void test(void)
     while (cmd[i])
     {
         if (!strcmp(cmd[i], "|"))
-        {
-            set_pipe_child(cmd, i);
-            is_pipe = 1;
-        }
-        if (is_pipe)
-        {
-            set_pipe_parent(cmd, i);
-            is_pipe = 0;
-        }
-        // if (!strcmp(cmd[i], ">"))
-        //     set_red_out(cmd[i + 1]);
+            set_pipe(cmd, i);
+        if (!strcmp(cmd[i], ">"))
+            set_red_out(cmd[i + 1]);
         i++;
     }
+    exec_cmd(cmd);
 }
 
 int main(int argc, char *argv[])
