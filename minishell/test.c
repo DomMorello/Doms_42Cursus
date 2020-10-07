@@ -5,15 +5,69 @@ extern char **environ;
 int g_fd[2];
 int g_red_out;
 
+void set_pipe(int *is_pipe)
+{
+	if (pipe(g_fd) != -1)
+		*is_pipe = 1;
+	perror("pipe err");
+}
+
+void set_red_out(char *title)
+{
+	g_red_out = open(title, O_CREAT | O_RDWR);
+	dup2(g_red_out, 1);
+	close(g_red_out);
+}
+
+void set_pipe_child()
+{
+	close(g_fd[0]);
+	dup2(g_fd[1], 1);
+	close(g_fd[1]);
+}
+
+void set_pipe_parent()
+{
+	close(g_fd[1]);
+	dup2(g_fd[0], 0);
+	close(g_fd[0]);
+}
+
+void exec_cmd(int *is_pipe)
+{
+	pid_t pid = fork();
+	wait(NULL);
+	if (pid == 0)
+	{
+		if (*is_pipe)
+			set_pipe_child();
+		execlp("ls", "ls", "-al", NULL);
+	}
+	else
+	{
+		if (*is_pipe)
+			set_pipe_parent();
+	}
+	*is_pipe = 0;
+}
+
 void test()
 {
+	int is_pipe;
+
+	is_pipe = 0;
 	//is_pipe true
-	/* 로직을 다시 한 번 세팅만 하는 쪽으로 해서 생각해보자 */
+	set_pipe(&is_pipe);
+	exec_cmd(&is_pipe);	//ls -al
+	/* 계속해서 이 flow로 한 번 해봐서 되면 대박! */
+	// find redirection between pipes: true
+	// set_red_out("hello1");
+	// set_red_out("hello2");
 }
 
 int	main(int argc, char *argv[])
 {
-	// ls -al | grep Sep | wc > hello1 | echo hi > hello2
+	// ls -al | grep Sep | wc > hello1 > hello2 | echo hi > hello3
 	test();
 
     //  // execve 이용한 bin 실행파일 구현
