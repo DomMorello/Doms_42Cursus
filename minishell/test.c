@@ -41,6 +41,11 @@ void exec_cmd(int *is_pipe, char *cmd, char *opt)
 	{
 		if (*is_pipe)
 			set_pipe_child();
+		// redirection true
+		if (!strcmp(cmd, "wc"))
+			set_red_out("hello2");	// > hello2
+		if (!strcmp(cmd, "echo"))
+			set_red_out("hello3");	// > hello3
 		execlp(cmd, cmd, opt, NULL);
 	}
 	else
@@ -58,12 +63,15 @@ void test()
 	is_pipe = 0;
 	//is_pipe true
 	set_pipe(&is_pipe);
-	exec_cmd(&is_pipe, "ls", "-al");	//ls -al
+	exec_cmd(&is_pipe, "ls", "-al");	//ls -al |
 	
 	set_pipe(&is_pipe);
-	exec_cmd(&is_pipe, "grep", "Sep"); //grep Sep
+	exec_cmd(&is_pipe, "grep", "Sep"); //grep Sep |
 
-	exec_cmd(&is_pipe, "wc", NULL);
+	set_pipe(&is_pipe);
+	exec_cmd(&is_pipe, "wc", NULL);	//wc
+
+	exec_cmd(&is_pipe, "echo", "hi");
 	// find redirection between pipes: true
 	// set_red_out("hello1");
 	// set_red_out("hello2");
@@ -104,56 +112,5 @@ int	main(int argc, char *argv[])
 	//  	return (1);
 	//  }
 	//  printf("this is not exec\n");
-	
-	// ls -al | grep Sep > hello1 | echo hi > hello2
-	
-	
-	/*
-	int fd[2];
-	pipe(fd);
-	pid_t pid = fork();
-	if (pid == 0)
-	{
-		close(fd[0]);
-		dup2(fd[1], 1);
-		close(fd[1]);
-		execlp("ls", "ls", "-al", NULL);
-		exit(1);
-	}
-	else
-	{
-		wait(NULL);
-		close(fd[1]);
-		dup2(fd[0], 0);
-		close(fd[0]);
-		
-		pipe(fd);
-		pid_t pid2 = fork();
-		if (pid2 == 0)
-		{
-			close(fd[0]);
-			perror("1 close");
-			dup2(fd[1], 1);
-			perror("2 dup2");
-			close(fd[1]);
-			perror("3 close");
-			execlp("grep", "grep", "Sep", NULL);
-			exit(1);
-		}
-		else
-		{
-			wait(NULL);
-			close(fd[1]);
-			perror("4 close");
-			dup2(fd[0], 0);
-			perror("5 dup2");
-			close(fd[0]);
-			perror("6 close");
-			execlp("wc", "wc", NULL);
-		}
-	}
-	*/
 	return (0);
 }
-//execlp("grep", "grep", "Sep", NULL);
-//execlp("wc", "wc", NULL);
