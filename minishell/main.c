@@ -13,40 +13,45 @@ void set_red_out(char *title)
 	close(g_red_out_fd);
 }
 
-void set_pipe(char *cmd[], int pipe_idx)
+void set_pipe_child()
 {
-    pid_t pid;
-    static int i = 0;
+	close(g_fd[0]);
+	dup2(g_fd[1], 1);
+	close(g_fd[1]);
+}
 
-    i++;
-    pipe(g_pipe_fd);
-    pid = fork();
+void set_pipe_parent()
+{
+	close(g_fd[1]);
+	dup2(g_fd[0], 0);
+	close(g_fd[0]);
+}
+
+void find_pipe(char *cmd, int *is_pipe)
+{
+    if (!strcmp(cmd, "|"))
+    {
+        *is_pipe = 1;
+        pipe(g_pipe_fd);
+    }
+}
+
+void exec_cmd(char *cmd[], int i, int *is_pipe)
+{
+    pid_t pid = fork();
     wait(NULL);
     if (pid == 0)
     {
-        close(g_pipe_fd[0]);
-        dup2(g_pipe_fd[1], 1);
-        close(g_pipe_fd[1]);
-        if (i == 1)
-            execlp("ls", "ls", "-al", NULL);
-        if (i == 2)
-            execlp("grep", "grep", "Sep", NULL);
+        if (*is_pipe)
+            set_pipe_child();
+        /* exec cmd */
     }
-    close(g_pipe_fd[1]);
-    dup2(g_pipe_fd[0], 0);
-    close(g_pipe_fd[0]);
-}
-
-void set_pipe_parent(char *cmd[], int pipe_idx)
-{
-    // close(g_pipe_fd[1]);
-    // dup2(g_pipe_fd[0], 0);
-    // close(g_pipe_fd[0]);
-}
-
-void exec_cmd(char *cmd[])
-{
-    execlp("wc", "wc", NULL);
+    else
+    {
+        if (*is_pipe)
+            set_pipe_parent();
+    }
+    *is_pipe = 0;
 }
 
 void test(void)
@@ -62,13 +67,11 @@ void test(void)
     is_pipe = 0;
     while (cmd[i])
     {
-        if (!strcmp(cmd[i], "|"))
-            set_pipe(cmd, i);
-        if (!strcmp(cmd[i], ">"))
-            set_red_out(cmd[i + 1]);
+        find_pipe(cmd[i], &is_pipe);
+        exec_cmd(cmd, i, &is_pipe); // 여기서 파싱이 까다롭다
+                                    // 명령어 단위로 잘라야 되는데 파이프를 기준으로 잘라야 한다.
         i++;
     }
-    exec_cmd(cmd);
 }
 
 int main(int argc, char *argv[])
