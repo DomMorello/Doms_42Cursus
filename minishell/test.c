@@ -9,7 +9,7 @@ void set_pipe(int *is_pipe)
 {
 	if (pipe(g_fd) != -1)
 		*is_pipe = 1;
-	perror("pipe err");
+	// perror("pipe err");
 }
 
 void set_red_out(char *title)
@@ -33,7 +33,7 @@ void set_pipe_parent()
 	close(g_fd[0]);
 }
 
-void exec_cmd(int *is_pipe)
+void exec_cmd(int *is_pipe, char *cmd, char *opt)
 {
 	pid_t pid = fork();
 	wait(NULL);
@@ -41,7 +41,7 @@ void exec_cmd(int *is_pipe)
 	{
 		if (*is_pipe)
 			set_pipe_child();
-		execlp("ls", "ls", "-al", NULL);
+		execlp(cmd, cmd, opt, NULL);
 	}
 	else
 	{
@@ -58,8 +58,12 @@ void test()
 	is_pipe = 0;
 	//is_pipe true
 	set_pipe(&is_pipe);
-	exec_cmd(&is_pipe);	//ls -al
-	/* 계속해서 이 flow로 한 번 해봐서 되면 대박! */
+	exec_cmd(&is_pipe, "ls", "-al");	//ls -al
+	
+	set_pipe(&is_pipe);
+	exec_cmd(&is_pipe, "grep", "Sep"); //grep Sep
+
+	exec_cmd(&is_pipe, "wc", NULL);
 	// find redirection between pipes: true
 	// set_red_out("hello1");
 	// set_red_out("hello2");
