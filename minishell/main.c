@@ -68,8 +68,7 @@ void test(void)
     while (cmd[i])
     {
         find_pipe(cmd[i], &is_pipe);
-        exec_cmd(cmd, i, &is_pipe); // 여기서 파싱이 까다롭다
-                                    // 명령어 단위로 잘라야 되는데 파이프를 기준으로 잘라야 한다.
+        exec_cmd(cmd, i, &is_pipe);
         i++;
     }
 }
