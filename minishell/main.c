@@ -15,24 +15,28 @@ void set_red_out(char *title)
 
 void set_pipe_child()
 {
-	close(g_fd[0]);
-	dup2(g_fd[1], 1);
-	close(g_fd[1]);
+	close(g_pipe_fd[0]);
+	dup2(g_pipe_fd[1], 1);
+	close(g_pipe_fd[1]);
 }
 
 void set_pipe_parent()
 {
-	close(g_fd[1]);
-	dup2(g_fd[0], 0);
-	close(g_fd[0]);
+	close(g_pipe_fd[1]);
+	dup2(g_pipe_fd[0], 0);
+	close(g_pipe_fd[0]);
 }
 
-void find_pipe(char *cmd, int *is_pipe)
+void find_pipe(char *cmd, int *is_pipe, int pipe_idx)
 {
     if (!strcmp(cmd, "|"))
     {
         *is_pipe = 1;
         pipe(g_pipe_fd);
+        printf("%d\n", pipe_idx);
+        /* 여기서 인덱스를 갖고 명령어를 나눠서 어떻게 처리할지를 해보자
+            비슷한 함수를 두 번 거치더라도 파이프 있는 경우와 아닌 경우를 
+            나눠서 하면 된다. 리다이렉션은 그 안에서 처리하면 될 것 같다 */
     }
 }
 
@@ -67,8 +71,7 @@ void test(void)
     is_pipe = 0;
     while (cmd[i])
     {
-        find_pipe(cmd[i], &is_pipe);
-        exec_cmd(cmd, i, &is_pipe);
+        find_pipe(cmd[i], &is_pipe, i);
         i++;
     }
 }
