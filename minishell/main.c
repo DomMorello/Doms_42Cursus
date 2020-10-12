@@ -33,10 +33,8 @@ void find_pipe(char *cmd, int *is_pipe, int pipe_idx)
     {
         *is_pipe = 1;
         pipe(g_pipe_fd);
-        printf("%d\n", pipe_idx);
-        /* 여기서 인덱스를 갖고 명령어를 나눠서 어떻게 처리할지를 해보자
-            비슷한 함수를 두 번 거치더라도 파이프 있는 경우와 아닌 경우를 
-            나눠서 하면 된다. 리다이렉션은 그 안에서 처리하면 될 것 같다 */
+        /* pipe_idx 를 이용해서 명령어처리 단위를 자른다. */
+
     }
 }
 
@@ -76,6 +74,7 @@ void test(void)
     }
 }
 
+/* 파이프를 기준으로 명령어 단위를 먼저 자르고 나서 실행하는 방법을 생각해보자 */
 int main(int argc, char *argv[])
 {
     test();
