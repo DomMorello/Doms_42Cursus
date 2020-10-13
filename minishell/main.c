@@ -27,13 +27,12 @@ void set_pipe_parent()
 	close(g_pipe_fd[0]);
 }
 
-void find_pipe(char *cmd, int *is_pipe, int pipe_idx)
+void process_pipe(char *cmd, int pipe_idx)
 {
     if (!strcmp(cmd, "|"))
     {
-        *is_pipe = 1;
+        /* 이전 파이프의 위치를 기억하고 있어야 한다 */
         pipe(g_pipe_fd);
-        /* pipe_idx 를 이용해서 명령어처리 단위를 자른다. */
 
     }
 }
@@ -56,6 +55,11 @@ void exec_cmd(char *cmd[], int i, int *is_pipe)
     *is_pipe = 0;
 }
 
+void exec_last_cmd(char *cmd[])
+{
+    printf("last cmd!\n");
+}
+
 void test(void)
 {
     /* ;콜론으로 나눠진 것이 여기로 들어왔다고 가정하자! */
@@ -63,14 +67,14 @@ void test(void)
                      "|", "echo", "hi", ">", "hello2", NULL};
     
     int i;
-    int is_pipe;
 
     i = 0;
-    is_pipe = 0;
     while (cmd[i])
     {
-        find_pipe(cmd[i], &is_pipe, i);
+        process_pipe(cmd[i], i);
         i++;
+        if (!cmd[i])
+            exec_last_cmd(cmd);
     }
 }
 
