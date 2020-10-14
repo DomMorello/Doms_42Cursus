@@ -86,9 +86,6 @@ void test(void)
     char *cmd[50] = {"ls", "-al", "|", "grep", "Sep", "|", "wc", ">",
             "hello1", ">", "hello2", "|", "echo", "hi", ">", "hello3", NULL};
 
-    // char *cmd[15] = {"ls", "-al", "|", "grep", "Sep", "|",
-    //                  "wc", ">", "hello1", ">", "hello2", NULL};
-
     int i;
     int prev_pipe_idx;
 
@@ -103,7 +100,6 @@ void test(void)
     }
 }
 
-/* 파이프를 기준으로 명령어 단위를 먼저 자르고 나서 실행하는 방법을 생각해보자 */
 int main(int argc, char *argv[])
 {
     test();

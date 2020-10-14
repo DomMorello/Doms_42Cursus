@@ -1,85 +1,51 @@
 #include "minishell.h"
 
-extern char **environ;
+int g_pipe_fd[2];
+int g_red_out_fd;
+int g_red_in_fd;
 
-int g_fd[2];
-int g_red_out;
-
-void set_pipe(int *is_pipe)
+void set_red_in(char *title)
 {
-	if (pipe(g_fd) != -1)
-		*is_pipe = 1;
-	// perror("pipe err");
+	g_red_in_fd = open(title, O_CREAT | O_RDWR);
+	dup2(g_red_in_fd, 0);
+	close(g_red_in_fd);
 }
 
 void set_red_out(char *title)
 {
-	g_red_out = open(title, O_CREAT | O_RDWR);
-	dup2(g_red_out, 1);
-	close(g_red_out);
-}
-
-void set_pipe_child()
-{
-	close(g_fd[0]);
-	dup2(g_fd[1], 1);
-	close(g_fd[1]);
-}
-
-void set_pipe_parent()
-{
-	close(g_fd[1]);
-	dup2(g_fd[0], 0);
-	close(g_fd[0]);
-}
-
-void exec_cmd(int *is_pipe, char *cmd, char *opt)
-{
-	pid_t pid = fork();
-	wait(NULL);
-	if (pid == 0)
-	{
-		if (*is_pipe)
-			set_pipe_child();
-		// redirection true
-		if (!strcmp(cmd, "wc"))
-			set_red_out("hello2");	// > hello2
-		if (!strcmp(cmd, "echo"))
-			set_red_out("hello3");	// > hello3
-		execlp(cmd, cmd, opt, NULL);
-	}
-	else
-	{
-		if (*is_pipe)
-			set_pipe_parent();
-	}
-	*is_pipe = 0;
+	g_red_out_fd = open(title, O_CREAT | O_RDWR);
+	dup2(g_red_out_fd, 1);
+	close(g_red_out_fd);
 }
 
 void test()
 {
-	int is_pipe;
+	// grep Sep < hello
+	pipe(g_pipe_fd);
 
-	is_pipe = 0;
-	//is_pipe true
-	set_pipe(&is_pipe);
-	exec_cmd(&is_pipe, "ls", "-al");	//ls -al |
+	pid_t pid = fork();
+	wait(NULL);
+	if (pid == 0)
+	{
+		close(g_pipe_fd[0]);
+		dup2(g_pipe_fd[1], 1);
+		close(g_pipe_fd[1]);
+		set_red_in("./hello");
+		execlp("grep", "grep", "Sep", NULL);
+	}
+	else
+	{
+		close(g_pipe_fd[1]);
+		dup2(g_pipe_fd[0], 0);
+		close(g_pipe_fd[0]);
+		set_red_out("./hello1");
+		execlp("wc", "wc", NULL);
+	}
 	
-	set_pipe(&is_pipe);
-	exec_cmd(&is_pipe, "grep", "Sep"); //grep Sep |
-
-	set_pipe(&is_pipe);
-	exec_cmd(&is_pipe, "wc", NULL);	//wc
-
-	exec_cmd(&is_pipe, "echo", "hi");
-	// find redirection between pipes: true
-	// set_red_out("hello1");
-	// set_red_out("hello2");
 }
 
 int	main(int argc, char *argv[])
 {
-	// ls -al | grep Sep | wc > hello1 > hello2 | echo hi > hello3
 	test();
 
     //  // execve 이용한 bin 실행파일 구현
