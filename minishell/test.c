@@ -20,7 +20,7 @@ void set_red_out(char *title)
 
 void test()
 {
-	// grep Sep < hello
+	// grep Sep < hello1 | wc > hello2
 	pipe(g_pipe_fd);
 
 	pid_t pid = fork();

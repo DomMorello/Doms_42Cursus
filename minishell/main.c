@@ -13,6 +13,13 @@ void set_red_out(char *title)
 	close(g_red_out_fd);
 }
 
+void set_red_in(char *title)
+{
+	g_red_in_fd = open(title, O_CREAT | O_RDWR);
+	dup2(g_red_in_fd, 0);
+	close(g_red_in_fd);
+}
+
 void set_pipe_child()
 {
 	close(g_pipe_fd[0]);
@@ -36,6 +43,8 @@ void process_red_out(char *cmd[], int *prev_pipe_idx, int pipe_idx)
     {
         if (!strcmp(cmd[i], ">"))
             set_red_out(cmd[i + 1]);
+        if (!strcmp(cmd[i], "<"))
+            set_red_in(cmd[i + 1]);
         i++;
     }
 }
@@ -52,9 +61,9 @@ void exec_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
         set_pipe_child();
         process_red_out(cmd, prev_pipe_idx, pipe_idx);
         if (i == 1)
-            execlp("ls", "ls", "-al", NULL);
-        if (i == 2)
             execlp("grep", "grep", "Sep", NULL);
+        if (i == 2)
+            execlp("ls", "ls", "-al", NULL);
         if (i == 3)
             execlp("wc", "wc", NULL);
     }
@@ -77,14 +86,17 @@ void process_pipe(char *cmd[], int pipe_idx, int *prev_pipe_idx)
 void exec_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
     process_red_out(cmd, prev_pipe_idx, pipe_idx);
-    execlp("echo", "echo", "hi", NULL);
+    execlp("wc", "wc", NULL);
 }
 
 void test(void)
 {
     /* ;콜론으로 나눠진 것이 여기로 들어왔다고 가정하자! */
-    char *cmd[50] = {"ls", "-al", "|", "grep", "Sep", "|", "wc", ">",
-            "hello1", ">", "hello2", "|", "echo", "hi", ">", "hello3", NULL};
+    // char *cmd[50] = {"ls", "-al", "|", "grep", "Sep", "|", "wc", ">",
+    //         "hello1", ">", "hello2", "|", "echo", "hi", ">", "hello3", NULL};
+    
+    char *cmd[50] = {"grep", "Sep", "<", "hello1", "|", 
+                        "wc", ">", "hello2", NULL};
 
     int i;
     int prev_pipe_idx;
