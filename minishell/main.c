@@ -86,7 +86,7 @@ void process_pipe(char *cmd[], int pipe_idx, int *prev_pipe_idx)
 void exec_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
     process_red_out(cmd, prev_pipe_idx, pipe_idx);
-    execlp("wc", "wc", NULL);
+    execlp("grep", "grep", "Sep", NULL);
 }
 
 void test(void)
@@ -95,8 +95,8 @@ void test(void)
     // char *cmd[50] = {"ls", "-al", "|", "grep", "Sep", "|", "wc", ">",
     //         "hello1", ">", "hello2", "|", "echo", "hi", ">", "hello3", NULL};
     
-    char *cmd[50] = {"grep", "Sep", "<", "hello1", "|", 
-                        "wc", ">", "hello2", NULL};
+    char *cmd[50] = {"grep", "Sep", "<", "hello1", ">", 
+                        "hello2", NULL};
 
     int i;
     int prev_pipe_idx;
