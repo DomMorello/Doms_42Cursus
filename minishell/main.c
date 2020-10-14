@@ -27,54 +27,79 @@ void set_pipe_parent()
 	close(g_pipe_fd[0]);
 }
 
-void process_pipe(char *cmd, int pipe_idx)
+void process_red_out(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
-    if (!strcmp(cmd, "|"))
-    {
-        /* 이전 파이프의 위치를 기억하고 있어야 한다 */
-        pipe(g_pipe_fd);
+    int i;
 
+    i = *prev_pipe_idx;
+    while (cmd[i] && i < pipe_idx)
+    {
+        if (!strcmp(cmd[i], ">"))
+            set_red_out(cmd[i + 1]);
+        i++;
     }
 }
 
-void exec_cmd(char *cmd[], int i, int *is_pipe)
+void exec_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
+    static int i = 0;
+
+    i++;
     pid_t pid = fork();
     wait(NULL);
     if (pid == 0)
     {
-        if (*is_pipe)
-            set_pipe_child();
-        /* exec cmd */
+        set_pipe_child();
+        process_red_out(cmd, prev_pipe_idx, pipe_idx);
+        if (i == 1)
+            execlp("ls", "ls", "-al", NULL);
+        if (i == 2)
+            execlp("grep", "grep", "Sep", NULL);
+        if (i == 3)
+            execlp("wc", "wc", NULL);
     }
     else
     {
-        if (*is_pipe)
-            set_pipe_parent();
+        set_pipe_parent();
     }
-    *is_pipe = 0;
 }
 
-void exec_last_cmd(char *cmd[])
+void process_pipe(char *cmd[], int pipe_idx, int *prev_pipe_idx)
 {
-    printf("last cmd!\n");
+    if (!strcmp(cmd[pipe_idx], "|"))
+    {
+        pipe(g_pipe_fd);
+        exec_cmd(cmd, prev_pipe_idx, pipe_idx);
+        *prev_pipe_idx = pipe_idx;
+    }
+}
+
+void exec_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
+{
+    process_red_out(cmd, prev_pipe_idx, pipe_idx);
+    execlp("echo", "echo", "hi", NULL);
 }
 
 void test(void)
 {
     /* ;콜론으로 나눠진 것이 여기로 들어왔다고 가정하자! */
-    char *cmd[15] = {"ls", "-al", "|", "grep", "Sep", "|", "wc", ">", "hello",
-                     "|", "echo", "hi", ">", "hello2", NULL};
-    
-    int i;
+    char *cmd[50] = {"ls", "-al", "|", "grep", "Sep", "|", "wc", ">",
+            "hello1", ">", "hello2", "|", "echo", "hi", ">", "hello3", NULL};
 
+    // char *cmd[15] = {"ls", "-al", "|", "grep", "Sep", "|",
+    //                  "wc", ">", "hello1", ">", "hello2", NULL};
+
+    int i;
+    int prev_pipe_idx;
+
+    prev_pipe_idx = 0;
     i = 0;
     while (cmd[i])
     {
-        process_pipe(cmd[i], i);
+        process_pipe(cmd, i, &prev_pipe_idx);
         i++;
         if (!cmd[i])
-            exec_last_cmd(cmd);
+            exec_last_cmd(cmd, &prev_pipe_idx, i);
     }
 }
 
