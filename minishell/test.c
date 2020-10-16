@@ -47,7 +47,7 @@ void test()
 int	main(int argc, char *argv[])
 {
 	test();
-
+	
     //  // execve 이용한 bin 실행파일 구현
 	//  char	**new_argv;
 	//  char	*command;

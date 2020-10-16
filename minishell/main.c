@@ -20,6 +20,14 @@ void set_red_in(char *title)
 	close(g_red_in_fd);
 }
 
+void set_red_double_out(char *title)
+{
+    g_red_out_fd = open(title, O_CREAT | O_RDWR | O_APPEND);
+    perror("double open");
+    dup2(g_red_out_fd, 1);
+    close(g_red_out_fd);
+}
+
 void set_pipe_child()
 {
 	close(g_pipe_fd[0]);
@@ -34,7 +42,7 @@ void set_pipe_parent()
 	close(g_pipe_fd[0]);
 }
 
-void process_red_out(char *cmd[], int *prev_pipe_idx, int pipe_idx)
+void process_redirection(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
     int i;
 
@@ -45,6 +53,8 @@ void process_red_out(char *cmd[], int *prev_pipe_idx, int pipe_idx)
             set_red_out(cmd[i + 1]);
         if (!strcmp(cmd[i], "<"))
             set_red_in(cmd[i + 1]);
+        if (!strcmp(cmd[i], ">>"))
+            set_red_double_out(cmd[i + 1]);
         i++;
     }
 }
@@ -59,11 +69,11 @@ void exec_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
     if (pid == 0)
     {
         set_pipe_child();
-        process_red_out(cmd, prev_pipe_idx, pipe_idx);
+        process_redirection(cmd, prev_pipe_idx, pipe_idx);
         if (i == 1)
-            execlp("grep", "grep", "Sep", NULL);
-        if (i == 2)
             execlp("ls", "ls", "-al", NULL);
+        if (i == 2)
+            execlp("grep", "grep", "Sep", NULL);
         if (i == 3)
             execlp("wc", "wc", NULL);
     }
@@ -85,8 +95,8 @@ void process_pipe(char *cmd[], int pipe_idx, int *prev_pipe_idx)
 
 void exec_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
-    process_red_out(cmd, prev_pipe_idx, pipe_idx);
-    execlp("wc", "wc", NULL);
+    process_redirection(cmd, prev_pipe_idx, pipe_idx);
+    execlp("echo", "hi", NULL);
 }
 
 void test(void)
@@ -95,7 +105,10 @@ void test(void)
     // char *cmd[50] = {"ls", "-al", "|", "grep", "Sep", "|", "wc", ">",
     //         "hello1", ">", "hello2", "|", "echo", "hi", ">", "hello3", NULL};
     
-    char *cmd[50] = {"grep", "Sep", "<", "hello1", "|", "wc", "<", "hello1", NULL};
+    // char *cmd[50] = {"grep", "Sep", "<", "hello1", "|", "wc", "<", "hello1", NULL};
+    
+    char *cmd[50] = {"ls", "-al", "|", "grep", "Sep", ">>", "hello1", "|",
+                    "echo", "hi", ">>", "hello1", NULL};
 
     int i;
     int prev_pipe_idx;
