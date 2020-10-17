@@ -9,6 +9,7 @@ int g_red_in_fd;
 void set_red_out(char *title)
 {
 	g_red_out_fd = open(title, O_CREAT | O_RDWR);
+    perror("red out open");
 	dup2(g_red_out_fd, 1);
 	close(g_red_out_fd);
 }
@@ -102,13 +103,13 @@ void exec_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 void test(void)
 {
     /* ;콜론으로 나눠진 것이 여기로 들어왔다고 가정하자! */
-    // char *cmd[50] = {"ls", "-al", "|", "grep", "Sep", "|", "wc", ">",
-    //         "hello1", ">", "hello2", "|", "echo", "hi", ">", "hello3", NULL};
+    char *cmd[50] = {"ls", "-al", "|", "grep", "Sep", "|", "wc", ">",
+            "hello1", ">", "hello2", "|", "echo", "hi", ">", "hello3", NULL};
     
     // char *cmd[50] = {"grep", "Sep", "<", "hello1", "|", "wc", "<", "hello1", NULL};
     
-    char *cmd[50] = {"ls", "-al", "|", "grep", "Sep", ">>", "hello1", "|",
-                    "echo", "hi", ">>", "hello1", NULL};
+    // char *cmd[50] = {"ls", "-al", "|", "grep", "Sep", ">>", "hello1", "|",
+    //                 "echo", "hi", ">>", "hello1", NULL};
 
     int i;
     int prev_pipe_idx;
