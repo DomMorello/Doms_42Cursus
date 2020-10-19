@@ -97,6 +97,61 @@ int is_bin(char *cmd, int *is_in_bin)
     }
 }
 
+int is_redirection(char *token)
+{
+    if (!strcmp(token, ">") || !strcmp(token, ">>")
+        || !strcmp(token, "<"))
+        return (TRUE);
+    return (FALSE);
+}
+
+int get_argc(char *cmd[], int prev_pipe_idx, int pipe_idx)
+{
+    int len;
+
+    len = 0;
+    if (prev_pipe_idx == 0)
+        while (prev_pipe_idx < pipe_idx && !is_redirection(cmd[prev_pipe_idx++]))
+            len++;
+    else
+        while (++prev_pipe_idx < pipe_idx && !is_redirection(cmd[prev_pipe_idx]))
+            len++;
+    return (len);
+}
+
+void exec_executable(char *cmd[], int prev_pipe_idx, int pipe_idx)
+{
+    char **argv;
+    int argc;
+    int i;
+
+    i = 0;
+    argv = NULL;
+    argc = get_argc(cmd, prev_pipe_idx, pipe_idx);
+    if (!(argv = (char **)malloc(sizeof(char *) * argc + 1)))
+        exit(-1);   //malloc ½ÇÆÐ ¾Æ¿ô!
+    while (prev_pipe_idx < pipe_idx && !is_redirection(cmd[prev_pipe_idx]))
+        argv[i++] = cmd[prev_pipe_idx++];
+	argv[i] = NULL;
+	
+}
+
+void exec_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx)
+{
+    char **argv;
+    int argc;
+	int i;
+
+	i = 0;
+    argv = NULL;
+    argc = get_argc(cmd, prev_pipe_idx, pipe_idx);
+	if (!(argv = (char **)malloc(sizeof(char *) * argc + 1)))
+        exit(-1);   //malloc ½ÇÆÐ ¾Æ¿ô!
+    while (++prev_pipe_idx < pipe_idx && !is_redirection(cmd[prev_pipe_idx]))
+        argv[i++] = cmd[prev_pipe_idx];
+	argv[i] = NULL;
+}
+
 void handle_executable(char *cmd[], int prev_pipe_idx, int pipe_idx)
 {
     int is_in_usr_bin;
@@ -106,12 +161,8 @@ void handle_executable(char *cmd[], int prev_pipe_idx, int pipe_idx)
     is_in_bin = 0;
     is_usr_bin(cmd[prev_pipe_idx], &is_in_usr_bin);
     is_bin(cmd[prev_pipe_idx], &is_in_bin);
-    printf("is usr bin: %d\n", is_in_usr_bin);
-    printf("is bin: %d\n", is_in_bin);
-    // while (prev_pipe_idx < pipe_idx)
-    // {
-        
-    // }
+    
+    exec_executable(cmd, prev_pipe_idx, pipe_idx);
 }
 
 void handle_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx)
@@ -123,13 +174,8 @@ void handle_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx)
     is_in_bin = 0;
     is_usr_bin(cmd[prev_pipe_idx + 1], &is_in_usr_bin);
     is_bin(cmd[prev_pipe_idx + 1], &is_in_bin);
-    printf("is usr bin: %d\n", is_in_usr_bin);
-    printf("is bin: %d\n", is_in_bin);
-
-    // while (++prev_pipe_idx < pipe_idx)
-    // {
-    //     printf("handle: %s\n", cmd[prev_pipe_idx]);
-    // }
+    
+    exec_executable2(cmd, prev_pipe_idx, pipe_idx);
 }
 
 void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
