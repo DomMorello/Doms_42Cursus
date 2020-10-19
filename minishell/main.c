@@ -61,21 +61,53 @@ void process_redirection(char *cmd[], int *prev_pipe_idx, int pipe_idx)
     }
 }
 
+int is_usr_bin(char *cmd, int *is_in_usr_bin)
+{
+    struct dirent *usr_bin;
+    DIR *usr_bin_p;
+
+    usr_bin_p = opendir("/usr/bin");
+    usr_bin = readdir(usr_bin_p);
+    while (usr_bin)
+    {
+        if (!strcmp(usr_bin->d_name, cmd))
+        {
+            *is_in_usr_bin = 1;
+            break ;
+        }
+        usr_bin = readdir(usr_bin_p);
+    }
+}
+
+int is_bin(char *cmd, int *is_in_bin)
+{
+    struct dirent *bin;
+    DIR *bin_p;
+
+    bin_p = opendir("/bin");
+    bin = readdir(bin_p);
+    while (bin)
+    {
+        if (!strcmp(bin->d_name, cmd))
+        {
+            *is_in_bin = 1;
+            break ;
+        }
+        bin = readdir(bin_p);
+    }
+}
+
 void handle_executable(char *cmd[], int prev_pipe_idx, int pipe_idx)
 {
-    struct dirent *dir;
-    DIR *dir_ptr;
+    int is_in_usr_bin;
+    int is_in_bin;
 
-    dir_ptr = opendir("/usr/bin");
-    perror("opendir err");
-    dir = readdir(dir_ptr);
-    perror("readdir err");
-    printf("!! %s\n", dir->d_name);
-    while (dir)
-    {
-        dir = readdir(dir_ptr);
-        printf("!! %s\n", dir->d_name);
-    }
+    is_in_usr_bin = 0;
+    is_in_bin = 0;
+    is_usr_bin(cmd[prev_pipe_idx], &is_in_usr_bin);
+    is_bin(cmd[prev_pipe_idx], &is_in_bin);
+    printf("is usr bin: %d\n", is_in_usr_bin);
+    printf("is bin: %d\n", is_in_bin);
     // while (prev_pipe_idx < pipe_idx)
     // {
         
@@ -84,10 +116,20 @@ void handle_executable(char *cmd[], int prev_pipe_idx, int pipe_idx)
 
 void handle_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx)
 {
-    while (++prev_pipe_idx < pipe_idx)
-    {
-        printf("handle: %s\n", cmd[prev_pipe_idx]);
-    }
+    int is_in_usr_bin;
+    int is_in_bin;
+
+    is_in_usr_bin = 0;
+    is_in_bin = 0;
+    is_usr_bin(cmd[prev_pipe_idx + 1], &is_in_usr_bin);
+    is_bin(cmd[prev_pipe_idx + 1], &is_in_bin);
+    printf("is usr bin: %d\n", is_in_usr_bin);
+    printf("is bin: %d\n", is_in_bin);
+
+    // while (++prev_pipe_idx < pipe_idx)
+    // {
+    //     printf("handle: %s\n", cmd[prev_pipe_idx]);
+    // }
 }
 
 void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
