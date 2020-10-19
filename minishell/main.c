@@ -6,6 +6,58 @@ int g_pipe_fd[2];
 int g_red_out_fd;
 int g_red_in_fd;
 
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+{
+	size_t src_len;
+	size_t i;
+
+	src_len = 0;
+	i = 0;
+	while (src[src_len])
+		src_len++;
+	if (dstsize == 0)
+		return (src_len);
+	while (src[i] && i < dstsize - 1)
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = '\0';
+	return (src_len);
+}
+
+size_t	ft_strlen(const char *s)
+{
+	size_t len;
+
+	len = 0;
+	while (s[len])
+		len++;
+	return (len);
+}
+
+size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
+{
+	size_t dst_len;
+	size_t src_len;
+	size_t i;
+
+	dst_len = ft_strlen(dst);
+	src_len = ft_strlen(src);
+	i = 0;
+	if (dstsize <= dst_len)
+		return (dstsize + src_len);
+	while (*dst)
+		dst++;
+	while (src[i] && i < dstsize - dst_len - 1)
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = 0;
+	return (dst_len + src_len);
+}
+
 void set_red_out(char *title)
 {
 	g_red_out_fd = open(title, O_CREAT | O_RDWR);
@@ -61,7 +113,7 @@ void process_redirection(char *cmd[], int *prev_pipe_idx, int pipe_idx)
     }
 }
 
-int is_usr_bin(char *cmd, int *is_in_usr_bin)
+int is_usr_bin(char *cmd, int *which_dir)
 {
     struct dirent *usr_bin;
     DIR *usr_bin_p;
@@ -72,14 +124,14 @@ int is_usr_bin(char *cmd, int *is_in_usr_bin)
     {
         if (!strcmp(usr_bin->d_name, cmd))
         {
-            *is_in_usr_bin = 1;
+            *which_dir = USR_BIN_NUM;
             break ;
         }
         usr_bin = readdir(usr_bin_p);
     }
 }
 
-int is_bin(char *cmd, int *is_in_bin)
+int is_bin(char *cmd, int *which_dir)
 {
     struct dirent *bin;
     DIR *bin_p;
@@ -90,7 +142,7 @@ int is_bin(char *cmd, int *is_in_bin)
     {
         if (!strcmp(bin->d_name, cmd))
         {
-            *is_in_bin = 1;
+            *which_dir = BIN_NUM;
             break ;
         }
         bin = readdir(bin_p);
@@ -119,63 +171,88 @@ int get_argc(char *cmd[], int prev_pipe_idx, int pipe_idx)
     return (len);
 }
 
-void exec_executable(char *cmd[], int prev_pipe_idx, int pipe_idx)
+char *get_filepath(char *token, int which_dir)
+{
+	char *ret;
+
+	ret = NULL;
+	if (which_dir == 1)
+	{
+		if (!(ret = (char *)malloc(sizeof(char) * (ft_strlen(USR_BIN_STR) + ft_strlen(token) + 1))))
+			exit(-1); //malloc fail -> boom
+		ft_strlcpy(ret, USR_BIN_STR, ft_strlen(USR_BIN_STR) + 1);
+		ret[ft_strlen(USR_BIN_STR)] = '\0';
+		ft_strlcat(ret, token, ft_strlen(ret) + ft_strlen(token) + 1);
+	}
+	else if (which_dir == 2)
+	{
+		if (!(ret = (char *)malloc(sizeof(char) * (ft_strlen(BIN_STR) + ft_strlen(token) + 1))))
+			exit(-1); //malloc fail -> boom
+		ft_strlcpy(ret, BIN_STR, ft_strlen(BIN_STR) + 1);
+		ret[ft_strlen(BIN_STR)] = '\0';
+		ft_strlcat(ret, token, ft_strlen(ret) + ft_strlen(token) + 1);
+	}
+	return (ret);
+}
+
+void exec_executable(char *cmd[], int prev_pipe_idx, int pipe_idx, int which_dir)
 {
     char **argv;
+	char *filepath;
     int argc;
     int i;
 
     i = 0;
     argv = NULL;
     argc = get_argc(cmd, prev_pipe_idx, pipe_idx);
+	filepath = get_filepath(cmd[prev_pipe_idx], which_dir);
     if (!(argv = (char **)malloc(sizeof(char *) * argc + 1)))
         exit(-1);   //malloc ½ÇÆÐ ¾Æ¿ô!
     while (prev_pipe_idx < pipe_idx && !is_redirection(cmd[prev_pipe_idx]))
         argv[i++] = cmd[prev_pipe_idx++];
 	argv[i] = NULL;
-	
+	execve(filepath, argv, environ);
 }
 
-void exec_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx)
+void exec_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx, int which_dir)
 {
     char **argv;
+	char *filepath;
     int argc;
 	int i;
 
 	i = 0;
     argv = NULL;
     argc = get_argc(cmd, prev_pipe_idx, pipe_idx);
+	filepath = get_filepath(cmd[prev_pipe_idx + 1], which_dir);
 	if (!(argv = (char **)malloc(sizeof(char *) * argc + 1)))
         exit(-1);   //malloc ½ÇÆÐ ¾Æ¿ô!
     while (++prev_pipe_idx < pipe_idx && !is_redirection(cmd[prev_pipe_idx]))
         argv[i++] = cmd[prev_pipe_idx];
 	argv[i] = NULL;
+	execve(filepath, argv, environ);
 }
 
 void handle_executable(char *cmd[], int prev_pipe_idx, int pipe_idx)
 {
-    int is_in_usr_bin;
-    int is_in_bin;
+    int which_dir;
 
-    is_in_usr_bin = 0;
-    is_in_bin = 0;
-    is_usr_bin(cmd[prev_pipe_idx], &is_in_usr_bin);
-    is_bin(cmd[prev_pipe_idx], &is_in_bin);
+    which_dir = 0;
+    is_usr_bin(cmd[prev_pipe_idx], &which_dir);
+    is_bin(cmd[prev_pipe_idx], &which_dir);
     
-    exec_executable(cmd, prev_pipe_idx, pipe_idx);
+    exec_executable(cmd, prev_pipe_idx, pipe_idx, which_dir);
 }
 
 void handle_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx)
 {
-    int is_in_usr_bin;
-    int is_in_bin;
+    int which_dir;
 
-    is_in_usr_bin = 0;
-    is_in_bin = 0;
-    is_usr_bin(cmd[prev_pipe_idx + 1], &is_in_usr_bin);
-    is_bin(cmd[prev_pipe_idx + 1], &is_in_bin);
+    which_dir = 0;
+    is_usr_bin(cmd[prev_pipe_idx + 1], &which_dir);
+    is_bin(cmd[prev_pipe_idx + 1], &which_dir);
     
-    exec_executable2(cmd, prev_pipe_idx, pipe_idx);
+    exec_executable2(cmd, prev_pipe_idx, pipe_idx, which_dir);
 }
 
 void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
@@ -191,20 +268,13 @@ void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 
 void exec_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
-    static int i = 0;
-
-    i++;
-    pid_t pid = fork();
+    pid_t pid;
+	
+	pid = fork();
     if (pid == 0)
     {
-        // set_pipe_child();
-        // process_redirection(cmd, prev_pipe_idx, pipe_idx);
-        // if (i == 1)
-        //     execlp("grep", "grep", "Sep", NULL);
-        // if (i == 2)
-        //     execlp("grep", "grep", "Sep", NULL);
-        // if (i == 3)
-        //     execlp("wc", "wc", NULL);
+        set_pipe_child();
+        process_redirection(cmd, prev_pipe_idx, pipe_idx);
         parse_cmd(cmd, prev_pipe_idx, pipe_idx);
         exit(1);
     }
@@ -215,7 +285,7 @@ void exec_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
     else
     {
         wait(NULL);
-        // set_pipe_parent();
+        set_pipe_parent();
     }
 }
 
@@ -223,8 +293,8 @@ void process_pipe(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
     if (!strcmp(cmd[pipe_idx], "|"))
     {
-        // pipe(g_pipe_fd);
-        // perror("pipe err");
+        pipe(g_pipe_fd);
+        perror("pipe err");
         exec_cmd(cmd, prev_pipe_idx, pipe_idx);
         *prev_pipe_idx = pipe_idx;
     }
@@ -232,8 +302,7 @@ void process_pipe(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 
 void exec_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
-    // process_redirection(cmd, prev_pipe_idx, pipe_idx);
-    // execlp("wc", "wc", NULL);
+    process_redirection(cmd, prev_pipe_idx, pipe_idx);
     parse_cmd(cmd, prev_pipe_idx, pipe_idx);
 }
 

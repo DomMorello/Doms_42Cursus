@@ -4,6 +4,8 @@ int g_pipe_fd[2];
 int g_red_out_fd;
 int g_red_in_fd;
 
+extern char *environ[];
+
 void set_red_in(char *title)
 {
 	g_red_in_fd = open(title, O_CREAT | O_RDWR);
@@ -41,7 +43,38 @@ void test()
 		set_red_out("./hello1");
 		execlp("wc", "wc", NULL);
 	}
-	
+}
+
+size_t	ft_strlen(const char *s)
+{
+	size_t len;
+
+	len = 0;
+	while (s[len])
+		len++;
+	return (len);
+}
+
+size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
+{
+	size_t dst_len;
+	size_t src_len;
+	size_t i;
+
+	dst_len = ft_strlen(dst);
+	src_len = ft_strlen(src);
+	i = 0;
+	if (dstsize <= dst_len)
+		return (dstsize + src_len);
+	while (*dst)
+		dst++;
+	while (src[i] && i < dstsize - dst_len - 1)
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = 0;
+	return (dst_len + src_len);
 }
 
 int	main(int argc, char *argv[])

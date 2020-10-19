@@ -23,6 +23,11 @@
 # define FALSE 0
 # define ERROR -1
 
+# define USR_BIN_STR "/usr/bin/"
+# define BIN_STR "/bin/"
+# define USR_BIN_NUM 1
+# define BIN_NUM 2
+
 int get_next_line(int fd, char **line);
 
 #endif
