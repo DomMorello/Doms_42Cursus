@@ -1,6 +1,6 @@
 #include "./minishell.h"
 
-extern char *environ[];
+extern char **environ;
 
 int g_pipe_fd[2];
 int g_red_out_fd;
@@ -113,6 +113,14 @@ void process_redirection(char *cmd[], int *prev_pipe_idx, int pipe_idx)
     }
 }
 
+int is_redirection(char *token)
+{
+    if (!strcmp(token, ">") || !strcmp(token, ">>")
+        || !strcmp(token, "<"))
+        return (TRUE);
+    return (FALSE);
+}
+
 int is_usr_bin(char *cmd, int *which_dir)
 {
     struct dirent *usr_bin;
@@ -147,14 +155,6 @@ int is_bin(char *cmd, int *which_dir)
         }
         bin = readdir(bin_p);
     }
-}
-
-int is_redirection(char *token)
-{
-    if (!strcmp(token, ">") || !strcmp(token, ">>")
-        || !strcmp(token, "<"))
-        return (TRUE);
-    return (FALSE);
 }
 
 int get_argc(char *cmd[], int prev_pipe_idx, int pipe_idx)
@@ -309,8 +309,8 @@ void exec_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 void test(void)
 {
     /* ;콜론으로 나눠진 것이 여기로 들어왔다고 가정하자! */
-    char *cmd[50] = {"ls", "-al", "|", "grep", "Sep", "|", "wc", ">",
-            "hello1", ">", "hello2", "|", "echo", "hi", ">", "hello3", NULL};
+    // char *cmd[50] = {"ls", "-al", "|", "grep", "Sep", "|", "wc", ">",
+    //         "hello1", ">", "hello2", "|", "echo", "hi", ">", "hello3", NULL};
 
     // char *cmd[50] = {"grep", "Sep", "<", "hello1", "|", "wc", "<", "hello1", NULL};
 
@@ -318,6 +318,8 @@ void test(void)
     //                 "echo", "hi", ">>", "hello1", NULL};
 
     // char *cmd[50] = {"grep", "Sep", "<", "hello1", "|", "wc", ">>", "hello1", ">>", "hello2", NULL};
+    
+	char *cmd[50] = {"ls", NULL};
 
     int i;
     int prev_pipe_idx;

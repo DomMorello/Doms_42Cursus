@@ -4,7 +4,7 @@ int g_pipe_fd[2];
 int g_red_out_fd;
 int g_red_in_fd;
 
-extern char *environ[];
+extern char **environ;
 
 void set_red_in(char *title)
 {

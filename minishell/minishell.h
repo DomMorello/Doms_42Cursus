@@ -12,6 +12,7 @@
 #include <time.h>
 #include <fcntl.h>
 #include <dirent.h>
+#include <signal.h>
 #include "./libft/libft.h"
 
 // # define GREEN "\033[0;32m"
