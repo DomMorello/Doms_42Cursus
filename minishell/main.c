@@ -121,6 +121,7 @@ int is_redirection(char *token)
     return (FALSE);
 }
 
+// 이런거 다 지워야 된다. 하아..
 int is_usr_bin(char *cmd, int *which_dir)
 {
     struct dirent *usr_bin;
