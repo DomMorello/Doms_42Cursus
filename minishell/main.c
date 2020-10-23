@@ -183,26 +183,33 @@ void exec_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx, int which_di
 	execve(filepath, argv, environ);
 }
 
+int check_executable(char *token)
+{
+	/* PATH= 를 확인해서 split으로 나눈 후에 opendir 하고 readdir해서 검사 */
+}
+
 void handle_executable(char *cmd[], int prev_pipe_idx, int pipe_idx)
 {
-    int which_dir;
+	if (check_executable(cmd[prev_pipe_idx]))
+		printf("executable right! \n");
+    // int which_dir;
 
-    which_dir = 0;
-    is_usr_bin(cmd[prev_pipe_idx], &which_dir);
-    is_bin(cmd[prev_pipe_idx], &which_dir);
+    // which_dir = 0;
+    // is_usr_bin(cmd[prev_pipe_idx], &which_dir);
+    // is_bin(cmd[prev_pipe_idx], &which_dir);
     
-    exec_executable(cmd, prev_pipe_idx, pipe_idx, which_dir);
+    // exec_executable(cmd, prev_pipe_idx, pipe_idx, which_dir);
 }
 
 void handle_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx)
 {
-    int which_dir;
+    // int which_dir;
 
-    which_dir = 0;
-    is_usr_bin(cmd[prev_pipe_idx + 1], &which_dir);
-    is_bin(cmd[prev_pipe_idx + 1], &which_dir);
+    // which_dir = 0;
+    // is_usr_bin(cmd[prev_pipe_idx + 1], &which_dir);
+    // is_bin(cmd[prev_pipe_idx + 1], &which_dir);
     
-    exec_executable2(cmd, prev_pipe_idx, pipe_idx, which_dir);
+    // exec_executable2(cmd, prev_pipe_idx, pipe_idx, which_dir);
 }
 
 void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
@@ -290,15 +297,17 @@ void test(void)
     
 	int i;
     int prev_pipe_idx;
+
     prev_pipe_idx = 0;
     i = 0;
-    // while (cmd[i])
-    // {
-    //     process_pipe(cmd, &prev_pipe_idx, i);
-    //     i++;
-    //     if (!cmd[i])
-    //         exec_last_cmd(cmd, &prev_pipe_idx, i);
-    // }
+	copy_environ();
+    while (cmd[i])
+    {
+        process_pipe(cmd, &prev_pipe_idx, i);
+        i++;
+        if (!cmd[i])
+            exec_last_cmd(cmd, &prev_pipe_idx, i);
+    }
 }
 
 int main(int argc, char *argv[])
