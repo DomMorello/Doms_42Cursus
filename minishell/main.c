@@ -1,62 +1,12 @@
 #include "./minishell.h"
 
 extern char **environ;
+t_list *g_env_list;
+t_list g_env_head;
 
 int g_pipe_fd[2];
 int g_red_out_fd;
 int g_red_in_fd;
-
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
-{
-	size_t src_len;
-	size_t i;
-
-	src_len = 0;
-	i = 0;
-	while (src[src_len])
-		src_len++;
-	if (dstsize == 0)
-		return (src_len);
-	while (src[i] && i < dstsize - 1)
-	{
-		dst[i] = src[i];
-		i++;
-	}
-	dst[i] = '\0';
-	return (src_len);
-}
-
-size_t	ft_strlen(const char *s)
-{
-	size_t len;
-
-	len = 0;
-	while (s[len])
-		len++;
-	return (len);
-}
-
-size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
-{
-	size_t dst_len;
-	size_t src_len;
-	size_t i;
-
-	dst_len = ft_strlen(dst);
-	src_len = ft_strlen(src);
-	i = 0;
-	if (dstsize <= dst_len)
-		return (dstsize + src_len);
-	while (*dst)
-		dst++;
-	while (src[i] && i < dstsize - dst_len - 1)
-	{
-		dst[i] = src[i];
-		i++;
-	}
-	dst[i] = 0;
-	return (dst_len + src_len);
-}
 
 void set_red_out(char *title)
 {
@@ -121,7 +71,6 @@ int is_redirection(char *token)
     return (FALSE);
 }
 
-// 이런거 다 지워야 된다. 하아..
 int is_usr_bin(char *cmd, int *which_dir)
 {
     struct dirent *usr_bin;
@@ -307,6 +256,23 @@ void exec_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
     parse_cmd(cmd, prev_pipe_idx, pipe_idx);
 }
 
+void copy_environ(void)
+{
+	int i;
+	t_list *tmp;
+
+	g_env_head.content = environ[0];
+	g_env_head.next = NULL;
+	g_env_list = &g_env_head;
+	i = 1;
+	while (environ[i])
+	{
+		tmp = ft_lstnew(environ[i]);
+		ft_lstadd_back(&g_env_list, tmp);
+		i++;
+	}
+}
+
 void test(void)
 {
     /* ;콜론으로 나눠진 것이 여기로 들어왔다고 가정하자! */
@@ -319,25 +285,25 @@ void test(void)
     //                 "echo", "hi", ">>", "hello1", NULL};
 
     // char *cmd[50] = {"grep", "Sep", "<", "hello1", "|", "wc", ">>", "hello1", ">>", "hello2", NULL};
-    
+
 	char *cmd[50] = {"ls", NULL};
-
-    int i;
+    
+	int i;
     int prev_pipe_idx;
-
     prev_pipe_idx = 0;
     i = 0;
-    while (cmd[i])
-    {
-        process_pipe(cmd, &prev_pipe_idx, i);
-        i++;
-        if (!cmd[i])
-            exec_last_cmd(cmd, &prev_pipe_idx, i);
-    }
+    // while (cmd[i])
+    // {
+    //     process_pipe(cmd, &prev_pipe_idx, i);
+    //     i++;
+    //     if (!cmd[i])
+    //         exec_last_cmd(cmd, &prev_pipe_idx, i);
+    // }
 }
 
 int main(int argc, char *argv[])
 {
+
     test();
     return 0;
 }
