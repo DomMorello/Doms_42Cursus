@@ -241,7 +241,7 @@ char *get_filepath(char *token, char **path)
     }
     if (ret)
         ft_strlcat(ret, "/", ft_strlen(ret) + 2);
-    printf("%d\n", _msize(ret));
+    printf("%s\n", ret);
 }
 
 void handle_executable(char *cmd[], int prev_pipe_idx, int pipe_idx)
