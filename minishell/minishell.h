@@ -14,6 +14,7 @@
 #include <dirent.h>
 #include <signal.h>
 #include "./libft/libft.h"
+#include <malloc.h>
 
 // # define GREEN "\033[0;32m"
 // # define LIGHT_BLUE "\033[0;34m"
@@ -24,10 +25,13 @@
 # define FALSE 0
 # define ERROR -1
 
+//다 삭제해야된다.
 # define USR_BIN_STR "/usr/bin/"
 # define BIN_STR "/bin/"
 # define USR_BIN_NUM 1
 # define BIN_NUM 2
+
+# define PATH "PATH="
 
 int get_next_line(int fd, char **line);
 

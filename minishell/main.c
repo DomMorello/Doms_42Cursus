@@ -121,77 +121,136 @@ int get_argc(char *cmd[], int prev_pipe_idx, int pipe_idx)
     return (len);
 }
 
-char *get_filepath(char *token, int which_dir)
-{
-	char *ret;
+// void exec_executable(char *cmd[], int prev_pipe_idx, int pipe_idx, int which_dir)
+// {
+//     char **argv;
+// 	char *filepath;
+//     int argc;
+//     int i;
 
-	ret = NULL;
-	if (which_dir == 1)
-	{
-		if (!(ret = (char *)malloc(sizeof(char) * (ft_strlen(USR_BIN_STR) + ft_strlen(token) + 1))))
-			exit(-1); //malloc fail -> boom
-		ft_strlcpy(ret, USR_BIN_STR, ft_strlen(USR_BIN_STR) + 1);
-		ret[ft_strlen(USR_BIN_STR)] = '\0';
-		ft_strlcat(ret, token, ft_strlen(ret) + ft_strlen(token) + 1);
-	}
-	else if (which_dir == 2)
-	{
-		if (!(ret = (char *)malloc(sizeof(char) * (ft_strlen(BIN_STR) + ft_strlen(token) + 1))))
-			exit(-1); //malloc fail -> boom
-		ft_strlcpy(ret, BIN_STR, ft_strlen(BIN_STR) + 1);
-		ret[ft_strlen(BIN_STR)] = '\0';
-		ft_strlcat(ret, token, ft_strlen(ret) + ft_strlen(token) + 1);
-	}
-	return (ret);
+//     i = 0;
+//     argv = NULL;
+//     argc = get_argc(cmd, prev_pipe_idx, pipe_idx);
+// 	filepath = get_filepath(cmd[prev_pipe_idx], which_dir);
+//     if (!(argv = (char **)malloc(sizeof(char *) * argc + 1)))
+//         exit(-1);   //malloc 실패 아웃!
+//     while (prev_pipe_idx < pipe_idx && !is_redirection(cmd[prev_pipe_idx]))
+//         argv[i++] = cmd[prev_pipe_idx++];
+// 	argv[i] = NULL;
+// 	execve(filepath, argv, environ);
+// }
+
+// void exec_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx, int which_dir)
+// {
+//     char **argv;
+// 	char *filepath;
+//     int argc;
+// 	int i;
+
+// 	i = 0;
+//     argv = NULL;
+//     argc = get_argc(cmd, prev_pipe_idx, pipe_idx);
+// 	filepath = get_filepath(cmd[prev_pipe_idx + 1], which_dir);
+// 	if (!(argv = (char **)malloc(sizeof(char *) * argc + 1)))
+//         exit(-1);   //malloc 실패 아웃!
+//     while (++prev_pipe_idx < pipe_idx && !is_redirection(cmd[prev_pipe_idx]))
+//         argv[i++] = cmd[prev_pipe_idx];
+// 	argv[i] = NULL;
+// 	execve(filepath, argv, environ);
+// }
+
+char **get_path(void)
+{
+    char *path;
+    char **ret;
+
+    path = NULL;
+    ret = NULL;
+    while (g_env_list)
+    {
+        if (!ft_strncmp(PATH, g_env_list->content, ft_strlen(PATH)))
+        {
+            path = g_env_list->content;
+            break ;
+        }
+        g_env_list = g_env_list->next;
+    }
+    if (path)
+    {
+        path += ft_strlen(PATH);
+        ret = ft_split(path, ':');
+    }
+    return (ret);
 }
 
-void exec_executable(char *cmd[], int prev_pipe_idx, int pipe_idx, int which_dir)
+int search_dir(char *token, char *path)
 {
-    char **argv;
-	char *filepath;
-    int argc;
+    struct dirent *dir;
+    DIR *dir_p;
+
+    dir_p = opendir(path);
+    dir = readdir(dir_p);
+    while (dir)
+    {
+        if (!strcmp(dir->d_name, token))
+            return (TRUE);
+        dir = readdir(dir_p);
+    }
+    return (FALSE);
+}
+
+// char *get_filepath(char *token, int which_dir)
+// {
+// 	char *ret;
+
+// 	ret = NULL;
+// 	if (which_dir == 1)
+// 	{
+// 		if (!(ret = (char *)malloc(sizeof(char) * (ft_strlen(USR_BIN_STR) + ft_strlen(token) + 1))))
+// 			exit(-1); //malloc fail -> boom
+// 		ft_strlcpy(ret, USR_BIN_STR, ft_strlen(USR_BIN_STR) + 1);
+// 		ret[ft_strlen(USR_BIN_STR)] = '\0';
+// 		ft_strlcat(ret, token, ft_strlen(ret) + ft_strlen(token) + 1);
+// 	}
+// 	else if (which_dir == 2)
+// 	{
+// 		if (!(ret = (char *)malloc(sizeof(char) * (ft_strlen(BIN_STR) + ft_strlen(token) + 1))))
+// 			exit(-1); //malloc fail -> boom
+// 		ft_strlcpy(ret, BIN_STR, ft_strlen(BIN_STR) + 1);
+// 		ret[ft_strlen(BIN_STR)] = '\0';
+// 		ft_strlcat(ret, token, ft_strlen(ret) + ft_strlen(token) + 1);
+// 	}
+// 	return (ret);
+// }
+
+char *get_filepath(char *token, char **path)
+{
+    char *ret;
     int i;
 
+    ret = NULL;
     i = 0;
-    argv = NULL;
-    argc = get_argc(cmd, prev_pipe_idx, pipe_idx);
-	filepath = get_filepath(cmd[prev_pipe_idx], which_dir);
-    if (!(argv = (char **)malloc(sizeof(char *) * argc + 1)))
-        exit(-1);   //malloc 실패 아웃!
-    while (prev_pipe_idx < pipe_idx && !is_redirection(cmd[prev_pipe_idx]))
-        argv[i++] = cmd[prev_pipe_idx++];
-	argv[i] = NULL;
-	execve(filepath, argv, environ);
-}
-
-void exec_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx, int which_dir)
-{
-    char **argv;
-	char *filepath;
-    int argc;
-	int i;
-
-	i = 0;
-    argv = NULL;
-    argc = get_argc(cmd, prev_pipe_idx, pipe_idx);
-	filepath = get_filepath(cmd[prev_pipe_idx + 1], which_dir);
-	if (!(argv = (char **)malloc(sizeof(char *) * argc + 1)))
-        exit(-1);   //malloc 실패 아웃!
-    while (++prev_pipe_idx < pipe_idx && !is_redirection(cmd[prev_pipe_idx]))
-        argv[i++] = cmd[prev_pipe_idx];
-	argv[i] = NULL;
-	execve(filepath, argv, environ);
-}
-
-int check_executable(char *token)
-{
-	/* PATH= 를 확인해서 split으로 나눈 후에 opendir 하고 readdir해서 검사 */
+    while (path[i])
+    {
+        if (search_dir(token, path[i]))
+        {
+            ret = path[i];
+            break ;
+        }
+        i++;
+    }
+    if (ret)
+        ft_strlcat(ret, "/", ft_strlen(ret) + 2);
+    printf("%d\n", _msize(ret));
 }
 
 void handle_executable(char *cmd[], int prev_pipe_idx, int pipe_idx)
 {
-	if (check_executable(cmd[prev_pipe_idx]))
-		printf("executable right! \n");
+	char **path;
+    char *filepath;
+
+    path = get_path();
+    filepath = get_filepath(cmd[prev_pipe_idx], path);
     // int which_dir;
 
     // which_dir = 0;
