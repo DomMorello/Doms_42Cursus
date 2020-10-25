@@ -14,7 +14,6 @@
 #include <dirent.h>
 #include <signal.h>
 #include "./libft/libft.h"
-#include <malloc.h>
 
 // # define GREEN "\033[0;32m"
 // # define LIGHT_BLUE "\033[0;34m"
