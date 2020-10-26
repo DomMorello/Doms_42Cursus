@@ -340,7 +340,7 @@ void test(void)
     // char *cmd[50] = {"grep", "Sep", "<", "hello1", "|", "wc", ">>", "hello1", ">>", "hello2", NULL};
 
 	// char *cmd[50] = {"/bin/ls", NULL};
-	char *cmd[50] = {"ls", NULL};
+	char *cmd[50] = {"../../../../bin/ls", NULL};
     
 	int i;
     int prev_pipe_idx;
