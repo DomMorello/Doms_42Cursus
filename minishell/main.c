@@ -340,9 +340,5 @@ int main(int argc, char *argv[])
 {
 
     test();
-	while (1)
-	{
-		;
-	}
     return 0;
 }
