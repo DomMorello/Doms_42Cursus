@@ -323,26 +323,27 @@ void test(void)
     
 	int i;
     int prev_pipe_idx;
+	int num;
 
-    prev_pipe_idx = 0;
-    i = 0;
-	copy_environ();
-    while (cmd[i])
-    {
-        process_pipe(cmd, &prev_pipe_idx, i);
-        i++;
-        if (!cmd[i])
-            exec_last_cmd(cmd, &prev_pipe_idx, i);
-    }
+	while (1)
+	{
+		scanf("%d", &num);
+    	prev_pipe_idx = 0;
+    	i = 0;
+		copy_environ();
+    	while (cmd[i])
+    	{
+        	process_pipe(cmd, &prev_pipe_idx, i);
+        	i++;
+        	if (!cmd[i])
+            	exec_last_cmd(cmd, &prev_pipe_idx, i);
+    	}
+	}
 }
 
 int main(int argc, char *argv[])
 {
 
     test();
-	while (1)
-	{
-		;
-	}
     return 0;
 }
