@@ -245,7 +245,6 @@ void cat_filepath(char **ret, char **tmp, char *token)
 		*ret = token;
 }
 
-
 char *get_filepath(char *token, char **path)
 {
     char *tmp;
@@ -289,6 +288,11 @@ void handle_executable(char *cmd[], int prev_pipe_idx, int pipe_idx)
 
 void handle_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx)
 {
+	char **path;
+    char *filepath;
+
+    path = get_path();
+    filepath = get_filepath(cmd[prev_pipe_idx + 1], path);
     // int which_dir;
 
     // which_dir = 0;
@@ -316,8 +320,8 @@ void exec_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 	pid = fork();
     if (pid == 0)
     {
-        set_pipe_child();
-        process_redirection(cmd, prev_pipe_idx, pipe_idx);
+        // set_pipe_child();
+        // process_redirection(cmd, prev_pipe_idx, pipe_idx);
         parse_cmd(cmd, prev_pipe_idx, pipe_idx);
         exit(1);
     }
@@ -328,7 +332,7 @@ void exec_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
     else
     {
         wait(NULL);
-        set_pipe_parent();
+        // set_pipe_parent();
     }
 }
 
@@ -336,8 +340,8 @@ void process_pipe(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
     if (!strcmp(cmd[pipe_idx], "|"))
     {
-        pipe(g_pipe_fd);
-        perror("pipe err");
+        // pipe(g_pipe_fd);
+        // perror("pipe err");
         exec_cmd(cmd, prev_pipe_idx, pipe_idx);
         *prev_pipe_idx = pipe_idx;
     }
@@ -345,7 +349,7 @@ void process_pipe(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 
 void exec_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
-    process_redirection(cmd, prev_pipe_idx, pipe_idx);
+    // process_redirection(cmd, prev_pipe_idx, pipe_idx);
     parse_cmd(cmd, prev_pipe_idx, pipe_idx);
 }
 
@@ -369,8 +373,8 @@ void copy_environ(void)
 void test(void)
 {
     /* ;콜론으로 나눠진 것이 여기로 들어왔다고 가정하자! */
-    // char *cmd[50] = {"ls", "-al", "|", "grep", "Sep", "|", "wc", ">",
-    //         "hello1", ">", "hello2", "|", "echo", "hi", ">", "hello3", NULL};
+    char *cmd[50] = {"ls", "-al", "|", "grep", "Sep", "|", "wc", ">",
+            "hello1", ">", "hello2", "|", "echo", "hi", ">", "hello3", NULL};
 
     // char *cmd[50] = {"grep", "Sep", "<", "hello1", "|", "wc", "<", "hello1", NULL};
 
@@ -380,7 +384,7 @@ void test(void)
     // char *cmd[50] = {"grep", "Sep", "<", "hello1", "|", "wc", ">>", "hello1", ">>", "hello2", NULL};
 
 	// char *cmd[50] = {"/bin/ls", NULL};
-	char *cmd[50] = {"ls", NULL};
+	// char *cmd[50] = {"ls", NULL};
     
 	int i;
     int prev_pipe_idx;
@@ -401,5 +405,9 @@ int main(int argc, char *argv[])
 {
 
     test();
+	while (1)
+	{
+		;
+	}
     return 0;
 }
