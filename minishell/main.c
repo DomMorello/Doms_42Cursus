@@ -90,8 +90,10 @@ void exec_executable(char *cmd[], int prev_pipe_idx, int pipe_idx, char *filepat
     char **argv;
     int argc;
     int i;
+	int token;
 
     i = 0;
+	token = prev_pipe_idx;
     argv = NULL;
     argc = get_argc(cmd, prev_pipe_idx, pipe_idx);
     if (!(argv = (char **)malloc(sizeof(char *) * argc + 1)))
@@ -99,7 +101,11 @@ void exec_executable(char *cmd[], int prev_pipe_idx, int pipe_idx, char *filepat
     while (prev_pipe_idx < pipe_idx && !is_redirection(cmd[prev_pipe_idx]))
         argv[i++] = cmd[prev_pipe_idx++];
 	argv[i] = NULL;
-	execve(filepath, argv, environ);
+	if (execve(filepath, argv, environ) == -1)
+	{
+		perror("exec:");
+		printf("mongshell: command not found: %s\n", cmd[token]);
+	}
 }
 
 void exec_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx, char *filepath)
@@ -107,7 +113,9 @@ void exec_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx, char *filepa
     char **argv;
     int argc;
 	int i;
+	int token;
 
+	token = prev_pipe_idx + 1;
 	i = 0;
     argv = NULL;
     argc = get_argc(cmd, prev_pipe_idx, pipe_idx);
@@ -116,7 +124,11 @@ void exec_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx, char *filepa
     while (++prev_pipe_idx < pipe_idx && !is_redirection(cmd[prev_pipe_idx]))
         argv[i++] = cmd[prev_pipe_idx];
 	argv[i] = NULL;
-	execve(filepath, argv, environ);
+	if (execve(filepath, argv, environ) == -1)
+	{
+		perror("exec:");
+		printf("monghsell: command not found: %s\n", cmd[token]);
+	}
 }
 
 char **get_path(void)
@@ -187,7 +199,6 @@ void		free_2d_char(char **arr)
 	free(arr);
 	arr = NULL;
 }
-
 
 char *get_filepath(char *token, char **path)
 {
@@ -284,8 +295,18 @@ void process_pipe(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 
 void exec_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
-    process_redirection(cmd, prev_pipe_idx, pipe_idx);
-    parse_cmd(cmd, prev_pipe_idx, pipe_idx);
+	pid_t pid;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		process_redirection(cmd, prev_pipe_idx, pipe_idx);
+		parse_cmd(cmd, prev_pipe_idx, pipe_idx);
+	}
+	else
+	{
+		wait(NULL);
+	}
 }
 
 void copy_environ(void)
@@ -323,21 +344,16 @@ void test(void)
     
 	int i;
     int prev_pipe_idx;
-	int num;
 
-	while (1)
+	prev_pipe_idx = 0;
+	i = 0;
+	copy_environ();
+	while (cmd[i])
 	{
-		scanf("%d", &num);
-    	prev_pipe_idx = 0;
-    	i = 0;
-		copy_environ();
-    	while (cmd[i])
-    	{
-        	process_pipe(cmd, &prev_pipe_idx, i);
-        	i++;
-        	if (!cmd[i])
-            	exec_last_cmd(cmd, &prev_pipe_idx, i);
-    	}
+		process_pipe(cmd, &prev_pipe_idx, i);
+		i++;
+		if (!cmd[i])
+			exec_last_cmd(cmd, &prev_pipe_idx, i);
 	}
 }
 
