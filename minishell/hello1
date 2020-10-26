@@ -1,0 +1,13 @@
+total 128
+drwxrwxrwx 1 donglee donglee  4096 Oct 26 19:50 .
+drwxrwxrwx 1 donglee donglee  4096 Aug 14 13:00 ..
+-rwxrwxrwx 1 donglee donglee 18752 Oct 26 19:49 a.out
+-rwxrwxrwx 1 donglee donglee  5771 Sep 14 18:21 backup.c
+drwxrwxrwx 1 donglee donglee  4096 Aug 14 15:38 gnl
+-rwxrwxrwx 1 donglee donglee     0 Oct 26 19:50 hello1
+drwxrwxrwx 1 donglee donglee  4096 Oct 26 19:39 libft
+-rwxrwxrwx 1 donglee donglee 74498 Oct 26 19:36 libft.a
+-rwxrwxrwx 1 donglee donglee  7268 Oct 26 19:50 main.c
+-rwxrwxrwx 1 donglee donglee   717 Oct 26 01:10 minishell.h
+-rwxrwxrwx 1 donglee donglee  6762 Aug 26 14:51 note.md
+-rwxrwxrwx 1 donglee donglee  2174 Oct 26 01:51 test.c

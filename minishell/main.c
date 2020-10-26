@@ -71,42 +71,6 @@ int is_redirection(char *token)
     return (FALSE);
 }
 
-int is_usr_bin(char *cmd, int *which_dir)
-{
-    struct dirent *usr_bin;
-    DIR *usr_bin_p;
-
-    usr_bin_p = opendir("/usr/bin");
-    usr_bin = readdir(usr_bin_p);
-    while (usr_bin)
-    {
-        if (!strcmp(usr_bin->d_name, cmd))
-        {
-            *which_dir = USR_BIN_NUM;
-            break ;
-        }
-        usr_bin = readdir(usr_bin_p);
-    }
-}
-
-int is_bin(char *cmd, int *which_dir)
-{
-    struct dirent *bin;
-    DIR *bin_p;
-
-    bin_p = opendir("/bin");
-    bin = readdir(bin_p);
-    while (bin)
-    {
-        if (!strcmp(bin->d_name, cmd))
-        {
-            *which_dir = BIN_NUM;
-            break ;
-        }
-        bin = readdir(bin_p);
-    }
-}
-
 int get_argc(char *cmd[], int prev_pipe_idx, int pipe_idx)
 {
     int len;
@@ -121,43 +85,39 @@ int get_argc(char *cmd[], int prev_pipe_idx, int pipe_idx)
     return (len);
 }
 
-// void exec_executable(char *cmd[], int prev_pipe_idx, int pipe_idx, int which_dir)
-// {
-//     char **argv;
-// 	char *filepath;
-//     int argc;
-//     int i;
+void exec_executable(char *cmd[], int prev_pipe_idx, int pipe_idx, char *filepath)
+{
+    char **argv;
+    int argc;
+    int i;
 
-//     i = 0;
-//     argv = NULL;
-//     argc = get_argc(cmd, prev_pipe_idx, pipe_idx);
-// 	filepath = get_filepath(cmd[prev_pipe_idx], which_dir);
-//     if (!(argv = (char **)malloc(sizeof(char *) * argc + 1)))
-//         exit(-1);   //malloc 실패 아웃!
-//     while (prev_pipe_idx < pipe_idx && !is_redirection(cmd[prev_pipe_idx]))
-//         argv[i++] = cmd[prev_pipe_idx++];
-// 	argv[i] = NULL;
-// 	execve(filepath, argv, environ);
-// }
+    i = 0;
+    argv = NULL;
+    argc = get_argc(cmd, prev_pipe_idx, pipe_idx);
+    if (!(argv = (char **)malloc(sizeof(char *) * argc + 1)))
+        exit(-1);   //malloc 실패 아웃!
+    while (prev_pipe_idx < pipe_idx && !is_redirection(cmd[prev_pipe_idx]))
+        argv[i++] = cmd[prev_pipe_idx++];
+	argv[i] = NULL;
+	execve(filepath, argv, environ);
+}
 
-// void exec_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx, int which_dir)
-// {
-//     char **argv;
-// 	char *filepath;
-//     int argc;
-// 	int i;
+void exec_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx, char *filepath)
+{
+    char **argv;
+    int argc;
+	int i;
 
-// 	i = 0;
-//     argv = NULL;
-//     argc = get_argc(cmd, prev_pipe_idx, pipe_idx);
-// 	filepath = get_filepath(cmd[prev_pipe_idx + 1], which_dir);
-// 	if (!(argv = (char **)malloc(sizeof(char *) * argc + 1)))
-//         exit(-1);   //malloc 실패 아웃!
-//     while (++prev_pipe_idx < pipe_idx && !is_redirection(cmd[prev_pipe_idx]))
-//         argv[i++] = cmd[prev_pipe_idx];
-// 	argv[i] = NULL;
-// 	execve(filepath, argv, environ);
-// }
+	i = 0;
+    argv = NULL;
+    argc = get_argc(cmd, prev_pipe_idx, pipe_idx);
+	if (!(argv = (char **)malloc(sizeof(char *) * argc + 1)))
+        exit(-1);   //malloc 실패 아웃!
+    while (++prev_pipe_idx < pipe_idx && !is_redirection(cmd[prev_pipe_idx]))
+        argv[i++] = cmd[prev_pipe_idx];
+	argv[i] = NULL;
+	execve(filepath, argv, environ);
+}
 
 char **get_path(void)
 {
@@ -201,37 +161,6 @@ int search_dir(char *token, char *path)
     return (FALSE);
 }
 
-// char *get_filepath(char *token, int which_dir)
-// {
-// 	char *ret;
-
-// 	ret = NULL;
-// 	if (which_dir == 1)
-// 	{
-// 		if (!(ret = (char *)malloc(sizeof(char) * (ft_strlen(USR_BIN_STR) + ft_strlen(token) + 1))))
-// 			exit(-1); //malloc fail -> boom
-// 		ft_strlcpy(ret, USR_BIN_STR, ft_strlen(USR_BIN_STR) + 1);
-// 		ret[ft_strlen(USR_BIN_STR)] = '\0';
-// 		ft_strlcat(ret, token, ft_strlen(ret) + ft_strlen(token) + 1);
-// 	}
-// 	else if (which_dir == 2)
-// 	{
-// 		if (!(ret = (char *)malloc(sizeof(char) * (ft_strlen(BIN_STR) + ft_strlen(token) + 1))))
-// 			exit(-1); //malloc fail -> boom
-// 		ft_strlcpy(ret, BIN_STR, ft_strlen(BIN_STR) + 1);
-// 		ret[ft_strlen(BIN_STR)] = '\0';
-// 		ft_strlcat(ret, token, ft_strlen(ret) + ft_strlen(token) + 1);
-// 	}
-// 	return (ret);
-// }
-
-    // if (tmp)
-    //     ft_strlcat(tmp, "/", ft_strlen(tmp) + 2);
-	// ret = (char *)malloc(sizeof(char) * (ft_strlen(tmp) + ft_strlen(token) + 1));
-    // ret = tmp;
-    // ft_strlcat(ret, token, ft_strlen(token) + ft_strlen(ret) + 1);
-    // printf("ret: %s\n", ret);
-
 void cat_filepath(char **ret, char **tmp, char *token)
 {
 	if (*tmp)
@@ -244,6 +173,21 @@ void cat_filepath(char **ret, char **tmp, char *token)
 	else
 		*ret = token;
 }
+
+void		free_2d_char(char **arr)
+{
+	int i;
+
+	i = 0;
+	while (arr[i])
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
+	arr = NULL;
+}
+
 
 char *get_filepath(char *token, char **path)
 {
@@ -264,7 +208,8 @@ char *get_filepath(char *token, char **path)
         i++;
     }
 	cat_filepath(&ret, &tmp, token);
-	printf("ret: %s\n", ret);
+	free_2d_char(path);
+	return (ret);
 }
 
 void handle_executable(char *cmd[], int prev_pipe_idx, int pipe_idx)
@@ -273,17 +218,11 @@ void handle_executable(char *cmd[], int prev_pipe_idx, int pipe_idx)
     char *filepath;
 
     path = get_path();
-    filepath = get_filepath(cmd[prev_pipe_idx], path);
-	/* 여기서 절대경로나 상대경로로 와도 filepath를 적절하게 얻어와서
-		exec_executable함수로 filepath를 매개변수로 넘겨주면서 하면 될 듯 */
-	
-    // int which_dir;
-
-    // which_dir = 0;
-    // is_usr_bin(cmd[prev_pipe_idx], &which_dir);
-    // is_bin(cmd[prev_pipe_idx], &which_dir);
+    filepath = get_filepath(cmd[prev_pipe_idx], path);	
+	//execve로 넘겨줘야 하기 때문에 free가 불가함
+	// printf("%s\n", filepath);
     
-    // exec_executable(cmd, prev_pipe_idx, pipe_idx, which_dir);
+    exec_executable(cmd, prev_pipe_idx, pipe_idx, filepath);
 }
 
 void handle_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx)
@@ -293,13 +232,9 @@ void handle_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx)
 
     path = get_path();
     filepath = get_filepath(cmd[prev_pipe_idx + 1], path);
-    // int which_dir;
+    // printf("%s\n", filepath);
 
-    // which_dir = 0;
-    // is_usr_bin(cmd[prev_pipe_idx + 1], &which_dir);
-    // is_bin(cmd[prev_pipe_idx + 1], &which_dir);
-    
-    // exec_executable2(cmd, prev_pipe_idx, pipe_idx, which_dir);
+    exec_executable2(cmd, prev_pipe_idx, pipe_idx, filepath);
 }
 
 void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
@@ -320,8 +255,8 @@ void exec_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 	pid = fork();
     if (pid == 0)
     {
-        // set_pipe_child();
-        // process_redirection(cmd, prev_pipe_idx, pipe_idx);
+        set_pipe_child();
+        process_redirection(cmd, prev_pipe_idx, pipe_idx);
         parse_cmd(cmd, prev_pipe_idx, pipe_idx);
         exit(1);
     }
@@ -332,7 +267,7 @@ void exec_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
     else
     {
         wait(NULL);
-        // set_pipe_parent();
+        set_pipe_parent();
     }
 }
 
@@ -340,8 +275,8 @@ void process_pipe(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
     if (!strcmp(cmd[pipe_idx], "|"))
     {
-        // pipe(g_pipe_fd);
-        // perror("pipe err");
+        pipe(g_pipe_fd);
+        perror("pipe err");
         exec_cmd(cmd, prev_pipe_idx, pipe_idx);
         *prev_pipe_idx = pipe_idx;
     }
@@ -349,7 +284,7 @@ void process_pipe(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 
 void exec_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
-    // process_redirection(cmd, prev_pipe_idx, pipe_idx);
+    process_redirection(cmd, prev_pipe_idx, pipe_idx);
     parse_cmd(cmd, prev_pipe_idx, pipe_idx);
 }
 
@@ -373,8 +308,8 @@ void copy_environ(void)
 void test(void)
 {
     /* ;콜론으로 나눠진 것이 여기로 들어왔다고 가정하자! */
-    char *cmd[50] = {"ls", "-al", "|", "grep", "Sep", "|", "wc", ">",
-            "hello1", ">", "hello2", "|", "echo", "hi", ">", "hello3", NULL};
+    // char *cmd[50] = {"ls", "-al", "|", "/bin/grep", "Sep", "|", "/usr/bin/wc", ">",
+    //         "hello1", ">", "hello2", "|", "echo", "hi", ">", "hello3", NULL};
 
     // char *cmd[50] = {"grep", "Sep", "<", "hello1", "|", "wc", "<", "hello1", NULL};
 
@@ -384,7 +319,7 @@ void test(void)
     // char *cmd[50] = {"grep", "Sep", "<", "hello1", "|", "wc", ">>", "hello1", ">>", "hello2", NULL};
 
 	// char *cmd[50] = {"/bin/ls", NULL};
-	// char *cmd[50] = {"ls", NULL};
+	char *cmd[50] = {"ls", NULL};
     
 	int i;
     int prev_pipe_idx;
