@@ -329,8 +329,8 @@ void copy_environ(void)
 void test(void)
 {
     /* ;콜론으로 나눠진 것이 여기로 들어왔다고 가정하자! */
-    // char *cmd[50] = {"ls", "-al", "|", "/bin/grep", "Sep", "|", "/usr/bin/wc", ">",
-    //         "hello1", ">", "hello2", "|", "echo", "hi", ">", "hello3", NULL};
+    char *cmd[50] = {"ls", "-al", "|", "/bin/grep", "Sep", "|", "/usr/bin/wc", ">",
+            "hello1", ">", "hello2", /*"|", "echo", "hi", ">", "hello3",*/ NULL};
 
     // char *cmd[50] = {"grep", "Sep", "<", "hello1", "|", "wc", "<", "hello1", NULL};
 
@@ -340,7 +340,6 @@ void test(void)
     // char *cmd[50] = {"grep", "Sep", "<", "hello1", "|", "wc", ">>", "hello1", ">>", "hello2", NULL};
 
 	// char *cmd[50] = {"/bin/ls", NULL};
-	char *cmd[50] = {"../../../../bin/ls", NULL};
     
 	int i;
     int prev_pipe_idx;
