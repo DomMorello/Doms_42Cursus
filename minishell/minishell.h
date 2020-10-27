@@ -24,13 +24,12 @@
 # define FALSE 0
 # define ERROR -1
 
-//다 삭제해야된다.
-# define USR_BIN_STR "/usr/bin/"
-# define BIN_STR "/bin/"
-# define USR_BIN_NUM 1
-# define BIN_NUM 2
+# define STDIN 0
+# define STDOUT 1
+# define STDERR 2
 
 # define PATH "PATH="
+# define HOME "HOME="
 
 int get_next_line(int fd, char **line);
 

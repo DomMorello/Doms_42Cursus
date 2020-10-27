@@ -103,8 +103,20 @@ void exec_executable(char *cmd[], int prev_pipe_idx, int pipe_idx, char *filepat
 	argv[i] = NULL;
 	if (execve(filepath, argv, environ) == -1)
 	{
-		perror("exec:");
-		printf("mongshell: command not found: %s\n", cmd[token]);
+		/* 에러 구체화해서 에러메세지 처리할 필요 있음 */
+		if (errno == 2)
+		{
+			ft_putstr_fd("mongshell: ", STDERR);
+			ft_putstr_fd(cmd[token], STDERR);
+			ft_putstr_fd(": command not found\n", STDERR);	
+		}
+		else
+		{
+			ft_putstr_fd("mongshell: ", STDERR);
+			ft_putstr_fd(cmd[token], STDERR);
+			ft_putstr_fd(": ", STDERR);
+			strerror(errno);
+		}
 	}
 }
 
@@ -126,8 +138,17 @@ void exec_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx, char *filepa
 	argv[i] = NULL;
 	if (execve(filepath, argv, environ) == -1)
 	{
-		perror("exec:");
-		printf("monghsell: command not found: %s\n", cmd[token]);
+		if (errno == 2)
+		{
+			ft_putstr_fd(cmd[token], STDERR);
+			ft_putstr_fd(": command not found\n", STDERR);	
+		}
+		else
+		{
+			ft_putstr_fd(cmd[token], STDERR);
+			ft_putstr_fd(": ", STDERR);
+			strerror(errno);
+		}
 	}
 }
 
@@ -229,10 +250,7 @@ void handle_executable(char *cmd[], int prev_pipe_idx, int pipe_idx)
     char *filepath;
 
     path = get_path();
-    filepath = get_filepath(cmd[prev_pipe_idx], path);	
-	//execve로 넘겨줘야 하기 때문에 free가 불가함
-	// printf("%s\n", filepath);
-    
+    filepath = get_filepath(cmd[prev_pipe_idx], path);	//free 불가
     exec_executable(cmd, prev_pipe_idx, pipe_idx, filepath);
 }
 
@@ -242,9 +260,7 @@ void handle_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx)
     char *filepath;
 
     path = get_path();
-    filepath = get_filepath(cmd[prev_pipe_idx + 1], path);
-    // printf("%s\n", filepath);
-
+    filepath = get_filepath(cmd[prev_pipe_idx + 1], path);	//free 불가
     exec_executable2(cmd, prev_pipe_idx, pipe_idx, filepath);
 }
 
@@ -329,8 +345,8 @@ void copy_environ(void)
 void test(void)
 {
     /* ;콜론으로 나눠진 것이 여기로 들어왔다고 가정하자! */
-    char *cmd[50] = {"ls", "-al", "|", "/bin/grep", "Sep", "|", "/usr/bin/wc", ">",
-            "hello1", ">", "hello2", /*"|", "echo", "hi", ">", "hello3",*/ NULL};
+    // char *cmd[50] = {"ls", "-al", "|", "/bin/grep", "Sep", "|", "/usr/bin/wc", ">",
+    //         "hello1", ">", "hello2", /*"|", "echo", "hi", ">", "hello3",*/ NULL};
 
     // char *cmd[50] = {"grep", "Sep", "<", "hello1", "|", "wc", "<", "hello1", NULL};
 
@@ -339,10 +355,10 @@ void test(void)
 
     // char *cmd[50] = {"grep", "Sep", "<", "hello1", "|", "wc", ">>", "hello1", ">>", "hello2", NULL};
 
-	// char *cmd[50] = {"/bin/ls", NULL};
-    
+	char *cmd[50] = {"ls", "-al", "|", "grep", "Sep", "hel", NULL};
+
 	int i;
-    int prev_pipe_idx;
+	int prev_pipe_idx;
 
 	prev_pipe_idx = 0;
 	i = 0;
@@ -358,7 +374,6 @@ void test(void)
 
 int main(int argc, char *argv[])
 {
-
     test();
     return 0;
 }
