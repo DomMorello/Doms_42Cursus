@@ -264,15 +264,125 @@ void handle_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx)
     exec_executable2(cmd, prev_pipe_idx, pipe_idx, filepath);
 }
 
+void exec_echo(char *cmd[], char *token, int prev_pipe_idx, int pipe_idx)
+{
+	printf("%s\n", token);
+}
+
+void exec_cd(char *cmd[], char *token, int prev_pipe_idx, int pipe_idx)
+{
+	int argc;
+	char **argv;
+	int i;
+
+	i = 0;
+    argv = NULL;
+    argc = get_argc(cmd, prev_pipe_idx, pipe_idx);
+    if (!(argv = (char **)malloc(sizeof(char *) * argc + 1)))
+        exit(-1);   //malloc 실패 아웃!
+    while (prev_pipe_idx < pipe_idx && !is_redirection(cmd[prev_pipe_idx]))
+        argv[i++] = cmd[prev_pipe_idx++];
+	argv[i] = NULL;
+}
+
+void exec_pwd(char *cmd[], char *token, int prev_pipe_idx, int pipe_idx)
+{
+	printf("%s\n", token);
+}
+
+void exec_export(char *cmd[], char *token, int prev_pipe_idx, int pipe_idx)
+{
+	printf("%s\n", token);
+}
+
+void exec_unset(char *cmd[], char *token, int prev_pipe_idx, int pipe_idx)
+{
+	printf("%s\n", token);
+}
+
+void exec_env(char *cmd[], char *token, int prev_pipe_idx, int pipe_idx)
+{
+	printf("%s\n", token);
+}
+
+void exec_exit(char *cmd[], char *token, int prev_pipe_idx, int pipe_idx)
+{
+	printf("%s\n", token);
+}
+
+void exec_built_in(char **cmd, char *token, int prev_pipe_idx, int pipe_idx, void (*route_built_in)(char **, char *, int, int))
+{
+	route_built_in(cmd, token, prev_pipe_idx, pipe_idx);
+}
+
+/*
+	어떻게 해야 중복된 함수를 만들지 않고 함수 포인터를 써서 잘 할 수 있을까? 
+*/
+// int handle_built_in(char *cmd[], int prev_pipe_idx, int pipe_idx)
+// {
+// 	if (!strcmp(cmd[prev_pipe_idx], ECHO))
+// 		exec_built_in(exec_echo);
+// 	if (!strcmp(cmd[prev_pipe_idx], CD))
+// 		exec_built_in(exec_cd);
+// 	if (!strcmp(cmd[prev_pipe_idx], PWD))
+// 		exec_built_in(exec_pwd);
+// 	if (!strcmp(cmd[prev_pipe_idx], EXPORT))
+// 		exec_built_in(exec_export);
+// 	if (!strcmp(cmd[prev_pipe_idx], UNSET))
+// 		exec_built_in(exec_unset);
+// 	if (!strcmp(cmd[prev_pipe_idx], ENV))
+// 		exec_built_in(exec_env);
+// 	if (!strcmp(cmd[prev_pipe_idx], EXIT))
+// 		exec_built_in(exec_exit);
+// }
+
+// int handle_built_in2(char *cmd[], int prev_pipe_idx, int pipe_idx)
+// {
+// 	if (!strcmp(cmd[prev_pipe_idx + 1], ECHO))
+// 		exec_built_in(exec_echo);
+// 	if (!strcmp(cmd[prev_pipe_idx + 1], CD))
+// 		exec_built_in(exec_cd);
+// 	if (!strcmp(cmd[prev_pipe_idx + 1], PWD))
+// 		exec_built_in(exec_pwd);
+// 	if (!strcmp(cmd[prev_pipe_idx + 1], EXPORT))
+// 		exec_built_in(exec_export);
+// 	if (!strcmp(cmd[prev_pipe_idx + 1], UNSET))
+// 		exec_built_in(exec_unset);
+// 	if (!strcmp(cmd[prev_pipe_idx + 1], ENV))
+// 		exec_built_in(exec_env);
+// 	if (!strcmp(cmd[prev_pipe_idx + 1], EXIT))
+// 		exec_built_in(exec_exit);
+// }
+
+int is_built_in(char *token)
+{
+	if (!strcmp(token, ECHO) || !strcmp(token, CD) ||
+		!strcmp(token, PWD) || !strcmp(token, EXPORT)
+		|| !strcmp(token, UNSET) || !strcmp(token, ENV)
+		|| !strcmp(token, EXIT))
+	  	return (TRUE);
+	return (FALSE);
+}
+
 void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
     int i;
 
     i = *prev_pipe_idx;
     if (i == 0)
-        handle_executable(cmd, i, pipe_idx); //함수 이름은 나중에 적절하게 바꾸자
+	{
+		if (is_built_in(cmd[i]))
+			handle_built_in(cmd, i, pipe_idx);
+		else
+        	handle_executable(cmd, i, pipe_idx);
+	}
     else
-        handle_executable2(cmd, i, pipe_idx);
+	{
+		if (is_built_in(cmd[i + 1]))
+			handle_built_in2(cmd, i, pipe_idx);
+		else
+    		handle_executable2(cmd, i, pipe_idx);
+	}
 }
 
 void exec_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
@@ -282,8 +392,8 @@ void exec_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 	pid = fork();
     if (pid == 0)
     {
-        set_pipe_child();
-        process_redirection(cmd, prev_pipe_idx, pipe_idx);
+        // set_pipe_child();
+        // process_redirection(cmd, prev_pipe_idx, pipe_idx);
         parse_cmd(cmd, prev_pipe_idx, pipe_idx);
         exit(1);
     }
@@ -294,7 +404,7 @@ void exec_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
     else
     {
         wait(NULL);
-        set_pipe_parent();
+        // set_pipe_parent();
     }
 }
 
@@ -302,8 +412,8 @@ void process_pipe(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
     if (!strcmp(cmd[pipe_idx], "|"))
     {
-        pipe(g_pipe_fd);
-        perror("pipe err");
+        // pipe(g_pipe_fd);
+        // perror("pipe err");
         exec_cmd(cmd, prev_pipe_idx, pipe_idx);
         *prev_pipe_idx = pipe_idx;
     }
@@ -316,7 +426,7 @@ void exec_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 	pid = fork();
 	if (pid == 0)
 	{
-		process_redirection(cmd, prev_pipe_idx, pipe_idx);
+		// process_redirection(cmd, prev_pipe_idx, pipe_idx);
 		parse_cmd(cmd, prev_pipe_idx, pipe_idx);
 	}
 	else
@@ -355,7 +465,8 @@ void test(void)
 
     // char *cmd[50] = {"grep", "Sep", "<", "hello1", "|", "wc", ">>", "hello1", ">>", "hello2", NULL};
 
-	char *cmd[50] = {"ls", "-al", "|", "grep", "Sep", "hel", NULL};
+	// char *cmd[50] = {"ls", "-al", "|", "grep", "Sep", "hel", NULL};
+	char *cmd[50] = {"cd", "libft", "|", "echo", "hi", NULL};
 
 	int i;
 	int prev_pipe_idx;

@@ -31,6 +31,14 @@
 # define PATH "PATH="
 # define HOME "HOME="
 
+# define ECHO "echo"
+# define CD "cd"
+# define PWD "pwd"
+# define EXPORT "export"
+# define UNSET "unset"
+# define ENV "env"
+# define EXIT "exit"
+
 int get_next_line(int fd, char **line);
 
 #endif
