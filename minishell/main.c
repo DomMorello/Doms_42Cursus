@@ -372,14 +372,14 @@ void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
     if (i == 0)
 	{
 		if (is_built_in(cmd[i]))
-			handle_built_in(cmd, i, pipe_idx);
+			;// handle_built_in(cmd, i, pipe_idx);
 		else
         	handle_executable(cmd, i, pipe_idx);
 	}
     else
 	{
 		if (is_built_in(cmd[i + 1]))
-			handle_built_in2(cmd, i, pipe_idx);
+			;// handle_built_in2(cmd, i, pipe_idx);
 		else
     		handle_executable2(cmd, i, pipe_idx);
 	}
@@ -392,8 +392,8 @@ void exec_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 	pid = fork();
     if (pid == 0)
     {
-        // set_pipe_child();
-        // process_redirection(cmd, prev_pipe_idx, pipe_idx);
+        set_pipe_child();
+        process_redirection(cmd, prev_pipe_idx, pipe_idx);
         parse_cmd(cmd, prev_pipe_idx, pipe_idx);
         exit(1);
     }
@@ -404,7 +404,7 @@ void exec_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
     else
     {
         wait(NULL);
-        // set_pipe_parent();
+        set_pipe_parent();
     }
 }
 
@@ -412,8 +412,8 @@ void process_pipe(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
     if (!strcmp(cmd[pipe_idx], "|"))
     {
-        // pipe(g_pipe_fd);
-        // perror("pipe err");
+        pipe(g_pipe_fd);
+        perror("pipe err");
         exec_cmd(cmd, prev_pipe_idx, pipe_idx);
         *prev_pipe_idx = pipe_idx;
     }
@@ -426,7 +426,7 @@ void exec_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 	pid = fork();
 	if (pid == 0)
 	{
-		// process_redirection(cmd, prev_pipe_idx, pipe_idx);
+		process_redirection(cmd, prev_pipe_idx, pipe_idx);
 		parse_cmd(cmd, prev_pipe_idx, pipe_idx);
 	}
 	else
@@ -452,7 +452,7 @@ void copy_environ(void)
 	}
 }
 
-void test(void)
+void test(char **cmd)
 {
     /* ;콜론으로 나눠진 것이 여기로 들어왔다고 가정하자! */
     // char *cmd[50] = {"ls", "-al", "|", "/bin/grep", "Sep", "|", "/usr/bin/wc", ">",
@@ -465,15 +465,15 @@ void test(void)
 
     // char *cmd[50] = {"grep", "Sep", "<", "hello1", "|", "wc", ">>", "hello1", ">>", "hello2", NULL};
 
-	// char *cmd[50] = {"ls", "-al", "|", "grep", "Sep", "hel", NULL};
-	char *cmd[50] = {"cd", "libft", "|", "echo", "hi", NULL};
+	// char *cmd[50] = {"ls", "-al", "|", "grep", "Sep", NULL};
+	// char *cmd[50] = {"cd", "libft", "|", "echo", "hi", NULL};
 
 	int i;
 	int prev_pipe_idx;
 
 	prev_pipe_idx = 0;
 	i = 0;
-	copy_environ();
+	copy_environ();	//어차피 전역변수라 다른 곳에 있어도 무관할 듯
 	while (cmd[i])
 	{
 		process_pipe(cmd, &prev_pipe_idx, i);
@@ -485,6 +485,19 @@ void test(void)
 
 int main(int argc, char *argv[])
 {
-    test();
+	while (1)
+	{
+		char buf[100] = {0, };
+		scanf("%s", buf);
+		char **cmd = ft_split(buf, ' ');
+
+		/*
+			왜 내 생각대로 되지 않을까
+			왜 hello world 하면 둘 다 에러처리를 할까
+			왜 ls -al하면 -al이라는 명령어가 없다고 할까
+			뭐가 문제일까 
+		*/
+    	test(cmd);
+	}
     return 0;
 }

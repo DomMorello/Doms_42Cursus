@@ -80,7 +80,28 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 int	main(int argc, char *argv[])
 {
 	// test();
-	
+	char buf[100] = {0, };
+
+	while (1)
+	{
+		scanf("%s", buf);
+		char **cmd = ft_split(buf, ' ');
+		pid_t pid = fork();
+		if (pid == 0)
+		{
+			int i = 0;
+
+			while (cmd[i])
+				printf("%s\n", cmd[i++]);
+			exit(1);
+		}
+		else
+		{
+			wait(NULL);
+		}
+	}
+
+
     //  // execve 이용한 bin 실행파일 구현
 	//  char	**new_argv;
 	//  char	*command;
