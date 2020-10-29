@@ -5,6 +5,8 @@ t_list *g_env_list;
 t_list g_env_head;
 
 int g_pipe_fd[2];
+int g_stdin;
+int g_stdout;
 int g_red_out_fd;
 int g_red_in_fd;
 
@@ -480,6 +482,8 @@ void test(char **cmd)
 		if (!cmd[i])
 			exec_last_cmd(cmd, &prev_pipe_idx, i);
 	}
+	dup2(g_stdin, 0);
+	dup2(g_stdout, 1);
 }
 
 int main(int argc, char *argv[])
@@ -488,7 +492,8 @@ int main(int argc, char *argv[])
 	char *line;
 
 	copy_environ();	//이건 테스트코드가 아니다.
-	
+	g_stdin = dup(0);
+	g_stdout = dup(1);
 	while (1)
 	{
 		char **cmd;

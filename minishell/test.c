@@ -80,8 +80,30 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 int	main(int argc, char *argv[])
 {
 	// test();
-	
-	
+	int fd[2];
+	int stdout = dup(1);
+	int stdin = dup(0);
+
+	printf("start!\n");
+	pipe(fd);
+	pid_t pid = fork();
+	if (pid == 0)
+	{
+		close(fd[0]);
+		dup2(fd[1], 1);
+		close(fd[1]);
+		execlp("ls", "ls", "-al", NULL);
+	}
+	else
+	{
+		wait(NULL);
+		close(fd[1]);
+		dup2(fd[0], 0);
+		close(fd[0]);
+
+	}
+	dup2(stdout, 1);
+	dup2(stdin, 0);
     //  // execve 이용한 bin 실행파일 구현
 	//  char	**new_argv;
 	//  char	*command;
