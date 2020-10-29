@@ -312,11 +312,6 @@ void exec_exit(char *cmd[], char *token, int prev_pipe_idx, int pipe_idx)
 	printf("%s\n", token);
 }
 
-void exec_built_in(char **cmd, char *token, int prev_pipe_idx, int pipe_idx, void (*route_built_in)(char **, char *, int, int))
-{
-	route_built_in(cmd, token, prev_pipe_idx, pipe_idx);
-}
-
 /*
 	어떻게 해야 중복된 함수를 만들지 않고 함수 포인터를 써서 잘 할 수 있을까? 
 */
