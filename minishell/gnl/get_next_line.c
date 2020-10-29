@@ -3,34 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 15:34:00 by donglee           #+#    #+#             */
-/*   Updated: 2020/04/09 20:38:29 by donglee          ###   ########.fr       */
+/*   Updated: 2020/10/29 18:01:27 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
-{
-	size_t src_len;
-	size_t i;
+// size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+// {
+// 	size_t src_len;
+// 	size_t i;
 
-	src_len = 0;
-	i = 0;
-	while (src[src_len])
-		src_len++;
-	if (dstsize == 0)
-		return (src_len);
-	while (src[i] && i < dstsize - 1)
-	{
-		dst[i] = src[i];
-		i++;
-	}
-	dst[i] = 0;
-	return (src_len);
-}
+// 	src_len = 0;
+// 	i = 0;
+// 	while (src[src_len])
+// 		src_len++;
+// 	if (dstsize == 0)
+// 		return (src_len);
+// 	while (src[i] && i < dstsize - 1)
+// 	{
+// 		dst[i] = src[i];
+// 		i++;
+// 	}
+// 	dst[i] = 0;
+// 	return (src_len);
+// }
 
 /*
 ** joins the BUFFER_SIZE stirng(buf) and string save(accumulated string)

@@ -470,10 +470,9 @@ void test(char **cmd)
 
 	int i;
 	int prev_pipe_idx;
-
+	
 	prev_pipe_idx = 0;
 	i = 0;
-	copy_environ();	//어차피 전역변수라 다른 곳에 있어도 무관할 듯
 	while (cmd[i])
 	{
 		process_pipe(cmd, &prev_pipe_idx, i);
@@ -485,19 +484,25 @@ void test(char **cmd)
 
 int main(int argc, char *argv[])
 {
+	int ret = 0;
+	char *line;
+
+	copy_environ();	//이건 테스트코드가 아니다.
+	
 	while (1)
 	{
-		char buf[100] = {0, };
-		scanf("%s", buf);
-		char **cmd = ft_split(buf, ' ');
-
-		/*
-			왜 내 생각대로 되지 않을까
-			왜 hello world 하면 둘 다 에러처리를 할까
-			왜 ls -al하면 -al이라는 명령어가 없다고 할까
-			뭐가 문제일까 
-		*/
+		char **cmd;
+		if ((ret = get_next_line(0, &line)) < 0)
+		{
+			printf("gnl error\n");
+			free(line);
+			exit(0);
+		}
+		cmd = ft_split(line, ' ');
     	test(cmd);
+		free(line);
+		free_2d_char(cmd);
 	}
+
     return 0;
 }
