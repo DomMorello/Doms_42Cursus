@@ -80,7 +80,7 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 int	main(int argc, char *argv[])
 {
 	// test();
-	
+
 	int red_in;
 	int red_out;
 
@@ -88,32 +88,35 @@ int	main(int argc, char *argv[])
 	int stdout;
 
 	stdin = dup(0);
+	perror("set up dup");
 	stdout = dup(1);
-	red_out = open("./hello1", O_CREAT | O_RDWR);
-	perror("red out 1");
-	dup2(red_out, 1);
-	perror("dup2");
-	close(red_out);
-
-	printf("what the hell!\n");
-
-	dup2(stdin, 0);
-	perror("dup2");
-	dup2(stdout, 1);
-	perror("dup2");
+	perror("set up dup");
 
 	red_out = open("./hello1", O_CREAT | O_RDWR);
-	perror("red out 1");
+	perror("red out open 1");
 	dup2(red_out, 1);
-	perror("dup2");
+	perror("red out dup2");
 	close(red_out);
 
-	printf("hello\n");
+	ft_putstr_fd("what the hell\n", 1);
 
 	dup2(stdin, 0);
-	perror("dup2");
+	perror("take back dup2");
 	dup2(stdout, 1);
-	perror("dup2");
+	perror("take back dup2");
+
+	red_out = open("./hello1", O_CREAT | O_RDWR);
+	perror("red out open 1");
+	dup2(red_out, 1);
+	perror("red out dup2");
+	close(red_out);
+
+	ft_putstr_fd("heloo!\n", 1);
+
+	dup2(stdin, 0);
+	perror("take back dup2");
+	dup2(stdout, 1);
+	perror("take back dup2");
 
     //  // execve 이용한 bin 실행파일 구현
 	//  char	**new_argv;

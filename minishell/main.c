@@ -12,29 +12,35 @@ int g_red_in_fd;
 
 void set_red_out(char *title)
 {
-	g_red_out_fd = open(title, O_CREAT | O_RDWR);
-    perror("red out open");
-	dup2(g_red_out_fd, 1);
-	perror("dup2");
-	close(g_red_out_fd);
+	if ((g_red_out_fd = open(title, O_CREAT | O_RDWR)) != ERROR)
+	{
+		perror("red out open");
+		dup2(g_red_out_fd, 1);
+		perror("dup2");
+		close(g_red_out_fd);
+	}
 }
 
 void set_red_in(char *title)
 {
-	g_red_in_fd = open(title, O_CREAT | O_RDWR);
-    perror("red in open");
-	dup2(g_red_in_fd, 0);
-	perror("dup2");
-	close(g_red_in_fd);
+	if ((g_red_in_fd = open(title, O_CREAT | O_RDWR)) != ERROR)
+	{
+		perror("red in open");
+		dup2(g_red_in_fd, 0);
+		perror("dup2");
+		close(g_red_in_fd);
+	}
 }
 
 void set_red_double_out(char *title)
 {
-    g_red_out_fd = open(title, O_CREAT | O_RDWR | O_APPEND);
-    perror("double open");
-    dup2(g_red_out_fd, 1);
-	perror("dup2");
-    close(g_red_out_fd);
+    if ((g_red_out_fd = open(title, O_CREAT | O_RDWR | O_APPEND)) != ERROR)
+	{
+		perror("double open");
+		dup2(g_red_out_fd, 1);
+		perror("dup2");
+		close(g_red_out_fd);
+	}
 }
 
 void set_pipe_child()
@@ -472,7 +478,12 @@ void test(char **cmd)
 
 	int i;
 	int prev_pipe_idx;
-	
+
+	g_stdin = dup(0);
+	perror("setup std dup");
+	g_stdout = dup(1);
+	perror("setup std dup");
+
 	prev_pipe_idx = 0;
 	i = 0;
 	while (cmd[i])
@@ -483,7 +494,9 @@ void test(char **cmd)
 			exec_last_cmd(cmd, &prev_pipe_idx, i);
 	}
 	dup2(g_stdin, 0);
+	perror("take back dup2");
 	dup2(g_stdout, 1);
+	perror("take back dup2");
 }
 
 int main(int argc, char *argv[])
@@ -492,8 +505,6 @@ int main(int argc, char *argv[])
 	char *line;
 
 	copy_environ();	//이건 테스트코드가 아니다.
-	g_stdin = dup(0);
-	g_stdout = dup(1);
 	while (1)
 	{
 		char **cmd;
