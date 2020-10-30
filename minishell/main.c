@@ -15,6 +15,7 @@ void set_red_out(char *title)
 	g_red_out_fd = open(title, O_CREAT | O_RDWR);
     perror("red out open");
 	dup2(g_red_out_fd, 1);
+	perror("dup2");
 	close(g_red_out_fd);
 }
 
@@ -23,6 +24,7 @@ void set_red_in(char *title)
 	g_red_in_fd = open(title, O_CREAT | O_RDWR);
     perror("red in open");
 	dup2(g_red_in_fd, 0);
+	perror("dup2");
 	close(g_red_in_fd);
 }
 
@@ -31,6 +33,7 @@ void set_red_double_out(char *title)
     g_red_out_fd = open(title, O_CREAT | O_RDWR | O_APPEND);
     perror("double open");
     dup2(g_red_out_fd, 1);
+	perror("dup2");
     close(g_red_out_fd);
 }
 
@@ -38,6 +41,7 @@ void set_pipe_child()
 {
 	close(g_pipe_fd[0]);
 	dup2(g_pipe_fd[1], 1);
+	perror("pipe dup2");
 	close(g_pipe_fd[1]);
 }
 
@@ -45,6 +49,7 @@ void set_pipe_parent()
 {
 	close(g_pipe_fd[1]);
 	dup2(g_pipe_fd[0], 0);
+	perror("pipe dup2");
 	close(g_pipe_fd[0]);
 }
 

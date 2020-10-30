@@ -80,30 +80,41 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 int	main(int argc, char *argv[])
 {
 	// test();
-	int fd[2];
-	int stdout = dup(1);
-	int stdin = dup(0);
+	
+	int red_in;
+	int red_out;
 
-	printf("start!\n");
-	pipe(fd);
-	pid_t pid = fork();
-	if (pid == 0)
-	{
-		close(fd[0]);
-		dup2(fd[1], 1);
-		close(fd[1]);
-		execlp("ls", "ls", "-al", NULL);
-	}
-	else
-	{
-		wait(NULL);
-		close(fd[1]);
-		dup2(fd[0], 0);
-		close(fd[0]);
+	int stdin;
+	int stdout;
 
-	}
-	dup2(stdout, 1);
+	stdin = dup(0);
+	stdout = dup(1);
+	red_out = open("./hello1", O_CREAT | O_RDWR);
+	perror("red out 1");
+	dup2(red_out, 1);
+	perror("dup2");
+	close(red_out);
+
+	printf("what the hell!\n");
+
 	dup2(stdin, 0);
+	perror("dup2");
+	dup2(stdout, 1);
+	perror("dup2");
+
+	red_out = open("./hello1", O_CREAT | O_RDWR);
+	perror("red out 1");
+	dup2(red_out, 1);
+	perror("dup2");
+	close(red_out);
+
+	printf("hello\n");
+
+	dup2(stdin, 0);
+	perror("dup2");
+	dup2(stdout, 1);
+	perror("dup2");
+
     //  // execve 이용한 bin 실행파일 구현
 	//  char	**new_argv;
 	//  char	*command;
