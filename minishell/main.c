@@ -12,7 +12,7 @@ int g_red_in_fd;
 
 void set_red_out(char *title)
 {
-	if ((g_red_out_fd = open(title, O_CREAT | O_RDWR)) != ERROR)
+	if ((g_red_out_fd = open(title, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR)) != ERROR)
 	{
 		perror("red out open");
 		dup2(g_red_out_fd, 1);
@@ -23,7 +23,7 @@ void set_red_out(char *title)
 
 void set_red_in(char *title)
 {
-	if ((g_red_in_fd = open(title, O_CREAT | O_RDWR)) != ERROR)
+	if ((g_red_in_fd = open(title, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR)) != ERROR)
 	{
 		perror("red in open");
 		dup2(g_red_in_fd, 0);

@@ -92,7 +92,7 @@ int	main(int argc, char *argv[])
 	stdout = dup(1);
 	perror("set up dup");
 
-	red_out = open("./hello1", O_CREAT | O_RDWR);
+	red_out = open("./hello1", O_CREAT | O_RDWR | O_APPEND, S_IRUSR | S_IWUSR);
 	perror("red out open 1");
 	dup2(red_out, 1);
 	perror("red out dup2");
@@ -105,7 +105,7 @@ int	main(int argc, char *argv[])
 	dup2(stdout, 1);
 	perror("take back dup2");
 
-	red_out = open("./hello1", O_CREAT | O_RDWR);
+	red_out = open("./hello1", O_CREAT | O_RDWR | O_APPEND, S_IRUSR | S_IWUSR);
 	perror("red out open 1");
 	dup2(red_out, 1);
 	perror("red out dup2");
