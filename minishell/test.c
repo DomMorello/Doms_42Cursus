@@ -81,43 +81,6 @@ int	main(int argc, char *argv[])
 {
 	// test();
 
-	int red_in;
-	int red_out;
-
-	int stdin;
-	int stdout;
-
-	stdin = dup(0);
-	perror("set up dup");
-	stdout = dup(1);
-	perror("set up dup");
-
-	red_out = open("./hello1", O_CREAT | O_RDWR | O_APPEND, S_IRUSR | S_IWUSR);
-	perror("red out open 1");
-	dup2(red_out, 1);
-	perror("red out dup2");
-	close(red_out);
-
-	ft_putstr_fd("what the hell\n", 1);
-
-	dup2(stdin, 0);
-	perror("take back dup2");
-	dup2(stdout, 1);
-	perror("take back dup2");
-
-	red_out = open("./hello1", O_CREAT | O_RDWR | O_APPEND, S_IRUSR | S_IWUSR);
-	perror("red out open 1");
-	dup2(red_out, 1);
-	perror("red out dup2");
-	close(red_out);
-
-	ft_putstr_fd("heloo!\n", 1);
-
-	dup2(stdin, 0);
-	perror("take back dup2");
-	dup2(stdout, 1);
-	perror("take back dup2");
-
     //  // execve 이용한 bin 실행파일 구현
 	//  char	**new_argv;
 	//  char	*command;
