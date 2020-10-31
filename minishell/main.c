@@ -122,7 +122,7 @@ void exec_executable(char *cmd[], int prev_pipe_idx, int pipe_idx, char *filepat
 			ft_putstr_fd("mongshell: ", STDERR);
 			ft_putstr_fd(cmd[token], STDERR);
 			ft_putstr_fd(": command not found\n", STDERR);	
-			exit(-1);
+			exit(-1);	//종료상태 구현해야 함.
 		}
 		else
 		{
@@ -366,7 +366,7 @@ void exec_exit(char *cmd[], char *token, int prev_pipe_idx, int pipe_idx)
 
 int is_built_in(char *token)
 {
-	if (!strcmp(token, ECHO) || !strcmp(token, CD) ||
+	if (/*!strcmp(token, ECHO) ||*/ !strcmp(token, CD) ||
 		!strcmp(token, PWD) || !strcmp(token, EXPORT)
 		|| !strcmp(token, UNSET) || !strcmp(token, ENV)
 		|| !strcmp(token, EXIT))
@@ -473,7 +473,8 @@ void test(char **cmd)
     // char *cmd[50] = {"ls", "-al", "|", "grep", "Sep", ">>", "hello1", "|",
     //                 "echo", "hi", ">>", "hello1", NULL};
 
-    // char *cmd[50] = {"grep", "Sep", "<", "hello1", "|", "wc", ">>", "hello1", ">>", "hello2", NULL};
+    // char *cmd[50] = {"grep", "Sep", "<", "hello1", "|", "wc", ">>",
+					// "hello1", ">>", "hello2", NULL};
 
 	// char *cmd[50] = {"ls", "-al", "|", "grep", "Sep", NULL};
 	// char *cmd[50] = {"cd", "libft", "|", "echo", "hi", NULL};

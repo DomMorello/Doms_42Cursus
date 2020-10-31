@@ -80,20 +80,7 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 int	main(int argc, char *argv[])
 {
 	// test();
-	int stdin;
-	int stdout;
-
-	stdin = dup(0);
-	perror("setup std dup");
-	stdout = dup(1);
-	perror("setup std dup");
-
 	
-
-	dup2(stdin, 0);
-	perror("take back dup2");
-	dup2(stdout, 1);
-	perror("take back dup2");
     //  // execve 이용한 bin 실행파일 구현
 	//  char	**new_argv;
 	//  char	*command;
