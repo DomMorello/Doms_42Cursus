@@ -157,12 +157,14 @@ void exec_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx, char *filepa
 		{
 			ft_putstr_fd(cmd[token], STDERR);
 			ft_putstr_fd(": command not found\n", STDERR);	
+			exit(-1);
 		}
 		else
 		{
 			ft_putstr_fd(cmd[token], STDERR);
 			ft_putstr_fd(": ", STDERR);
 			strerror(errno);
+			exit(-1);
 		}
 	}
 }
