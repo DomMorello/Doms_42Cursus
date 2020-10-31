@@ -34,7 +34,7 @@ void set_red_in(char *title)
 
 void set_red_double_out(char *title)
 {
-    if ((g_red_out_fd = open(title, O_CREAT | O_RDWR | O_APPEND)) != ERROR)
+    if ((g_red_out_fd = open(title, O_CREAT | O_RDWR | O_APPEND, S_IRUSR | S_IWUSR)) != ERROR)
 	{
 		perror("double open");
 		dup2(g_red_out_fd, 1);
@@ -122,6 +122,7 @@ void exec_executable(char *cmd[], int prev_pipe_idx, int pipe_idx, char *filepat
 			ft_putstr_fd("mongshell: ", STDERR);
 			ft_putstr_fd(cmd[token], STDERR);
 			ft_putstr_fd(": command not found\n", STDERR);	
+			exit(-1);
 		}
 		else
 		{
@@ -129,6 +130,7 @@ void exec_executable(char *cmd[], int prev_pipe_idx, int pipe_idx, char *filepat
 			ft_putstr_fd(cmd[token], STDERR);
 			ft_putstr_fd(": ", STDERR);
 			strerror(errno);
+			exit(-1);
 		}
 	}
 }
