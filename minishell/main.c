@@ -286,6 +286,15 @@ void exec_echo(char *cmd[], char *token, int prev_pipe_idx, int pipe_idx)
 	printf("%s\n", token);
 }
 
+/*
+	파이프 뒤에 cd 작동 x
+	cd gnl | echo hi  -> echo hi만 작동함
+	cd gnl > hello1 -> 현재 디렉토리에 hello1 내용없이 생기고 gnl로 이동
+	cd gnl > hello1 | cd hi -> 현재 디렉토리에 hi디렉토리가 없기 때문에
+								디렉토리 없다는 에러 뜨고 cd gnl도 안 됨.
+	unset dong | cd gnl -> unset도 안 되고 cd도 안 됨
+	cd fdas asfd 1개 이상 들어오면 too many arguments 에러
+*/
 void exec_cd(char *cmd[], char *token, int prev_pipe_idx, int pipe_idx)
 {
 	int argc;
