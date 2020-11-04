@@ -484,6 +484,10 @@ void test(char **cmd)
 	int i;
 	int prev_pipe_idx;
 
+	/*
+		pipe, redirection관련 fd 들을 여기서 지역변수로 해도 될 것 같다.
+	*/
+
 	g_stdin = dup(0);
 	perror("setup std dup");
 	g_stdout = dup(1);
@@ -509,7 +513,7 @@ int main(int argc, char *argv[])
 	int ret = 0;
 	char *line;
 
-	copy_environ();	//이건 테스트코드가 아니다.
+	copy_environ();
 	while (1)
 	{
 		char **cmd;
