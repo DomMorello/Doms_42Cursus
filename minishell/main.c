@@ -295,6 +295,7 @@ void exec_echo(char *cmd[], char *token, int prev_pipe_idx, int pipe_idx)
 	unset dong | cd gnl -> unset도 안 되고 cd도 안 됨
 	cd fdas asfd 1개 이상 들어오면 too many arguments 에러
 */
+
 void exec_cd(char *cmd[], char *token, int prev_pipe_idx, int pipe_idx)
 {
 	int argc;
