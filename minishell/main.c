@@ -281,9 +281,9 @@ void handle_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx)
     exec_executable2(cmd, prev_pipe_idx, pipe_idx, filepath);
 }
 
-void exec_echo(char *cmd[], char *token, int prev_pipe_idx, int pipe_idx)
+void exec_echo(char *cmd[], int prev_pipe_idx, int pipe_idx)
 {
-	printf("%s\n", token);
+	printf("echo!!\n");
 }
 
 /*
@@ -294,9 +294,41 @@ void exec_echo(char *cmd[], char *token, int prev_pipe_idx, int pipe_idx)
 								디렉토리 없다는 에러 뜨고 cd gnl도 안 됨.
 	unset dong | cd gnl -> unset도 안 되고 cd도 안 됨
 	cd fdas asfd 1개 이상 들어오면 too many arguments 에러
+	디렉토리 없다는 에러메세지 다 알려준다. 
+	파이프로 이으면 처음꺼는 마지막에 알려준다(맨 처음에 cd가 나올 경우만)
 */
 
-void exec_cd(char *cmd[], char *token, int prev_pipe_idx, int pipe_idx)
+void exec_cd(char *cmd[], int prev_pipe_idx, int pipe_idx)
+{
+	printf("cd!!\n");
+}
+
+void exec_pwd(char *cmd[], int prev_pipe_idx, int pipe_idx)
+{
+	printf("pwd!!\n");
+}
+
+void exec_export(char *cmd[], int prev_pipe_idx, int pipe_idx)
+{
+	printf("export!!\n");
+}
+
+void exec_unset(char *cmd[], int prev_pipe_idx, int pipe_idx)
+{
+	printf("unset!!\n");
+}
+
+void exec_env(char *cmd[], int prev_pipe_idx, int pipe_idx)
+{
+	printf("env!!\n");
+}
+
+void exec_exit(char *cmd[], int prev_pipe_idx, int pipe_idx)
+{
+	printf("exit!!\n");
+}
+
+void exec_built_in(void (*exec_func)(char **, int, int), char **cmd, int prev_pipe_idx, int pipe_idx)
 {
 	int argc;
 	char **argv;
@@ -308,76 +340,50 @@ void exec_cd(char *cmd[], char *token, int prev_pipe_idx, int pipe_idx)
     if (!(argv = (char **)malloc(sizeof(char *) * argc + 1)))
         exit(-1);   //malloc 실패 아웃!
     while (prev_pipe_idx < pipe_idx && !is_redirection(cmd[prev_pipe_idx]))
-        argv[i++] = cmd[prev_pipe_idx++];
+        argv[i++] = cmd[prev_pipe_idx++]; 
 	argv[i] = NULL;
+	
 }
 
-void exec_pwd(char *cmd[], char *token, int prev_pipe_idx, int pipe_idx)
+void handle_built_in(char *cmd[], int prev_pipe_idx, int pipe_idx)
 {
-	printf("%s\n", token);
+	if (!strcmp(cmd[prev_pipe_idx], ECHO))
+		exec_built_in(exec_echo, cmd, prev_pipe_idx, pipe_idx);
+	if (!strcmp(cmd[prev_pipe_idx], CD))
+		exec_built_in(exec_cd, cmd, prev_pipe_idx, pipe_idx);
+	if (!strcmp(cmd[prev_pipe_idx], PWD))
+		exec_built_in(exec_pwd, cmd, prev_pipe_idx, pipe_idx);
+	if (!strcmp(cmd[prev_pipe_idx], EXPORT))
+		exec_built_in(exec_export, cmd, prev_pipe_idx, pipe_idx);
+	if (!strcmp(cmd[prev_pipe_idx], UNSET))
+		exec_built_in(exec_unset, cmd, prev_pipe_idx, pipe_idx);
+	if (!strcmp(cmd[prev_pipe_idx], ENV))
+		exec_built_in(exec_env, cmd, prev_pipe_idx, pipe_idx);
+	if (!strcmp(cmd[prev_pipe_idx], EXIT))
+		exec_built_in(exec_exit, cmd, prev_pipe_idx, pipe_idx);
 }
 
-void exec_export(char *cmd[], char *token, int prev_pipe_idx, int pipe_idx)
+void handle_built_in2(char *cmd[], int prev_pipe_idx, int pipe_idx)
 {
-	printf("%s\n", token);
+	if (!strcmp(cmd[prev_pipe_idx + 1], ECHO))
+		exec_built_in(exec_echo, cmd, prev_pipe_idx, pipe_idx);
+	if (!strcmp(cmd[prev_pipe_idx + 1], CD))
+		exec_built_in(exec_cd, cmd, prev_pipe_idx, pipe_idx);
+	if (!strcmp(cmd[prev_pipe_idx + 1], PWD))
+		exec_built_in(exec_pwd, cmd, prev_pipe_idx, pipe_idx);
+	if (!strcmp(cmd[prev_pipe_idx + 1], EXPORT))
+		exec_built_in(exec_export, cmd, prev_pipe_idx, pipe_idx);
+	if (!strcmp(cmd[prev_pipe_idx + 1], UNSET))
+		exec_built_in(exec_unset, cmd, prev_pipe_idx, pipe_idx);
+	if (!strcmp(cmd[prev_pipe_idx + 1], ENV))
+		exec_built_in(exec_env, cmd, prev_pipe_idx, pipe_idx);
+	if (!strcmp(cmd[prev_pipe_idx + 1], EXIT))
+		exec_built_in(exec_exit, cmd, prev_pipe_idx, pipe_idx);
 }
-
-void exec_unset(char *cmd[], char *token, int prev_pipe_idx, int pipe_idx)
-{
-	printf("%s\n", token);
-}
-
-void exec_env(char *cmd[], char *token, int prev_pipe_idx, int pipe_idx)
-{
-	printf("%s\n", token);
-}
-
-void exec_exit(char *cmd[], char *token, int prev_pipe_idx, int pipe_idx)
-{
-	printf("%s\n", token);
-}
-
-/*
-	어떻게 해야 중복된 함수를 만들지 않고 함수 포인터를 써서 잘 할 수 있을까? 
-*/
-// int handle_built_in(char *cmd[], int prev_pipe_idx, int pipe_idx)
-// {
-// 	if (!strcmp(cmd[prev_pipe_idx], ECHO))
-// 		exec_built_in(exec_echo);
-// 	if (!strcmp(cmd[prev_pipe_idx], CD))
-// 		exec_built_in(exec_cd);
-// 	if (!strcmp(cmd[prev_pipe_idx], PWD))
-// 		exec_built_in(exec_pwd);
-// 	if (!strcmp(cmd[prev_pipe_idx], EXPORT))
-// 		exec_built_in(exec_export);
-// 	if (!strcmp(cmd[prev_pipe_idx], UNSET))
-// 		exec_built_in(exec_unset);
-// 	if (!strcmp(cmd[prev_pipe_idx], ENV))
-// 		exec_built_in(exec_env);
-// 	if (!strcmp(cmd[prev_pipe_idx], EXIT))
-// 		exec_built_in(exec_exit);
-// }
-
-// int handle_built_in2(char *cmd[], int prev_pipe_idx, int pipe_idx)
-// {
-// 	if (!strcmp(cmd[prev_pipe_idx + 1], ECHO))
-// 		exec_built_in(exec_echo);
-// 	if (!strcmp(cmd[prev_pipe_idx + 1], CD))
-// 		exec_built_in(exec_cd);
-// 	if (!strcmp(cmd[prev_pipe_idx + 1], PWD))
-// 		exec_built_in(exec_pwd);
-// 	if (!strcmp(cmd[prev_pipe_idx + 1], EXPORT))
-// 		exec_built_in(exec_export);
-// 	if (!strcmp(cmd[prev_pipe_idx + 1], UNSET))
-// 		exec_built_in(exec_unset);
-// 	if (!strcmp(cmd[prev_pipe_idx + 1], ENV))
-// 		exec_built_in(exec_env);
-// 	if (!strcmp(cmd[prev_pipe_idx + 1], EXIT))
-// 		exec_built_in(exec_exit);
-// }
 
 int is_built_in(char *token)
 {
+	// echo는 일단 테스트를 위해서 execve로 살려두자.
 	if (/*!strcmp(token, ECHO) ||*/ !strcmp(token, CD) ||
 		!strcmp(token, PWD) || !strcmp(token, EXPORT)
 		|| !strcmp(token, UNSET) || !strcmp(token, ENV)
@@ -394,14 +400,14 @@ void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
     if (i == 0)
 	{
 		if (is_built_in(cmd[i]))
-			;// handle_built_in(cmd, i, pipe_idx);
+			handle_built_in(cmd, i, pipe_idx);
 		else
         	handle_executable(cmd, i, pipe_idx);
 	}
     else
 	{
 		if (is_built_in(cmd[i + 1]))
-			;// handle_built_in2(cmd, i, pipe_idx);
+			handle_built_in2(cmd, i, pipe_idx);
 		else
     		handle_executable2(cmd, i, pipe_idx);
 	}
