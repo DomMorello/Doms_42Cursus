@@ -281,7 +281,7 @@ void handle_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx)
     exec_executable2(cmd, prev_pipe_idx, pipe_idx, filepath);
 }
 
-void exec_echo(char *cmd[], int prev_pipe_idx, int pipe_idx)
+void exec_echo(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 {
 	printf("echo!!\n");
 }
@@ -298,51 +298,61 @@ void exec_echo(char *cmd[], int prev_pipe_idx, int pipe_idx)
 	파이프로 이으면 처음꺼는 마지막에 알려준다(맨 처음에 cd가 나올 경우만)
 */
 
-void exec_cd(char *cmd[], int prev_pipe_idx, int pipe_idx)
+void exec_cd(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 {
-	printf("cd!!\n");
+	struct stat file;
+	char buf[100];
+	char *cwd;
+
+	if (argc > 2)
+	{
+		if (prev_pipe_idx == 0)
+		{
+			ft_putstr_fd("mongshell: ", 2);
+			ft_putstr_fd(cmd[prev_pipe_idx], 2);
+			ft_putstr_fd(": too many arguments\n", 2);
+		}
+		else
+		{
+			ft_putstr_fd("mongshell: ", 2);
+			ft_putstr_fd(cmd[prev_pipe_idx + 1], 2);
+			ft_putstr_fd(": too many arguments\n", 2);
+		}
+	}
+	cwd = getcwd(buf, sizeof(buf));
 }
 
-void exec_pwd(char *cmd[], int prev_pipe_idx, int pipe_idx)
+void exec_pwd(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 {
 	printf("pwd!!\n");
 }
 
-void exec_export(char *cmd[], int prev_pipe_idx, int pipe_idx)
+void exec_export(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 {
 	printf("export!!\n");
 }
 
-void exec_unset(char *cmd[], int prev_pipe_idx, int pipe_idx)
+void exec_unset(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 {
 	printf("unset!!\n");
 }
 
-void exec_env(char *cmd[], int prev_pipe_idx, int pipe_idx)
+void exec_env(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 {
 	printf("env!!\n");
 }
 
-void exec_exit(char *cmd[], int prev_pipe_idx, int pipe_idx)
+void exec_exit(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 {
 	printf("exit!!\n");
 }
 
-void exec_built_in(void (*exec_func)(char **, int, int), char **cmd, int prev_pipe_idx, int pipe_idx)
+void exec_built_in(void (*exec_func)(char **, int, int, int), char **cmd, int prev_pipe_idx, int pipe_idx)
 {
 	int argc;
-	char **argv;
-	int i;
 
-	i = 0;
-    argv = NULL;
     argc = get_argc(cmd, prev_pipe_idx, pipe_idx);
-    if (!(argv = (char **)malloc(sizeof(char *) * argc + 1)))
-        exit(-1);   //malloc 실패 아웃!
-    while (prev_pipe_idx < pipe_idx && !is_redirection(cmd[prev_pipe_idx]))
-        argv[i++] = cmd[prev_pipe_idx++]; 
-	argv[i] = NULL;
-	
+	exec_func(cmd, prev_pipe_idx, pipe_idx, argc);
 }
 
 void handle_built_in(char *cmd[], int prev_pipe_idx, int pipe_idx)
