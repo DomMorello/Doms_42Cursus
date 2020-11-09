@@ -286,6 +286,20 @@ void exec_echo(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 	printf("echo!!\n");
 }
 
+int find_pipe(char *cmd[])
+{
+	int i;
+
+	i = 0;
+	while (cmd[i])
+	{
+		if (!strcmp(cmd[i], "|"))
+			return (TRUE);
+		i++;
+	}
+	return (FALSE);
+}
+
 /*
 	파이프 뒤에 cd 작동 x
 	cd gnl | echo hi  -> echo hi만 작동함
@@ -298,12 +312,50 @@ void exec_echo(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 	파이프로 이으면 처음꺼는 마지막에 알려준다(맨 처음에 cd가 나올 경우만)
 */
 
-void exec_cd(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
+void change_dir(char *cmd[], char *dir, int is_pipe)
 {
 	struct stat file;
 	char buf[100];
 	char *cwd;
 
+	if (!stat(dir, &file))
+	{
+		if (S_ISDIR(file.st_mode))
+		{
+			if (!is_pipe)
+			{
+				chdir(dir);
+				cwd = getcwd(buf, sizeof(buf));	//test
+				ft_putstr_fd(cwd, 2);
+				ft_putstr_fd("\n", 2);
+			}
+		}
+		else
+		{
+			ft_putstr_fd("mongshell: cd: ", 2);
+			ft_putstr_fd(dir, 2);
+			ft_putstr_fd(": Not a directory\n", 2);
+		}
+	}
+	else
+	{
+		ft_putstr_fd("mongshell: cd: ", 2);
+		ft_putstr_fd(dir, 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
+	}
+}
+
+void exec_cd(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
+{
+	int is_pipe;
+	char *dir;
+
+	if (prev_pipe_idx == 0)
+		dir = cmd[prev_pipe_idx + 1];
+	else
+		dir = cmd[prev_pipe_idx + 2];
+	
+	is_pipe = find_pipe(cmd);	//이게 1이면 chdir을 하지 않는다.
 	if (argc > 2)
 	{
 		if (prev_pipe_idx == 0)
@@ -319,7 +371,11 @@ void exec_cd(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 			ft_putstr_fd(": too many arguments\n", 2);
 		}
 	}
-	cwd = getcwd(buf, sizeof(buf));
+	else
+	{
+		change_dir(cmd, dir, is_pipe);
+	}
+	
 }
 
 void exec_pwd(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)

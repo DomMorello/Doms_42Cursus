@@ -48,7 +48,13 @@ void test()
 int	main(int argc, char *argv[])
 {
 	// test();
-	
+	struct stat file;
+
+	int b = chdir("gnl");
+	printf("b: %d\n", b);
+	int a = stat("get_next_line.c", &file);
+	printf("a: %d\n", a);
+	printf("is_dir: %d\n", S_ISDIR(file.st_mode));
     //  // execve 이용한 bin 실행파일 구현
 	//  char	**new_argv;
 	//  char	*command;
