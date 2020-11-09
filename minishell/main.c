@@ -5,8 +5,6 @@ t_list *g_env_list;
 t_list g_env_head;
 
 int g_pipe_fd[2];
-int g_stdin;
-int g_stdout;
 int g_red_out_fd;
 int g_red_in_fd;
 
@@ -590,13 +588,9 @@ void test(char **cmd)
 	int i;
 	int prev_pipe_idx;
 
-	/*
-		pipe, redirection관련 fd 들을 여기서 지역변수로 해도 될 것 같다.
-	*/
-
-	g_stdin = dup(0);
+	int stdin_tmp = dup(0);
 	perror("setup std dup");
-	g_stdout = dup(1);
+	int stdout_tmp = dup(1);
 	perror("setup std dup");
 
 	prev_pipe_idx = 0;
@@ -608,9 +602,9 @@ void test(char **cmd)
 		if (!cmd[i])
 			exec_last_cmd(cmd, &prev_pipe_idx, i);
 	}
-	dup2(g_stdin, 0);
+	dup2(stdin_tmp, 0);
 	perror("take back dup2");
-	dup2(g_stdout, 1);
+	dup2(stdout_tmp, 1);
 	perror("take back dup2");
 }
 
