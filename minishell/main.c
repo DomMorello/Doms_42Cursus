@@ -21,14 +21,33 @@ void set_red_out(char *title)
 	}
 }
 
-void set_red_in(char *title)
+void set_red_in(char *title, char *token)
 {
-	if ((g_red_in_fd = open(title, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR)) != ERROR)
+	struct stat file;
+
+	if (!stat(title, &file))
 	{
-		perror("red in open");
-		dup2(g_red_in_fd, 0);
-		perror("dup2");
-		close(g_red_in_fd);
+		if (S_ISDIR(file.st_mode))
+		{
+			ft_putstr_fd(token, 2);
+			ft_putstr_fd(": (standard input): Is a directory\n", 2);
+		}
+		else
+		{
+			if ((g_red_in_fd = open(title, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR)) != ERROR)
+			{
+				perror("red in open");
+				dup2(g_red_in_fd, 0);
+				perror("dup2");
+				close(g_red_in_fd);
+			}			
+		}	
+	}
+	else
+	{
+		ft_putstr_fd("momgshell: ", 2);
+		ft_putstr_fd(title, 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
 	}
 }
 
@@ -62,14 +81,19 @@ void set_pipe_parent()
 void process_redirection(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
     int i;
+	char *token;
 
     i = *prev_pipe_idx;
+	if (i == 0)
+		token = cmd[i];
+	else
+		token = cmd[i + 1];
     while (cmd[i] && i < pipe_idx)
     {
         if (!strcmp(cmd[i], ">"))
             set_red_out(cmd[i + 1]);
         if (!strcmp(cmd[i], "<"))
-            set_red_in(cmd[i + 1]);
+            set_red_in(cmd[i + 1], token);
         if (!strcmp(cmd[i], ">>"))
             set_red_double_out(cmd[i + 1]);
         i++;
