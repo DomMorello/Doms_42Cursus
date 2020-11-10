@@ -48,13 +48,17 @@ void test()
 int	main(int argc, char *argv[])
 {
 	// test();
-	struct stat file;
+	int stdin1 = dup(0);
+	perror("dup");
+	int stdout1 = dup(1);
+	perror("dup");
+	printf("%d %d \n", stdin1, stdout1);
 
-	int b = chdir("gnl");
-	printf("b: %d\n", b);
-	int a = stat("get_next_line.c", &file);
-	printf("a: %d\n", a);
-	printf("is_dir: %d\n", S_ISDIR(file.st_mode));
+	int a = dup2(stdin1, 0);
+	perror("dup2");
+	int b = dup2(stdout1, 1);
+	perror("dup2");
+	printf("%d %d \n", a, b);
     //  // execve 이용한 bin 실행파일 구현
 	//  char	**new_argv;
 	//  char	*command;

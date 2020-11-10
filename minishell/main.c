@@ -397,7 +397,6 @@ void exec_cd(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 	{
 		change_dir(cmd, dir, is_pipe);
 	}
-	
 }
 
 void exec_pwd(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
@@ -544,6 +543,7 @@ void exec_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 	{
 		process_redirection(cmd, prev_pipe_idx, pipe_idx);
 		parse_cmd(cmd, prev_pipe_idx, pipe_idx);
+		exit(1);
 	}
 	else
 	{
