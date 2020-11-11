@@ -48,7 +48,54 @@ void test()
 int	main(int argc, char *argv[])
 {
 	// test();
+
+	char *line;
+	char **cmd;
+
+	get_next_line(0, &line);
+	cmd = ft_split(line, ' ');
 	
+	int stdin1 = dup(0);
+	perror("set up stdtin");
+	int stdout1 = dup(1);
+	perror("set up stdtin");
+
+	int len = 0;
+	while (cmd[len])
+		len++;
+	
+	if (len > 2)
+		ft_putstr_fd("too many\n", 2);
+	else
+	{
+		struct stat file;
+		char buf[100];
+		char *cwd;
+
+		if (!stat(cmd[1], &file))
+		{
+			if (S_ISDIR(file.st_mode))
+			{
+				chdir(cmd[1]);
+				cwd = getcwd(buf, sizeof(buf));
+				ft_putstr_fd(cwd, 2);
+				ft_putstr_fd("\n", 2);
+			}
+			else
+			{
+				ft_putstr_fd("not a dir\n", 2);
+			}
+		}
+		else
+		{
+			ft_putstr_fd("no such\n", 2);
+		}
+	}
+	dup2(stdin1, 0);
+	perror("take back stdtin");
+	dup2(stdout1, 1);
+	perror("take back stdtin");
+
     //  // execve 이용한 bin 실행파일 구현
 	//  char	**new_argv;
 	//  char	*command;
