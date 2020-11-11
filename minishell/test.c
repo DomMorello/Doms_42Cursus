@@ -48,17 +48,7 @@ void test()
 int	main(int argc, char *argv[])
 {
 	// test();
-	int stdin1 = dup(0);
-	perror("dup");
-	int stdout1 = dup(1);
-	perror("dup");
-	printf("%d %d \n", stdin1, stdout1);
-
-	int a = dup2(stdin1, 0);
-	perror("dup2");
-	int b = dup2(stdout1, 1);
-	perror("dup2");
-	printf("%d %d \n", a, b);
+	
     //  // execve 이용한 bin 실행파일 구현
 	//  char	**new_argv;
 	//  char	*command;

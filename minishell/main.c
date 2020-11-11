@@ -29,6 +29,7 @@ void set_red_in(char *title, char *token)
 		{
 			ft_putstr_fd(token, 2);
 			ft_putstr_fd(": (standard input): Is a directory\n", 2);
+			exit(-1);
 		}
 		else
 		{
@@ -46,6 +47,7 @@ void set_red_in(char *title, char *token)
 		ft_putstr_fd("momgshell: ", 2);
 		ft_putstr_fd(title, 2);
 		ft_putstr_fd(": No such file or directory\n", 2);
+		exit(-1);
 	}
 }
 
@@ -432,52 +434,52 @@ void exec_built_in(void (*exec_func)(char **, int, int, int), char **cmd, int pr
 	exec_func(cmd, prev_pipe_idx, pipe_idx, argc);
 }
 
-void handle_built_in(char *cmd[], int prev_pipe_idx, int pipe_idx)
-{
-	if (!strcmp(cmd[prev_pipe_idx], ECHO))
-		exec_built_in(exec_echo, cmd, prev_pipe_idx, pipe_idx);
-	if (!strcmp(cmd[prev_pipe_idx], CD))
-		exec_built_in(exec_cd, cmd, prev_pipe_idx, pipe_idx);
-	if (!strcmp(cmd[prev_pipe_idx], PWD))
-		exec_built_in(exec_pwd, cmd, prev_pipe_idx, pipe_idx);
-	if (!strcmp(cmd[prev_pipe_idx], EXPORT))
-		exec_built_in(exec_export, cmd, prev_pipe_idx, pipe_idx);
-	if (!strcmp(cmd[prev_pipe_idx], UNSET))
-		exec_built_in(exec_unset, cmd, prev_pipe_idx, pipe_idx);
-	if (!strcmp(cmd[prev_pipe_idx], ENV))
-		exec_built_in(exec_env, cmd, prev_pipe_idx, pipe_idx);
-	if (!strcmp(cmd[prev_pipe_idx], EXIT))
-		exec_built_in(exec_exit, cmd, prev_pipe_idx, pipe_idx);
-}
+// void handle_built_in(char *cmd[], int prev_pipe_idx, int pipe_idx)
+// {
+// 	if (!strcmp(cmd[prev_pipe_idx], ECHO))
+// 		exec_built_in(exec_echo, cmd, prev_pipe_idx, pipe_idx);
+// 	if (!strcmp(cmd[prev_pipe_idx], CD))
+// 		exec_built_in(exec_cd, cmd, prev_pipe_idx, pipe_idx);
+// 	if (!strcmp(cmd[prev_pipe_idx], PWD))
+// 		exec_built_in(exec_pwd, cmd, prev_pipe_idx, pipe_idx);
+// 	if (!strcmp(cmd[prev_pipe_idx], EXPORT))
+// 		exec_built_in(exec_export, cmd, prev_pipe_idx, pipe_idx);
+// 	if (!strcmp(cmd[prev_pipe_idx], UNSET))
+// 		exec_built_in(exec_unset, cmd, prev_pipe_idx, pipe_idx);
+// 	if (!strcmp(cmd[prev_pipe_idx], ENV))
+// 		exec_built_in(exec_env, cmd, prev_pipe_idx, pipe_idx);
+// 	if (!strcmp(cmd[prev_pipe_idx], EXIT))
+// 		exec_built_in(exec_exit, cmd, prev_pipe_idx, pipe_idx);
+// }
 
-void handle_built_in2(char *cmd[], int prev_pipe_idx, int pipe_idx)
-{
-	if (!strcmp(cmd[prev_pipe_idx + 1], ECHO))
-		exec_built_in(exec_echo, cmd, prev_pipe_idx, pipe_idx);
-	if (!strcmp(cmd[prev_pipe_idx + 1], CD))
-		exec_built_in(exec_cd, cmd, prev_pipe_idx, pipe_idx);
-	if (!strcmp(cmd[prev_pipe_idx + 1], PWD))
-		exec_built_in(exec_pwd, cmd, prev_pipe_idx, pipe_idx);
-	if (!strcmp(cmd[prev_pipe_idx + 1], EXPORT))
-		exec_built_in(exec_export, cmd, prev_pipe_idx, pipe_idx);
-	if (!strcmp(cmd[prev_pipe_idx + 1], UNSET))
-		exec_built_in(exec_unset, cmd, prev_pipe_idx, pipe_idx);
-	if (!strcmp(cmd[prev_pipe_idx + 1], ENV))
-		exec_built_in(exec_env, cmd, prev_pipe_idx, pipe_idx);
-	if (!strcmp(cmd[prev_pipe_idx + 1], EXIT))
-		exec_built_in(exec_exit, cmd, prev_pipe_idx, pipe_idx);
-}
+// void handle_built_in2(char *cmd[], int prev_pipe_idx, int pipe_idx)
+// {
+// 	if (!strcmp(cmd[prev_pipe_idx + 1], ECHO))
+// 		exec_built_in(exec_echo, cmd, prev_pipe_idx, pipe_idx);
+// 	if (!strcmp(cmd[prev_pipe_idx + 1], CD))
+// 		exec_built_in(exec_cd, cmd, prev_pipe_idx, pipe_idx);
+// 	if (!strcmp(cmd[prev_pipe_idx + 1], PWD))
+// 		exec_built_in(exec_pwd, cmd, prev_pipe_idx, pipe_idx);
+// 	if (!strcmp(cmd[prev_pipe_idx + 1], EXPORT))
+// 		exec_built_in(exec_export, cmd, prev_pipe_idx, pipe_idx);
+// 	if (!strcmp(cmd[prev_pipe_idx + 1], UNSET))
+// 		exec_built_in(exec_unset, cmd, prev_pipe_idx, pipe_idx);
+// 	if (!strcmp(cmd[prev_pipe_idx + 1], ENV))
+// 		exec_built_in(exec_env, cmd, prev_pipe_idx, pipe_idx);
+// 	if (!strcmp(cmd[prev_pipe_idx + 1], EXIT))
+// 		exec_built_in(exec_exit, cmd, prev_pipe_idx, pipe_idx);
+// }
 
-int is_built_in(char *token)
-{
-	// echo는 일단 테스트를 위해서 execve로 살려두자.
-	if (/*!strcmp(token, ECHO) ||*/ !strcmp(token, CD) ||
-		!strcmp(token, PWD) || !strcmp(token, EXPORT)
-		|| !strcmp(token, UNSET) || !strcmp(token, ENV)
-		|| !strcmp(token, EXIT))
-	  	return (TRUE);
-	return (FALSE);
-}
+// int is_built_in(char *token)
+// {
+// 	// echo는 일단 테스트를 위해서 execve로 살려두자.
+// 	if (/*!strcmp(token, ECHO) ||*/ !strcmp(token, CD) ||
+// 		!strcmp(token, PWD) || !strcmp(token, EXPORT)
+// 		|| !strcmp(token, UNSET) || !strcmp(token, ENV)
+// 		|| !strcmp(token, EXIT))
+// 	  	return (TRUE);
+// 	return (FALSE);
+// }
 
 void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
@@ -486,16 +488,16 @@ void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
     i = *prev_pipe_idx;
     if (i == 0)
 	{
-		if (is_built_in(cmd[i]))
-			handle_built_in(cmd, i, pipe_idx);
-		else
+		// if (is_built_in(cmd[i]))
+		// 	handle_built_in(cmd, i, pipe_idx);
+		// else
         	handle_executable(cmd, i, pipe_idx);
 	}
     else
 	{
-		if (is_built_in(cmd[i + 1]))
-			handle_built_in2(cmd, i, pipe_idx);
-		else
+		// if (is_built_in(cmd[i + 1]))
+		// 	handle_built_in2(cmd, i, pipe_idx);
+		// else
     		handle_executable2(cmd, i, pipe_idx);
 	}
 }
@@ -523,13 +525,51 @@ void exec_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
     }
 }
 
+int is_no_process(char *token)
+{
+	if (!strcmp(token, CD))	//더 추가돼야 하는데 일단은 cd만
+		return (TRUE);
+	return (FALSE);
+}
+
+void handle_cmd(char *token, char *cmd[], int *prev_pipe_idx, int pipe_idx)
+{
+	// if (!strcmp(token, ECHO))
+	// 	exec_built_in(exec_echo, cmd, *prev_pipe_idx, pipe_idx);
+	/*else */if (!strcmp(token, CD))
+		exec_built_in(exec_cd, cmd, *prev_pipe_idx, pipe_idx);
+	else if (!strcmp(token, PWD))
+		exec_built_in(exec_pwd, cmd, *prev_pipe_idx, pipe_idx);
+	else if (!strcmp(token, EXPORT))
+		exec_built_in(exec_export, cmd, *prev_pipe_idx, pipe_idx);
+	else if (!strcmp(token, UNSET))
+		exec_built_in(exec_unset, cmd, *prev_pipe_idx, pipe_idx);
+	else if (!strcmp(token, ENV))
+		exec_built_in(exec_env, cmd, *prev_pipe_idx, pipe_idx);
+	else if (!strcmp(token, EXIT))
+		exec_built_in(exec_exit, cmd, *prev_pipe_idx, pipe_idx);
+	else
+		exec_cmd(cmd, prev_pipe_idx, pipe_idx);
+}
+
 void process_pipe(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
+	char *token;
+
+	if (*prev_pipe_idx == 0)
+		token = cmd[*prev_pipe_idx];
+	else
+		token = cmd[*prev_pipe_idx + 1];
     if (!strcmp(cmd[pipe_idx], "|"))
     {
         pipe(g_pipe_fd);
         perror("pipe err");
-        exec_cmd(cmd, prev_pipe_idx, pipe_idx);
+		/* 여기서 명령어를 파싱해서 fork인지 아닌지를 판별 */
+		// if (is_no_process(token))	//cd export 등등
+		// 	handle_no_process();	//함수 실행하는 부분
+		// else
+        	// exec_cmd(cmd, prev_pipe_idx, pipe_idx);	//그게 아닌 경우 프로세스로 진행
+		handle_cmd(token, cmd, prev_pipe_idx, pipe_idx);
         *prev_pipe_idx = pipe_idx;
     }
 }
@@ -549,6 +589,34 @@ void exec_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 	{
 		wait(NULL);
 	}
+}
+
+void handle_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
+{
+	char *token;
+	int i;
+
+	i = *prev_pipe_idx;
+	if (i == 0)
+		token = cmd[i];
+	else
+		token = cmd[i + 1];
+	// if (!strcmp(token, ECHO))
+	// 	exec_built_in(exec_echo, cmd, i, pipe_idx);
+	/*else */if (!strcmp(token, CD))
+		exec_built_in(exec_cd, cmd, i, pipe_idx);
+	else if (!strcmp(token, PWD))
+		exec_built_in(exec_pwd, cmd, i, pipe_idx);
+	else if (!strcmp(token, EXPORT))
+		exec_built_in(exec_export, cmd, i, pipe_idx);
+	else if (!strcmp(token, UNSET))
+		exec_built_in(exec_unset, cmd, i, pipe_idx);
+	else if (!strcmp(token, ENV))
+		exec_built_in(exec_env, cmd, i, pipe_idx);
+	else if (!strcmp(token, EXIT))
+		exec_built_in(exec_exit, cmd, i, pipe_idx);
+	else
+		exec_last_cmd(cmd, prev_pipe_idx, pipe_idx);
 }
 
 void copy_environ(void)
@@ -600,7 +668,7 @@ void test(char **cmd)
 		process_pipe(cmd, &prev_pipe_idx, i);
 		i++;
 		if (!cmd[i])
-			exec_last_cmd(cmd, &prev_pipe_idx, i);
+			handle_last_cmd(cmd, &prev_pipe_idx, i);
 	}
 	dup2(stdin_tmp, 0);
 	perror("take back dup2");
