@@ -635,7 +635,7 @@ void test(char **cmd)
 	if (a == -1)
 		perror("take back dup2");
 	int b = dup2(stdout_tmp, 1);
-	id (b == -1)
+	if (b == -1)
 		perror("take back dup2");
 }
 
@@ -648,6 +648,7 @@ int main(int argc, char *argv[])
 	while (1)
 	{
 		char **cmd;
+		ft_putstr_fd("\033[0;32mmongshell\033[0;34m$ \033[0m", 2);
 		if ((ret = get_next_line(0, &line)) < 0)
 		{
 			printf("gnl error\n");
