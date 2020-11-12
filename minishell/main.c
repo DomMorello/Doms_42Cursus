@@ -341,31 +341,30 @@ void change_dir(char *cmd[], char *dir, int is_pipe)
 	struct stat file;
 	char buf[100];
 	char *cwd;
-
-	if (!stat(dir, &file))
+	
+	if (!is_pipe)
 	{
-		if (S_ISDIR(file.st_mode))
+		if (chdir(dir) == ERROR)
 		{
-			if (!is_pipe)
+			if (errno == ENOTDIR)
 			{
-				chdir(dir);
-				cwd = getcwd(buf, sizeof(buf));	//test
-				ft_putstr_fd(cwd, 2);
-				ft_putstr_fd("\n", 2);
+				ft_putstr_fd("mongshell: cd: ", 2);
+				ft_putstr_fd(dir, 2);
+				ft_putstr_fd(": Not a directory\n", 2);
+			}
+			else
+			{
+				ft_putstr_fd("mongshell: cd: ", 2);
+				ft_putstr_fd(dir, 2);
+				ft_putstr_fd(": No such file or directory\n", 2);
 			}
 		}
 		else
 		{
-			ft_putstr_fd("mongshell: cd: ", 2);
-			ft_putstr_fd(dir, 2);
-			ft_putstr_fd(": Not a directory\n", 2);
+			cwd = getcwd(buf, sizeof(buf));	//test
+			ft_putstr_fd(cwd, 2);
+			ft_putstr_fd("\n", 2);
 		}
-	}
-	else
-	{
-		ft_putstr_fd("mongshell: cd: ", 2);
-		ft_putstr_fd(dir, 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
 	}
 }
 
@@ -670,10 +669,13 @@ void test(char **cmd)
 		if (!cmd[i])
 			handle_last_cmd(cmd, &prev_pipe_idx, i);
 	}
-	dup2(stdin_tmp, 0);
+	int a = dup2(stdin_tmp, 0);
 	perror("take back dup2");
-	dup2(stdout_tmp, 1);
+	int b = dup2(stdout_tmp, 1);
 	perror("take back dup2");
+	ft_putnbr_fd(a, 2);
+	ft_putnbr_fd(b, 2);
+	ft_putstr_fd("\n", 2);
 }
 
 int main(int argc, char *argv[])
