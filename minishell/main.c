@@ -12,11 +12,14 @@ void set_red_out(char *title)
 {
 	if ((g_red_out_fd = open(title, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR)) != ERROR)
 	{
-		perror("red out open");
-		dup2(g_red_out_fd, 1);
-		perror("dup2");
+		int a = dup2(g_red_out_fd, 1);
+		if (a == -1)
+			perror("dup2");
 		close(g_red_out_fd);
 	}
+	if (g_red_out_fd == -1)
+		perror("red out open");
+	
 }
 
 void set_red_in(char *title, char *token)
@@ -35,11 +38,13 @@ void set_red_in(char *title, char *token)
 		{
 			if ((g_red_in_fd = open(title, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR)) != ERROR)
 			{
-				perror("red in open");
-				dup2(g_red_in_fd, 0);
-				perror("dup2");
+				int a = dup2(g_red_in_fd, 0);
+				if (a == -1)
+					perror("dup2");
 				close(g_red_in_fd);
-			}			
+			}
+			if (g_red_in_fd == -1)
+				perror("red in open");		
 		}	
 	}
 	else
@@ -55,26 +60,30 @@ void set_red_double_out(char *title)
 {
     if ((g_red_out_fd = open(title, O_CREAT | O_RDWR | O_APPEND, S_IRUSR | S_IWUSR)) != ERROR)
 	{
-		perror("double open");
-		dup2(g_red_out_fd, 1);
-		perror("dup2");
+		int a = dup2(g_red_out_fd, 1);
+		if (a == -1)
+			perror("dup2");
 		close(g_red_out_fd);
 	}
+	if (g_red_out_fd == -1)
+		perror("red double out open");
 }
 
 void set_pipe_child()
 {
 	close(g_pipe_fd[0]);
-	dup2(g_pipe_fd[1], 1);
-	perror("pipe dup2");
+	int a = dup2(g_pipe_fd[1], 1);
+	if (a == -1)
+		perror("pipe dup2");
 	close(g_pipe_fd[1]);
 }
 
 void set_pipe_parent()
 {
 	close(g_pipe_fd[1]);
-	dup2(g_pipe_fd[0], 0);
-	perror("pipe dup2");
+	int a = dup2(g_pipe_fd[0], 0);
+	if (a == -1)
+		perror("pipe dup2");
 	close(g_pipe_fd[0]);
 }
 
@@ -225,6 +234,8 @@ int search_dir(char *token, char *path)
     if (dir_p = opendir(path))
     {
         dir = readdir(dir_p);
+		if (!dir)
+			perror("read dir err");
         while (dir)
         {
             if (!strcmp(dir->d_name, token))
@@ -232,6 +243,9 @@ int search_dir(char *token, char *path)
             dir = readdir(dir_p);
         }
     }
+	else
+		perror("opendir err");
+	
     return (FALSE);
 }
 
@@ -323,18 +337,6 @@ int find_pipe(char *cmd[])
 	}
 	return (FALSE);
 }
-
-/*
-	파이프 뒤에 cd 작동 x
-	cd gnl | echo hi  -> echo hi만 작동함
-	cd gnl > hello1 -> 현재 디렉토리에 hello1 내용없이 생기고 gnl로 이동
-	cd gnl > hello1 | cd hi -> 현재 디렉토리에 hi디렉토리가 없기 때문에
-								디렉토리 없다는 에러 뜨고 cd gnl도 안 됨.
-	unset dong | cd gnl -> unset도 안 되고 cd도 안 됨
-	cd fdas asfd 1개 이상 들어오면 too many arguments 에러
-	디렉토리 없다는 에러메세지 다 알려준다. 
-	파이프로 이으면 처음꺼는 마지막에 알려준다(맨 처음에 cd가 나올 경우만)
-*/
 
 void change_dir(char *cmd[], char *dir, int is_pipe)
 {
@@ -433,53 +435,6 @@ void exec_built_in(void (*exec_func)(char **, int, int, int), char **cmd, int pr
 	exec_func(cmd, prev_pipe_idx, pipe_idx, argc);
 }
 
-// void handle_built_in(char *cmd[], int prev_pipe_idx, int pipe_idx)
-// {
-// 	if (!strcmp(cmd[prev_pipe_idx], ECHO))
-// 		exec_built_in(exec_echo, cmd, prev_pipe_idx, pipe_idx);
-// 	if (!strcmp(cmd[prev_pipe_idx], CD))
-// 		exec_built_in(exec_cd, cmd, prev_pipe_idx, pipe_idx);
-// 	if (!strcmp(cmd[prev_pipe_idx], PWD))
-// 		exec_built_in(exec_pwd, cmd, prev_pipe_idx, pipe_idx);
-// 	if (!strcmp(cmd[prev_pipe_idx], EXPORT))
-// 		exec_built_in(exec_export, cmd, prev_pipe_idx, pipe_idx);
-// 	if (!strcmp(cmd[prev_pipe_idx], UNSET))
-// 		exec_built_in(exec_unset, cmd, prev_pipe_idx, pipe_idx);
-// 	if (!strcmp(cmd[prev_pipe_idx], ENV))
-// 		exec_built_in(exec_env, cmd, prev_pipe_idx, pipe_idx);
-// 	if (!strcmp(cmd[prev_pipe_idx], EXIT))
-// 		exec_built_in(exec_exit, cmd, prev_pipe_idx, pipe_idx);
-// }
-
-// void handle_built_in2(char *cmd[], int prev_pipe_idx, int pipe_idx)
-// {
-// 	if (!strcmp(cmd[prev_pipe_idx + 1], ECHO))
-// 		exec_built_in(exec_echo, cmd, prev_pipe_idx, pipe_idx);
-// 	if (!strcmp(cmd[prev_pipe_idx + 1], CD))
-// 		exec_built_in(exec_cd, cmd, prev_pipe_idx, pipe_idx);
-// 	if (!strcmp(cmd[prev_pipe_idx + 1], PWD))
-// 		exec_built_in(exec_pwd, cmd, prev_pipe_idx, pipe_idx);
-// 	if (!strcmp(cmd[prev_pipe_idx + 1], EXPORT))
-// 		exec_built_in(exec_export, cmd, prev_pipe_idx, pipe_idx);
-// 	if (!strcmp(cmd[prev_pipe_idx + 1], UNSET))
-// 		exec_built_in(exec_unset, cmd, prev_pipe_idx, pipe_idx);
-// 	if (!strcmp(cmd[prev_pipe_idx + 1], ENV))
-// 		exec_built_in(exec_env, cmd, prev_pipe_idx, pipe_idx);
-// 	if (!strcmp(cmd[prev_pipe_idx + 1], EXIT))
-// 		exec_built_in(exec_exit, cmd, prev_pipe_idx, pipe_idx);
-// }
-
-// int is_built_in(char *token)
-// {
-// 	// echo는 일단 테스트를 위해서 execve로 살려두자.
-// 	if (/*!strcmp(token, ECHO) ||*/ !strcmp(token, CD) ||
-// 		!strcmp(token, PWD) || !strcmp(token, EXPORT)
-// 		|| !strcmp(token, UNSET) || !strcmp(token, ENV)
-// 		|| !strcmp(token, EXIT))
-// 	  	return (TRUE);
-// 	return (FALSE);
-// }
-
 void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
     int i;
@@ -561,8 +516,9 @@ void process_pipe(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 		token = cmd[*prev_pipe_idx + 1];
     if (!strcmp(cmd[pipe_idx], "|"))
     {
-        pipe(g_pipe_fd);
-        perror("pipe err");
+        int a = pipe(g_pipe_fd);
+        if (a == -1)
+			perror("pipe err");
 		/* 여기서 명령어를 파싱해서 fork인지 아닌지를 판별 */
 		// if (is_no_process(token))	//cd export 등등
 		// 	handle_no_process();	//함수 실행하는 부분
@@ -584,6 +540,10 @@ void exec_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 		parse_cmd(cmd, prev_pipe_idx, pipe_idx);
 		exit(1);
 	}
+	else if (pid < 0)
+    {
+        perror("fork err");
+    }
 	else
 	{
 		wait(NULL);
@@ -656,9 +616,11 @@ void test(char **cmd)
 	int prev_pipe_idx;
 
 	int stdin_tmp = dup(0);
-	perror("setup std dup");
+	if (stdin_tmp == -1)
+		perror("set up dup");
 	int stdout_tmp = dup(1);
-	perror("setup std dup");
+	if (stdout_tmp == -1)
+		perror("set up dup");
 
 	prev_pipe_idx = 0;
 	i = 0;
@@ -670,12 +632,11 @@ void test(char **cmd)
 			handle_last_cmd(cmd, &prev_pipe_idx, i);
 	}
 	int a = dup2(stdin_tmp, 0);
-	perror("take back dup2");
+	if (a == -1)
+		perror("take back dup2");
 	int b = dup2(stdout_tmp, 1);
-	perror("take back dup2");
-	ft_putnbr_fd(a, 2);
-	ft_putnbr_fd(b, 2);
-	ft_putstr_fd("\n", 2);
+	id (b == -1)
+		perror("take back dup2");
 }
 
 int main(int argc, char *argv[])
