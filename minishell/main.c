@@ -162,7 +162,7 @@ void exec_executable(char *cmd[], int prev_pipe_idx, int pipe_idx, char *filepat
 			ft_putstr_fd("mongshell: ", STDERR);
 			ft_putstr_fd(cmd[token], STDERR);
 			ft_putstr_fd(": ", STDERR);
-			strerror(errno);
+			ft_putstr_fd(strerror(errno), STDERR);
 			exit(-1);
 		}
 	}
@@ -188,15 +188,17 @@ void exec_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx, char *filepa
 	{
 		if (errno == 2)
 		{
+			ft_putstr_fd("mongshell: ", STDERR);
 			ft_putstr_fd(cmd[token], STDERR);
 			ft_putstr_fd(": command not found\n", STDERR);	
 			exit(-1);
 		}
 		else
 		{
+			ft_putstr_fd("mongshell: ", STDERR);
 			ft_putstr_fd(cmd[token], STDERR);
 			ft_putstr_fd(": ", STDERR);
-			strerror(errno);
+			ft_putstr_fd(strerror(errno), STDERR);
 			exit(-1);
 		}
 	}
@@ -343,30 +345,32 @@ void change_dir(char *cmd[], char *dir, int is_pipe)
 	struct stat file;
 	char buf[100];
 	char *cwd;
-	
-	if (!is_pipe)
+
+	if (!stat(dir, &file))
 	{
-		if (chdir(dir) == ERROR)
+		if (!is_pipe)
 		{
-			if (errno == ENOTDIR)
+			if (!chdir(dir))
 			{
+				cwd = getcwd(buf, sizeof(buf));	//test
+				ft_putstr_fd(cwd, 2);
+				ft_putstr_fd("\n", 2);
+			}
+			else
+			{
+				// perror("chdir err");
 				ft_putstr_fd("mongshell: cd: ", 2);
 				ft_putstr_fd(dir, 2);
 				ft_putstr_fd(": Not a directory\n", 2);
 			}
-			else
-			{
-				ft_putstr_fd("mongshell: cd: ", 2);
-				ft_putstr_fd(dir, 2);
-				ft_putstr_fd(": No such file or directory\n", 2);
-			}
 		}
-		else
-		{
-			cwd = getcwd(buf, sizeof(buf));	//test
-			ft_putstr_fd(cwd, 2);
-			ft_putstr_fd("\n", 2);
-		}
+	}
+	else
+	{
+		// perror("stat err");
+		ft_putstr_fd("mongshell: cd: ", 2);
+		ft_putstr_fd(dir, 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
 	}
 }
 
@@ -427,12 +431,15 @@ void exec_exit(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 	printf("exit!!\n");
 }
 
-void exec_built_in(void (*exec_func)(char **, int, int, int), char **cmd, int prev_pipe_idx, int pipe_idx)
+void exec_built_in(void (*exec_func)(char **, int, int, int), char **cmd, int *prev_pipe_idx, int pipe_idx)
 {
 	int argc;
+	int prev_pipe;
 
-    argc = get_argc(cmd, prev_pipe_idx, pipe_idx);
-	exec_func(cmd, prev_pipe_idx, pipe_idx, argc);
+	prev_pipe = *prev_pipe_idx;
+    argc = get_argc(cmd, prev_pipe, pipe_idx);
+	process_redirection(cmd, prev_pipe_idx, pipe_idx);
+	exec_func(cmd, prev_pipe, pipe_idx, argc);
 }
 
 void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
@@ -491,17 +498,17 @@ void handle_cmd(char *token, char *cmd[], int *prev_pipe_idx, int pipe_idx)
 	// if (!strcmp(token, ECHO))
 	// 	exec_built_in(exec_echo, cmd, *prev_pipe_idx, pipe_idx);
 	/*else */if (!strcmp(token, CD))
-		exec_built_in(exec_cd, cmd, *prev_pipe_idx, pipe_idx);
+		exec_built_in(exec_cd, cmd, prev_pipe_idx, pipe_idx);
 	else if (!strcmp(token, PWD))
-		exec_built_in(exec_pwd, cmd, *prev_pipe_idx, pipe_idx);
+		exec_built_in(exec_pwd, cmd, prev_pipe_idx, pipe_idx);
 	else if (!strcmp(token, EXPORT))
-		exec_built_in(exec_export, cmd, *prev_pipe_idx, pipe_idx);
+		exec_built_in(exec_export, cmd, prev_pipe_idx, pipe_idx);
 	else if (!strcmp(token, UNSET))
-		exec_built_in(exec_unset, cmd, *prev_pipe_idx, pipe_idx);
+		exec_built_in(exec_unset, cmd, prev_pipe_idx, pipe_idx);
 	else if (!strcmp(token, ENV))
-		exec_built_in(exec_env, cmd, *prev_pipe_idx, pipe_idx);
+		exec_built_in(exec_env, cmd, prev_pipe_idx, pipe_idx);
 	else if (!strcmp(token, EXIT))
-		exec_built_in(exec_exit, cmd, *prev_pipe_idx, pipe_idx);
+		exec_built_in(exec_exit, cmd, prev_pipe_idx, pipe_idx);
 	else
 		exec_cmd(cmd, prev_pipe_idx, pipe_idx);
 }
@@ -563,17 +570,17 @@ void handle_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 	// if (!strcmp(token, ECHO))
 	// 	exec_built_in(exec_echo, cmd, i, pipe_idx);
 	/*else */if (!strcmp(token, CD))
-		exec_built_in(exec_cd, cmd, i, pipe_idx);
+		exec_built_in(exec_cd, cmd, prev_pipe_idx, pipe_idx);
 	else if (!strcmp(token, PWD))
-		exec_built_in(exec_pwd, cmd, i, pipe_idx);
+		exec_built_in(exec_pwd, cmd, prev_pipe_idx, pipe_idx);
 	else if (!strcmp(token, EXPORT))
-		exec_built_in(exec_export, cmd, i, pipe_idx);
+		exec_built_in(exec_export, cmd, prev_pipe_idx, pipe_idx);
 	else if (!strcmp(token, UNSET))
-		exec_built_in(exec_unset, cmd, i, pipe_idx);
+		exec_built_in(exec_unset, cmd, prev_pipe_idx, pipe_idx);
 	else if (!strcmp(token, ENV))
-		exec_built_in(exec_env, cmd, i, pipe_idx);
+		exec_built_in(exec_env, cmd, prev_pipe_idx, pipe_idx);
 	else if (!strcmp(token, EXIT))
-		exec_built_in(exec_exit, cmd, i, pipe_idx);
+		exec_built_in(exec_exit, cmd, prev_pipe_idx, pipe_idx);
 	else
 		exec_last_cmd(cmd, prev_pipe_idx, pipe_idx);
 }
@@ -660,6 +667,5 @@ int main(int argc, char *argv[])
 		free(line);
 		free_2d_char(cmd);
 	}
-
     return 0;
 }

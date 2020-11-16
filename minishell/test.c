@@ -48,6 +48,8 @@ void test()
 int	main(int argc, char *argv[])
 {
 	// test();
-
+	struct stat file;
+	int a = stat("hi", &file);
+	printf("a: %d\n", a);
 	return (0);
 }
