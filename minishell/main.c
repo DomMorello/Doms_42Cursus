@@ -349,6 +349,8 @@ void change_dir(char *cmd[], char *dir, int is_pipe)
 	char buf[100];
 	char *cwd;
 
+	//이 부분에서 cd만 들어왔을 경우 stat에 들어가면서
+	//dir이 없는데도 실행하니까 세그폴트가 나는 것이다. 
 	if (!stat(dir, &file))
 	{
 		if (!is_pipe)
@@ -407,11 +409,8 @@ void exec_cd(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 	{
 		change_dir(cmd, dir, is_pipe);
 	}
-}
-
-void exec_pwd(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
-{
-	printf("pwd!!\n");
+	//이 부분에서 argc를 확인하고 분기해서 cd만 입력이 들어왔을 경우
+	//HOME을 찾아서 이동시키는 함수를 구현해야 한다.
 }
 
 void exec_export(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
@@ -445,9 +444,9 @@ void exec_nprocess_built_in(void (*exec_func)(char **, int, int, int), char **cm
 	exec_func(cmd, prev_pipe, pipe_idx, argc);
 }
 
-void exec_process_built_in(void (*exec_func)(char **, int, int, int), char *cmd[], int prev_pipe_idx, int pipe_idx)
+void exec_pwd(char *cmd[], int prev_pipe_idx, int pipe_idx)
 {
-
+	printf("pwd!!\n");
 }
 
 void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
@@ -462,11 +461,10 @@ void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 		token = cmd[i + 1];
 	//process로 진행해야 할 명령어들 그 외에는 execve로 실행
 	if (!strcmp(token, PWD))
-		exec_process_built_in(exec_pwd, cmd, i, pipe_idx);
+		exec_pwd(cmd, i, pipe_idx);
 	else
 		handle_executable(token, cmd, i, pipe_idx);
 	
-
 
     // if (i == 0)
     // 	handle_executable(token, cmd, i, pipe_idx);
