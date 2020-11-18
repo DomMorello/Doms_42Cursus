@@ -438,11 +438,6 @@ void exec_cd(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 	}
 }
 
-void exec_export(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
-{
-	printf("export!!\n");
-}
-
 void exec_unset(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 {
 	printf("unset!!\n");
@@ -516,6 +511,11 @@ void exec_env(char *cmd[], int prev_pipe_idx, int pipe_idx)
 	}
 }
 
+void exec_export(char *cmd[], int prev_pipe_idx, int pipe_idx)
+{
+	
+}
+
 void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
     int i;
@@ -527,18 +527,14 @@ void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 	else
 		token = cmd[i + 1];
 	//process로 진행해야 할 명령어들 그 외에는 execve로 실행
-	if (!strcmp(token, PWD))
+	if (!ft_strncmp(PWD, token, ft_strlen(PWD)))
 		exec_pwd(cmd, i, pipe_idx);
-	else if (!strcmp(token, ENV))
+	else if (!ft_strncmp(ENV, token, ft_strlen(ENV)))
 		exec_env(cmd, i, pipe_idx);
+	else if (!ft_strncmp(EXPORT, token, ft_strlen(EXPORT)))
+		exec_export(cmd, i, pipe_idx);
 	else
 		handle_executable(token, cmd, i, pipe_idx);
-	
-
-    // if (i == 0)
-    // 	handle_executable(token, cmd, i, pipe_idx);
-    // else
-	// 	handle_executable2(cmd, i, pipe_idx);
 }
 
 void exec_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
@@ -729,7 +725,7 @@ int main(int argc, char *argv[])
 	int ret = 0;
 	char *line;
 
-	copy_environ();
+	copy_environ();	//프로그램 종료 전에 링크드 리스트 전부 free해줘야 한다
 	while (1)
 	{
 		char **cmd;
