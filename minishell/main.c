@@ -213,7 +213,6 @@ char **get_path(void)
     path = NULL;
     ret = NULL;
 	env_tmp = g_env_list;
-	printf("get path\n");
     while (env_tmp)
     {
         if (!ft_strncmp(PATH, env_tmp->content, ft_strlen(PATH)))
@@ -250,7 +249,9 @@ int search_dir(char *token, char *path)
     }
 	else
 		perror("opendir err");
-	
+	int a = closedir(dir_p);
+	if (a == -1)
+		perror("closedir err");
     return (FALSE);
 }
 
@@ -317,16 +318,6 @@ void handle_executable(char *token, char *cmd[], int prev_pipe_idx, int pipe_idx
 		exec_executable2(cmd, prev_pipe_idx, pipe_idx, filepath);
 }
 
-// void handle_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx)
-// {
-// 	char **path;
-//     char *filepath;
-
-//     path = get_path();
-//     filepath = get_filepath(cmd[prev_pipe_idx + 1], path);	//free 불가
-//     exec_executable2(cmd, prev_pipe_idx, pipe_idx, filepath);
-// }
-
 void exec_echo(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 {
 	printf("echo!!\n");
@@ -351,9 +342,7 @@ void change_dir(char *cmd[], char *dir, int is_pipe)
 	struct stat file;
 	char buf[100];
 	char *cwd;
-
-	//이 부분에서 cd만 들어왔을 경우 stat에 들어가면서
-	//dir이 없는데도 실행하니까 세그폴트가 나는 것이다. 
+ 
 	if (!stat(dir, &file))
 	{
 		if (!is_pipe)
@@ -447,8 +436,6 @@ void exec_cd(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 	{
 		change_dir(cmd, dir, is_pipe);
 	}
-	//이 부분에서 argc를 확인하고 분기해서 cd만 입력이 들어왔을 경우
-	//HOME을 찾아서 이동시키는 함수를 구현해야 한다.
 }
 
 void exec_export(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
@@ -484,7 +471,12 @@ void exec_nprocess_built_in(void (*exec_func)(char **, int, int, int), char **cm
 
 void exec_pwd(char *cmd[], int prev_pipe_idx, int pipe_idx)
 {
-	printf("pwd!!\n");
+	char *cwd;
+
+	cwd = getcwd(NULL, 0);
+	ft_putstr_fd(cwd, STDOUT);
+	ft_putstr_fd("\n", STDOUT);
+	free(cwd);
 }
 
 void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
