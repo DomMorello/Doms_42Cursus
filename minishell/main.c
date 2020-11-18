@@ -447,11 +447,6 @@ void exec_unset(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 	printf("unset!!\n");
 }
 
-void exec_env(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
-{
-	printf("env!!\n");
-}
-
 void exec_exit(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 {
 	printf("exit!!\n");
@@ -483,6 +478,24 @@ void exec_pwd(char *cmd[], int prev_pipe_idx, int pipe_idx)
 	}
 }
 
+void exec_env(char *cmd[], int prev_pipe_idx, int pipe_idx)
+{
+	int argc;
+	t_list *env_tmp;
+
+	env_tmp = g_env_list;
+	argc = get_argc(cmd, prev_pipe_idx, pipe_idx);
+	if (argc == 1)
+	{
+		while (env_tmp)
+		{
+			ft_putstr_fd((char *)env_tmp->content, STDOUT);
+			ft_putstr_fd("\n", STDOUT);
+			env_tmp = env_tmp->next;
+		}
+	}
+}
+
 void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
     int i;
@@ -496,6 +509,8 @@ void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 	//process로 진행해야 할 명령어들 그 외에는 execve로 실행
 	if (!strcmp(token, PWD))
 		exec_pwd(cmd, i, pipe_idx);
+	else if (!strcmp(token, ENV))
+		exec_env(cmd, i, pipe_idx);
 	else
 		handle_executable(token, cmd, i, pipe_idx);
 	
