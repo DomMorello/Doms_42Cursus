@@ -511,9 +511,89 @@ void exec_env(char *cmd[], int prev_pipe_idx, int pipe_idx)
 	}
 }
 
+void	sort_export(t_list **list)
+{
+	int swapped;
+	t_list *ptr1;
+	t_list *lptr;
+	char *tmp;
+	
+	swapped = 1;
+	ptr1 = NULL;
+	lptr = NULL;
+	tmp = NULL;
+	while (swapped)
+	{
+		swapped = 0;
+		ptr1 = *list;
+		while (ptr1->next != lptr)
+		{
+			if (ft_strncmp(ptr1->content, ptr1->next->content, ft_strlen(ptr1->content)) > 0)
+			{
+				tmp = ptr1->content;
+				ptr1->content = ptr1->next->content;
+				ptr1->next->content = tmp;
+				swapped = 1;
+			}
+			ptr1 = ptr1->next;
+		}
+		lptr = ptr1;
+	}
+}
+
+void add_dquote(char *new, char *line)
+{
+	int i;
+
+	i = 0;
+	while (new[i])
+	{
+		if (new[i] == '=')
+		{
+			i++;
+			new[i] = '\"';
+			i++;
+			while (new[i])
+			{
+				new[i] = line[i - 1];
+				i++;
+			}
+			new[i] = line[i - 1];
+			i++;
+			new[i] = '\"';
+			new[i + 1] = '\0';
+		}
+		i++;
+	}
+}
+
+void print_export(char *line)
+{
+	char *new;
+	int i;
+
+	i = 0;
+	new = (char *)malloc(sizeof(char) * ft_strlen(line) + 3);
+	if (!new)
+		exit(-1);	//malloc fucked up
+	ft_strlcpy(new, line, ft_strlen(line) + 1);
+	add_dquote(new, line);
+	ft_putstr_fd("declare -x ", STDERR);
+	ft_putstr_fd(new, STDERR);
+	ft_putstr_fd("\n", STDERR);
+}
+
 void exec_export(char *cmd[], int prev_pipe_idx, int pipe_idx)
 {
-	
+	t_list *export_tmp;
+
+	export_tmp = g_env_list;
+	sort_export(&export_tmp);
+	while (export_tmp)
+	{
+		print_export((char *)export_tmp->content);
+		export_tmp = export_tmp->next;
+	}
 }
 
 void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
@@ -527,11 +607,11 @@ void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 	else
 		token = cmd[i + 1];
 	//process로 진행해야 할 명령어들 그 외에는 execve로 실행
-	if (!ft_strncmp(PWD, token, ft_strlen(PWD)))
+	if (!ft_strncmp(PWD, token, ft_strlen(token)))
 		exec_pwd(cmd, i, pipe_idx);
-	else if (!ft_strncmp(ENV, token, ft_strlen(ENV)))
+	else if (!ft_strncmp(ENV, token, ft_strlen(token)))
 		exec_env(cmd, i, pipe_idx);
-	else if (!ft_strncmp(EXPORT, token, ft_strlen(EXPORT)))
+	else if (!ft_strncmp(EXPORT, token, ft_strlen(token)))
 		exec_export(cmd, i, pipe_idx);
 	else
 		handle_executable(token, cmd, i, pipe_idx);
