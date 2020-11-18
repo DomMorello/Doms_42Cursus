@@ -3,6 +3,7 @@
 extern char **environ;
 t_list *g_env_list;
 t_list g_env_head;
+// 쉘 변수를 담을 링크드 리스트도 필요할 것 같다.
 
 int g_pipe_fd[2];
 int g_red_out_fd;
@@ -478,6 +479,25 @@ void exec_pwd(char *cmd[], int prev_pipe_idx, int pipe_idx)
 	}
 }
 
+int find_env_path(void)
+{
+	t_list *env_tmp;
+	char *needle;
+
+	env_tmp = g_env_list;
+	while (env_tmp)
+	{
+        if (!ft_strncmp(PATH, env_tmp->content, ft_strlen(PATH)))
+        {
+			needle = ft_strnstr((char *)env_tmp->content, USRBIN, ft_strlen((char *)env_tmp->content));
+			if (needle)
+				return (TRUE);
+		}
+		env_tmp = env_tmp->next;
+	}
+	return (FALSE);
+}
+
 void exec_env(char *cmd[], int prev_pipe_idx, int pipe_idx)
 {
 	int argc;
@@ -485,7 +505,7 @@ void exec_env(char *cmd[], int prev_pipe_idx, int pipe_idx)
 
 	env_tmp = g_env_list;
 	argc = get_argc(cmd, prev_pipe_idx, pipe_idx);
-	if (argc == 1)
+	if (argc == 1 && find_env_path())
 	{
 		while (env_tmp)
 		{

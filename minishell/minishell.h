@@ -30,6 +30,7 @@
 
 # define PATH "PATH="
 # define HOME "HOME="
+# define USRBIN "/usr/bin"
 
 # define ECHO "echo"
 # define CD "cd"
