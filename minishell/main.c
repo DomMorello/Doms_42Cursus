@@ -208,17 +208,20 @@ char **get_path(void)
 {
     char *path;
     char **ret;
+	t_list *env_tmp;
 
     path = NULL;
     ret = NULL;
-    while (g_env_list)
+	env_tmp = g_env_list;
+	printf("get path\n");
+    while (env_tmp)
     {
-        if (!ft_strncmp(PATH, g_env_list->content, ft_strlen(PATH)))
+        if (!ft_strncmp(PATH, env_tmp->content, ft_strlen(PATH)))
         {
-            path = g_env_list->content;
+            path = env_tmp->content;
             break ;
         }
-        g_env_list = g_env_list->next;
+        env_tmp = env_tmp->next;
     }
     if (path)
     {
@@ -379,6 +382,37 @@ void change_dir(char *cmd[], char *dir, int is_pipe)
 	}
 }
 
+char *find_home(void)
+{
+	t_list *env_tmp;
+
+	env_tmp = g_env_list;
+	while (env_tmp)
+	{
+        if (!ft_strncmp(HOME, env_tmp->content, ft_strlen(HOME)))
+            return ((char *)env_tmp->content);
+		env_tmp = env_tmp->next;
+	}
+	return (NULL);
+}
+
+void dir_to_HOME(char *cmd[], int is_pipe)
+{
+	char *home;
+
+	home = find_home();
+	if (home)
+	{
+		home += ft_strlen(HOME);
+		change_dir(cmd, home, is_pipe);
+	}
+	else
+	{
+		ft_putstr_fd("mongshell: cd: ", 2);
+		ft_putstr_fd("HOME not found\n", 2);
+	}
+}
+
 void exec_cd(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 {
 	int is_pipe;
@@ -404,6 +438,10 @@ void exec_cd(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 			ft_putstr_fd(cmd[prev_pipe_idx + 1], 2);
 			ft_putstr_fd(": too many arguments\n", 2);
 		}
+	}
+	else if (argc == 1)
+	{
+		dir_to_HOME(cmd, is_pipe);
 	}
 	else
 	{
@@ -672,7 +710,7 @@ int main(int argc, char *argv[])
 			exit(0);
 		}
 		cmd = ft_split(line, ' ');
-    	test(cmd);
+    	test(cmd);	//명령어 처리 함수
 		free(line);
 		free_2d_char(cmd);
 	}
