@@ -19,7 +19,6 @@ void set_red_out(char *title)
 	}
 	if (g_red_out_fd == -1)
 		perror("red out open");
-	
 }
 
 void set_red_in(char *title, char *token)
@@ -45,7 +44,7 @@ void set_red_in(char *title, char *token)
 			}
 			if (g_red_in_fd == -1)
 				perror("red in open");		
-		}	
+		}
 	}
 	else
 	{
@@ -474,9 +473,14 @@ void exec_pwd(char *cmd[], int prev_pipe_idx, int pipe_idx)
 	char *cwd;
 
 	cwd = getcwd(NULL, 0);
-	ft_putstr_fd(cwd, STDOUT);
-	ft_putstr_fd("\n", STDOUT);
-	free(cwd);
+	if (!cwd)
+		perror("getcwd err");
+	else
+	{
+		ft_putstr_fd(cwd, STDOUT);
+		ft_putstr_fd("\n", STDOUT);
+		free(cwd);
+	}
 }
 
 void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
