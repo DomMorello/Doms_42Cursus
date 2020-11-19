@@ -68,6 +68,10 @@ void copy_environ(void)
 int	main(int argc, char *argv[])
 {
 	// test();
-	
+	char *s1 = "env";
+	char *token = "enva";
+	int a = ft_strncmp(s1, token, ft_strlen(s1));
+	printf("a: %d\n", a);
+
 	return (0);
 }

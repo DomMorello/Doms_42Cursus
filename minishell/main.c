@@ -617,11 +617,11 @@ void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 	else
 		token = cmd[i + 1];
 	//process로 진행해야 할 명령어들 그 외에는 execve로 실행
-	if (!ft_strncmp(PWD, token, ft_strlen(token)))
+	if (!ft_strncmp(PWD, token, ft_strlen(token) > ft_strlen(PWD) ? ft_strlen(token) : ft_strlen(PWD)))
 		exec_pwd(cmd, i, pipe_idx);
-	else if (!ft_strncmp(ENV, token, ft_strlen(token)))
+	else if (!ft_strncmp(ENV, token, ft_strlen(token) > ft_strlen(ENV) ? ft_strlen(token) : ft_strlen(ENV)))
 		exec_env(cmd, i, pipe_idx);
-	else if (!ft_strncmp(EXPORT, token, ft_strlen(token)))
+	else if (!ft_strncmp(EXPORT, token, ft_strlen(token) > ft_strlen(EXPORT) ? ft_strlen(token) : ft_strlen(EXPORT)))
 		exec_export_p(cmd, i, pipe_idx);
 	else
 		handle_executable(token, cmd, i, pipe_idx);
@@ -648,13 +648,6 @@ void exec_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
         wait(NULL);
         set_pipe_parent();
     }
-}
-
-int is_no_process(char *token)
-{
-	if (!strcmp(token, CD))	//더 추가돼야 하는데 일단은 cd만
-		return (TRUE);
-	return (FALSE);
 }
 
 char *get_key(char *content)
@@ -726,12 +719,18 @@ void handle_cmd(char *token, char *cmd[], int *prev_pipe_idx, int pipe_idx)
 	/* 여기도 argc 해서 export로 넘겨야겠지? */
 	// if (!strcmp(token, ECHO))
 	// 	exec_built_in(exec_echo, cmd, *prev_pipe_idx, pipe_idx);
-	/*else */if (!ft_strncmp(token, CD, ft_strlen(token)))
-		exec_nprocess_built_in(exec_cd, cmd, prev_pipe_idx, pipe_idx);
+	/*else */if (!ft_strncmp(token, CD, ft_strlen(token) > ft_strlen(CD) ? ft_strlen(token) : ft_strlen(CD)))
+	{
+		printf("cd!\n");
+		// exec_nprocess_built_in(exec_cd, cmd, prev_pipe_idx, pipe_idx);
+	}
 	// else if (!strcmp(token, PWD))
 	// 	exec_built_in(exec_pwd, cmd, prev_pipe_idx, pipe_idx);
-	else if (!ft_strncmp(token, EXPORT, ft_strlen(token)))
-		exec_nprocess_built_in(exec_export_np, cmd, prev_pipe_idx, pipe_idx);
+	else if (!ft_strncmp(token, EXPORT, ft_strlen(token) > ft_strlen(EXPORT) ? ft_strlen(token) : ft_strlen(EXPORT)))
+	{
+		printf("export!\n");
+		// exec_nprocess_built_in(exec_export_np, cmd, prev_pipe_idx, pipe_idx);
+	}
 	// else if (!strcmp(token, UNSET))
 	// 	exec_built_in(exec_unset, cmd, prev_pipe_idx, pipe_idx);
 	// else if (!strcmp(token, ENV))
@@ -800,11 +799,11 @@ void handle_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 		token = cmd[i + 1];
 	// if (!strcmp(token, ECHO))
 	// 	exec_built_in(exec_echo, cmd, i, pipe_idx);
-	/*else */if (!strcmp(token, CD))
+	/*else */if (!ft_strncmp(token, CD, ft_strlen(token) > ft_strlen(CD) ? ft_strlen(token) : ft_strlen(CD)))
 		exec_nprocess_built_in(exec_cd, cmd, prev_pipe_idx, pipe_idx);
 	// else if (!strcmp(token, PWD))
 	// 	exec_built_in(exec_pwd, cmd, prev_pipe_idx, pipe_idx);
-	else if (!strcmp(token, EXPORT) && argc > 1)
+	else if (!ft_strncmp(token, EXPORT, ft_strlen(token) > ft_strlen(EXPORT) ? ft_strlen(token) : ft_strlen(EXPORT)) && argc > 1)
 		exec_nprocess_built_in(exec_export_np, cmd, prev_pipe_idx, pipe_idx);
 	// else if (!strcmp(token, UNSET))
 	// 	exec_built_in(exec_unset, cmd, prev_pipe_idx, pipe_idx);
