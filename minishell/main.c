@@ -583,17 +583,27 @@ void print_export(char *line)
 	ft_putstr_fd("\n", STDERR);
 }
 
-void exec_export(char *cmd[], int prev_pipe_idx, int pipe_idx)
+void exec_export_p(char *cmd[], int prev_pipe_idx, int pipe_idx)
 {
 	t_list *export_tmp;
+	int argc;
 
-	export_tmp = g_env_list;
-	sort_export(&export_tmp);
-	while (export_tmp)
+	argc = 0;
+	argc = get_argc(cmd, prev_pipe_idx, pipe_idx);
+	if (argc == 1)
 	{
-		print_export((char *)export_tmp->content);
-		export_tmp = export_tmp->next;
+		export_tmp = g_env_list;
+		sort_export(&export_tmp);
+		while (export_tmp)
+		{
+			print_export((char *)export_tmp->content);
+			export_tmp = export_tmp->next;
+		}
 	}
+	// else
+	// {
+	// 	export_with_argv(cmd, argc);
+	// }
 }
 
 void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
@@ -612,7 +622,7 @@ void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 	else if (!ft_strncmp(ENV, token, ft_strlen(token)))
 		exec_env(cmd, i, pipe_idx);
 	else if (!ft_strncmp(EXPORT, token, ft_strlen(token)))
-		exec_export(cmd, i, pipe_idx);
+		exec_export_p(cmd, i, pipe_idx);
 	else
 		handle_executable(token, cmd, i, pipe_idx);
 }
@@ -647,16 +657,38 @@ int is_no_process(char *token)
 	return (FALSE);
 }
 
+void exec_export_np(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
+{
+	int i;
+	t_list *new;
+	char *new_content;
+
+	i = 1;
+	while (i < argc)
+	{
+		new_content = NULL;
+		new = NULL;
+		if (ft_strrchr(cmd[i], '='))
+		{
+			new_content = ft_strdup(cmd[i]);
+			new = ft_lstnew(new_content);
+			ft_lstadd_back(&g_env_list, new);
+		}
+		i++;
+	}
+}
+
 void handle_cmd(char *token, char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
+	/* 여기도 argc 해서 export로 넘겨야겠지? */
 	// if (!strcmp(token, ECHO))
 	// 	exec_built_in(exec_echo, cmd, *prev_pipe_idx, pipe_idx);
-	/*else */if (!strcmp(token, CD))
+	/*else */if (!ft_strncmp(token, CD, ft_strlen(token)))
 		exec_nprocess_built_in(exec_cd, cmd, prev_pipe_idx, pipe_idx);
 	// else if (!strcmp(token, PWD))
 	// 	exec_built_in(exec_pwd, cmd, prev_pipe_idx, pipe_idx);
-	// else if (!strcmp(token, EXPORT))
-	// 	exec_built_in(exec_export, cmd, prev_pipe_idx, pipe_idx);
+	else if (!ft_strncmp(token, EXPORT, ft_strlen(token)))
+		exec_nprocess_built_in(exec_export_np, cmd, prev_pipe_idx, pipe_idx);
 	// else if (!strcmp(token, UNSET))
 	// 	exec_built_in(exec_unset, cmd, prev_pipe_idx, pipe_idx);
 	// else if (!strcmp(token, ENV))
@@ -715,8 +747,10 @@ void handle_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
 	char *token;
 	int i;
+	int argc;
 
 	i = *prev_pipe_idx;
+	argc = get_argc(cmd, i, pipe_idx);
 	if (i == 0)
 		token = cmd[i];
 	else
@@ -727,8 +761,8 @@ void handle_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 		exec_nprocess_built_in(exec_cd, cmd, prev_pipe_idx, pipe_idx);
 	// else if (!strcmp(token, PWD))
 	// 	exec_built_in(exec_pwd, cmd, prev_pipe_idx, pipe_idx);
-	// else if (!strcmp(token, EXPORT))
-	// 	exec_built_in(exec_export, cmd, prev_pipe_idx, pipe_idx);
+	else if (!strcmp(token, EXPORT) && argc > 1)
+		exec_nprocess_built_in(exec_export_np, cmd, prev_pipe_idx, pipe_idx);
 	// else if (!strcmp(token, UNSET))
 	// 	exec_built_in(exec_unset, cmd, prev_pipe_idx, pipe_idx);
 	// else if (!strcmp(token, ENV))

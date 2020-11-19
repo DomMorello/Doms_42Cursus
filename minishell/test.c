@@ -45,9 +45,51 @@ void test()
 	}
 }
 
+t_list *g_env;
+t_list head;
+
+void copy_env(void)
+{
+	head.content = "hello";
+	head.next = NULL;
+	g_env = &head;
+
+	t_list *tmp = ft_lstnew("world");
+	ft_lstadd_back(&g_env, tmp);
+}
+
+void print_env(void)
+{
+	t_list *test = g_env;
+	while (test)
+	{
+		printf("%s\n", (char *)test->content);
+		test = test->next;
+	}
+}
+
+void exec_export(void)
+{
+	pid_t pid = fork();
+	if (pid == 0)
+	{
+		t_list *tmp = ft_lstnew("what");
+		ft_lstadd_back(&g_env, tmp);
+		printf("child!!\n");
+		print_env();
+		exit(-1);
+	}
+	else
+	{
+		wait(NULL);
+	}
+}
+
 int	main(int argc, char *argv[])
 {
 	// test();
-	
+	copy_env();
+	exec_export();
+	print_env();
 	return (0);
 }
