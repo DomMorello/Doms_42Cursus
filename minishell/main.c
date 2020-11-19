@@ -670,7 +670,7 @@ int check_update(char *content)
 	t_list *tmp;
 
 	tmp = g_env_list;
-	key = get_key(content);	//key free해줘야 한다.
+	key = get_key(content);
 	while (tmp)
 	{
 		if (!ft_strncmp(key, (char *)tmp->content, ft_strlen(key)))
@@ -683,6 +683,7 @@ int check_update(char *content)
 		}
 		tmp = tmp->next;
 	}
+	free(key);
 	return (FALSE);
 }
 
@@ -745,11 +746,6 @@ void process_pipe(char *cmd[], int *prev_pipe_idx, int pipe_idx)
         int a = pipe(g_pipe_fd);
         if (a == -1)
 			perror("pipe err");
-		/* 여기서 명령어를 파싱해서 fork인지 아닌지를 판별 */
-		// if (is_no_process(token))	//cd export 등등
-		// 	handle_no_process();	//함수 실행하는 부분
-		// else
-        	// exec_cmd(cmd, prev_pipe_idx, pipe_idx);	//그게 아닌 경우 프로세스로 진행
 		handle_cmd(token, cmd, prev_pipe_idx, pipe_idx);
         *prev_pipe_idx = pipe_idx;
     }
