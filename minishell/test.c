@@ -85,11 +85,35 @@ void exec_export(void)
 	}
 }
 
+
+char *get_key(char *content)
+{
+	int i;
+	int key_len;
+	char *ret;
+
+	i = 0;
+	key_len = 0;
+	ret = NULL;
+	while (content[i])
+	{
+		if (content[i] == '=')
+		{
+			key_len = i;
+			break ;
+		}
+		i++;
+	}
+	ret = (char *)malloc(sizeof(char) * key_len + 1);
+	ft_strlcpy(ret, content, key_len + 1);
+	printf("ret: %s\n", ret);
+}
+
 int	main(int argc, char *argv[])
 {
 	// test();
-	copy_env();
-	exec_export();
-	print_env();
+	char *s = "hello=world";
+	get_key(s);
+
 	return (0);
 }

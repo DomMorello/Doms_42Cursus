@@ -657,6 +657,41 @@ int is_no_process(char *token)
 	return (FALSE);
 }
 
+char *get_key(char *content)
+{
+	int i;
+	int key_len;
+	char *ret;
+
+	i = 0;
+	key_len = 0;
+	ret = NULL;
+	while (content[i])
+	{
+		if (content[i] == '=')
+		{
+			key_len = i;
+			break ;
+		}
+		i++;
+	}
+	if ((ret = (char *)malloc(sizeof(char) * key_len + 1)) == NULL)
+	{
+		ft_putstr_fd("malloc fuekcdup\n", STDERR);
+		exit(-1);
+	}
+	ft_strlcpy(ret, content, key_len + 1);
+	return (ret);
+}
+
+int check_update(char *content)
+{
+	char *key;
+
+	key = get_key(content);	//key free해줘야 한다.
+	/* key랑 기존 env에서 같은 키 있는지 검사하고 있으면 업데이트 */
+}
+
 void exec_export_np(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 {
 	int i;
@@ -670,9 +705,12 @@ void exec_export_np(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 		new = NULL;
 		if (ft_strrchr(cmd[i], '='))
 		{
-			new_content = ft_strdup(cmd[i]);
-			new = ft_lstnew(new_content);
-			ft_lstadd_back(&g_env_list, new);
+			if (!check_update(cmd[i]))
+			{
+				new_content = ft_strdup(cmd[i]);
+				new = ft_lstnew(new_content);
+				ft_lstadd_back(&g_env_list, new);
+			}
 		}
 		i++;
 	}
