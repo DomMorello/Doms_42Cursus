@@ -578,9 +578,9 @@ void print_export(char *line)
 		exit(-1);	//malloc fucked up
 	ft_strlcpy(new, line, ft_strlen(line) + 1);
 	add_dquote(new, line);
-	ft_putstr_fd("declare -x ", STDERR);
-	ft_putstr_fd(new, STDERR);
-	ft_putstr_fd("\n", STDERR);
+	ft_putstr_fd("declare -x ", STDOUT);
+	ft_putstr_fd(new, STDOUT);
+	ft_putstr_fd("\n", STDOUT);
 }
 
 void exec_export_p(char *cmd[], int prev_pipe_idx, int pipe_idx)
@@ -600,10 +600,6 @@ void exec_export_p(char *cmd[], int prev_pipe_idx, int pipe_idx)
 			export_tmp = export_tmp->next;
 		}
 	}
-	// else
-	// {
-	// 	export_with_argv(cmd, argc);
-	// }
 }
 
 void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
@@ -716,21 +712,16 @@ void exec_export_np(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 
 void handle_cmd(char *token, char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
-	/* 여기도 argc 해서 export로 넘겨야겠지? */
 	// if (!strcmp(token, ECHO))
 	// 	exec_built_in(exec_echo, cmd, *prev_pipe_idx, pipe_idx);
 	/*else */if (!ft_strncmp(token, CD, ft_strlen(token) > ft_strlen(CD) ? ft_strlen(token) : ft_strlen(CD)))
-	{
-		printf("cd!\n");
-		// exec_nprocess_built_in(exec_cd, cmd, prev_pipe_idx, pipe_idx);
-	}
+		exec_nprocess_built_in(exec_cd, cmd, prev_pipe_idx, pipe_idx);
 	// else if (!strcmp(token, PWD))
 	// 	exec_built_in(exec_pwd, cmd, prev_pipe_idx, pipe_idx);
-	else if (!ft_strncmp(token, EXPORT, ft_strlen(token) > ft_strlen(EXPORT) ? ft_strlen(token) : ft_strlen(EXPORT)))
-	{
-		printf("export!\n");
-		// exec_nprocess_built_in(exec_export_np, cmd, prev_pipe_idx, pipe_idx);
-	}
+	// else if (!ft_strncmp(token, EXPORT, ft_strlen(token) > ft_strlen(EXPORT) ? ft_strlen(token) : ft_strlen(EXPORT)))
+	// 	exec_nprocess_built_in(exec_export_np, cmd, prev_pipe_idx, pipe_idx);
+	/* pipe가 있으면 인자 있는 export는 작동하지 않는다. */
+
 	// else if (!strcmp(token, UNSET))
 	// 	exec_built_in(exec_unset, cmd, prev_pipe_idx, pipe_idx);
 	// else if (!strcmp(token, ENV))
