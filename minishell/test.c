@@ -4,6 +4,9 @@ int g_pipe_fd[2];
 int g_red_out_fd;
 int g_red_in_fd;
 
+t_list *g_env_list;
+t_list g_env_head;
+
 extern char **environ;
 
 void set_red_in(char *title)
@@ -45,75 +48,26 @@ void test()
 	}
 }
 
-t_list *g_env;
-t_list head;
-
-void copy_env(void)
-{
-	head.content = "hello";
-	head.next = NULL;
-	g_env = &head;
-
-	t_list *tmp = ft_lstnew("world");
-	ft_lstadd_back(&g_env, tmp);
-}
-
-void print_env(void)
-{
-	t_list *test = g_env;
-	while (test)
-	{
-		printf("%s\n", (char *)test->content);
-		test = test->next;
-	}
-}
-
-void exec_export(void)
-{
-	pid_t pid = fork();
-	if (pid == 0)
-	{
-		t_list *tmp = ft_lstnew("what");
-		ft_lstadd_back(&g_env, tmp);
-		printf("child!!\n");
-		print_env();
-		exit(-1);
-	}
-	else
-	{
-		wait(NULL);
-	}
-}
-
-
-char *get_key(char *content)
+void copy_environ(void)
 {
 	int i;
-	int key_len;
-	char *ret;
+	t_list *tmp;
 
-	i = 0;
-	key_len = 0;
-	ret = NULL;
-	while (content[i])
+	g_env_head.content = ft_strdup(environ[0]);
+	g_env_head.next = NULL;
+	g_env_list = &g_env_head;
+	i = 1;
+	while (environ[i])
 	{
-		if (content[i] == '=')
-		{
-			key_len = i;
-			break ;
-		}
+		tmp = ft_lstnew(ft_strdup(environ[i]));
+		ft_lstadd_back(&g_env_list, tmp);
 		i++;
 	}
-	ret = (char *)malloc(sizeof(char) * key_len + 1);
-	ft_strlcpy(ret, content, key_len + 1);
-	printf("ret: %s\n", ret);
 }
 
 int	main(int argc, char *argv[])
 {
 	// test();
-	char *s = "hello=world";
-	get_key(s);
-
+	
 	return (0);
 }

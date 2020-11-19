@@ -659,37 +659,42 @@ int is_no_process(char *token)
 
 char *get_key(char *content)
 {
-	int i;
 	int key_len;
 	char *ret;
 
-	i = 0;
 	key_len = 0;
 	ret = NULL;
-	while (content[i])
-	{
-		if (content[i] == '=')
-		{
-			key_len = i;
-			break ;
-		}
-		i++;
-	}
-	if ((ret = (char *)malloc(sizeof(char) * key_len + 1)) == NULL)
+	while (content[key_len] != '=')
+		key_len++;
+	if ((ret = (char *)malloc(sizeof(char) * key_len + 2)) == NULL)
 	{
 		ft_putstr_fd("malloc fuekcdup\n", STDERR);
 		exit(-1);
 	}
-	ft_strlcpy(ret, content, key_len + 1);
+	ft_strlcpy(ret, content, key_len + 2);
 	return (ret);
 }
 
 int check_update(char *content)
 {
 	char *key;
+	t_list *tmp;
 
+	tmp = g_env_list;
 	key = get_key(content);	//key free해줘야 한다.
-	/* key랑 기존 env에서 같은 키 있는지 검사하고 있으면 업데이트 */
+	while (tmp)
+	{
+		if (!ft_strncmp(key, (char *)tmp->content, ft_strlen(key)))
+		{
+			if (tmp->content)
+				free(tmp->content);
+			
+			tmp->content = ft_strdup(content);
+			return (TRUE);
+		}
+		tmp = tmp->next;
+	}
+	return (FALSE);
 }
 
 void exec_export_np(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
@@ -816,13 +821,13 @@ void copy_environ(void)
 	int i;
 	t_list *tmp;
 
-	g_env_head.content = environ[0];
+	g_env_head.content = ft_strdup(environ[0]);
 	g_env_head.next = NULL;
 	g_env_list = &g_env_head;
 	i = 1;
 	while (environ[i])
 	{
-		tmp = ft_lstnew(environ[i]);
+		tmp = ft_lstnew(ft_strdup(environ[i]));
 		ft_lstadd_back(&g_env_list, tmp);
 		i++;
 	}
