@@ -692,22 +692,25 @@ void exec_export_np(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 	int i;
 	t_list *new;
 	char *new_content;
-
-	i = 1;
-	while (i < argc)
+	
+	i = prev_pipe_idx;
+	if (!find_pipe(cmd))
 	{
-		new_content = NULL;
-		new = NULL;
-		if (ft_strrchr(cmd[i], '='))
+		while (prev_pipe_idx < argc + i + 1)
 		{
-			if (!check_update(cmd[i]))
+			new_content = NULL;
+			new = NULL;
+			if (ft_strrchr(cmd[prev_pipe_idx], '='))
 			{
-				new_content = ft_strdup(cmd[i]);
-				new = ft_lstnew(new_content);
-				ft_lstadd_back(&g_env_list, new);
+				if (!check_update(cmd[prev_pipe_idx]))
+				{
+					new_content = ft_strdup(cmd[prev_pipe_idx]);
+					new = ft_lstnew(new_content);
+					ft_lstadd_back(&g_env_list, new);
+				}
 			}
+			prev_pipe_idx++;
 		}
-		i++;
 	}
 }
 
@@ -863,12 +866,22 @@ void test(char **cmd)
 		perror("take back dup2");
 }
 
+void free_env(void)
+{
+	while (g_env_list)
+	{
+		free(g_env_list->content);
+		g_env_list = g_env_list->next;
+	}
+	ft_lstclear(&g_env_list, free);
+}
+
 int main(int argc, char *argv[])
 {
 	int ret = 0;
 	char *line;
 
-	copy_environ();	//프로그램 종료 전에 링크드 리스트 전부 free해줘야 한다
+	copy_environ();
 	while (1)
 	{
 		char **cmd;
@@ -877,12 +890,13 @@ int main(int argc, char *argv[])
 		{
 			printf("gnl error\n");
 			free(line);
-			exit(0);
+			exit(-1);
 		}
 		cmd = ft_split(line, ' ');
     	test(cmd);	//명령어 처리 함수
 		free(line);
 		free_2d_char(cmd);
 	}
+	free_env();
     return 0;
 }
