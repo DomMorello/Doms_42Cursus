@@ -337,25 +337,25 @@ int find_pipe(char *cmd[])
 	return (FALSE);
 }
 
-void update_OLDPWD(char *cwd)
+void update_env(char *cwd, char *key)
 {
 	t_list *tmp;
-	char *oldpwd;
+	char *new;
 
 	tmp = g_env_list;
-	if ((oldpwd = (char *)malloc(sizeof(char) * (ft_strlen(OLDPWD) + ft_strlen(cwd)) + 1)) == NULL)
+	if ((new = (char *)malloc(sizeof(char) * (ft_strlen(key) + ft_strlen(cwd)) + 1)) == NULL)
 	{
 		ft_putstr_fd("malloc fuckedup\n", 2);
 		exit(-1);
 	}
-	ft_strlcpy(oldpwd, OLDPWD, ft_strlen(OLDPWD) + 1);
-	ft_strlcat(oldpwd, cwd, ft_strlen(OLDPWD) + ft_strlen(cwd) + 1);
+	ft_strlcpy(new, key, ft_strlen(key) + 1);
+	ft_strlcat(new, cwd, ft_strlen(key) + ft_strlen(cwd) + 1);
 	while (tmp)
 	{
-		if (!ft_strncmp(OLDPWD, (char *)tmp->content, ft_strlen(OLDPWD)))
+		if (!ft_strncmp(key, (char *)tmp->content, ft_strlen(key)))
 		{
 			free((char *)tmp->content);
-			tmp->content = oldpwd;
+			tmp->content = new;
 		}
 		tmp = tmp->next;
 	}
@@ -374,8 +374,10 @@ void change_dir(char *cmd[], char *dir, int is_pipe)
 		{
 			if (!chdir(dir))
 			{
-				update_OLDPWD(cwd);
-				cwd = getcwd(buf, sizeof(buf));	//test
+				update_env(cwd, OLDPWD);
+				cwd = getcwd(buf, sizeof(buf));
+				update_env(cwd, PWD2);
+				/* showing result (must be deleted) */
 				ft_putstr_fd(cwd, 2);
 				ft_putstr_fd("\n", 2);
 			}

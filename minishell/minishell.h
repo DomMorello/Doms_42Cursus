@@ -32,6 +32,7 @@
 # define HOME "HOME="
 # define USRBIN "/usr/bin"
 # define OLDPWD "OLDPWD="
+# define PWD2 "PWD="
 
 # define ECHO "echo"
 # define CD "cd"
