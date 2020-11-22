@@ -68,10 +68,16 @@ void copy_environ(void)
 int	main(int argc, char *argv[])
 {
 	// test();
-	char *s1 = "env";
-	char *token = "enva";
-	int a = ft_strncmp(s1, token, ft_strlen(s1));
-	printf("a: %d\n", a);
+	char *s1 = NULL;
+	char *s2 = "OLDPWD=";
+	char *s3 = "helloworld";
+	
+	s1 = malloc(sizeof(char) * (ft_strlen(s2) + ft_strlen(s3)) + 1);
+	ft_strlcpy(s1, s2, ft_strlen(s2) + 1);
+	printf("%s\n", s1);
+	ft_strlcat(s1, s3, ft_strlen(s3) + ft_strlen(s2) + 1);
+	printf("%s\n", s1);
+
 
 	return (0);
 }

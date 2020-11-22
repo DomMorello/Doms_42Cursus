@@ -337,18 +337,44 @@ int find_pipe(char *cmd[])
 	return (FALSE);
 }
 
+void update_OLDPWD(char *cwd)
+{
+	t_list *tmp;
+	char *oldpwd;
+
+	tmp = g_env_list;
+	if ((oldpwd = (char *)malloc(sizeof(char) * (ft_strlen(OLDPWD) + ft_strlen(cwd)) + 1)) == NULL)
+	{
+		ft_putstr_fd("malloc fuckedup\n", 2);
+		exit(-1);
+	}
+	ft_strlcpy(oldpwd, OLDPWD, ft_strlen(OLDPWD) + 1);
+	ft_strlcat(oldpwd, cwd, ft_strlen(OLDPWD) + ft_strlen(cwd) + 1);
+	while (tmp)
+	{
+		if (!ft_strncmp(OLDPWD, (char *)tmp->content, ft_strlen(OLDPWD)))
+		{
+			free((char *)tmp->content);
+			tmp->content = oldpwd;
+		}
+		tmp = tmp->next;
+	}
+}
+
 void change_dir(char *cmd[], char *dir, int is_pipe)
 {
 	struct stat file;
 	char buf[100];
 	char *cwd;
  
+	cwd = getcwd(buf, sizeof(buf));
 	if (!stat(dir, &file))
 	{
 		if (!is_pipe)
 		{
 			if (!chdir(dir))
 			{
+				update_OLDPWD(cwd);
 				cwd = getcwd(buf, sizeof(buf));	//test
 				ft_putstr_fd(cwd, 2);
 				ft_putstr_fd("\n", 2);
@@ -553,13 +579,16 @@ void add_dquote(char *new, char *line)
 			i++;
 			new[i] = '\"';
 			i++;
-			while (new[i])
+			if (new[i])
 			{
+				while (new[i])
+				{
+					new[i] = line[i - 1];
+					i++;
+				}
 				new[i] = line[i - 1];
 				i++;
 			}
-			new[i] = line[i - 1];
-			i++;
 			new[i] = '\"';
 			new[i + 1] = '\0';
 		}
@@ -623,7 +652,7 @@ void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 		handle_executable(token, cmd, i, pipe_idx);
 }
 
-void exec_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
+void exec_cmd_p(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
     pid_t pid;
 	
@@ -692,11 +721,16 @@ void exec_export_np(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 	int i;
 	t_list *new;
 	char *new_content;
-	
+	int size;
+
 	i = prev_pipe_idx;
+	if (i == 0)
+		size = argc + i;
+	else
+		size = argc + i + 1;
 	if (!find_pipe(cmd))
 	{
-		while (prev_pipe_idx < argc + i + 1)
+		while (prev_pipe_idx < size)
 		{
 			new_content = NULL;
 			new = NULL;
@@ -733,7 +767,7 @@ void handle_cmd(char *token, char *cmd[], int *prev_pipe_idx, int pipe_idx)
 	// else if (!strcmp(token, EXIT))
 	// 	exec_built_in(exec_exit, cmd, prev_pipe_idx, pipe_idx);
 	else
-		exec_cmd(cmd, prev_pipe_idx, pipe_idx);
+		exec_cmd_p(cmd, prev_pipe_idx, pipe_idx);
 }
 
 void process_pipe(char *cmd[], int *prev_pipe_idx, int pipe_idx)

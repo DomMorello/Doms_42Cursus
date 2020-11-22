@@ -31,6 +31,7 @@
 # define PATH "PATH="
 # define HOME "HOME="
 # define USRBIN "/usr/bin"
+# define OLDPWD "OLDPWD="
 
 # define ECHO "echo"
 # define CD "cd"
