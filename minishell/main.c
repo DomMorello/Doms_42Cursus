@@ -318,11 +318,6 @@ void handle_executable(char *token, char *cmd[], int prev_pipe_idx, int pipe_idx
 		exec_executable2(cmd, prev_pipe_idx, pipe_idx, filepath);
 }
 
-void exec_echo(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
-{
-	printf("echo!!\n");
-}
-
 int find_pipe(char *cmd[])
 {
 	int i;
@@ -612,7 +607,6 @@ void exec_export_p(char *cmd[], int prev_pipe_idx, int pipe_idx)
 	t_list *export_tmp;
 	int argc;
 
-	argc = 0;
 	argc = get_argc(cmd, prev_pipe_idx, pipe_idx);
 	if (argc == 1)
 	{
@@ -624,6 +618,42 @@ void exec_export_p(char *cmd[], int prev_pipe_idx, int pipe_idx)
 			export_tmp = export_tmp->next;
 		}
 	}
+}
+
+void print_echo(char *cmd[], int start, int end)
+{
+	int option;
+
+	option = FALSE;
+	if (!ft_strncmp(cmd[start], N_OPTION, ft_strlen(cmd[start]) > ft_strlen(N_OPTION) ? ft_strlen(cmd[start]) : ft_strlen(N_OPTION)))
+		option = TRUE;
+	while (start < end)
+	{
+		
+		ft_putstr_fd(cmd[start], 2);
+		ft_putstr_fd("\n", 2);
+		start++;
+	}
+}
+
+void exec_echo(char *cmd[], int prev_pipe_idx, int pipe_idx)
+{
+	int argc;
+	int i;
+	int size;
+
+	argc = get_argc(cmd, prev_pipe_idx, pipe_idx);
+	if (prev_pipe_idx == 0)
+	{
+		i = prev_pipe_idx + 1;
+		size = argc;
+	}
+	else
+	{
+		i = prev_pipe_idx + 2;
+		size = argc + prev_pipe_idx + 1;
+	}
+	print_echo(cmd, i, size);
 }
 
 void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
@@ -643,6 +673,8 @@ void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 		exec_env(cmd, i, pipe_idx);
 	else if (!ft_strncmp(EXPORT, token, ft_strlen(token) > ft_strlen(EXPORT) ? ft_strlen(token) : ft_strlen(EXPORT)))
 		exec_export_p(cmd, i, pipe_idx);
+	else if (!ft_strncmp(ECHO, token, ft_strlen(token) > ft_strlen(ECHO) ? ft_strlen(token) : ft_strlen(ECHO)))
+		exec_echo(cmd, i, pipe_idx);
 	else
 		handle_executable(token, cmd, i, pipe_idx);
 }
@@ -743,7 +775,7 @@ void exec_export_np(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 	}
 }
 
-void check_key(char *token)
+void delete_env_node(char *token)
 {
 	t_list *tmp;
 	t_list *prev;
@@ -771,14 +803,17 @@ void exec_unset(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 	int size;
 
 	i = prev_pipe_idx;
-	if (i == 0)
-		size = argc + i;
-	else
-		size = argc + i + 1;
-	while (prev_pipe_idx < size)
+	if (!find_pipe(cmd))
 	{
-		check_key(cmd[prev_pipe_idx]);
-		prev_pipe_idx++;
+		if (i == 0)
+			size = argc + i;
+		else
+			size = argc + i + 1;
+		while (prev_pipe_idx < size)
+		{
+			delete_env_node(cmd[prev_pipe_idx]);
+			prev_pipe_idx++;
+		}
 	}
 }
 
@@ -865,6 +900,7 @@ void handle_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 		exec_nprocess_built_in(exec_export_np, cmd, prev_pipe_idx, pipe_idx);
 	else if (!ft_strncmp(token, UNSET, ft_strlen(token) > ft_strlen(UNSET) ? ft_strlen(token) : ft_strlen(UNSET)))
 		exec_nprocess_built_in(exec_unset, cmd, prev_pipe_idx, pipe_idx);
+	
 	// else if (!strcmp(token, ENV))
 	// 	exec_built_in(exec_env, cmd, prev_pipe_idx, pipe_idx);
 	// else if (!strcmp(token, EXIT))

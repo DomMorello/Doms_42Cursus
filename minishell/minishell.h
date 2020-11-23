@@ -33,6 +33,7 @@
 # define USRBIN "/usr/bin"
 # define OLDPWD "OLDPWD="
 # define PWD2 "PWD="
+# define N_OPTION "-n"
 
 # define ECHO "echo"
 # define CD "cd"
