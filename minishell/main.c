@@ -383,7 +383,6 @@ void change_dir(char *cmd[], char *dir, int is_pipe)
 			}
 			else
 			{
-				// perror("chdir err");
 				ft_putstr_fd("mongshell: cd: ", 2);
 				ft_putstr_fd(dir, 2);
 				ft_putstr_fd(": Not a directory\n", 2);
@@ -392,7 +391,6 @@ void change_dir(char *cmd[], char *dir, int is_pipe)
 	}
 	else
 	{
-		// perror("stat err");
 		ft_putstr_fd("mongshell: cd: ", 2);
 		ft_putstr_fd(dir, 2);
 		ft_putstr_fd(": No such file or directory\n", 2);
@@ -464,11 +462,6 @@ void exec_cd(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 	{
 		change_dir(cmd, dir, is_pipe);
 	}
-}
-
-void exec_unset(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
-{
-	printf("unset!!\n");
 }
 
 void exec_exit(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
@@ -750,6 +743,44 @@ void exec_export_np(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 	}
 }
 
+void check_key(char *token)
+{
+	t_list *tmp;
+	t_list *prev;
+
+	tmp = g_env_list;
+	while (tmp)
+	{
+		if (!ft_strncmp(token, (char *)tmp->content, ft_strlen(token)))
+		{
+			if (((char *)tmp->content)[ft_strlen(token)] == '=')
+			{
+				prev->next = tmp->next;
+				ft_lstdelone(tmp, free);
+			}
+		}
+		prev = tmp;
+		tmp = tmp->next;
+	}
+}
+
+void exec_unset(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
+{
+	int i;
+	int size;
+
+	i = prev_pipe_idx;
+	if (i == 0)
+		size = argc + i;
+	else
+		size = argc + i + 1;
+	while (prev_pipe_idx < size)
+	{
+		check_key(cmd[prev_pipe_idx]);
+		prev_pipe_idx++;
+	}
+}
+
 void handle_cmd(char *token, char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
 	// if (!strcmp(token, ECHO))
@@ -762,8 +793,8 @@ void handle_cmd(char *token, char *cmd[], int *prev_pipe_idx, int pipe_idx)
 	// 	exec_nprocess_built_in(exec_export_np, cmd, prev_pipe_idx, pipe_idx);
 	/* pipe가 있으면 인자 있는 export는 작동하지 않는다. */
 
-	// else if (!strcmp(token, UNSET))
-	// 	exec_built_in(exec_unset, cmd, prev_pipe_idx, pipe_idx);
+	else if (!ft_strncmp(token, UNSET, ft_strlen(token) > ft_strlen(UNSET) ? ft_strlen(token) : ft_strlen(UNSET)))
+		exec_nprocess_built_in(exec_unset, cmd, prev_pipe_idx, pipe_idx);
 	// else if (!strcmp(token, ENV))
 	// 	exec_built_in(exec_env, cmd, prev_pipe_idx, pipe_idx);
 	// else if (!strcmp(token, EXIT))
@@ -831,8 +862,8 @@ void handle_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 	// 	exec_built_in(exec_pwd, cmd, prev_pipe_idx, pipe_idx);
 	else if (!ft_strncmp(token, EXPORT, ft_strlen(token) > ft_strlen(EXPORT) ? ft_strlen(token) : ft_strlen(EXPORT)) && argc > 1)
 		exec_nprocess_built_in(exec_export_np, cmd, prev_pipe_idx, pipe_idx);
-	// else if (!strcmp(token, UNSET))
-	// 	exec_built_in(exec_unset, cmd, prev_pipe_idx, pipe_idx);
+	else if (!ft_strncmp(token, UNSET, ft_strlen(token) > ft_strlen(UNSET) ? ft_strlen(token) : ft_strlen(UNSET)))
+		exec_nprocess_built_in(exec_unset, cmd, prev_pipe_idx, pipe_idx);
 	// else if (!strcmp(token, ENV))
 	// 	exec_built_in(exec_env, cmd, prev_pipe_idx, pipe_idx);
 	// else if (!strcmp(token, EXIT))

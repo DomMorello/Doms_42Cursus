@@ -68,6 +68,11 @@ void copy_environ(void)
 int	main(int argc, char *argv[])
 {
 	// test();
+	char *s1 = "hel";
+	char *s2 = "hel=asfd";
+
+	int a = ft_strncmp(s1, s2, ft_strlen(s1));
+	printf("%d\n", a);
 
 	return (0);
 }
