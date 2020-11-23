@@ -749,6 +749,7 @@ void check_key(char *token)
 	t_list *prev;
 
 	tmp = g_env_list;
+	prev = tmp;
 	while (tmp)
 	{
 		if (!ft_strncmp(token, (char *)tmp->content, ft_strlen(token)))
