@@ -18,7 +18,7 @@ void set_red_out(char *title)
 			perror("dup2");
 		close(g_red_out_fd);
 	}
-	if (g_red_out_fd == -1)
+	else
 		perror("red out open");
 }
 
@@ -488,6 +488,7 @@ void exec_pwd(char *cmd[], int prev_pipe_idx, int pipe_idx)
 		ft_putstr_fd("\n", STDOUT);
 		free(cwd);
 	}
+	exit(0);
 }
 
 int find_env_path(void)
@@ -525,6 +526,7 @@ void exec_env(char *cmd[], int prev_pipe_idx, int pipe_idx)
 			env_tmp = env_tmp->next;
 		}
 	}
+	exit(0);
 }
 
 void	sort_export(t_list **list)
@@ -618,6 +620,7 @@ void exec_export_p(char *cmd[], int prev_pipe_idx, int pipe_idx)
 			export_tmp = export_tmp->next;
 		}
 	}
+	exit(0);
 }
 
 void print_echo(char *cmd[], int start, int end)
@@ -629,11 +632,30 @@ void print_echo(char *cmd[], int start, int end)
 		option = TRUE;
 	while (start < end)
 	{
-		
-		ft_putstr_fd(cmd[start], 2);
-		ft_putstr_fd("\n", 2);
+		if (is_redirection(cmd[start]))
+			start += 2;
+		if (ft_strncmp(cmd[start], "|", ft_strlen(cmd[start])))
+			ft_putstr_fd(cmd[start], 2);
+		if (!option)
+			ft_putstr_fd("\n", 2);
 		start++;
+		/* 이제 이 부분을 띄어쓰기 하나만 해서 하면 된다. */
 	}
+}
+
+int get_len(char *cmd[], int prev_pipe_idx, int pipe_idx)
+{
+    int len;
+	int start;
+
+    len = 0;
+	if (prev_pipe_idx == 0)
+		start = 0;
+	else
+		start = 1;		
+    while (start++ < pipe_idx)
+        len++;
+    return (len);
 }
 
 void exec_echo(char *cmd[], int prev_pipe_idx, int pipe_idx)
@@ -642,7 +664,7 @@ void exec_echo(char *cmd[], int prev_pipe_idx, int pipe_idx)
 	int i;
 	int size;
 
-	argc = get_argc(cmd, prev_pipe_idx, pipe_idx);
+	argc = get_len(cmd, prev_pipe_idx, pipe_idx);
 	if (prev_pipe_idx == 0)
 	{
 		i = prev_pipe_idx + 1;
@@ -654,6 +676,7 @@ void exec_echo(char *cmd[], int prev_pipe_idx, int pipe_idx)
 		size = argc + prev_pipe_idx + 1;
 	}
 	print_echo(cmd, i, size);
+	exit(0);
 }
 
 void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
@@ -674,7 +697,10 @@ void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 	else if (!ft_strncmp(EXPORT, token, ft_strlen(token) > ft_strlen(EXPORT) ? ft_strlen(token) : ft_strlen(EXPORT)))
 		exec_export_p(cmd, i, pipe_idx);
 	else if (!ft_strncmp(ECHO, token, ft_strlen(token) > ft_strlen(ECHO) ? ft_strlen(token) : ft_strlen(ECHO)))
+	{
+		ft_putstr_fd("here?\n", 2);
 		exec_echo(cmd, i, pipe_idx);
+	}
 	else
 		handle_executable(token, cmd, i, pipe_idx);
 }
