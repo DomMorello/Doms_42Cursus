@@ -65,14 +65,22 @@ void copy_environ(void)
 	}
 }
 
+void sig_handler(int signo)
+{
+	printf("worked!\n");
+	exit(1);
+}
+
 int	main(int argc, char *argv[])
 {
 	// test();
-	char *s1 = "hel";
-	char *s2 = "hel=asfd";
-
-	int a = ft_strncmp(s1, s2, ft_strlen(s1));
-	printf("%d\n", a);
-
+	int i = 0;
+	signal(SIGINT, sig_handler);
+	while (1)
+	{
+		printf("%d\n", i);
+		i++;
+		sleep(1);
+	}
 	return (0);
 }

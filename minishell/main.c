@@ -3,11 +3,11 @@
 extern char **environ;
 t_list *g_env_list;
 t_list g_env_head;
-// 쉘 변수를 담을 링크드 리스트도 필요할 것 같다.
 
 int g_pipe_fd[2];
 int g_red_out_fd;
 int g_red_in_fd;
+int g_last_state;
 
 void set_red_out(char *title)
 {
@@ -1022,7 +1022,7 @@ int main(int argc, char *argv[])
 			exit(-1);
 		}
 		cmd = ft_split(line, ' ');
-    	test(cmd);	//명령어 처리 함수
+		test(cmd);	//명령어 처리 함수
 		free(line);
 		free_2d_char(cmd);
 	}
