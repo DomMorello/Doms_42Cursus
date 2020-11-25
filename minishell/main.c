@@ -1005,11 +1005,19 @@ void free_env(void)
 	ft_lstclear(&g_env_list, free);
 }
 
+void do_nothing(int signo)
+{
+	ft_putstr_fd("\n", 2);
+	ft_putstr_fd("\033[0;32mmongshell\033[0;34m$ \033[0m", 2);
+	(void)signo;
+}
+
 int main(int argc, char *argv[])
 {
 	int ret = 0;
 	char *line;
-
+	
+	signal(SIGQUIT, do_nothing);
 	copy_environ();
 	while (1)
 	{
