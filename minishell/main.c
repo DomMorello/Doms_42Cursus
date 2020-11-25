@@ -635,12 +635,14 @@ void print_echo(char *cmd[], int start, int end)
 		if (is_redirection(cmd[start]))
 			start += 2;
 		if (ft_strncmp(cmd[start], "|", ft_strlen(cmd[start])))
+		{
 			ft_putstr_fd(cmd[start], 2);
-		if (!option)
-			ft_putstr_fd("\n", 2);
+			ft_putstr_fd(" ", 2);
+		}
 		start++;
-		/* 이제 이 부분을 띄어쓰기 하나만 해서 하면 된다. */
 	}
+	if (!option)
+		ft_putstr_fd("\n", 2);
 }
 
 int get_len(char *cmd[], int prev_pipe_idx, int pipe_idx)
@@ -697,10 +699,7 @@ void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 	else if (!ft_strncmp(EXPORT, token, ft_strlen(token) > ft_strlen(EXPORT) ? ft_strlen(token) : ft_strlen(EXPORT)))
 		exec_export_p(cmd, i, pipe_idx);
 	else if (!ft_strncmp(ECHO, token, ft_strlen(token) > ft_strlen(ECHO) ? ft_strlen(token) : ft_strlen(ECHO)))
-	{
-		ft_putstr_fd("here?\n", 2);
 		exec_echo(cmd, i, pipe_idx);
-	}
 	else
 		handle_executable(token, cmd, i, pipe_idx);
 }
