@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:26:45 by jipark            #+#    #+#             */
-/*   Updated: 2020/11/26 18:10:09 by marvin           ###   ########.fr       */
+/*   Updated: 2020/11/26 23:46:05 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,35 +47,36 @@ static void			replace_key_with_value(t_token *token, char **environ)
 		handle_empty_environ(token);
 }
 
-static void			search_and_replace_env(t_token **token, char **environ)
-{
-	t_token			*new_token;
-	t_token 		*new_token_tmp;
-	t_token 		*last;
+// static void			search_and_replace_env(t_token **token, char **environ)
+// {
+// 	t_token			*new_token;
+// 	t_token 		*new_token_tmp;
+// 	t_token 		*last;
 
-	(*token)->next->data += sizeof(char);
-	(*token)->next->data[ft_strlen((*token)->next->data) - 1] = CHAR_NULL;
-	new_token = tokenize_lexer((*token)->next->data, ft_strlen((*token)->next->data));
-	new_token_tmp = new_token;
-	while (new_token_tmp)
-	{
-		if (new_token_tmp->type == CHAR_ENV)
-			replace_key_with_value(new_token_tmp, environ);
-		new_token_tmp = new_token_tmp->next;
-	}
-	last = (*token)->next->next;
-	(*token)->next->data -= sizeof(char);
-	free((*token)->next->data);
-	free((*token)->next);
-	(*token)->next = new_token;
-	while (new_token->next != NULL)
-		new_token = new_token->next;
-	new_token->next = last;
-}
+// 	(*token)->next->data += sizeof(char);
+// 	(*token)->next->data[ft_strlen((*token)->next->data) - 1] = CHAR_NULL;
+// 	new_token = tokenize_lexer((*token)->next->data, ft_strlen((*token)->next->data));
+// 	new_token_tmp = new_token;
+// 	while (new_token_tmp)
+// 	{
+// 		if (new_token_tmp->type == CHAR_ENV)
+// 			replace_key_with_value(new_token_tmp, environ);
+// 		new_token_tmp = new_token_tmp->next;
+// 	}
+// 	last = (*token)->next->next;
+// 	(*token)->next->data -= sizeof(char);
+// 	free((*token)->next->data);
+// 	free((*token)->next);
+// 	(*token)->next = new_token;
+// 	while (new_token->next != NULL)
+// 		new_token = new_token->next;
+// 	new_token->next = last;
+// }
 
 void			adjust_env(t_token *token)
 {
 	extern char	**environ;
+	/* 여기서 내가 복사한 전역변수를 검사하도록 수정해야 한다. */
 	t_token		*tmp;
 
 	tmp = token;
@@ -91,8 +92,10 @@ void			adjust_env(t_token *token)
 		tmp = tmp->next;
 	}
 	tmp = token;
-	while (token != NULL) {
-		if (token->data[0] == CHAR_NULL) {
+	while (token != NULL) 
+	{
+		if (token->data[0] == CHAR_NULL) 
+		{
 			free(token->data);
 			tmp->next = NULL;
 			free(token);

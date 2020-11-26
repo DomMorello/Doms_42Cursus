@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:23:45 by jipark            #+#    #+#             */
-/*   Updated: 2020/11/26 18:10:35 by marvin           ###   ########.fr       */
+/*   Updated: 2020/11/26 23:14:47 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,13 @@ int				is_env_exception(t_token *token, t_status *status, char *str, char char_t
 	** 보완점 : echo $user$user인 경우, token 반환시 'echo', 'dongleedonglee' 두개를 반환하도록 해야함...
 	*/
 	if (char_type == CHAR_ENV && (str[status->i - 1] != ' ' && str[status->i + 1] != ' ')
-		&& status->state != STATE_IN_QUOTE && status->state != STATE_IN_DQUOTE) //예시 : echo hi my name is$user, 현재 i가 $를 가리킴.,
+		/*&& status->state != STATE_IN_QUOTE && status->state != STATE_IN_DQUOTE*/) //예시 : echo hi my name is$user, 현재 i가 $를 가리킴.,
+		//큰따옴표나 따옴표 안에서도 환경변수가 인식돼야 하기 때문에 뭔가 바뀌어야 할 것 같다.
 		//$앞에 공백이 아닌 경우에 대한 예외 처리. $앞이 공백인 경우는 다른 곳에서 잘 처리되기 때문.
 	{
 		token->data[status->j] = CHAR_NULL; //현재 token->data : name/0
-		token->next = (t_token *)malloc(sizeof(t_token)); //token->next를 생성해주고
+		if ((token->next = (t_token *)malloc(sizeof(t_token))) == NULL) //token->next를 생성해주고
+			exit(ERROR);
 		token = token->next; //token이 다음 token을 읽게 해줌.
 		initiate_token(token, status->length - status->i); //token초기화.
 		status->j = 0; //다시 j를 0으로 초기화

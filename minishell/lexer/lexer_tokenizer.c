@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_tokenizer.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jipark <jipark@student.42.fr>              +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/11/26 14:52:03 by jipark           ###   ########.fr       */
+/*   Updated: 2020/11/26 23:47:58 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,7 @@ static int		tokenize_normal(t_token *token, t_status *status, char c, char char_
 
 	result = -1;
 	if (char_type == CHAR_NORMAL) //예를들어 echo hi이고, 현재 str[status->i](즉 char c)가 일반 문자인경우
-	{
 		token->data[(status->j)++] = c; //계속 data에 기록해주고 j인덱스 올려줌
-		//check_command_flag(token, status); (지워도 문제없을듯 ㅋ, 현재 token이 명령어인지 아닌지 ㅊ ㅔ크)
-	}
 	else if (char_type == CHAR_WHITESPACE) //echo hi이고 현재 data에 echo까지 쓴 상태에서 다음 읽은 문자가 공백인경우
 		result = issue_new_token(token, status, FALSE, char_type);
 	else if (char_type == CHAR_QUOTE) //echo 'hi'이고 현재 data에 echo까지 쓴 상태에서 다음 읽은 문자가 ' 인 경우
@@ -30,9 +27,10 @@ static int		tokenize_normal(t_token *token, t_status *status, char c, char char_
 		add_char_and_change_state(token, status, char_type, STATE_IN_DQUOTE);
 	else if (char_type == CHAR_ENV) //똑같음
 		add_char_and_change_state(token, status, char_type, STATE_IN_ENV);
-	else if (char_type == CHAR_SEMICOLON || char_type == CHAR_PIPE || char_type == CHAR_REDIRECTION)
+	else if (char_type == CHAR_SEMICOLON || char_type == CHAR_PIPE || char_type == CHAR_RED_OUT || char_type == CHAR_RED_IN)
 		result = issue_new_token(token, status, TRUE, char_type);
-	return (result == -1 || result == TRUE); //exit 처리 고려
+	//리디렉션 double output도 추가해야 한다.
+	return (result == -1 || result == TRUE);
 }
 
 static void		tokenize_quote(t_token *token, t_status *status, char c, int is_end_of_quote)
@@ -68,8 +66,9 @@ static int		convert_input_into_tokens(t_token *token, t_status *status, char *st
 		{ //위와같은 예외 사항이 아닌 경우 무조건 if 안으로 들어옴.
 			if (status->state == STATE_NORMAL)
 			{
-				if (!tokenize_normal(token, status, str[status->i], char_type))
-					return (FALSE);
+				tokenize_normal(token, status, str[status->i], char_type);
+				// if (!tokenize_normal(token, status, str[status->i], char_type))
+				// 	return (FALSE);
 			}
 			else if (status->state == STATE_IN_QUOTE) //echo "hi my name is" 문자열에서 status->i가 h를 가리킨경우.
 				tokenize_quote(token, status, str[status->i], is_end_of_quote(char_type, CHAR_QUOTE));
@@ -82,7 +81,7 @@ static int		convert_input_into_tokens(t_token *token, t_status *status, char *st
 			token = token->next; //현재 위치에서는 그 전 TOEKN을 가리키고 있기 때문에, 다음으로 넘겨줌
 		examine_end_of_line(token, status, char_type);
 	}
-	return (TRUE); //문자 검사 마치면 TRUE 리턴.
+	// return (TRUE); //문자 검사 마치면 TRUE 리턴.
 }
 
 t_token			*tokenize_lexer(char *str, int length)
@@ -91,12 +90,12 @@ t_token			*tokenize_lexer(char *str, int length)
 	t_status	status;
 
 	if ((token = (t_token *)malloc(sizeof(t_token))) == NULL) //list 첫번재 원소 메모리 할당
-		return (NULL);
-	if (!initiate_token(token, length))
-		return (NULL); //TODO : free token.
+		exit(ERROR);
+	initiate_token(token, length);
 	initiate_token_status(&status, str, length);
-	if (!convert_input_into_tokens(token, &status, str))
-		return (NULL); //TODO : free all tokens.
+	convert_input_into_tokens(token, &status, str);
+	// if (!convert_input_into_tokens(token, &status, str))
+	// 	return (NULL); //TODO : free all tokens.
 	return (token); //토큰의 가장 첫 번째 원소 주소를 반환.
 }
 
@@ -113,72 +112,16 @@ int				main(int argc, char const *argv[])
 		if (check_basic_grammar(token))
 		{
 			t_token *tmp = token;
-			/*
-			현재는 echo $user hi 이런식으로 생긴 토큰을 echo donglee hi로 변경해줘야함.
-			*/
-			adjust_env(tmp);
-
+			adjust_env(tmp);//환경변수를 찾아서 해당 value로 바꿔줘야 함.
+			/* 여기다가 추가적으로 큰따옴표나 따옴표 안에 있는 
+				환경변수를 처리해줘야 할 것 같다. */
 			//테스트 출력
-			while (tmp) {
-				printf("%s\n", tmp->data);
-				tmp = tmp->next;
-			}
-
-			/*
-			1) quote/dquote environment
-			*/
-
-			/*
-			adjust_env(tmp);
-			*/
-			/*
-			while (tmp)
+			while (tmp) 
 			{
-				if (tmp->white_space_flag == TRUE)
-					printf("%s, next white space : yes\n", tmp->data);
-				else if (tmp->white_space_flag == FALSE)
-					printf("%s, next white space : no\n", tmp->data);
+				printf("%s			,%d\n", tmp->data, tmp->type);
 				tmp = tmp->next;
 			}
-			*/
-			/*
-			while (tmp) {
-				printf("%s\n", tmp->data);
-				tmp = tmp->next;
-			}
-			*/
 		}
-
-		//{
-			/*
-			adjust_env(token);
-			*/
-		/*
-			i = 0;
-			t_token **tokens = convert_list_into_array(token);
-			while (tokens[i])
-			{
-				if (tokens[i]->type == COMMAND)
-					printf("%15s, status : COMMAND\n", tokens[i]->data);
-				else if (tokens[i]->type == CHAR_ENV)
-					printf("%15s, status : ENV\n", tokens[i]->data);
-				else if (tokens[i]->type == CHAR_QUOTE)
-					printf("%15s, status : QUOTE\n", tokens[i]->data);
-				else if (tokens[i]->type == CHAR_DQUOTE)
-					printf("%15s, status : DQUOTE\n", tokens[i]->data);
-				else if (tokens[i]->type == TOKEN)
-					printf("%15s, status : TOKEN\n", tokens[i]->data);
-				else if (tokens[i]->type == CHAR_PIPE)
-					printf("%15s, status : PIPE\n", tokens[i]->data);
-				else if (tokens[i]->type == CHAR_REDIRECTION)
-					printf("%15s, status : REDIRECTION\n", tokens[i]->data);
-				else if (tokens[i]->type == CHAR_SEMICOLON)
-					printf("%15s, status : SEMICOLON\n", tokens[i]->data);
-				else
-					printf("null");
-				i++;
-			}
-		*/
 		free_all_tokens(&token, free);
 	}
 	return (EXIT_SUCCESS);
