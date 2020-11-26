@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/11/26 23:47:58 by marvin           ###   ########.fr       */
+/*   Updated: 2020/11/27 00:59:30 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,7 @@ static int		convert_input_into_tokens(t_token *token, t_status *status, char *st
 		if (!is_env_exception(token, status, str, char_type)) //문자열에서 현재 읽은 문자가 $일 때, echo hi$user와 같이 환경변수앞에 공백이 아니라 문자인경우 확인
 		{ //위와같은 예외 사항이 아닌 경우 무조건 if 안으로 들어옴.
 			if (status->state == STATE_NORMAL)
-			{
 				tokenize_normal(token, status, str[status->i], char_type);
-				// if (!tokenize_normal(token, status, str[status->i], char_type))
-				// 	return (FALSE);
-			}
 			else if (status->state == STATE_IN_QUOTE) //echo "hi my name is" 문자열에서 status->i가 h를 가리킨경우.
 				tokenize_quote(token, status, str[status->i], is_end_of_quote(char_type, CHAR_QUOTE));
 			else if (status->state == STATE_IN_DQUOTE)
@@ -81,7 +77,6 @@ static int		convert_input_into_tokens(t_token *token, t_status *status, char *st
 			token = token->next; //현재 위치에서는 그 전 TOEKN을 가리키고 있기 때문에, 다음으로 넘겨줌
 		examine_end_of_line(token, status, char_type);
 	}
-	// return (TRUE); //문자 검사 마치면 TRUE 리턴.
 }
 
 t_token			*tokenize_lexer(char *str, int length)
@@ -94,9 +89,20 @@ t_token			*tokenize_lexer(char *str, int length)
 	initiate_token(token, length);
 	initiate_token_status(&status, str, length);
 	convert_input_into_tokens(token, &status, str);
-	// if (!convert_input_into_tokens(token, &status, str))
-	// 	return (NULL); //TODO : free all tokens.
 	return (token); //토큰의 가장 첫 번째 원소 주소를 반환.
+}
+
+/*
+	1) $user$user 인 경우 dongleedonglee 문자열로 하나의 토큰으로 해야 한다.
+	2) 큰 따옴표와 따옴표 안에 있는 환경변수를 치환해야 한다. (따로 로직)
+	3) '>>' 더블 아웃풋을 파싱해야 하는데 이 또한 따로 로직으로 처리해야 할 것 같다.
+	4) 세미콜론으로 나눠서 2차원 문자열 배열을 순서대로 내 함수에 넘겨줘야 한다.
+	5) copy_env 를 통해 복제한 리스트를 갖고 환경변수를 치환하도록 해야 한다.
+*/
+
+void check_dred_out(t_token *token)
+{
+	
 }
 
 int				main(int argc, char const *argv[])
@@ -112,9 +118,9 @@ int				main(int argc, char const *argv[])
 		if (check_basic_grammar(token))
 		{
 			t_token *tmp = token;
+			t_token *tmp2 = token;
 			adjust_env(tmp);//환경변수를 찾아서 해당 value로 바꿔줘야 함.
-			/* 여기다가 추가적으로 큰따옴표나 따옴표 안에 있는 
-				환경변수를 처리해줘야 할 것 같다. */
+			check_dred_out(tmp2);
 			//테스트 출력
 			while (tmp) 
 			{
@@ -126,20 +132,3 @@ int				main(int argc, char const *argv[])
 	}
 	return (EXIT_SUCCESS);
 }
-
-
-
-/*
-
-
-TODO
-
-1. Reset all logics.
-2. Tokenize를 initiate하기
-3. quote에 한해서만 convert작업 실행. $ 발견했을때 치환해주기.
-
-
-
-
-
-*/

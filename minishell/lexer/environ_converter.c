@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:26:45 by jipark            #+#    #+#             */
-/*   Updated: 2020/11/26 23:46:05 by marvin           ###   ########.fr       */
+/*   Updated: 2020/11/27 01:01:13 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,6 @@ void			adjust_env(t_token *token)
 	{
 		if (tmp->type == CHAR_ENV) //environment 토큰 찾고
 			replace_key_with_value(tmp, environ); //key를 value로 변환
-		/* 기존 로직 사용 불가
-		if (tmp->next != NULL && (tmp->next->type == CHAR_QUOTE || tmp->next->type == CHAR_DQUOTE))
-			search_and_replace_env(&tmp, environ);
-		*/
 		// 보완점 : 따옴표 안의 환경변수를 처리해야함. 여기다가.
 		tmp = tmp->next;
 	}
@@ -104,4 +100,5 @@ void			adjust_env(t_token *token)
 		tmp = token;
 		token = token->next;
 	}
+	/* 이 코드는 왜 있는지 jipark한테 함 물어보자 */
 }
