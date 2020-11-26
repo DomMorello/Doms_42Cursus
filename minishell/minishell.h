@@ -63,7 +63,8 @@ enum TOKEN_TYPE {
 	CHAR_NEWLINE = '\n',
 	CHAR_NORMAL = -1,
 	CHAR_PIPE = '|',
-	CHAR_REDIRECTION = '>',
+	CHAR_RED_OUT = '>',
+	CHAR_RED_IN = '<',
 	CHAR_QUOTE = '\'',
 	CHAR_DQUOTE = '\"',
 	CHAR_SEMICOLON = ';',
@@ -71,7 +72,6 @@ enum TOKEN_TYPE {
 	CHAR_TAB = '\t',	//필요해?
 	CHAR_ENV = '$',
 	TOKEN = -1,
-	COMMAND = 1	//필요해?
 };
 
 typedef struct s_token t_token;
@@ -107,7 +107,6 @@ typedef struct s_status
 	int j; //token 안의 data 문자열에 대한 인덱스
 	int state;
 	int length;
-	int command_flag;	//필요해?
 	char *str;
 }				t_status;
 
@@ -119,7 +118,7 @@ t_token		*tokenize_lexer(char *str, int length);
 int				is_normal_env(char c1, char c2);
 int				is_normal_special_char(char c1, char c2);
 char			analyze_char_type(char *str, t_status *status);
-int			initiate_token(t_token *token, int length);
+void			initiate_token(t_token *token, int length);
 int				is_end_of_quote(char char_type, char c);
 
 void			adjust_env(t_token *token);
@@ -134,7 +133,6 @@ int				check_basic_grammar(t_token *token);
 void			free_all_tokens(t_token **token, void (*del)(void *));
 
 int				issue_new_token(t_token *token, t_status *status, int flag, char char_type);
-void			check_command_flag(t_token *token, t_status *status);
 void			add_char_and_change_state(t_token *token, t_status *status, char char_type, int state);
 
 #endif
