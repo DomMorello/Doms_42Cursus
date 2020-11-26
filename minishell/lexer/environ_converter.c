@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   environ_converter.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jipark <jipark@student.42.fr>              +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:26:45 by jipark            #+#    #+#             */
-/*   Updated: 2020/11/26 14:59:33 by jipark           ###   ########.fr       */
+/*   Updated: 2020/11/26 18:10:09 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ static void			replace_key_with_value(t_token *token, char **environ)
 	int				j;
 	int				flag;
 
-	i = ZERO_INDEX;
+	i = 0;
 	flag = FALSE;
 	key = token->data + sizeof(char); //현재 문자가 $user면 당장 필요한건 user라는 문자이기 때문에 포인터 주소 올려줌.
 	while (environ[i] != NULL) //환경변수 반복문 돌면서
 	{
-		j = ZERO_INDEX;
+		j = 0;
 		while (environ[i][j] != '=') //환경변수들이 xx=yy 형태이기때문에, key(xx)의 길이를 구함
 			j++;
 		if (!ft_strncmp(environ[i], key, j)) //key(user)랑 environ[i](xx)를 비교
@@ -92,7 +92,7 @@ void			adjust_env(t_token *token)
 	}
 	tmp = token;
 	while (token != NULL) {
-		if (token->data[ZERO_INDEX] == CHAR_NULL) {
+		if (token->data[0] == CHAR_NULL) {
 			free(token->data);
 			tmp->next = NULL;
 			free(token);

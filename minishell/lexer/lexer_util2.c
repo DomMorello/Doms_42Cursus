@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_util2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jipark <jipark@student.42.fr>              +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:23:45 by jipark            #+#    #+#             */
-/*   Updated: 2020/11/26 14:50:43 by jipark           ###   ########.fr       */
+/*   Updated: 2020/11/26 18:10:35 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 void			examine_end_of_line(t_token *token, t_status *status, char char_type)
 {
 	(status->i)++; //norm때문에 i를 여기서 올려줌
-	if (char_type != CHAR_NULL || status->j <= ZERO_INDEX) //여기서 말하는 char_type은 gnl로 읽은 문자열의 마지막 문자가 null인지
+	if (char_type != CHAR_NULL || status->j <= 0) //여기서 말하는 char_type은 gnl로 읽은 문자열의 마지막 문자가 null인지
 		return ; //status->j 에 대한 조건은 없어도 될것같음. 보완점.
 	token->data[status->j] = CHAR_NULL;
-	status->j = ZERO_INDEX;
+	status->j = 0;
 }
 
 int				is_env_exception(t_token *token, t_status *status, char *str, char char_type)
@@ -36,7 +36,7 @@ int				is_env_exception(t_token *token, t_status *status, char *str, char char_t
 		token->next = (t_token *)malloc(sizeof(t_token)); //token->next를 생성해주고
 		token = token->next; //token이 다음 token을 읽게 해줌.
 		initiate_token(token, status->length - status->i); //token초기화.
-		status->j = ZERO_INDEX; //다시 j를 0으로 초기화
+		status->j = 0; //다시 j를 0으로 초기화
 		token->type = CHAR_ENV;
 		token->data[(status->j)++] = CHAR_ENV; //새로운 토큰의 첫번째 문자를 $로 기록하고, j를 1 증가시켜줌
 		status->state = STATE_IN_ENV;
@@ -68,7 +68,7 @@ t_token			**convert_list_into_array(t_token *token)
 	int			size;
 	int			i;
 
-	size = ZERO_INDEX;
+	size = 0;
 	tmp = token;
 	while (tmp != NULL)
 	{
@@ -78,7 +78,7 @@ t_token			**convert_list_into_array(t_token *token)
 	if ((dest = (t_token **)malloc(sizeof(t_token *) * (size + 1))) == NULL)
 		return (NULL); //TODO : free all tokens.
 	dest[size] = NULL;
-	i = ZERO_INDEX;
+	i = 0;
 	while (i < size)
 	{
 		dest[i] = token;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_util.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jipark <jipark@student.42.fr>              +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:00:28 by jipark            #+#    #+#             */
-/*   Updated: 2020/11/26 13:55:12 by jipark           ###   ########.fr       */
+/*   Updated: 2020/11/26 18:10:27 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	flush_buf(char *buf)
 {
 	int		i;
 
-	i = ZERO_INDEX;
+	i = 0;
 	while (i < BUF_SIZE)
 		buf[i++] = CHAR_NULL;
 }
@@ -26,7 +26,7 @@ static void	remove_newline(char *buf)
 	int		i;
 
 	i = BUF_SIZE - 1;
-	while (i >= ZERO_INDEX)
+	while (i >= 0)
 	{
 		if (buf[i] == CHAR_NEWLINE)
 		{
@@ -59,8 +59,8 @@ int			initiate_token(t_token *token, int length)
 
 void		initiate_token_status(t_status *status, char *str, int length)
 {
-	status->i = ZERO_INDEX; //read나 gnl로 읽은 문자열 인덱스
-	status->j = ZERO_INDEX;
+	status->i = 0; //read나 gnl로 읽은 문자열 인덱스
+	status->j = 0;
 	status->state = STATE_NORMAL; //따옴표가 아닌 일반 노말
 	status->length = length;
 	status->command_flag = TRUE;

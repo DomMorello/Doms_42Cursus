@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_issuer.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jipark <jipark@student.42.fr>              +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:22:18 by jipark            #+#    #+#             */
-/*   Updated: 2020/11/26 14:33:52 by jipark           ###   ########.fr       */
+/*   Updated: 2020/11/26 18:10:41 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,14 @@ int			issue_new_token(t_token *token, t_status *status, int flag, char char_type
 	else if (status->command_flag == FALSE && flag && char_type != CHAR_REDIRECTION)
 		status->command_flag = TRUE;
 	*/
-	if (status->j > ZERO_INDEX)
+	if (status->j > 0)
 	{
 		token->data[status->j] = CHAR_NULL; //그러면 현재 토큰의 마지막 j자리를 null로 마무리
 		if ((token->next = (t_token *)malloc(sizeof(t_token))) == NULL) //새로운 토큰 생성
 			return (FALSE);  //현재 토큰의 next를 새 토큰 주소로 입력해둠
 		token = token->next; //다음 토큰을 현재 토큰으로 함(땡겨줌)
 		initiate_token(token, status->length - status->i); //초기화 하고
-		status->j = ZERO_INDEX; //다시 첫번째부터 기록해야하기 때문에 j를 0으로
+		status->j = 0; //다시 첫번째부터 기록해야하기 때문에 j를 0으로
 	}
 	if (flag && !issue_special_token(token, status, char_type))
 		return (FALSE);

@@ -47,7 +47,6 @@ int get_next_line(int fd, char **line);
 
 /* jipark */
 
-# define ZERO_INDEX 0
 # define BUF_SIZE 1024
 /*
 ** enum STATE represents state of current character when parsing lexer.
@@ -69,10 +68,10 @@ enum TOKEN_TYPE {
 	CHAR_DQUOTE = '\"',
 	CHAR_SEMICOLON = ';',
 	CHAR_WHITESPACE = ' ',
-	CHAR_TAB = '\t',
+	CHAR_TAB = '\t',	//필요해?
 	CHAR_ENV = '$',
 	TOKEN = -1,
-	COMMAND = 1
+	COMMAND = 1	//필요해?
 };
 
 typedef struct s_token t_token;
@@ -85,7 +84,7 @@ typedef struct s_token
 {
 	char *data;
 	int type;
-	int white_space_flag;
+	int white_space_flag;	//필요해?
 	t_token *next;
 }				t_token;
 
@@ -108,11 +107,9 @@ typedef struct s_status
 	int j; //token 안의 data 문자열에 대한 인덱스
 	int state;
 	int length;
-	int command_flag;
+	int command_flag;	//필요해?
 	char *str;
 }				t_status;
-
-int get_next_line(int fd, char **line);
 
 /*
 ** Directory lexer
@@ -122,12 +119,12 @@ t_token		*tokenize_lexer(char *str, int length);
 int				is_normal_env(char c1, char c2);
 int				is_normal_special_char(char c1, char c2);
 char			analyze_char_type(char *str, t_status *status);
+int			initiate_token(t_token *token, int length);
 int				is_end_of_quote(char char_type, char c);
 
 void			adjust_env(t_token *token);
 
 void			handle_prompt(char *buf);
-int			initiate_token(t_token *token, int length);
 void		initiate_token_status(t_status *status, char *str, int length);
 
 void			examine_end_of_line(t_token *token, t_status *status, char char_type);

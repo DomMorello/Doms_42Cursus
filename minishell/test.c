@@ -74,13 +74,20 @@ void sig_handler(int signo)
 int	main(int argc, char *argv[])
 {
 	// test();
+	// int i = 0;
+	// signal(SIGINT, sig_handler);
+	// while (1)
+	// {
+	// 	printf("%d\n", i);
+	// 	i++;
+	// 	sleep(1);
+	// }
+	char *s = malloc(sizeof(char) * 10);
+	ft_bzero(s, 10);
 	int i = 0;
-	signal(SIGINT, sig_handler);
-	while (1)
+	while (i < 11)
 	{
-		printf("%d\n", i);
-		i++;
-		sleep(1);
+		printf("%d\n", s[i++]);
 	}
 	return (0);
 }
