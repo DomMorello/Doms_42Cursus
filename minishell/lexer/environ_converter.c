@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:26:45 by jipark            #+#    #+#             */
-/*   Updated: 2020/11/27 01:01:13 by marvin           ###   ########.fr       */
+/*   Updated: 2020/11/27 12:55:42 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,18 +87,4 @@ void			adjust_env(t_token *token)
 		// 보완점 : 따옴표 안의 환경변수를 처리해야함. 여기다가.
 		tmp = tmp->next;
 	}
-	tmp = token;
-	while (token != NULL) 
-	{
-		if (token->data[0] == CHAR_NULL) 
-		{
-			free(token->data);
-			tmp->next = NULL;
-			free(token);
-			return;
-		}
-		tmp = token;
-		token = token->next;
-	}
-	/* 이 코드는 왜 있는지 jipark한테 함 물어보자 */
 }

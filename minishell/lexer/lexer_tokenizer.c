@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/11/27 00:59:30 by marvin           ###   ########.fr       */
+/*   Updated: 2020/11/27 14:15:16 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,9 +100,40 @@ t_token			*tokenize_lexer(char *str, int length)
 	5) copy_env 를 통해 복제한 리스트를 갖고 환경변수를 치환하도록 해야 한다.
 */
 
+void make_dred_out(t_token *token, t_token *deleted, t_token *prev)
+{
+	if (token == deleted)
+	{
+		token->next = token->next->next;
+		free(token->data);
+		token->data = ft_strdup(">>");
+		free(token->next->data);
+		free(token->next);
+	}
+	else
+	{
+		
+	}
+}
+
 void check_dred_out(t_token *token)
 {
-	
+	t_token *tmp;
+	t_token *prev;
+	int d_red_out;
+
+	d_red_out = FALSE;
+	tmp = token;
+	while (tmp)
+	{
+		if (!ft_strncmp(tmp->data, ">", ft_strlen(">")))
+			d_red_out = TRUE;
+		prev = tmp;
+		if (d_red_out && !ft_strncmp(tmp->next->data, ">", ft_strlen(">")))
+			make_dred_out(token, tmp, prev);
+		d_red_out = FALSE;
+		tmp = tmp->next;
+	}
 }
 
 int				main(int argc, char const *argv[])
@@ -118,9 +149,8 @@ int				main(int argc, char const *argv[])
 		if (check_basic_grammar(token))
 		{
 			t_token *tmp = token;
-			t_token *tmp2 = token;
 			adjust_env(tmp);//환경변수를 찾아서 해당 value로 바꿔줘야 함.
-			check_dred_out(tmp2);
+			// check_dred_out(tmp);
 			//테스트 출력
 			while (tmp) 
 			{

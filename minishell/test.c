@@ -82,12 +82,9 @@ int	main(int argc, char *argv[])
 	// 	i++;
 	// 	sleep(1);
 	// }
-	char *s = malloc(sizeof(char) * 10);
-	ft_bzero(s, 10);
-	int i = 0;
-	while (i < 11)
-	{
-		printf("%d\n", s[i++]);
-	}
+	char *s1 = ">";
+	char *s2 = ">";
+	int a = ft_strncmp(s1, s2, 1);
+	printf("%d\n", a);
 	return (0);
 }
