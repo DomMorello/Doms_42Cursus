@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/11/27 14:21:34 by donglee          ###   ########.fr       */
+/*   Updated: 2020/11/27 15:45:45 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,26 +94,20 @@ t_token			*tokenize_lexer(char *str, int length)
 
 /*
 	1) $user$user 인 경우 dongleedonglee 문자열로 하나의 토큰으로 해야 한다.
-	2) 큰 따옴표와 따옴표 안에 있는 환경변수를 치환해야 한다. (따로 로직)
-	3) '>>' 더블 아웃풋을 파싱해야 하는데 이 또한 따로 로직으로 처리해야 할 것 같다.
+	2) 큰 따옴표와 따옴표 안에 있는 환경변수를 치환해야 한다.
+	3) '>>' 더블 아웃풋을 파싱해야 하는데 이 또한 따로 로직으로 처리해야 할 것 같다.(done)
 	4) 세미콜론으로 나눠서 2차원 문자열 배열을 순서대로 내 함수에 넘겨줘야 한다.
 	5) copy_env 를 통해 복제한 리스트를 갖고 환경변수를 치환하도록 해야 한다.
+	6) 마지막에 공백이 있을 경우 token이 하나 더 생성되는데 문제가 없을까?
 */
 
-void make_dred_out(t_token *token, t_token *deleted, t_token *prev)
+void make_dred_out(t_token *deleted, t_token *prev)
 {
-	if (token == deleted)
-	{
-		token->next = token->next->next;
-		free(token->data);
-		token->data = ft_strdup(">>");
-		free(token->next->data);
-		free(token->next);
-	}
-	else
-	{
-		
-	}
+	prev->next = deleted->next;
+	free(prev->data);
+	prev->data = ft_strdup(">>");
+	free(deleted->data);
+	free(deleted);
 }
 
 void check_dred_out(t_token *token)
@@ -122,17 +116,17 @@ void check_dred_out(t_token *token)
 	t_token *prev;
 	int d_red_out;
 
-	d_red_out = FALSE;
 	tmp = token;
-	while (tmp)
+	d_red_out = FALSE;
+	while (tmp)	//echo hi > > test > > test1
 	{
 		if (!ft_strncmp(tmp->data, ">", ft_strlen(">")))
 			d_red_out = TRUE;
 		prev = tmp;
-		if (d_red_out && !ft_strncmp(tmp->next->data, ">", ft_strlen(">")))
-			make_dred_out(token, tmp, prev);
-		d_red_out = FALSE;
 		tmp = tmp->next;
+		if (tmp && d_red_out &&!ft_strncmp(tmp->data, ">", ft_strlen(">")))
+			make_dred_out(tmp, prev);
+		d_red_out = FALSE;
 	}
 }
 
@@ -148,21 +142,16 @@ int				main(int argc, char const *argv[])
 		token = tokenize_lexer(buf, ft_strlen(buf)); //링크드 리스트의 헤드 부분 포인터 주소 반환
 		if (check_basic_grammar(token))
 		{
-			t_token *tmp = token;
-			adjust_env(tmp);//환경변수를 찾아서 해당 value로 바꿔줘야 함.
-			// check_dred_out(tmp);
+			adjust_env(token);	//환경변수를 찾아서 해당 value로 바꿔줘야 함.
+			check_dred_out(token);
 			//테스트 출력
-			while (tmp) 
+			while (token) 
 			{
-				printf("%s			,%d\n", tmp->data, tmp->type);
-				tmp = tmp->next;
+				printf("%s			,%d\n", token->data, token->type);
+				token = token->next;
 			}
 		}
 		free_all_tokens(&token, free);
-	}
-	while (1)
-	{
-		;
 	}
 	return (EXIT_SUCCESS);
 }
