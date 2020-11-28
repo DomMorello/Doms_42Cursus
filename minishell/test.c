@@ -82,9 +82,8 @@ int	main(int argc, char *argv[])
 	// 	i++;
 	// 	sleep(1);
 	// }
-	t_list *tmp = g_env_list;
-	int i = 0;
-	if (((char *)(tmp->content))[i] != '=')
-		printf("hi\n");
+	char *s = "hello";
+	char *ret = ft_strdup(s + 2);
+	printf("ret %s\n", ret);
 	return (0);
 }

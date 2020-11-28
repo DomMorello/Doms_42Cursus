@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/11/27 18:50:53 by marvin           ###   ########.fr       */
+/*   Updated: 2020/11/28 18:56:36 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,8 +126,9 @@ void check_env(char *data)
 	int i;
 	char *key;
 	int key_len;
-	extern char **environ;	//나중에 t_list 카피한 것으로 바꿔야 한다. 
+	t_list *env_tmp;
 
+	env_tmp = g_env_list;
 	//echo hi "ma $user name$user"
 	i = 0;
 	while (data[i])
@@ -229,10 +230,10 @@ int				main(int argc, char const *argv[])
 		if (check_basic_grammar(token))
 		{
 			adjust_env(token);	//환경변수를 찾아서 해당 value로 바꿔줘야 함.
-			// check_dred_out(token);
-			// erase_quote(token, CHAR_DQUOTE);
-			// erase_quote(token, CHAR_QUOTE);
-			// adjust_env_in_dquote(token);
+			check_dred_out(token);
+			erase_quote(token, CHAR_DQUOTE);
+			erase_quote(token, CHAR_QUOTE);
+			adjust_env_in_dquote(token);
 			//테스트 출력
 			while (token) 
 			{
