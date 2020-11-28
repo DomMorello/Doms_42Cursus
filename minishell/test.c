@@ -82,9 +82,9 @@ int	main(int argc, char *argv[])
 	// 	i++;
 	// 	sleep(1);
 	// }
-	char *s1 = ">";
-	char *s2 = ">";
-	int a = ft_strncmp(s1, s2, 1);
-	printf("%d\n", a);
+	t_list *tmp = g_env_list;
+	int i = 0;
+	if (((char *)(tmp->content))[i] != '=')
+		printf("hi\n");
 	return (0);
 }

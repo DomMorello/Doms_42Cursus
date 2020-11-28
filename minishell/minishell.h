@@ -15,6 +15,10 @@
 #include <signal.h>
 #include "./libft/libft.h"
 
+extern char **environ;
+t_list *g_env_list;
+t_list g_env_head;
+
 // # define GREEN "\033[0;32m"
 // # define LIGHT_BLUE "\033[0;34m"
 // # define YELLOW "\033[0;33m"

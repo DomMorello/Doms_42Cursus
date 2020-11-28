@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/11/27 15:45:45 by marvin           ###   ########.fr       */
+/*   Updated: 2020/11/27 18:50:53 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,15 +92,6 @@ t_token			*tokenize_lexer(char *str, int length)
 	return (token); //토큰의 가장 첫 번째 원소 주소를 반환.
 }
 
-/*
-	1) $user$user 인 경우 dongleedonglee 문자열로 하나의 토큰으로 해야 한다.
-	2) 큰 따옴표와 따옴표 안에 있는 환경변수를 치환해야 한다.
-	3) '>>' 더블 아웃풋을 파싱해야 하는데 이 또한 따로 로직으로 처리해야 할 것 같다.(done)
-	4) 세미콜론으로 나눠서 2차원 문자열 배열을 순서대로 내 함수에 넘겨줘야 한다.
-	5) copy_env 를 통해 복제한 리스트를 갖고 환경변수를 치환하도록 해야 한다.
-	6) 마지막에 공백이 있을 경우 token이 하나 더 생성되는데 문제가 없을까?
-*/
-
 void make_dred_out(t_token *deleted, t_token *prev)
 {
 	prev->next = deleted->next;
@@ -118,7 +109,7 @@ void check_dred_out(t_token *token)
 
 	tmp = token;
 	d_red_out = FALSE;
-	while (tmp)	//echo hi > > test > > test1
+	while (tmp)
 	{
 		if (!ft_strncmp(tmp->data, ">", ft_strlen(">")))
 			d_red_out = TRUE;
@@ -130,11 +121,106 @@ void check_dred_out(t_token *token)
 	}
 }
 
+void check_env(char *data)
+{
+	int i;
+	char *key;
+	int key_len;
+	extern char **environ;	//나중에 t_list 카피한 것으로 바꿔야 한다. 
+
+	//echo hi "ma $user name$user"
+	i = 0;
+	while (data[i])
+	{
+		if (data[i] == CHAR_ENV)
+		{
+			key_len = 0;
+			while (data[i] != ' ')
+			{
+				
+			}
+		}
+		i++;
+	}
+}
+
+void adjust_env_in_dquote(t_token *token)
+{
+	t_token *tmp;
+
+	tmp = token;
+	while (tmp)
+	{
+		if (tmp->type == CHAR_DQUOTE)
+		{
+			check_env(tmp->data);
+		}
+		tmp = tmp->next;
+	}
+}
+
+void copy_without_quote(char *data, char *new, char quote_type)
+{
+	int i;
+	int j;
+
+	i = 0;
+	j = 0;
+	while (data[i])
+	{
+		if (data[i] != quote_type)
+			new[j++] = data[i];
+		i++;
+	}
+	new[j] = 0;
+}
+
+void erase_quote(t_token *token, char quote_type)
+{
+	t_token *tmp;
+	char *new;
+	char which_quote;
+
+	tmp = token;
+	which_quote = quote_type;
+	while (tmp)
+	{
+		if (tmp->type == which_quote)
+		{
+			if ((new = (char *)malloc(sizeof(char) * ft_strlen(tmp->data) - 1)) == NULL)
+				exit(-1);
+			copy_without_quote(tmp->data, new, which_quote);
+			free(tmp->data);
+			tmp->data = new;
+		}
+		tmp = tmp->next;
+	}
+}
+
+//main에 있는데 일단 여기서 테스트를 위해서
+void copy_environ(void)
+{
+	int i;
+	t_list *tmp;
+
+	g_env_head.content = ft_strdup(environ[0]);
+	g_env_head.next = NULL;
+	g_env_list = &g_env_head;
+	i = 1;
+	while (environ[i])
+	{
+		tmp = ft_lstnew(ft_strdup(environ[i]));
+		ft_lstadd_back(&g_env_list, tmp);
+		i++;
+	}
+}
+
 int				main(int argc, char const *argv[])
 {
 	t_token		*token;
 	char		buf[BUF_SIZE];
 	int			i;
+	copy_environ();
 
 	while (TRUE)
 	{
@@ -143,7 +229,10 @@ int				main(int argc, char const *argv[])
 		if (check_basic_grammar(token))
 		{
 			adjust_env(token);	//환경변수를 찾아서 해당 value로 바꿔줘야 함.
-			check_dred_out(token);
+			// check_dred_out(token);
+			// erase_quote(token, CHAR_DQUOTE);
+			// erase_quote(token, CHAR_QUOTE);
+			// adjust_env_in_dquote(token);
 			//테스트 출력
 			while (token) 
 			{
@@ -155,3 +244,13 @@ int				main(int argc, char const *argv[])
 	}
 	return (EXIT_SUCCESS);
 }
+
+/*
+	1) $user$user 인 경우 dongleedonglee 문자열로 하나의 토큰으로 해야 한다.
+	2) 큰 따옴표와 따옴표 안에 있는 환경변수를 치환해야 한다.
+	3) '>>' 더블 아웃풋을 파싱해야 하는데 이 또한 따로 로직으로 처리해야 할 것 같다.(done)
+	4) 세미콜론으로 나눠서 2차원 문자열 배열을 순서대로 내 함수에 넘겨줘야 한다.
+	5) copy_env 를 통해 복제한 리스트를 갖고 환경변수를 치환하도록 해야 한다.
+	6) 마지막에 공백이 있을 경우 token이 하나 더 생성되는데 문제가 없을까?
+	7) 큰따옴표 작은따옴표 제거한 상태로 넘겨줘야 한다 (done)
+*/
