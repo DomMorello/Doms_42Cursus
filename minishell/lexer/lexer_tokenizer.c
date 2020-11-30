@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/11/28 18:56:36 by marvin           ###   ########.fr       */
+/*   Updated: 2020/11/30 19:01:04 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,25 +121,90 @@ void check_dred_out(t_token *token)
 	}
 }
 
-void check_env(char *data)
+void convert_to_value(char *new, char *env_content, int *i, int *j)
 {
+	int env_key_len;
+
+	env_key_len = 0;
+	(*i)++;
+	while (env_content[env_key_len] != '=')
+		env_key_len++;
+	env_key_len++;
+	while (env_content[env_key_len])
+		new[(*j)++] = env_content[env_key_len++];
+}
+
+void convert_key_to_env(char *env_content, char *token_data, char *key, int env_idx)
+{
+	int env_key_len;
+	char *new;
 	int i;
-	char *key;
-	int key_len;
+	int j;
+
+	env_key_len = 0;
+	i = 0;
+	j = 0;
+	while (env_content[env_key_len] != '=')
+		env_key_len++;
+	if ((new = (char *)malloc(sizeof(char) * ft_strlen(token_data) + ft_strlen(&env_content[env_key_len + 1]) - ft_strlen(key) + 2)) == NULL)
+		exit(-1);
+	while (token_data[i])
+	{
+		if (token_data[i] == CHAR_ENV && i == env_idx)
+		{
+			convert_to_value(new, env_content, &i, &j);
+			i += ft_strlen(key);
+		}
+		new[j++] = token_data[i++];
+	}
+	// 1 $user $user $user $user $user 2
+	new[j] = 0;
+	/* why strdup? */
+	free(token_data);
+	token_data = ft_strdup(new);
+	free(new);
+}
+
+void search_key_in_env(char *key, char *token_data, int env_idx)
+{
 	t_list *env_tmp;
+	int env_key_len;
 
 	env_tmp = g_env_list;
-	//echo hi "ma $user name$user"
-	i = 0;
-	while (data[i])
+	while (env_tmp)
 	{
-		if (data[i] == CHAR_ENV)
+		env_key_len = 0;
+		while (((char *)(env_tmp->content))[env_key_len] != '=')
+			env_key_len++;
+		if (!ft_strncmp((char *)env_tmp->content, key, env_key_len > ft_strlen(key) ? env_key_len : ft_strlen(key)))
+			convert_key_to_env((char *)env_tmp->content, token_data, key, env_idx);
+		env_tmp = env_tmp->next;
+	}
+}
+
+void copy_env_key(char *token_data)
+{
+	char *env;
+	int i;
+	int j;
+	int env_idx;
+
+	i = 0;
+	env_idx = 0;
+	while (token_data[i])
+	{
+		j = 0;
+		if (token_data[i] == CHAR_ENV)
 		{
-			key_len = 0;
-			while (data[i] != ' ')
-			{
-				
-			}
+			env_idx = i;
+			if ((env = (char *)malloc(sizeof(char) * ft_strlen(token_data) + 1)) == NULL)
+				exit(-1);
+			i++;
+			while (token_data[i] && token_data[i] != ' ')
+				env[j++] = token_data[i++];
+			env[j] = 0;
+			search_key_in_env(env, token_data, env_idx);
+			free(env);
 		}
 		i++;
 	}
@@ -154,7 +219,7 @@ void adjust_env_in_dquote(t_token *token)
 	{
 		if (tmp->type == CHAR_DQUOTE)
 		{
-			check_env(tmp->data);
+			copy_env_key(tmp->data);
 		}
 		tmp = tmp->next;
 	}
@@ -235,7 +300,7 @@ int				main(int argc, char const *argv[])
 			erase_quote(token, CHAR_QUOTE);
 			adjust_env_in_dquote(token);
 			//테스트 출력
-			while (token) 
+			while (token)
 			{
 				printf("%s			,%d\n", token->data, token->type);
 				token = token->next;

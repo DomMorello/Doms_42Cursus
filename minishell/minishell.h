@@ -84,6 +84,7 @@ typedef struct s_lexer t_lexer;
 /*
 ** Struct s_token is an element of linked list.
 */
+
 typedef struct s_token
 {
 	char *data;

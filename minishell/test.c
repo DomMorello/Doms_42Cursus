@@ -82,8 +82,6 @@ int	main(int argc, char *argv[])
 	// 	i++;
 	// 	sleep(1);
 	// }
-	char *s = "hello";
-	char *ret = ft_strdup(s + 2);
-	printf("ret %s\n", ret);
+	
 	return (0);
 }
