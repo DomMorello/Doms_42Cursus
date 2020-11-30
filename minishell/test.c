@@ -82,6 +82,44 @@ int	main(int argc, char *argv[])
 	// 	i++;
 	// 	sleep(1);
 	// }
-	
+	// char *s1 = malloc(3);
+	// s1 = "hi";
+	// char *s2 = malloc(6);
+	// s2 = "hello";
+	// free(s1);
+	// s1 = s2;
+	// printf("%s\n", s1);
+
+	// char *s1 = malloc(3);
+	// s1[0] = 'h';
+	// s1[1] = 'i';
+	// s1[2] = 0;
+	// free(s1);
+	// s1 = malloc(6);
+	// s1[0] = 'h';
+	// s1[1] = 'e';
+	// s1[2] = 'l';
+	// s1[3] = 'l';
+	// s1[4] = 'o';
+	// s1[5] = 0;
+	// printf("%s\n", s1);
+	char *s1 = malloc(3);
+	s1[0] = 'h';
+	s1[1] = 'i';
+	s1[2] = 0;
+	char *s2 = malloc(6);
+	s1[0] = 'h';
+	s1[1] = 'e';
+	s1[2] = 'l';
+	s1[3] = 'l';
+	s1[4] = 'o';
+	s1[5] = 0;
+	free(s1);
+	char *s3 = ft_strdup(s2);
+	// s1 = ft_strdup(s2);
+	printf("%s\n", s3);
+	/* 정확하게 같은 원리로 진행한거같은데
+		왜 여기서는 안 되는거지? */
+
 	return (0);
 }

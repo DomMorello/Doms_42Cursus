@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/11/30 19:01:04 by marvin           ###   ########.fr       */
+/*   Updated: 2020/11/30 23:43:57 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ void convert_key_to_env(char *env_content, char *token_data, char *key, int env_
 	j = 0;
 	while (env_content[env_key_len] != '=')
 		env_key_len++;
-	if ((new = (char *)malloc(sizeof(char) * ft_strlen(token_data) + ft_strlen(&env_content[env_key_len + 1]) - ft_strlen(key) + 2)) == NULL)
+	if ((new = (char *)malloc(sizeof(char) * ft_strlen(token_data) + ft_strlen(&env_content[env_key_len + 1]) - ft_strlen(key) + 1)) == NULL)
 		exit(-1);
 	while (token_data[i])
 	{
