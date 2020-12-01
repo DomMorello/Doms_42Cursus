@@ -115,6 +115,11 @@ while (i--)
 	s[2] = 0;
 	test1(s);
 	printf("%s\n", s);
+	free(s);
+}
+while (1)
+{
+	;
 }
 
 	return (0);
