@@ -660,6 +660,7 @@ int get_len(char *cmd[], int prev_pipe_idx, int pipe_idx)
     return (len);
 }
 
+/* echo > 1 > 2 > 3 리디렉션 여러개 올 때 병신되는거 고쳐야 한다. */
 void exec_echo(char *cmd[], int prev_pipe_idx, int pipe_idx)
 {
 	int argc;

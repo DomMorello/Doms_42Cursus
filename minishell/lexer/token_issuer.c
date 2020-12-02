@@ -6,15 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:22:18 by jipark            #+#    #+#             */
-/*   Updated: 2020/11/26 23:34:29 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/03 00:20:43 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 static int	issue_special_token(t_token *token, t_status *status, char char_type)
-{ //보완점 <, >> 같은 경우 처리 해줘야함
-
+{
 /*
 해당 함수는 ;, >, | 같이 1개로 끝나는 토큰 처리용
 echo hi > cat.txt

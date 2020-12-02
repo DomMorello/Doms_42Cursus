@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:02:10 by jipark            #+#    #+#             */
-/*   Updated: 2020/11/27 00:20:50 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/02 23:36:01 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,8 @@ char		analyze_char_type(char *str, t_status *status)
 	if (status->state == STATE_IN_QUOTE && str[status->i] != CHAR_QUOTE)
 		return (CHAR_NORMAL); 
 		//현재 quote에 들어온 상태에서는 모든 문자를 normal로 인식함 echo "hihihihihi" 있으면 따옴표 안의 모든 문자는 normal 인식
-	if (status->state == STATE_IN_DQUOTE && str[status->i] != CHAR_DQUOTE) { //쌍따옴표인경우
+	if (status->state == STATE_IN_DQUOTE && str[status->i] != CHAR_DQUOTE) //쌍따옴표인경우
 		return (CHAR_NORMAL);
-	}
 	return (get_char_type(str[status->i]));
 }
 

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/02 21:01:24 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/03 00:26:37 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ static int		tokenize_normal(t_token *token, t_status *status, char c, char char_
 		add_char_and_change_state(token, status, char_type, STATE_IN_ENV);
 	else if (char_type == CHAR_SEMICOLON || char_type == CHAR_PIPE || char_type == CHAR_RED_OUT || char_type == CHAR_RED_IN)
 		result = issue_new_token(token, status, TRUE, char_type);
-	//리디렉션 double output도 추가해야 한다.
 	return (result == -1 || result == TRUE);
 }
 
@@ -160,8 +159,6 @@ void convert_key_to_env(char *env_content, char **token_data, char *key, int env
 	new[j] = 0;
 	free(*token_data);
 	*token_data = new;
-	// token_data = ft_strdup(new);
-	// free(new);
 }
 
 void search_key_in_env(char *key, char **token_data, int env_idx)
@@ -307,17 +304,16 @@ int				main(int argc, char const *argv[])
 			}
 		}
 		free_all_tokens(token, free);
-		// free_all_tokens(token, free);
 	}
 	return (EXIT_SUCCESS);
 }
 
 /*
 	1) $user$user 인 경우 dongleedonglee 문자열로 하나의 토큰으로 해야 한다.
-	2) 큰 따옴표와 따옴표 안에 있는 환경변수를 치환해야 한다.
+	2) 큰 따옴표 안에 있는 환경변수를 치환해야 한다.(done)
 	3) '>>' 더블 아웃풋을 파싱해야 하는데 이 또한 따로 로직으로 처리해야 할 것 같다.(done)
 	4) 세미콜론으로 나눠서 2차원 문자열 배열을 순서대로 내 함수에 넘겨줘야 한다.
-	5) copy_env 를 통해 복제한 리스트를 갖고 환경변수를 치환하도록 해야 한다.
+	5) copy_env 를 통해 복제한 리스트를 갖고 환경변수를 치환하도록 해야 한다.(done)
 	6) 마지막에 공백이 있을 경우 token이 하나 더 생성되는데 문제가 없을까?
 	7) 큰따옴표 작은따옴표 제거한 상태로 넘겨줘야 한다 (done)
 */
