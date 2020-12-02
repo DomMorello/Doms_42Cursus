@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/02 20:45:36 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/02 20:50:54 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,8 +159,9 @@ void convert_key_to_env(char *env_content, char *token_data, char *key, int env_
 	}
 	new[j] = 0;
 	free(token_data);
-	token_data = ft_strdup(new);
-	free(new);
+	token_data = new;
+	// token_data = ft_strdup(new);
+	// free(new);
 }
 
 void search_key_in_env(char *key, char *token_data, int env_idx)
