@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:23:45 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/02 13:43:53 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/02 13:51:55 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,19 +121,32 @@ int				check_basic_grammar(t_token *token)
 	return (TRUE);
 }
 
-void			free_all_tokens(t_token **token, void (*del)(void *))
-{
-	t_token		*tmp;
+// void			free_all_tokens(t_token **token, void (*del)(void *))
+// {
+// 	t_token		*tmp;
 
-	if (!*token)
+// 	if (!*token)
+// 		return ;
+// 	while (*token)
+// 	{
+// 		tmp = (*token);
+// 		*token = (*token)->next;
+// 		del(tmp->data);
+// 		tmp->data = NULL;
+// 		del(tmp);
+// 		tmp = NULL;
+// 	}
+// }
+void			free_all_tokens(t_token *token, void (*del)(void *))
+{
+	if (!token)
 		return ;
-	while (*token)
+	while (token)
 	{
-		tmp = (*token);
-		*token = (*token)->next;
-		del(tmp->data);
-		tmp->data = NULL;
-		del(tmp);
-		tmp = NULL;
+		del(token->data);
+		token->data = NULL;
+		del(token);
+		token = NULL;
+		token = token->next;
 	}
 }

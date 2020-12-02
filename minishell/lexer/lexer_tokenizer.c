@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/02 13:41:22 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/02 13:50:43 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -304,7 +304,8 @@ int				main(int argc, char const *argv[])
 				token = token->next;
 			}
 		}
-		free_all_tokens(&token, free);
+		// free_all_tokens(&token, free);
+		free_all_tokens(token, free);
 	}
 	return (EXIT_SUCCESS);
 }
