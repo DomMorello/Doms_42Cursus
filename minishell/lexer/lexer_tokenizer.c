@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/02 13:21:20 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/02 13:26:12 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,10 +294,10 @@ int				main(int argc, char const *argv[])
 		if (check_basic_grammar(token))
 		{
 			adjust_env(token);	//환경변수를 찾아서 해당 value로 바꿔줘야 함.
-			check_dred_out(token);
-			erase_quote(token, CHAR_DQUOTE);
-			erase_quote(token, CHAR_QUOTE);
-			adjust_env_in_dquote(token);
+			//check_dred_out(token);
+			//erase_quote(token, CHAR_DQUOTE);
+			//erase_quote(token, CHAR_QUOTE);
+			//adjust_env_in_dquote(token);
 			//테스트 출력
 			while (token)
 			{
