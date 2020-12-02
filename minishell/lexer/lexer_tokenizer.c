@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/02 14:03:48 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/02 14:20:22 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -298,10 +298,11 @@ int				main(int argc, char const *argv[])
 			// erase_quote(token, CHAR_QUOTE);
 			// adjust_env_in_dquote(token);
 			//테스트 출력
-			while (token)
+			t_token *tmp = token;
+			while (tmp)
 			{
-				printf("%s			,%d\n", token->data, token->type);
-				token = token->next;
+				printf("%s			,%d\n", tmp->data, tmp->type);
+				tmp = tmp->next;
 			}
 		}
 		// free_all_tokens(&token, free);
