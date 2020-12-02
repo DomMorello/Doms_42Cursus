@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/02 20:10:28 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/02 20:18:32 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,14 +150,15 @@ void convert_key_to_env(char *env_content, char *token_data, char *key, int env_
 		exit(-1);
 	while (token_data[i])
 	{
-		// if (token_data[i] == CHAR_ENV && i == env_idx)
-		// {
-		// 	convert_to_value(new, env_content, &i, &j);
-		// 	i += ft_strlen(key);
-		// }
+		if (token_data[i] == CHAR_ENV && i == env_idx)
+		{
+			convert_to_value(new, env_content, &i, &j);
+			i += ft_strlen(key);
+		}
 		new[j++] = token_data[i++];
 	}
 	new[j] = 0;
+	printf("new: %s\n", new);
 	free(token_data);
 	token_data = ft_strdup(new);
 	free(new);
