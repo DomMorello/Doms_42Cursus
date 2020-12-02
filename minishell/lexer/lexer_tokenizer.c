@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/02 13:50:43 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/02 14:03:48 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -292,11 +292,11 @@ int				main(int argc, char const *argv[])
 		token = tokenize_lexer(buf, ft_strlen(buf)); //링크드 리스트의 헤드 부분 포인터 주소 반환
 		if (check_basic_grammar(token))
 		{
-			adjust_env(token);	//환경변수를 찾아서 해당 value로 바꿔줘야 함.
-			check_dred_out(token);
-			erase_quote(token, CHAR_DQUOTE);
-			erase_quote(token, CHAR_QUOTE);
-			adjust_env_in_dquote(token);
+			// adjust_env(token);	//환경변수를 찾아서 해당 value로 바꿔줘야 함.
+			// check_dred_out(token);
+			// erase_quote(token, CHAR_DQUOTE);
+			// erase_quote(token, CHAR_QUOTE);
+			// adjust_env_in_dquote(token);
 			//테스트 출력
 			while (token)
 			{
