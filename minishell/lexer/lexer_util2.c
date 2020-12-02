@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:23:45 by jipark            #+#    #+#             */
-/*   Updated: 2020/11/27 00:02:34 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/02 13:43:53 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,8 @@ void			free_all_tokens(t_token **token, void (*del)(void *))
 		tmp = (*token);
 		*token = (*token)->next;
 		del(tmp->data);
+		tmp->data = NULL;
 		del(tmp);
+		tmp = NULL;
 	}
 }
