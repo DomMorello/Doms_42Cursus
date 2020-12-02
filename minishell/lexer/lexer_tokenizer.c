@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/01 17:05:55 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/02 13:21:20 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,16 +150,15 @@ void convert_key_to_env(char *env_content, char *token_data, char *key, int env_
 		exit(-1);
 	while (token_data[i])
 	{
-		if (token_data[i] == CHAR_ENV && i == env_idx)
-		{
-			convert_to_value(new, env_content, &i, &j);
-			i += ft_strlen(key);
-		}
+		// if (token_data[i] == CHAR_ENV && i == env_idx)
+		// {
+		// 	convert_to_value(new, env_content, &i, &j);
+		// 	i += ft_strlen(key);
+		// }
 		new[j++] = token_data[i++];
 	}
-	// 1 $user $user $user $user $user 2
 	new[j] = 0;
-	/* why strdup? */
+	printf("new: %s\ntoken: %s\n", new, token_data);
 	free(token_data);
 	token_data = ft_strdup(new);
 	free(new);
@@ -203,7 +202,6 @@ void copy_env_key(char *token_data)
 			while (token_data[i] && token_data[i] != ' ')
 				env[j++] = token_data[i++];
 			env[j] = 0;
-			//1 $user'!' $user $user 2
 			search_key_in_env(env, token_data, env_idx);
 			free(env);
 		}

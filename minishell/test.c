@@ -71,25 +71,6 @@ void sig_handler(int signo)
 	exit(1);
 }
 
-void test1(char *s)
-{
-	s[1] = 'e';
-	char *new = malloc(6);
-	if (new == NULL)
-	{
-		printf("malloc fail\n");
-	}
-	new[0] = 'h';
-	new[1] = 'e';
-	new[2] = 'l';
-	new[3] = 'l';
-	new[4] = 'o';
-	new[5] = 0;
-	free(s);
-	s = ft_strdup(new);
-	free(new);
-}
-
 int	main(int argc, char *argv[])
 {
 	// test();
@@ -101,26 +82,6 @@ int	main(int argc, char *argv[])
 	// 	i++;
 	// 	sleep(1);
 	// }
-int i = 100;
-while (i--)
-{
-	char *s = malloc(50);
-	ft_bzero(s, 50);
-	if (s == NULL)
-	{
-		printf("malloc fail\n");
-	}
-	s[0] = 'h';
-	s[1] = 'i';
-	s[2] = 0;
-	test1(s);
-	printf("%s\n", s);
-	free(s);
-}
-while (1)
-{
-	;
-}
 
 	return (0);
 }
