@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/02 20:50:54 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/02 21:01:24 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ void convert_to_value(char *new, char *env_content, int *i, int *j)
 		new[(*j)++] = env_content[env_key_len++];
 }
 
-void convert_key_to_env(char *env_content, char *token_data, char *key, int env_idx)
+void convert_key_to_env(char *env_content, char **token_data, char *key, int env_idx)
 {
 	int env_key_len;
 	char *new;
@@ -146,25 +146,25 @@ void convert_key_to_env(char *env_content, char *token_data, char *key, int env_
 	j = 0;
 	while (env_content[env_key_len] != '=')
 		env_key_len++;
-	if ((new = (char *)malloc(sizeof(char) * ft_strlen(token_data) + ft_strlen(&env_content[env_key_len + 1]) - ft_strlen(key) + 1)) == NULL)
+	if ((new = (char *)malloc(sizeof(char) * ft_strlen(*token_data) + ft_strlen(&env_content[env_key_len + 1]) - ft_strlen(key) + 1)) == NULL)
 		exit(-1);
-	while (token_data[i])
+	while ((*token_data)[i])
 	{
-		if (token_data[i] == CHAR_ENV && i == env_idx)
+		if ((*token_data)[i] == CHAR_ENV && i == env_idx)
 		{
 			convert_to_value(new, env_content, &i, &j);
 			i += ft_strlen(key);
 		}
-		new[j++] = token_data[i++];
+		new[j++] = (*token_data)[i++];
 	}
 	new[j] = 0;
-	free(token_data);
-	token_data = new;
+	free(*token_data);
+	*token_data = new;
 	// token_data = ft_strdup(new);
 	// free(new);
 }
 
-void search_key_in_env(char *key, char *token_data, int env_idx)
+void search_key_in_env(char *key, char **token_data, int env_idx)
 {
 	t_list *env_tmp;
 	int env_key_len;
@@ -181,7 +181,7 @@ void search_key_in_env(char *key, char *token_data, int env_idx)
 	}
 }
 
-void copy_env_key(char *token_data)
+void copy_env_key(char **token_data)
 {
 	char *env;
 	int i;
@@ -190,17 +190,17 @@ void copy_env_key(char *token_data)
 
 	i = 0;
 	env_idx = 0;
-	while (token_data[i])
+	while ((*token_data)[i])
 	{
 		j = 0;
-		if (token_data[i] == CHAR_ENV)
+		if ((*token_data)[i] == CHAR_ENV)
 		{
 			env_idx = i;
-			if ((env = (char *)malloc(sizeof(char) * ft_strlen(token_data) + 1)) == NULL)
+			if ((env = (char *)malloc(sizeof(char) * ft_strlen(*token_data) + 1)) == NULL)
 				exit(-1);
 			i++;
-			while (token_data[i] && token_data[i] != ' ')
-				env[j++] = token_data[i++];
+			while ((*token_data)[i] && (*token_data)[i] != ' ')
+				env[j++] = (*token_data)[i++];
 			env[j] = 0;
 			search_key_in_env(env, token_data, env_idx);
 			free(env);
@@ -218,7 +218,7 @@ void adjust_env_in_dquote(t_token *token)
 	{
 		if (tmp->type == CHAR_DQUOTE)
 		{
-			copy_env_key(tmp->data);
+			copy_env_key(&(tmp->data));
 		}
 		tmp = tmp->next;
 	}

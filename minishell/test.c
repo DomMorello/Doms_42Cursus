@@ -71,18 +71,19 @@ void sig_handler(int signo)
 	exit(1);
 }
 
+void test1(char **s)
+{
+	char *new = malloc(3);
+	new[0] = 'h';
+	new[1] = 'i';
+	new[2] = 0;
+
+	free(*s);
+	*s = new;
+}
+
 int	main(int argc, char *argv[])
 {
-	// test();
-	// int i = 0;
-	// signal(SIGINT, sig_handler);
-	// while (1)
-	// {
-	// 	printf("%d\n", i);
-	// 	i++;
-	// 	sleep(1);
-	// }
-
 	char *s = malloc(6);
 	s[0] = 'h';
 	s[1] = 'e';
@@ -90,15 +91,8 @@ int	main(int argc, char *argv[])
 	s[3] = 'l';
 	s[4] = 'o';
 	s[5] = 0;
+	test1(&s);
 
-	char *new = malloc(3);
-	new[0] = 'h';
-	new[1] = 'i';
-	new[2] = 0;
-
-	free(s);
-	s = new;
 	printf("%s\n", s);
-
 	return (0);
 }
