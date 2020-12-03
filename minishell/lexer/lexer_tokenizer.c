@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/03 16:57:15 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/03 17:02:10 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,13 +108,13 @@ t_token			*tokenize_lexer(char *str, int length)
 	return (token); //토큰의 가장 첫 번째 원소 주소를 반환.
 }
 
-void make_dred_out(t_token *deleted, t_token *prev)
+void make_dred_out(t_token **deleted, t_token **prev)
 {
-	prev->next = deleted->next;
-	free(prev->data);
-	prev->data = ft_strdup(">>");
-	free(deleted->data);
-	free(deleted);
+	*(prev->next) = *(deleted->next);
+	free(*(prev->data));
+	*(prev->data) = ft_strdup(">>");
+	free(*(deleted->data));
+	free(*(deleted));
 }
 
 void check_dred_out(t_token *token)
@@ -132,7 +132,7 @@ void check_dred_out(t_token *token)
 		prev = tmp;
 		tmp = tmp->next;
 		if (tmp && d_red_out && !ft_strncmp(tmp->data, ">", ft_strlen(">")))
-			make_dred_out(tmp, prev);
+			make_dred_out(&tmp, &prev);
 		d_red_out = FALSE;
 	}
 }
