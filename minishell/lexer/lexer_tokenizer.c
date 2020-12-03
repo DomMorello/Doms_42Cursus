@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/03 15:39:19 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/03 16:57:15 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,27 @@ static void		tokenize_env(t_token *token, t_status *status, char c, char char_ty
 	token->data[(status->j)++] = c; //공백 만나기 전까지는 계속 토큰에 환경변수 이름 기록
 }
 
+void trim_end(char *str)
+{
+	int len;
+
+	len = ft_strlen(str);
+	while (str[len - 1])
+	{
+		if (str[len - 1] != CHAR_WHITESPACE)
+		{
+			str[len] = 0;
+			return ;
+		}
+		len--;
+	}
+}
+
 static int		convert_input_into_tokens(t_token *token, t_status *status, char *str)
 {
 	char		char_type;
 
+	trim_end(str);
 	while (str[status->i]) //read나 gnl로 읽은 문자열을 status의 i인덱스로 하나하나씩 읽음
 	{
 		char_type = analyze_char_type(str, status); //현재 인덱스의 문자의 타입을 결정함 (이게 특수기호인지, 아니면 문자로 취급하는 예외경우인지 등)
@@ -114,7 +131,7 @@ void check_dred_out(t_token *token)
 			d_red_out = TRUE;
 		prev = tmp;
 		tmp = tmp->next;
-		if (tmp && d_red_out &&!ft_strncmp(tmp->data, ">", ft_strlen(">")))
+		if (tmp && d_red_out && !ft_strncmp(tmp->data, ">", ft_strlen(">")))
 			make_dred_out(tmp, prev);
 		d_red_out = FALSE;
 	}
@@ -299,7 +316,7 @@ int				main(int argc, char const *argv[])
 			//테스트 출력
 			while (tmp)
 			{
-				printf("%s			,%d\n", tmp->data, tmp->type);
+				printf("%s!\n", tmp->data);
 				tmp = tmp->next;
 			}
 		}
@@ -314,6 +331,6 @@ int				main(int argc, char const *argv[])
 	3) '>>' 더블 아웃풋을 파싱해야 하는데 이 또한 따로 로직으로 처리해야 할 것 같다.(done)
 	4) 세미콜론으로 나눠서 2차원 문자열 배열을 순서대로 내 함수에 넘겨줘야 한다.
 	5) copy_env 를 통해 복제한 리스트를 갖고 환경변수를 치환하도록 해야 한다.(done)
-	6) 마지막에 공백이 있을 경우 token이 하나 더 생성되는데 문제가 없을까?
+	6) 마지막에 공백이 있을 경우 token이 하나 더 생성되는데 문제가 없을까?(done)
 	7) 큰따옴표 작은따옴표 제거한 상태로 넘겨줘야 한다 (done)
 */
