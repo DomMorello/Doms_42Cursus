@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:23:45 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/03 00:09:08 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/03 13:56:52 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,12 @@ int				is_env_exception(t_token *token, t_status *status, char *str, char char_t
 	if (char_type == CHAR_ENV && (str[status->i - 1] != ' ' && str[status->i + 1] != ' ')
 		&& status->state != STATE_IN_QUOTE && status->state != STATE_IN_DQUOTE)
 	{
-		token->data[status->j] = CHAR_NULL; //현재 token->data : name/0
-		if ((token->next = (t_token *)malloc(sizeof(t_token))) == NULL) //token->next를 생성해주고
-			exit(ERROR);
-		token = token->next; //token이 다음 token을 읽게 해줌.
-		initiate_token(token, status->length - status->i); //token초기화.
-		status->j = 0; //다시 j를 0으로 초기화
+		// token->data[status->j] = CHAR_NULL; //현재 token->data : name/0
+		// if ((token->next = (t_token *)malloc(sizeof(t_token))) == NULL) //token->next를 생성해주고
+			// exit(ERROR);
+		// token = token->next; //token이 다음 token을 읽게 해줌.
+		// initiate_token(token, status->length - status->i); //token초기화.
+		// status->j = 0; //다시 j를 0으로 초기화
 		token->type = CHAR_ENV;
 		token->data[(status->j)++] = CHAR_ENV; //새로운 토큰의 첫번째 문자를 $로 기록하고, j를 1 증가시켜줌
 		status->state = STATE_IN_ENV;

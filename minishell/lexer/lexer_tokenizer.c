@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/03 00:26:37 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/03 15:39:19 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,7 +196,7 @@ void copy_env_key(char **token_data)
 			if ((env = (char *)malloc(sizeof(char) * ft_strlen(*token_data) + 1)) == NULL)
 				exit(-1);
 			i++;
-			while ((*token_data)[i] && (*token_data)[i] != ' ')
+			while ((*token_data)[i] && (*token_data)[i] != ' ' && (*token_data)[i] != CHAR_ENV)
 				env[j++] = (*token_data)[i++];
 			env[j] = 0;
 			search_key_in_env(env, token_data, env_idx);
@@ -309,7 +309,7 @@ int				main(int argc, char const *argv[])
 }
 
 /*
-	1) $user$user 인 경우 dongleedonglee 문자열로 하나의 토큰으로 해야 한다.
+	1) $user$user 인 경우 dongleedonglee 문자열로 하나의 토큰으로 해야 한다.(done)
 	2) 큰 따옴표 안에 있는 환경변수를 치환해야 한다.(done)
 	3) '>>' 더블 아웃풋을 파싱해야 하는데 이 또한 따로 로직으로 처리해야 할 것 같다.(done)
 	4) 세미콜론으로 나눠서 2차원 문자열 배열을 순서대로 내 함수에 넘겨줘야 한다.

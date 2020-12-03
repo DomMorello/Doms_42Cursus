@@ -140,4 +140,10 @@ void			free_all_tokens(t_token *token, void (*del)(void *));
 int				issue_new_token(t_token *token, t_status *status, int flag, char char_type);
 void			add_char_and_change_state(t_token *token, t_status *status, char char_type, int state);
 
+void copy_env_key(char **token_data);
+void search_key_in_env(char *key, char **token_data, int env_idx);
+void convert_key_to_env(char *env_content, char **token_data, char *key, int env_idx);
+void convert_to_value(char *new, char *env_content, int *i, int *j);
+
+
 #endif

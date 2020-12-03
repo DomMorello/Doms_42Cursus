@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:26:45 by jipark            #+#    #+#             */
-/*   Updated: 2020/11/28 18:55:35 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/03 15:34:08 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,34 @@ static void			replace_key_with_value(t_token *token)
 // 	new_token->next = last;
 // }
 
+void replace_exception_env(t_token *token)
+{
+	t_token *tmp;
+
+	tmp = token;
+	copy_env_key(&(tmp->data));
+}
+
+int is_one_env(t_token *token)
+{
+	int i;
+	int num_env;
+
+	i = 0;
+	num_env = 0;
+	if (token->data[i] != CHAR_ENV)
+		return (FALSE);
+	while (token->data[i])
+	{
+		if (num_env > 1)
+			return (FALSE);
+		if (token->data[i] == CHAR_ENV)
+			num_env++;
+		i++;
+	}
+	return (TRUE);
+}
+
 void			adjust_env(t_token *token)
 {
 	t_token		*tmp;
@@ -81,9 +109,13 @@ void			adjust_env(t_token *token)
 	tmp = token;
 	while (tmp != NULL)
 	{
-		if (tmp->type == CHAR_ENV) //environment 토큰 찾고
-			replace_key_with_value(tmp); //key를 value로 변환
-		// 보완점 : 따옴표 안의 환경변수를 처리해야함. 여기다가.
+		if (tmp->type == CHAR_ENV)
+		{
+			if (is_one_env(tmp))
+				replace_key_with_value(tmp);
+			else
+				replace_exception_env(tmp);
+		}
 		tmp = tmp->next;
 	}
 }
