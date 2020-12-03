@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/03 17:02:10 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/03 23:42:01 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,13 +108,14 @@ t_token			*tokenize_lexer(char *str, int length)
 	return (token); //토큰의 가장 첫 번째 원소 주소를 반환.
 }
 
-void make_dred_out(t_token **deleted, t_token **prev)
+void make_dred_out(t_token *deleted, t_token *prev)
 {
-	*(prev->next) = *(deleted->next);
-	free(*(prev->data));
-	*(prev->data) = ft_strdup(">>");
-	free(*(deleted->data));
-	free(*(deleted));
+	// prev->next = deleted->next;
+	free(prev->data);
+	prev->data = ft_strdup(">>");
+	// free(deleted->data);
+	// free(deleted);
+	/* 예제를 만들어서 테스트해보자 노드 삭제하고 연결하는 부분! */
 }
 
 void check_dred_out(t_token *token)
@@ -122,7 +123,7 @@ void check_dred_out(t_token *token)
 	t_token *tmp;
 	t_token *prev;
 	int d_red_out;
-
+	
 	tmp = token;
 	d_red_out = FALSE;
 	while (tmp)
@@ -132,7 +133,7 @@ void check_dred_out(t_token *token)
 		prev = tmp;
 		tmp = tmp->next;
 		if (tmp && d_red_out && !ft_strncmp(tmp->data, ">", ft_strlen(">")))
-			make_dred_out(&tmp, &prev);
+			make_dred_out(tmp, prev);
 		d_red_out = FALSE;
 	}
 }
@@ -307,13 +308,13 @@ int				main(int argc, char const *argv[])
 		token = tokenize_lexer(buf, ft_strlen(buf)); //링크드 리스트의 헤드 부분 포인터 주소 반환
 		if (check_basic_grammar(token))
 		{
-			t_token *tmp = token;
 			adjust_env(token);	//환경변수를 찾아서 해당 value로 바꿔줘야 함.
 			check_dred_out(token);
 			erase_quote(token, CHAR_DQUOTE);
 			erase_quote(token, CHAR_QUOTE);
 			adjust_env_in_dquote(token);
-			//테스트 출력
+			// // //테스트 출력
+			t_token *tmp = token;
 			while (tmp)
 			{
 				printf("%s!\n", tmp->data);
