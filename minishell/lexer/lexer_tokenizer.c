@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/03 23:42:01 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/04 17:32:42 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,11 +110,11 @@ t_token			*tokenize_lexer(char *str, int length)
 
 void make_dred_out(t_token *deleted, t_token *prev)
 {
-	// prev->next = deleted->next;
+	prev->next = deleted->next;
 	free(prev->data);
 	prev->data = ft_strdup(">>");
-	// free(deleted->data);
-	// free(deleted);
+	free(deleted->data);
+	free(deleted);
 	/* 예제를 만들어서 테스트해보자 노드 삭제하고 연결하는 부분! */
 }
 
@@ -126,8 +126,11 @@ void check_dred_out(t_token *token)
 	
 	tmp = token;
 	d_red_out = FALSE;
+	
 	while (tmp)
 	{
+		/* 출력시 쓰레기값이 원인 */
+		printf("trest: %s\n", tmp->data);
 		if (!ft_strncmp(tmp->data, ">", ft_strlen(">")))
 			d_red_out = TRUE;
 		prev = tmp;
