@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/04 17:32:42 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/06 18:37:36 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,8 +129,6 @@ void check_dred_out(t_token *token)
 	
 	while (tmp)
 	{
-		/* 출력시 쓰레기값이 원인 */
-		printf("trest: %s\n", tmp->data);
 		if (!ft_strncmp(tmp->data, ">", ft_strlen(">")))
 			d_red_out = TRUE;
 		prev = tmp;

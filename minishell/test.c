@@ -71,56 +71,20 @@ void sig_handler(int signo)
 	exit(1);
 }
 
-struct NODE {    // 연결 리스트의 노드 구조체
-    struct NODE *next;    // 다음 노드의 주소를 저장할 포인터
-    int data;             // 데이터를 저장할 멤버
-};
-
-void addFirst(t_token *target, char *data)    // 기준 노드 뒤에 노드를 추가하는 함수
+void print_token(t_token *token)
 {
-    t_token *newNode = malloc(sizeof(t_token));    // 새 노드 생성
-    target->next = newNode;
-    newNode->data = data;   
-	newNode->next = NULL;         // 데이터 저장
-}
+	t_token *tmp = token;
 
-void removeFirst(t_token *target)    // 기준 노드의 다음 노드를 삭제하는 함수
-{
-    t_token *removeNode = target->next;    // 기준 노드의 다음 노드 주소를 저장
-    target->next = removeNode->next;     // 기준 노드의 다음 노드에 삭제할 노드의 다음 노드를 지정
-
-    free(removeNode);    // 노드 메모리 해제
+	while (tmp)
+	{
+		printf("%s\n", tmp->data);
+		tmp = tmp->next;
+	}
 }
 
 int main()
 {
-    t_token *token = malloc(sizeof(token));    // 머리 노드 생성
-                                                        // 머리 노드는 데이터를 저장하지 않음
-    token->next = NULL;
-
-    addFirst(token, "10");      // 머리 노드 뒤에 새 노드 추가
-    addFirst(token->next, "20");      // 머리 노드 뒤에 새 노드 추가
-    addFirst(token->next->next, "30");      // 머리 노드 뒤에 새 노드 추가
-
-    removeFirst(token);       // 머리 노드 뒤에 있는 노드를 삭제
-
-    t_token *curr = token->next;                                                                      
-    // 연결 리스트 순회용 포인터에 첫 번째 노드의 주소 저장
-    while (curr != NULL)                // 포인터가 NULL이 아닐 때 계속 반복
-    {
-        printf("%s\n", curr->data);     // 현재 노드의 데이터 출력
-        curr = curr->next;              // 포인터에 다음 노드의 주소 저장
-    }
-
-    curr = token->next;      // 연결 리스트 순회용 포인터에 첫 번째 노드의 주소 저장
-    while (curr != NULL)    // 포인터가 NULL이 아닐 때 계속 반복
-    {
-        t_token *next = curr->next; // 현재 노드의 다음 노드 주소를 임시로 저장
-        free(curr);        // 현재 노드 메모리 해제
-        curr = next;       // 포인터에 다음 노드의 주소 저장
-    }
-
-    free(token);    // 머리 노드 메모리 해제
+	
 
     return 0;
 }
