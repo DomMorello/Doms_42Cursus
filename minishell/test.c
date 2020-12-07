@@ -67,7 +67,7 @@ void copy_environ(void)
 
 void sig_handler(int signo)
 {
-	printf("worked!\n");
+	printf("worked! %d\n", signo);
 	exit(1);
 }
 
@@ -82,7 +82,7 @@ void print_token(t_token *token)
 	}
 }
 
-t_token *add_back(t_token *token, char *data)
+void add_back(t_token *token, char *data)
 {
 	t_token *tmp = token;
 
