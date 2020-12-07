@@ -89,40 +89,63 @@ t_token *add_back(t_token *token, char *data)
 	while (tmp->next)
 		tmp = tmp->next;
 	t_token *new = malloc(sizeof(t_token));
-	new->data = data;
+	new->data = ft_strdup(data);
 	new->next = NULL;
 	tmp->next = new;
 }
 
-void remove_if(t_token *token)
+void make_dred_out(t_token *deleted, t_token *prev)
 {
-	t_token *tmp = token;
-	t_token *prev;
+	printf("prev->next: %p %s\n", prev->next, prev->data);
+	printf("deleted->next: %p %s\n", deleted->next, deleted->data);
+	prev->next = deleted->next;	//세그폴트 나는 부분
+	free(prev->data);
+	prev->data = ft_strdup(">>");
+	free(deleted->data);
+	free(deleted);
+}
 
+void check_dred_out(t_token *token)
+{
+	t_token *tmp;
+	t_token *prev;
+	int d_red_out;
+	
+	tmp = token;
+	d_red_out = FALSE;
 	while (tmp)
 	{
-		if (!strcmp(tmp->data, "three"))
-		{
-			prev->next = tmp->next;
-			free(tmp);
-		}
+		if (!ft_strncmp(tmp->data, ">", ft_strlen(">")))
+			d_red_out = TRUE;
 		prev = tmp;
 		tmp = tmp->next;
+		if (tmp && d_red_out && !ft_strncmp(tmp->data, ">", ft_strlen(">")))
+			make_dred_out(tmp, prev);
+		d_red_out = FALSE;
 	}
 }
 
 int main()
 {
 	t_token *token = malloc(sizeof(t_token));
-	token->data = "one";
+	token->data = ft_strdup("one");
 	token->next = NULL;
 
 	add_back(token, "two");
+	add_back(token, ">");
+	add_back(token, ">");
 	add_back(token, "three");
+	add_back(token, ">");
+	add_back(token, ">");
 	add_back(token, "four");
+	add_back(token, ">");
+	add_back(token, ">");
 	add_back(token, "five");
+	add_back(token, ">");
+	add_back(token, ">"); 
+	add_back(token, "six");
 
-	remove_if(token);
+	check_dred_out(token);
 	print_token(token);
     return 0;
 }
