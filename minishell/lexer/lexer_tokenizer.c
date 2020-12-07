@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/07 18:06:57 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/07 21:47:04 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,33 +108,43 @@ t_token			*tokenize_lexer(char *str, int length)
 	return (token); //토큰의 가장 첫 번째 원소 주소를 반환.
 }
 
-void make_dred_out(t_token *deleted, t_token *prev)
+int make_dred_out(t_token *deleted, t_token *prev, int d_red_out)
 {
-	prev->next = deleted->next;
-	free(prev->data);
-	prev->data = ft_strdup(">>");
-	// free(deleted->data);
-	// free(deleted);
-	/* 예제를 만들어서 테스트해보자 노드 삭제하고 연결하는 부분! */
+	if (deleted && d_red_out && !ft_strncmp(deleted->data, ">", ft_strlen(">")))
+	{
+		prev->next = deleted->next;
+		free(prev->data);
+		prev->data = ft_strdup(">>");
+		free(deleted->data);
+		free(deleted);
+		return (TRUE);
+	}
+	return (FALSE);
 }
 
 void check_dred_out(t_token *token)
 {
 	t_token *tmp;
+	t_token *tmp2;
 	t_token *prev;
 	int d_red_out;
 	
 	tmp = token;
-	d_red_out = FALSE;
-	while (tmp)
+	tmp2 = token;
+	while (tmp2)
 	{
-		if (!ft_strncmp(tmp->data, ">", ft_strlen(">")))
-			d_red_out = TRUE;
-		prev = tmp;
-		tmp = tmp->next;
-		if (tmp && d_red_out && !ft_strncmp(tmp->data, ">", ft_strlen(">")))
-			make_dred_out(tmp, prev);
-		d_red_out = FALSE;
+		tmp = tmp2;
+		while (tmp)
+		{
+			d_red_out = FALSE;
+			if (!ft_strncmp(tmp->data, ">", ft_strlen(">")))
+				d_red_out = TRUE;
+			prev = tmp;
+			tmp = tmp->next;
+			if (make_dred_out(tmp, prev, d_red_out))
+				break ;
+		}
+		tmp2 = tmp2->next;
 	}
 }
 
@@ -335,4 +345,5 @@ int				main(int argc, char const *argv[])
 	6) 마지막에 공백이 있을 경우 token이 하나 더 생성되는데 문제가 없을까?(done)
 	7) 큰따옴표 작은따옴표 제거한 상태로 넘겨줘야 한다 (done)
 	8) 마지막에 >, <, | d인 경우 에러처리
+	9) >>> 이런식으로 문법오류 에러처리
 */
