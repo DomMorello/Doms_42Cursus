@@ -96,13 +96,11 @@ void add_back(t_token *token, char *data)
 
 void make_dred_out(t_token *deleted, t_token *prev)
 {
-	printf("prev->next: %p %s\n", prev->next, prev->data);
-	printf("deleted->next: %p %s\n", deleted->next, deleted->data);
-	prev->next = deleted->next;	//세그폴트 나는 부분
+	prev->next = deleted->next;
 	free(prev->data);
 	prev->data = ft_strdup(">>");
-	free(deleted->data);
-	free(deleted);
+	// free(deleted->data);
+	// free(deleted);
 }
 
 void check_dred_out(t_token *token)
@@ -144,6 +142,12 @@ int main()
 	add_back(token, ">");
 	add_back(token, ">"); 
 	add_back(token, "six");
+	add_back(token, ">");
+	add_back(token, ">");
+	add_back(token, "seven");
+	add_back(token, ">");
+	add_back(token, ">");
+	add_back(token, "eight");
 
 	check_dred_out(token);
 	print_token(token);

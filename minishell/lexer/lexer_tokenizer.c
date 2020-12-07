@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/07 14:42:47 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/07 18:06:57 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,8 +113,8 @@ void make_dred_out(t_token *deleted, t_token *prev)
 	prev->next = deleted->next;
 	free(prev->data);
 	prev->data = ft_strdup(">>");
-	free(deleted->data);
-	free(deleted);
+	// free(deleted->data);
+	// free(deleted);
 	/* 예제를 만들어서 테스트해보자 노드 삭제하고 연결하는 부분! */
 }
 
@@ -334,4 +334,5 @@ int				main(int argc, char const *argv[])
 	5) copy_env 를 통해 복제한 리스트를 갖고 환경변수를 치환하도록 해야 한다.(done)
 	6) 마지막에 공백이 있을 경우 token이 하나 더 생성되는데 문제가 없을까?(done)
 	7) 큰따옴표 작은따옴표 제거한 상태로 넘겨줘야 한다 (done)
+	8) 마지막에 >, <, | d인 경우 에러처리
 */
