@@ -82,9 +82,47 @@ void print_token(t_token *token)
 	}
 }
 
+t_token *add_back(t_token *token, char *data)
+{
+	t_token *tmp = token;
+
+	while (tmp->next)
+		tmp = tmp->next;
+	t_token *new = malloc(sizeof(t_token));
+	new->data = data;
+	new->next = NULL;
+	tmp->next = new;
+}
+
+void remove_if(t_token *token)
+{
+	t_token *tmp = token;
+	t_token *prev;
+
+	while (tmp)
+	{
+		if (!strcmp(tmp->data, "three"))
+		{
+			prev->next = tmp->next;
+			free(tmp);
+		}
+		prev = tmp;
+		tmp = tmp->next;
+	}
+}
+
 int main()
 {
-	
+	t_token *token = malloc(sizeof(t_token));
+	token->data = "one";
+	token->next = NULL;
 
+	add_back(token, "two");
+	add_back(token, "three");
+	add_back(token, "four");
+	add_back(token, "five");
+
+	remove_if(token);
+	print_token(token);
     return 0;
 }

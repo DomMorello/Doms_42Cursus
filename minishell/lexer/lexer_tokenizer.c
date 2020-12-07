@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/06 18:37:36 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/07 14:42:47 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,6 @@ void check_dred_out(t_token *token)
 	
 	tmp = token;
 	d_red_out = FALSE;
-	
 	while (tmp)
 	{
 		if (!ft_strncmp(tmp->data, ">", ft_strlen(">")))
