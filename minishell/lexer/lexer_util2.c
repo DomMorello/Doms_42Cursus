@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:23:45 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/03 13:56:52 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/07 22:37:51 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,13 @@ int				check_basic_grammar(t_token *token)
 		}
 		if (token->type == CHAR_SEMICOLON && token->next->type == CHAR_SEMICOLON) //echo hi;;
 		{
+			ft_putstr_fd("minishell : syntax error near ';;'\n", 1);
+			return (FALSE);
+		}
+		/* 따옴표 상황이 아닌데 >>> || << 이런식으로 오면 에러처리 해야 함*/
+		if (!token->next && (token->type == CHAR_PIPE || token->type == CHAR_RED_OUT || token->type == CHAR_RED_IN || token->type == '\\'))
+		{
+			/* 이거 하기 전에 마지막에 내용없는 노드를 삭제해야함. */
 			ft_putstr_fd("minishell : syntax error near ';;'\n", 1);
 			return (FALSE);
 		}

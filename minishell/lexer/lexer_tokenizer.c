@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/07 21:47:04 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/07 22:45:12 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -305,6 +305,26 @@ void copy_environ(void)
 	}
 }
 
+void remove_empty_token(t_token *token)
+{
+	t_token *tmp;
+	t_token *prev;
+
+	tmp = token;
+	while (tmp)
+	{
+		if (!tmp->next && !ft_strncmp(tmp->data, "", 1))
+		{
+			prev->next = NULL;
+			free(tmp->data);
+			free(tmp);
+			break ;
+		}
+		prev = tmp;
+		tmp = tmp->next;
+	}
+}
+
 int				main(int argc, char const *argv[])
 {
 	t_token		*token;
@@ -316,6 +336,7 @@ int				main(int argc, char const *argv[])
 	{
 		handle_prompt(buf);
 		token = tokenize_lexer(buf, ft_strlen(buf)); //링크드 리스트의 헤드 부분 포인터 주소 반환
+		remove_empty_token(token);
 		if (check_basic_grammar(token))
 		{
 			adjust_env(token);	//환경변수를 찾아서 해당 value로 바꿔줘야 함.
@@ -323,7 +344,7 @@ int				main(int argc, char const *argv[])
 			erase_quote(token, CHAR_DQUOTE);
 			erase_quote(token, CHAR_QUOTE);
 			adjust_env_in_dquote(token);
-			// // //테스트 출력
+			// 테스트 출력
 			t_token *tmp = token;
 			while (tmp)
 			{
@@ -344,6 +365,7 @@ int				main(int argc, char const *argv[])
 	5) copy_env 를 통해 복제한 리스트를 갖고 환경변수를 치환하도록 해야 한다.(done)
 	6) 마지막에 공백이 있을 경우 token이 하나 더 생성되는데 문제가 없을까?(done)
 	7) 큰따옴표 작은따옴표 제거한 상태로 넘겨줘야 한다 (done)
-	8) 마지막에 >, <, | d인 경우 에러처리
+	8) 마지막에 >, <, | d인 경우 에러처리-> 에러메세지만 손보면 될듯 원인을 찾자
 	9) >>> 이런식으로 문법오류 에러처리
+	10) > | 등으로 끝날 때 맨 뒤에 내용없는 토큰이 하나 더 생긴다.(done)
 */
