@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:00:28 by jipark            #+#    #+#             */
-/*   Updated: 2020/11/26 22:49:09 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/08 16:41:26 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,5 @@ void		initiate_token_status(t_status *status, char *str, int length)
 	status->j = 0;
 	status->state = STATE_NORMAL; //따옴표가 아닌 일반 노말
 	status->length = length;
-	// status->command_flag = TRUE;	//필요해?
 	status->str = str;
 }

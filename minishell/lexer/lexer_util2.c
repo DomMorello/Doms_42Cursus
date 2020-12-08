@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:23:45 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/07 22:37:51 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/08 22:34:40 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,11 @@ t_token			**convert_list_into_array(t_token *token)
 
 int				check_basic_grammar(t_token *token)
 {
+	if (token && !ft_strncmp((*token).data, ";", 1))
+	{
+		ft_putstr_fd("minishell : syntax error near unexpected token `;'\n", STDERR);
+		return (FALSE);
+	}
 	while (token != NULL) //echo, "hi", ;, cd
 	{
 		if (token->type == CHAR_QUOTE || token->type == CHAR_DQUOTE)
@@ -121,23 +126,39 @@ int				check_basic_grammar(t_token *token)
 				printf("token type : %d (34 == \")\n", token->type);
 				printf("--------------debug grammar spot-----------\n");
 				*/
-				ft_putstr_fd("minishell : syntax error near '", 1);
-				ft_putstr_fd(token->data, 1);
-				ft_putstr_fd("'\n", 1);
+				ft_putstr_fd("minishell : syntax error near '", STDERR);
+				ft_putstr_fd(token->data, STDERR);
+				ft_putstr_fd("'\n", STDERR);
 				return (FALSE);
 			}
 		}
-		if (token->type == CHAR_SEMICOLON && token->next->type == CHAR_SEMICOLON) //echo hi;;
+		if (token->type == CHAR_SEMICOLON && token->next && token->next->type == CHAR_SEMICOLON) //echo hi;;
 		{
-			ft_putstr_fd("minishell : syntax error near ';;'\n", 1);
+			ft_putstr_fd("minishell : syntax error near ';;'\n", STDERR);
 			return (FALSE);
 		}
-		/* 따옴표 상황이 아닌데 >>> || << 이런식으로 오면 에러처리 해야 함*/
 		if (!token->next && (token->type == CHAR_PIPE || token->type == CHAR_RED_OUT || token->type == CHAR_RED_IN || token->type == '\\'))
 		{
-			/* 이거 하기 전에 마지막에 내용없는 노드를 삭제해야함. */
-			ft_putstr_fd("minishell : syntax error near ';;'\n", 1);
+			ft_putstr_fd("minishell : syntax error near unexpected token `newline'\n", STDERR);
 			return (FALSE);
+		}
+		if (token->type != CHAR_DQUOTE && token->type != CHAR_QUOTE)
+		{
+			if (!ft_strncmp(token->data, ">", 1) && token->next && !ft_strncmp(token->next->data, ">", 1) && token->next->next && !ft_strncmp(token->next->next->data, ">", 1))
+			{
+				ft_putstr_fd("minishell : syntax error near unexpected token `>'\n", STDERR);
+				return (FALSE);
+			}
+			if (!ft_strncmp(token->data, "<", 1) && token->next && !ft_strncmp(token->next->data, "<", 1))
+			{
+				ft_putstr_fd("minishell : syntax error near unexpected token `<'\n", STDERR);
+				return (FALSE);
+			}
+			if (!ft_strncmp(token->data, "|", 1) && token->next && !ft_strncmp(token->next->data, "|", 1))
+			{
+				ft_putstr_fd("minishell : syntax error near unexpected token `|'\n", STDERR);
+				return (FALSE);
+			}
 		}
 		token = token->next;
 	}
