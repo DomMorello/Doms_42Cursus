@@ -311,7 +311,7 @@ void handle_executable(char *token, char *cmd[], int prev_pipe_idx, int pipe_idx
     char *filepath;
 
     path = get_path();
-    filepath = get_filepath(token, path);	//free 불가
+    filepath = get_filepath(token, path);
 	if (prev_pipe_idx == 0)
     	exec_executable(cmd, prev_pipe_idx, pipe_idx, filepath);
 	else
@@ -628,6 +628,8 @@ void print_echo(char *cmd[], int start, int end)
 	int option;
 
 	option = FALSE;
+	if (!cmd[start])
+		ft_putstr_fd("\n", STDOUT);
 	if (!ft_strncmp(cmd[start], N_OPTION, ft_strlen(cmd[start]) > ft_strlen(N_OPTION) ? ft_strlen(cmd[start]) : ft_strlen(N_OPTION)))
 	{
 		start++;
@@ -1029,7 +1031,7 @@ int				main(int argc, char const *argv[])
 	t_token		*token;
 	char		buf[BUF_SIZE];
 	char 		***cmds;
-	
+
 	signal(SIGQUIT, do_nothing);
 	copy_environ();
 	while (TRUE)
@@ -1055,7 +1057,7 @@ int				main(int argc, char const *argv[])
 		}
 		free_all_tokens(token, free);
 	}
-	// free_env();	//ctrl + D 누르면 이 함수가 작동해야 할텐데; exit하면 될거같은데?
+	free_env();	//ctrl + D 누르면 이 함수가 작동해야 할텐데; exit하면 될거같은데?
 	return (EXIT_SUCCESS);
 }
 
