@@ -1047,9 +1047,9 @@ int				main(int argc, char const *argv[])
 			cmds = divide_semicolon(token);
 			// print_cmds(cmds);
 			start_bash(cmds);
+			free_cmds(cmds);
 		}
 		free_all_tokens(token, free);
-		free_cmds(cmds);
 	}
 	free_env();	//ctrl + D 누르면 이 함수가 작동해야 할텐데;
 	return (EXIT_SUCCESS);
