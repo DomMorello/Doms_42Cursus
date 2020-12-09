@@ -1004,6 +1004,26 @@ void print_cmds(char ***cmds)
 	}
 }
 
+void free_cmds(char ***cmds)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (cmds[i])
+	{
+		j = 0;
+		while (cmds[i][j])
+		{
+			free(cmds[i][j]);
+			j++;
+		}
+		free(cmds[i]);
+		i++;
+	}
+	free(cmds);
+}
+
 int				main(int argc, char const *argv[])
 {
 	t_token		*token;
@@ -1029,6 +1049,7 @@ int				main(int argc, char const *argv[])
 			start_bash(cmds);
 		}
 		free_all_tokens(token, free);
+		free_cmds(cmds);
 	}
 	free_env();	//ctrl + D 누르면 이 함수가 작동해야 할텐데;
 	return (EXIT_SUCCESS);
