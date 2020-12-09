@@ -1036,7 +1036,11 @@ int				main(int argc, char const *argv[])
 	{
 		handle_prompt(buf);
 		token = tokenize_lexer(buf, ft_strlen(buf)); //링크드 리스트의 헤드 부분 포인터 주소 반환
-		remove_empty_token(token);
+		if (!remove_empty_token(token))
+		{
+			free_all_tokens(token, free);
+			continue ;
+		}
 		if (check_basic_grammar(token))
 		{
 			adjust_env(token);	//환경변수를 찾아서 해당 value로 바꿔줘야 함.

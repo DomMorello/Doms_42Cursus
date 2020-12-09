@@ -147,7 +147,7 @@ char ***alloc_cmds(t_token *token, char ***cmds, int len);
 void copy_token_to_char(t_token **token, int num_cmd, char **cmds);
 int get_num_cmd(t_token **token);
 int get_num_cmdline(t_token *token);
-void remove_empty_token(t_token *token);
+int remove_empty_token(t_token *token);
 void erase_quote(t_token *token, char quote_type);
 void copy_without_quote(char *data, char *new, char quote_type);
 void adjust_env_in_dquote(t_token *token);

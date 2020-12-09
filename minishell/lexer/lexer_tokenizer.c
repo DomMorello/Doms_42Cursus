@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/09 15:15:47 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/09 19:21:35 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,14 +287,14 @@ void erase_quote(t_token *token, char quote_type)
 	}
 }
 
-void remove_empty_token(t_token *token)
+int remove_empty_token(t_token *token)
 {
 	t_token *tmp;
 	t_token *prev;
 
 	tmp = token;
 	if (!ft_strncmp(tmp->data, "", 1))
-		return ;
+		return (FALSE);
 	while (tmp)
 	{
 		if (!tmp->next && !ft_strncmp(tmp->data, "", 1))
@@ -307,6 +307,7 @@ void remove_empty_token(t_token *token)
 		prev = tmp;
 		tmp = tmp->next;
 	}
+	return (TRUE);
 }
 
 int get_num_cmdline(t_token *token)
