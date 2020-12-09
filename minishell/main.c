@@ -1055,7 +1055,7 @@ int				main(int argc, char const *argv[])
 		}
 		free_all_tokens(token, free);
 	}
-	free_env();	//ctrl + D 누르면 이 함수가 작동해야 할텐데;
+	// free_env();	//ctrl + D 누르면 이 함수가 작동해야 할텐데; exit하면 될거같은데?
 	return (EXIT_SUCCESS);
 }
 
