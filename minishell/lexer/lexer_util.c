@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:00:28 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/08 16:41:26 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/09 18:51:25 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static void	remove_newline(char *buf)
 
 void		handle_prompt(char *buf)
 {
-	ft_putstr_fd("minishell % ", 1);
+	ft_putstr_fd("\033[0;32mmongshell\033[0;34m$ \033[0m", STDERR);
 	ft_bzero(buf, BUF_SIZE);
 	read(STDIN, buf, BUF_SIZE); //읽기
 	remove_newline(buf); //마지막 newline 지우기

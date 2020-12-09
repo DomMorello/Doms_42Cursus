@@ -158,8 +158,6 @@ void convert_to_value(char *new, char *env_content, int *i, int *j);
 void check_dred_out(t_token *token);
 int make_dred_out(t_token *deleted, t_token *prev, int d_red_out);
 
-
-
 /* main */
 void do_nothing(int signo);
 void free_env(void);

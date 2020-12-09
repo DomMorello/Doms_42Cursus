@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/09 13:33:11 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/09 15:15:47 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,6 +293,8 @@ void remove_empty_token(t_token *token)
 	t_token *prev;
 
 	tmp = token;
+	if (!ft_strncmp(tmp->data, "", 1))
+		return ;
 	while (tmp)
 	{
 		if (!tmp->next && !ft_strncmp(tmp->data, "", 1))
@@ -397,26 +399,6 @@ char ***divide_semicolon(t_token *token)
 	cmds = alloc_cmds(token, cmds, len);
 	return (cmds);
 }
-
-// void print_cmds(char ***cmds)
-// {
-// 	int i;
-// 	int j;
-
-// 	i = 0;
-// 	printf("---------------------------------\n");
-// 	while (cmds[i])
-// 	{
-// 		j = 0;
-// 		while (cmds[i][j])
-// 		{
-// 			printf("cmds: %s\n", cmds[i][j]);
-// 			j++;
-// 		}
-// 		printf("----------------------------\n");
-// 		i++;
-// 	}
-// }
 
 void start_bash(char ***cmds)
 {

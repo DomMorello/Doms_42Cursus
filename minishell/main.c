@@ -629,20 +629,26 @@ void print_echo(char *cmd[], int start, int end)
 
 	option = FALSE;
 	if (!ft_strncmp(cmd[start], N_OPTION, ft_strlen(cmd[start]) > ft_strlen(N_OPTION) ? ft_strlen(cmd[start]) : ft_strlen(N_OPTION)))
+	{
+		start++;
 		option = TRUE;
+	}
 	while (start < end)
 	{
 		if (is_redirection(cmd[start]))
+		{
 			start += 2;
+			continue ;
+		}
 		if (ft_strncmp(cmd[start], "|", ft_strlen(cmd[start])))
 		{
-			ft_putstr_fd(cmd[start], 2);
-			ft_putstr_fd(" ", 2);
+			ft_putstr_fd(cmd[start], STDOUT);
+			ft_putstr_fd(" ", STDOUT);
 		}
 		start++;
 	}
 	if (!option)
-		ft_putstr_fd("\n", 2);
+		ft_putstr_fd("\n", STDOUT);
 }
 
 int get_len(char *cmd[], int prev_pipe_idx, int pipe_idx)
@@ -660,7 +666,6 @@ int get_len(char *cmd[], int prev_pipe_idx, int pipe_idx)
     return (len);
 }
 
-/* echo > 1 > 2 > 3 리디렉션 여러개 올 때 병신되는거 고쳐야 한다. */
 void exec_echo(char *cmd[], int prev_pipe_idx, int pipe_idx)
 {
 	int argc;
@@ -701,6 +706,8 @@ void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 		exec_export_p(cmd, i, pipe_idx);
 	else if (!ft_strncmp(ECHO, token, ft_strlen(token) > ft_strlen(ECHO) ? ft_strlen(token) : ft_strlen(ECHO)))
 		exec_echo(cmd, i, pipe_idx);
+	else if (is_redirection(token))
+		;
 	else
 		handle_executable(token, cmd, i, pipe_idx);
 }
@@ -845,22 +852,10 @@ void exec_unset(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 
 void handle_cmd(char *token, char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
-	// if (!strcmp(token, ECHO))
-	// 	exec_built_in(exec_echo, cmd, *prev_pipe_idx, pipe_idx);
-	/*else */if (!ft_strncmp(token, CD, ft_strlen(token) > ft_strlen(CD) ? ft_strlen(token) : ft_strlen(CD)))
+	if (!ft_strncmp(token, CD, ft_strlen(token) > ft_strlen(CD) ? ft_strlen(token) : ft_strlen(CD)))
 		exec_nprocess_built_in(exec_cd, cmd, prev_pipe_idx, pipe_idx);
-	// else if (!strcmp(token, PWD))
-	// 	exec_built_in(exec_pwd, cmd, prev_pipe_idx, pipe_idx);
-	// else if (!ft_strncmp(token, EXPORT, ft_strlen(token) > ft_strlen(EXPORT) ? ft_strlen(token) : ft_strlen(EXPORT)))
-	// 	exec_nprocess_built_in(exec_export_np, cmd, prev_pipe_idx, pipe_idx);
-	/* pipe가 있으면 인자 있는 export는 작동하지 않는다. */
-
 	else if (!ft_strncmp(token, UNSET, ft_strlen(token) > ft_strlen(UNSET) ? ft_strlen(token) : ft_strlen(UNSET)))
 		exec_nprocess_built_in(exec_unset, cmd, prev_pipe_idx, pipe_idx);
-	// else if (!strcmp(token, ENV))
-	// 	exec_built_in(exec_env, cmd, prev_pipe_idx, pipe_idx);
-	// else if (!strcmp(token, EXIT))
-	// 	exec_built_in(exec_exit, cmd, prev_pipe_idx, pipe_idx);
 	else
 		exec_cmd_p(cmd, prev_pipe_idx, pipe_idx);
 }
@@ -916,21 +911,12 @@ void handle_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 		token = cmd[i];
 	else
 		token = cmd[i + 1];
-	// if (!strcmp(token, ECHO))
-	// 	exec_built_in(exec_echo, cmd, i, pipe_idx);
-	/*else */if (!ft_strncmp(token, CD, ft_strlen(token) > ft_strlen(CD) ? ft_strlen(token) : ft_strlen(CD)))
+	if (!ft_strncmp(token, CD, ft_strlen(token) > ft_strlen(CD) ? ft_strlen(token) : ft_strlen(CD)))
 		exec_nprocess_built_in(exec_cd, cmd, prev_pipe_idx, pipe_idx);
-	// else if (!strcmp(token, PWD))
-	// 	exec_built_in(exec_pwd, cmd, prev_pipe_idx, pipe_idx);
 	else if (!ft_strncmp(token, EXPORT, ft_strlen(token) > ft_strlen(EXPORT) ? ft_strlen(token) : ft_strlen(EXPORT)) && argc > 1)
 		exec_nprocess_built_in(exec_export_np, cmd, prev_pipe_idx, pipe_idx);
 	else if (!ft_strncmp(token, UNSET, ft_strlen(token) > ft_strlen(UNSET) ? ft_strlen(token) : ft_strlen(UNSET)))
 		exec_nprocess_built_in(exec_unset, cmd, prev_pipe_idx, pipe_idx);
-	
-	// else if (!strcmp(token, ENV))
-	// 	exec_built_in(exec_env, cmd, prev_pipe_idx, pipe_idx);
-	// else if (!strcmp(token, EXIT))
-	// 	exec_built_in(exec_exit, cmd, prev_pipe_idx, pipe_idx);
 	else
 		exec_last_cmd(cmd, prev_pipe_idx, pipe_idx);
 }
@@ -998,6 +984,26 @@ void do_nothing(int signo)
 	(void)signo;
 }
 
+void print_cmds(char ***cmds)
+{
+	int i;
+	int j;
+
+	i = 0;
+	printf("---------------------------------\n");
+	while (cmds[i])
+	{
+		j = 0;
+		while (cmds[i][j])
+		{
+			printf("cmds: %s\n", cmds[i][j]);
+			j++;
+		}
+		printf("----------------------------\n");
+		i++;
+	}
+}
+
 int				main(int argc, char const *argv[])
 {
 	t_token		*token;
@@ -1018,18 +1024,11 @@ int				main(int argc, char const *argv[])
 			erase_quote(token, CHAR_DQUOTE);
 			erase_quote(token, CHAR_QUOTE);
 			adjust_env_in_dquote(token);
-			// 테스트 출력
-			// t_token *tmp = token;
-			// while (tmp)
-			// {
-			// 	printf("%s!\n", tmp->data);
-			// 	tmp = tmp->next;
-			// }
+			cmds = divide_semicolon(token);
+			// print_cmds(cmds);
+			start_bash(cmds);
 		}
-		cmds = divide_semicolon(token);
 		free_all_tokens(token, free);
-		// print_cmds(cmds);
-		start_bash(cmds);
 	}
 	free_env();	//ctrl + D 누르면 이 함수가 작동해야 할텐데;
 	return (EXIT_SUCCESS);
