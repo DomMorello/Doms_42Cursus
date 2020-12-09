@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/08 22:53:02 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/09 13:33:11 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,24 +287,6 @@ void erase_quote(t_token *token, char quote_type)
 	}
 }
 
-//main에 있는데 일단 여기서 테스트를 위해서
-void copy_environ(void)
-{
-	int i;
-	t_list *tmp;
-
-	g_env_head.content = ft_strdup(environ[0]);
-	g_env_head.next = NULL;
-	g_env_list = &g_env_head;
-	i = 1;
-	while (environ[i])
-	{
-		tmp = ft_lstnew(ft_strdup(environ[i]));
-		ft_lstadd_back(&g_env_list, tmp);
-		i++;
-	}
-}
-
 void remove_empty_token(t_token *token)
 {
 	t_token *tmp;
@@ -372,14 +354,13 @@ void copy_token_to_char(t_token **token, int num_cmd, char **cmds)
 			continue ;
 		}
 		cmds[i] = ft_strdup((*token)->data);
-		printf("test %s\n", cmds[i]);
 		*token = (*token)->next;
 		i++;
 	}
-	printf("-------\n");
+	cmds[i] = NULL;
 }
 
-void alloc_cmds(t_token *token, char ***cmds, int len)
+char ***alloc_cmds(t_token *token, char ***cmds, int len)
 {
 	int i;
 	int num_cmd;
@@ -398,30 +379,10 @@ void alloc_cmds(t_token *token, char ***cmds, int len)
 		if ((cmds[i] = (char **)malloc(sizeof(char *) * num_cmd + 1)) == NULL)
 			exit(-1);
 		copy_token_to_char(&tmp2, num_cmd, cmds[i]);
-		cmds[num_cmd] = NULL;
+		cmds[i][num_cmd] = NULL;
 		i++;
 	}
-}
-/* 프린트 하는 부분에서 세그폴트가 난다 잘 분석해봐야 한다. */
-
-void print_cmds(char ***cmds)
-{
-	int i;
-	int j;
-
-	i = 0;
-	printf("---------------------------------\n");
-	while (cmds[i])
-	{
-		j = 0;
-		while (cmds[i][j])
-		{
-			printf("cmds: %s\n", cmds[i][j]);
-			j++;
-		}
-		printf("----------------------------\n");
-		i++;
-	}
+	return (cmds);
 }
 
 char ***divide_semicolon(t_token *token)
@@ -433,55 +394,87 @@ char ***divide_semicolon(t_token *token)
 	i = 0;
 	len = 0;
 	len = get_num_cmdline(token) + 1;
-	alloc_cmds(token, cmds, len);
+	cmds = alloc_cmds(token, cmds, len);
 	return (cmds);
 }
 
+// void print_cmds(char ***cmds)
+// {
+// 	int i;
+// 	int j;
 
-int				main(int argc, char const *argv[])
+// 	i = 0;
+// 	printf("---------------------------------\n");
+// 	while (cmds[i])
+// 	{
+// 		j = 0;
+// 		while (cmds[i][j])
+// 		{
+// 			printf("cmds: %s\n", cmds[i][j]);
+// 			j++;
+// 		}
+// 		printf("----------------------------\n");
+// 		i++;
+// 	}
+// }
+
+void start_bash(char ***cmds)
 {
-	t_token		*token;
-	char		buf[BUF_SIZE];
-	char 		***cmds;
-	
-	copy_environ();
-	while (TRUE)
+	int i;
+
+	i = 0;
+	while (cmds[i])
 	{
-		handle_prompt(buf);
-		token = tokenize_lexer(buf, ft_strlen(buf)); //링크드 리스트의 헤드 부분 포인터 주소 반환
-		remove_empty_token(token);
-		if (check_basic_grammar(token))
-		{
-			adjust_env(token);	//환경변수를 찾아서 해당 value로 바꿔줘야 함.
-			check_dred_out(token);
-			erase_quote(token, CHAR_DQUOTE);
-			erase_quote(token, CHAR_QUOTE);
-			adjust_env_in_dquote(token);
-			// 테스트 출력
-			t_token *tmp = token;
-			while (tmp)
-			{
-				printf("%s!\n", tmp->data);
-				tmp = tmp->next;
-			}
-		}
-		cmds = divide_semicolon(token);
-		// print_cmds(cmds);
-		free_all_tokens(token, free);
+		test(cmds[i]);
+		i++;
 	}
-	return (EXIT_SUCCESS);
 }
+
+// int				main(int argc, char const *argv[])
+// {
+// 	t_token		*token;
+// 	char		buf[BUF_SIZE];
+// 	char 		***cmds;
+	
+// 	copy_environ();
+// 	while (TRUE)
+// 	{
+// 		handle_prompt(buf);
+// 		token = tokenize_lexer(buf, ft_strlen(buf)); //링크드 리스트의 헤드 부분 포인터 주소 반환
+// 		remove_empty_token(token);
+// 		if (check_basic_grammar(token))
+// 		{
+// 			adjust_env(token);	//환경변수를 찾아서 해당 value로 바꿔줘야 함.
+// 			check_dred_out(token);
+// 			erase_quote(token, CHAR_DQUOTE);
+// 			erase_quote(token, CHAR_QUOTE);
+// 			adjust_env_in_dquote(token);
+// 			// 테스트 출력
+// 			t_token *tmp = token;
+// 			while (tmp)
+// 			{
+// 				printf("%s!\n", tmp->data);
+// 				tmp = tmp->next;
+// 			}
+// 		}
+// 		cmds = divide_semicolon(token);
+// 		free_all_tokens(token, free);
+// 		print_cmds(cmds);
+// 		start_bash(cmds);
+// 	}
+// 	return (EXIT_SUCCESS);
+// }
 
 /*
 	1) $user$user 인 경우 dongleedonglee 문자열로 하나의 토큰으로 해야 한다.(done)
 	2) 큰 따옴표 안에 있는 환경변수를 치환해야 한다.(done)
 	3) '>>' 더블 아웃풋을 파싱해야 하는데 이 또한 따로 로직으로 처리해야 할 것 같다.(done)
-	4) 세미콜론으로 나눠서 2차원 문자열 배열을 순서대로 내 함수에 넘겨줘야 한다.
+	4) 세미콜론으로 나눠서 2차원 문자열 배열을 순서대로 내 함수에 넘겨줘야 한다.(done)
 	5) copy_env 를 통해 복제한 리스트를 갖고 환경변수를 치환하도록 해야 한다.(done)
 	6) 마지막에 공백이 있을 경우 token이 하나 더 생성되는데 문제가 없을까?(done)
 	7) 큰따옴표 작은따옴표 제거한 상태로 넘겨줘야 한다 (done)
 	8) 마지막에 >, <, | d인 경우 에러처리-> 에러메세지만 손보면 될듯 원인을 찾자(done)
 	9) >>> 이런식으로 문법오류 에러처리 (done)
 	10) > | 등으로 끝날 때 맨 뒤에 내용없는 토큰이 하나 더 생긴다.(done)
-	11) ; 이 젤 먼저 나올 때 에러 처리
+	11) ; 이 젤 먼저 나올 때 에러 처리(done)
 */

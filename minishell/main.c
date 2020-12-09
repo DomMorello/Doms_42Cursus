@@ -954,21 +954,6 @@ void copy_environ(void)
 
 void test(char **cmd)
 {
-    /* ;콜론으로 나눠진 것이 여기로 들어왔다고 가정하자! */
-    // char *cmd[50] = {"ls", "-al", "|", "/bin/grep", "Sep", "|", "/usr/bin/wc", ">",
-    //         "hello1", ">", "hello2", /*"|", "echo", "hi", ">", "hello3",*/ NULL};
-
-    // char *cmd[50] = {"grep", "Sep", "<", "hello1", "|", "wc", "<", "hello1", NULL};
-
-    // char *cmd[50] = {"ls", "-al", "|", "grep", "Sep", ">>", "hello1", "|",
-    //                 "echo", "hi", ">>", "hello1", NULL};
-
-    // char *cmd[50] = {"grep", "Sep", "<", "hello1", "|", "wc", ">>",
-					// "hello1", ">>", "hello2", NULL};
-
-	// char *cmd[50] = {"ls", "-al", "|", "grep", "Sep", NULL};
-	// char *cmd[50] = {"cd", "libft", "|", "echo", "hi", NULL};
-
 	int i;
 	int prev_pipe_idx;
 
@@ -1013,28 +998,65 @@ void do_nothing(int signo)
 	(void)signo;
 }
 
-int main(int argc, char *argv[])
+int				main(int argc, char const *argv[])
 {
-	int ret = 0;
-	char *line;
+	t_token		*token;
+	char		buf[BUF_SIZE];
+	char 		***cmds;
 	
 	signal(SIGQUIT, do_nothing);
 	copy_environ();
-	while (1)
+	while (TRUE)
 	{
-		char **cmd;
-		ft_putstr_fd("\033[0;32mmongshell\033[0;34m$ \033[0m", 2);
-		if ((ret = get_next_line(0, &line)) < 0)
+		handle_prompt(buf);
+		token = tokenize_lexer(buf, ft_strlen(buf)); //링크드 리스트의 헤드 부분 포인터 주소 반환
+		remove_empty_token(token);
+		if (check_basic_grammar(token))
 		{
-			printf("gnl error\n");
-			free(line);
-			exit(-1);
+			adjust_env(token);	//환경변수를 찾아서 해당 value로 바꿔줘야 함.
+			check_dred_out(token);
+			erase_quote(token, CHAR_DQUOTE);
+			erase_quote(token, CHAR_QUOTE);
+			adjust_env_in_dquote(token);
+			// 테스트 출력
+			// t_token *tmp = token;
+			// while (tmp)
+			// {
+			// 	printf("%s!\n", tmp->data);
+			// 	tmp = tmp->next;
+			// }
 		}
-		cmd = ft_split(line, ' ');
-		test(cmd);	//명령어 처리 함수
-		free(line);
-		free_2d_char(cmd);
+		cmds = divide_semicolon(token);
+		free_all_tokens(token, free);
+		// print_cmds(cmds);
+		start_bash(cmds);
 	}
-	free_env();
-	return 0;
+	free_env();	//ctrl + D 누르면 이 함수가 작동해야 할텐데;
+	return (EXIT_SUCCESS);
 }
+
+// int main(int argc, char *argv[])
+// {
+// 	int ret = 0;
+// 	char *line;
+	
+// 	signal(SIGQUIT, do_nothing);
+// 	copy_environ();
+// 	while (1)
+// 	{
+// 		char **cmd;
+// 		ft_putstr_fd("\033[0;32mmongshell\033[0;34m$ \033[0m", 2);
+// 		if ((ret = get_next_line(0, &line)) < 0)
+// 		{
+// 			printf("gnl error\n");
+// 			free(line);
+// 			exit(-1);
+// 		}
+// 		cmd = ft_split(line, ' ');
+// 		test(cmd);	//명령어 처리 함수
+// 		free(line);
+// 		free_2d_char(cmd);
+// 	}
+// 	free_env();
+// 	return 0;
+// }

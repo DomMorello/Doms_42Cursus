@@ -140,10 +140,76 @@ void			free_all_tokens(t_token *token, void (*del)(void *));
 int				issue_new_token(t_token *token, t_status *status, int flag, char char_type);
 void			add_char_and_change_state(t_token *token, t_status *status, char char_type, int state);
 
+/* lexer add */
+void start_bash(char ***cmds);
+char ***divide_semicolon(t_token *token);
+char ***alloc_cmds(t_token *token, char ***cmds, int len);
+void copy_token_to_char(t_token **token, int num_cmd, char **cmds);
+int get_num_cmd(t_token **token);
+int get_num_cmdline(t_token *token);
+void remove_empty_token(t_token *token);
+void erase_quote(t_token *token, char quote_type);
+void copy_without_quote(char *data, char *new, char quote_type);
+void adjust_env_in_dquote(t_token *token);
 void copy_env_key(char **token_data);
 void search_key_in_env(char *key, char **token_data, int env_idx);
 void convert_key_to_env(char *env_content, char **token_data, char *key, int env_idx);
 void convert_to_value(char *new, char *env_content, int *i, int *j);
+void check_dred_out(t_token *token);
+int make_dred_out(t_token *deleted, t_token *prev, int d_red_out);
+
+
+
+/* main */
+void do_nothing(int signo);
+void free_env(void);
+void test(char **cmd);
+void copy_environ(void);
+void handle_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx);
+void exec_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx);
+void process_pipe(char *cmd[], int *prev_pipe_idx, int pipe_idx);
+void handle_cmd(char *token, char *cmd[], int *prev_pipe_idx, int pipe_idx);
+void exec_unset(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc);
+void delete_env_node(char *token);
+void exec_export_np(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc);
+int check_update(char *content);
+char *get_key(char *content);
+void exec_cmd_p(char *cmd[], int *prev_pipe_idx, int pipe_idx);
+void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx);
+void exec_echo(char *cmd[], int prev_pipe_idx, int pipe_idx);
+int get_len(char *cmd[], int prev_pipe_idx, int pipe_idx);
+void print_echo(char *cmd[], int start, int end);
+void exec_export_p(char *cmd[], int prev_pipe_idx, int pipe_idx);
+void print_export(char *line);
+void add_dquote(char *new, char *line);
+void	sort_export(t_list **list);
+void exec_env(char *cmd[], int prev_pipe_idx, int pipe_idx);
+int find_env_path(void);
+void exec_pwd(char *cmd[], int prev_pipe_idx, int pipe_idx);
+void exec_nprocess_built_in(void (*exec_func)(char **, int, int, int), char **cmd, int *prev_pipe_idx, int pipe_idx);
+void exec_exit(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc);
+void exec_cd(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc);
+void dir_to_HOME(char *cmd[], int is_pipe);
+char *find_home(void);
+void change_dir(char *cmd[], char *dir, int is_pipe);
+void update_env(char *cwd, char *key);
+int find_pipe(char *cmd[]);
+void handle_executable(char *token, char *cmd[], int prev_pipe_idx, int pipe_idx);
+char *get_filepath(char *token, char **path);
+void		free_2d_char(char **arr);
+void cat_filepath(char **ret, char **tmp, char *token);
+int search_dir(char *token, char *path);
+char **get_path(void);
+void exec_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx, char *filepath);
+void exec_executable(char *cmd[], int prev_pipe_idx, int pipe_idx, char *filepath);
+int get_argc(char *cmd[], int prev_pipe_idx, int pipe_idx);
+int is_redirection(char *token);
+void process_redirection(char *cmd[], int *prev_pipe_idx, int pipe_idx);
+void set_pipe_parent();
+void set_pipe_child();
+void set_red_double_out(char *title);
+void set_red_in(char *title, char *token);
+void set_red_out(char *title);
 
 
 #endif
