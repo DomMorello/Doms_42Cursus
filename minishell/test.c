@@ -39,7 +39,7 @@ int main()
 	pid_t pid = fork();
 	if (pid == 0)
 	{
-		execlp("echo", "echo", "hi", NULL);
+		execlp("cat", "cat", NULL);
 	}
 	else if (pid < 0)
 	{
@@ -49,9 +49,9 @@ int main()
 	{
 		wait(&status);
 	}
-	
+	printf("test %d\n", status);
 	if (WIFEXITED(status))
-		printf("normal term %d\n", WEXITSTATUS(stat));
+		printf("normal term %d\n", WEXITSTATUS(status));
 	else if (WIFSIGNALED(status))
 		printf("abnormal signal term %d\n", WTERMSIG(status));
 	
