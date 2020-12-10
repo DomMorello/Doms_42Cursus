@@ -9,45 +9,6 @@ t_list g_env_head;
 
 extern char **environ;
 
-void set_red_in(char *title)
-{
-	g_red_in_fd = open(title, O_CREAT | O_RDWR);
-	dup2(g_red_in_fd, 0);
-	close(g_red_in_fd);
-}
-
-void set_red_out(char *title)
-{
-	g_red_out_fd = open(title, O_CREAT | O_RDWR);
-	dup2(g_red_out_fd, 1);
-	close(g_red_out_fd);
-}
-
-void test()
-{
-	// grep Sep < hello1 | wc > hello2
-	pipe(g_pipe_fd);
-
-	pid_t pid = fork();
-	wait(NULL);
-	if (pid == 0)
-	{
-		close(g_pipe_fd[0]);
-		dup2(g_pipe_fd[1], 1);
-		close(g_pipe_fd[1]);
-		set_red_in("./hello");
-		execlp("grep", "grep", "Sep", NULL);
-	}
-	else
-	{
-		close(g_pipe_fd[1]);
-		dup2(g_pipe_fd[0], 0);
-		close(g_pipe_fd[0]);
-		set_red_out("./hello1");
-		execlp("wc", "wc", NULL);
-	}
-}
-
 void copy_environ(void)
 {
 	int i;
@@ -73,6 +34,27 @@ void sig_handler(int signo)
 
 int main()
 {
+	int status = 0;
+
+	pid_t pid = fork();
+	if (pid == 0)
+	{
+		execlp("echo", "echo", "hi", NULL);
+	}
+	else if (pid < 0)
+	{
+		perror("fork err");
+	}
+	else
+	{
+		wait(&status);
+	}
+	
+	if (WIFEXITED(status))
+		printf("normal term %d\n", WEXITSTATUS(stat));
+	else if (WIFSIGNALED(status))
+		printf("abnormal signal term %d\n", WTERMSIG(status));
+	
 	
     return 0;
 }
