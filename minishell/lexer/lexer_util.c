@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:00:28 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/09 18:51:25 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/11 22:21:57 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,20 @@ static void	remove_newline(char *buf)
 
 void		handle_prompt(char *buf)
 {
+	char tmp;
+	int ret;
+	int i;
+
+	ret = 0;
+	i = 0;
 	ft_putstr_fd("\033[0;32mmongshell\033[0;34m$ \033[0m", STDERR);
 	ft_bzero(buf, BUF_SIZE);
-	read(STDIN, buf, BUF_SIZE); //읽기
-	remove_newline(buf); //마지막 newline 지우기
+	while (ret = read(STDIN, &tmp, 1) && tmp != '\n')
+	{
+		buf[i++] = tmp;
+	}
+	// read(STDIN, buf, BUF_SIZE);
+	// remove_newline(buf); //마지막 newline 지우기
 }
 
 void			initiate_token(t_token *token, int length)

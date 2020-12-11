@@ -34,27 +34,37 @@ void sig_handler(int signo)
 
 int main()
 {
-	int status = 0;
+	// signal(SIGINT, sig_handler);
 
-	pid_t pid = fork();
-	if (pid == 0)
+	char *line;
+
+	while (TRUE)
 	{
-		execlp("cat", "cat", NULL);
+		get_next_line(0, &line);
+		printf("%s\n", line);
+		free(line);
 	}
-	else if (pid < 0)
-	{
-		perror("fork err");
-	}
-	else
-	{
-		wait(&status);
-	}
-	printf("test %d\n", status);
-	if (WIFEXITED(status))
-		printf("normal term %d\n", WEXITSTATUS(status));
-	else if (WIFSIGNALED(status))
-		printf("abnormal signal term %d\n", WTERMSIG(status));
-	
+
+
+	// int status = 0;
+	// pid_t pid = fork();
+	// if (pid == 0)
+	// {
+	// 	execlp("cat", "cat", NULL);
+	// }
+	// else if (pid < 0)
+	// {
+	// 	perror("fork err");
+	// }
+	// else
+	// {
+	// 	wait(&status);
+	// }
+	// printf("test %d\n", status);
+	// if (WIFEXITED(status))
+	// 	printf("normal term %d\n", WEXITSTATUS(status));
+	// else if (WIFSIGNALED(status))
+	// 	printf("abnormal signal term %d\n", WTERMSIG(status));
 	
     return 0;
 }
