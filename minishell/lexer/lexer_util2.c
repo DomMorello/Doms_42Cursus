@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:23:45 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/08 22:34:40 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/12 16:35:06 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,37 +23,9 @@ void			examine_end_of_line(t_token *token, t_status *status, char char_type)
 
 int				is_env_exception(t_token *token, t_status *status, char *str, char char_type)
 {
-	/*
-	** 현재 읽은 문자가 $인데, 예외 케이스로 일반 문자로 인식하는 경우가 아니면 무조건 환경변수에 대한 문자임.
-	** 환경변수 인 경우 if 절에 들어감.
-	** 보완점 : echo $user$user인 경우, token 반환시 'echo', 'dongleedonglee' 두개를 반환하도록 해야함...
-	*/
-	// if (char_type == CHAR_ENV && (str[status->i - 1] != ' ' && str[status->i + 1] != ' ')
-	// 	&& status->state != STATE_IN_QUOTE && status->state != STATE_IN_DQUOTE) //예시 : echo hi my name is$user, 현재 i가 $를 가리킴.,
-	// 	//$앞에 공백이 아닌 경우에 대한 예외 처리. $앞이 공백인 경우는 다른 곳에서 잘 처리되기 때문.
-	// {
-	// 	token->data[status->j] = CHAR_NULL; //현재 token->data : name/0
-	// 	if ((token->next = (t_token *)malloc(sizeof(t_token))) == NULL) //token->next를 생성해주고
-	// 		exit(ERROR);
-	// 	token = token->next; //token이 다음 token을 읽게 해줌.
-	// 	initiate_token(token, status->length - status->i); //token초기화.
-	// 	status->j = 0; //다시 j를 0으로 초기화
-	// 	token->type = CHAR_ENV;
-	// 	token->data[(status->j)++] = CHAR_ENV; //새로운 토큰의 첫번째 문자를 $로 기록하고, j를 1 증가시켜줌
-	// 	status->state = STATE_IN_ENV;
-	// 	return (TRUE);
-	// }
-	// return (FALSE);
-	/* 이 부분을 통째로 바꿔야 한다. 앞에랑 붙어있으면 붙어있는 그대로 token 하나로 해야된다. */
 	if (char_type == CHAR_ENV && (str[status->i - 1] != ' ' && str[status->i + 1] != ' ')
 		&& status->state != STATE_IN_QUOTE && status->state != STATE_IN_DQUOTE)
 	{
-		// token->data[status->j] = CHAR_NULL; //현재 token->data : name/0
-		// if ((token->next = (t_token *)malloc(sizeof(t_token))) == NULL) //token->next를 생성해주고
-			// exit(ERROR);
-		// token = token->next; //token이 다음 token을 읽게 해줌.
-		// initiate_token(token, status->length - status->i); //token초기화.
-		// status->j = 0; //다시 j를 0으로 초기화
 		token->type = CHAR_ENV;
 		token->data[(status->j)++] = CHAR_ENV; //새로운 토큰의 첫번째 문자를 $로 기록하고, j를 1 증가시켜줌
 		status->state = STATE_IN_ENV;
@@ -61,22 +33,6 @@ int				is_env_exception(t_token *token, t_status *status, char *str, char char_t
 	}
 	return (FALSE);
 }
-/*
-gnl로 읽은 문자 : echo hi
-문자열 길이 : 7
-가장 처음 token 초기화 : token->data length를 7로 초기화함.
-echo hi를 계속 읽음
-data[0] = e
-data[1] = c
-data[2] = h
-data[3] = o
-(0, 1, 2, 3, 4는 모두 status->j)
-if 공백을 만나면
-	data[4] = \0;
-	new_token = malloc
-	token->next = new_token;
-	new_token->data = malloc(status->length - status->i); //길이의 최대치를 할당
-*/
 
 t_token			**convert_list_into_array(t_token *token)
 {

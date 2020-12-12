@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:26:45 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/03 15:34:08 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/12 17:16:05 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,14 @@
 
 static void			handle_empty_environ(t_token *token)
 {
-	free(token->data);
-	token->data = ft_strdup(""); //빈문자열을 반환.
-	token->type = TOKEN;
+	if (!ft_strncmp(token->data, "$?", 2))
+		return ;
+	else
+	{
+		free(token->data);
+		token->data = ft_strdup(""); //빈문자열을 반환.
+		token->type = TOKEN;
+	}
 }
 
 static void			replace_key_with_value(t_token *token)
@@ -47,32 +52,6 @@ static void			replace_key_with_value(t_token *token)
 	if (!flag) //환경변수 못찾은 경우
 		handle_empty_environ(token);
 }
-
-// static void			search_and_replace_env(t_token **token, char **environ)
-// {
-// 	t_token			*new_token;
-// 	t_token 		*new_token_tmp;
-// 	t_token 		*last;
-
-// 	(*token)->next->data += sizeof(char);
-// 	(*token)->next->data[ft_strlen((*token)->next->data) - 1] = CHAR_NULL;
-// 	new_token = tokenize_lexer((*token)->next->data, ft_strlen((*token)->next->data));
-// 	new_token_tmp = new_token;
-// 	while (new_token_tmp)
-// 	{
-// 		if (new_token_tmp->type == CHAR_ENV)
-// 			replace_key_with_value(new_token_tmp, environ);
-// 		new_token_tmp = new_token_tmp->next;
-// 	}
-// 	last = (*token)->next->next;
-// 	(*token)->next->data -= sizeof(char);
-// 	free((*token)->next->data);
-// 	free((*token)->next);
-// 	(*token)->next = new_token;
-// 	while (new_token->next != NULL)
-// 		new_token = new_token->next;
-// 	new_token->next = last;
-// }
 
 void replace_exception_env(t_token *token)
 {

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:00:28 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/11 22:21:57 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/12 17:55:33 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,12 @@ void		handle_prompt(char *buf)
 	i = 0;
 	ft_putstr_fd("\033[0;32mmongshell\033[0;34m$ \033[0m", STDERR);
 	ft_bzero(buf, BUF_SIZE);
-	while (ret = read(STDIN, &tmp, 1) && tmp != '\n')
+	while (tmp != '\n')
 	{
-		buf[i++] = tmp;
+		while (ret = read(STDIN, &tmp, 1) && tmp != '\n')
+		{
+			buf[i++] = tmp;
+		}
 	}
 	// read(STDIN, buf, BUF_SIZE);
 	// remove_newline(buf); //마지막 newline 지우기
