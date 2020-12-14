@@ -989,7 +989,6 @@ void do_nothing(int signo)
 	cat을 한 후 ctrl \ ‘^\Quit: 3'메세지 출력 다음 프롬프트로 넘어감. 종료상태 131
 	-> 이 부분은 따로 구현을 하지 않아도 알아서 잘 될 것
 	 */
-	ft_putstr_fd("\b\b  \b\b", STDERR);
 	(void)signo;
 }
 
