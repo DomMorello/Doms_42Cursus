@@ -35,17 +35,7 @@ void sig_handler(int signo)
 int main()
 {
 	// signal(SIGINT, sig_handler);
-
-	char *line;
-
-	while (TRUE)
-	{
-		get_next_line(0, &line);
-		printf("%s\n", line);
-		free(line);
-	}
-
-
+	printf("%d\n", '\n');
 	// int status = 0;
 	// pid_t pid = fork();
 	// if (pid == 0)
