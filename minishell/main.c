@@ -981,29 +981,15 @@ void free_env(void)
 
 void do_nothing(int signo)
 {
-	ft_putstr_fd("\n", 2);
-	ft_putstr_fd("\033[0;32mmongshell\033[0;34m$ \033[0m", 2);
+	// ft_putstr_fd("\n", 2);
+	// ft_putstr_fd("\033[0;32mmongshell\033[0;34m$ \033[0m", 2);
+	/* 
+	프롬프트에서 ctrl \ 아무 작동x 종료상태 그대로
+	어떤 명령어를 치고 난 후 ctrl \ 아무 작동x
+	cat을 한 후 ctrl \ ‘^\Quit: 3'메세지 출력 다음 프롬프트로 넘어감. 종료상태 131
+	-> 이 부분은 따로 구현을 하지 않아도 알아서 잘 될 것
+	 */
 	(void)signo;
-}
-
-void print_cmds(char ***cmds)
-{
-	int i;
-	int j;
-
-	i = 0;
-	printf("---------------------------------\n");
-	while (cmds[i])
-	{
-		j = 0;
-		while (cmds[i][j])
-		{
-			printf("cmds: %s\n", cmds[i][j]);
-			j++;
-		}
-		printf("----------------------------\n");
-		i++;
-	}
 }
 
 void free_cmds(char ***cmds)
@@ -1051,38 +1037,11 @@ int				main(int argc, char const *argv[])
 			erase_quote(token, CHAR_QUOTE);
 			adjust_env_in_dquote(token);
 			cmds = divide_semicolon(token);
-			// print_cmds(cmds);
 			start_bash(cmds);
 			free_cmds(cmds);
 		}
 		free_all_tokens(token, free);
 	}
-	free_env();	//ctrl + D 누르면 이 함수가 작동해야 할텐데; exit하면 될거같은데?
+	free_env();
 	return (EXIT_SUCCESS);
 }
-
-// int main(int argc, char *argv[])
-// {
-// 	int ret = 0;
-// 	char *line;
-	
-// 	signal(SIGQUIT, do_nothing);
-// 	copy_environ();
-// 	while (1)
-// 	{
-// 		char **cmd;
-// 		ft_putstr_fd("\033[0;32mmongshell\033[0;34m$ \033[0m", 2);
-// 		if ((ret = get_next_line(0, &line)) < 0)
-// 		{
-// 			printf("gnl error\n");
-// 			free(line);
-// 			exit(-1);
-// 		}
-// 		cmd = ft_split(line, ' ');
-// 		test(cmd);	//명령어 처리 함수
-// 		free(line);
-// 		free_2d_char(cmd);
-// 	}
-// 	free_env();
-// 	return 0;
-// }
