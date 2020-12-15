@@ -7,7 +7,8 @@ t_list g_env_head;
 int g_pipe_fd[2];
 int g_red_out_fd;
 int g_red_in_fd;
-int g_last_state;
+int g_exit_status;
+int g_pid;
 
 void set_red_out(char *title)
 {
@@ -716,17 +717,18 @@ void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 
 void exec_cmd_p(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
-    pid_t pid;
+    // pid_t pid;
 	
-	pid = fork();
-    if (pid == 0)
+	// pid = fork();
+	g_pid = fork();
+    if (g_pid == 0)
     {
         set_pipe_child();
         process_redirection(cmd, prev_pipe_idx, pipe_idx);
         parse_cmd(cmd, prev_pipe_idx, pipe_idx);
         exit(1);
     }
-    else if (pid < 0)
+    else if (g_pid < 0)
     {
         perror("fork err");
     }
@@ -882,16 +884,16 @@ void process_pipe(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 
 void exec_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
-	pid_t pid;
+	// pid_t pid;
 
-	pid = fork();
-	if (pid == 0)
+	g_pid = fork();
+	if (g_pid == 0)
 	{
 		process_redirection(cmd, prev_pipe_idx, pipe_idx);
 		parse_cmd(cmd, prev_pipe_idx, pipe_idx);
 		exit(1);
 	}
-	else if (pid < 0)
+	else if (g_pid < 0)
     {
         perror("fork err");
     }
@@ -979,6 +981,21 @@ void free_env(void)
 	ft_lstclear(&g_env_list, free);
 }
 
+void sig_int(int signo)
+{
+	(void)signo;
+	ft_putstr_fd("\n", STDERR);
+	ft_putstr_fd("\033[0;32mmongshell\033[0;34m$ \033[0m", STDERR);
+	g_exit_status = 1;
+}
+/*
+	프롬프트 ctrl c 를 하고 나서 개행발생, 종료상태 1
+	어떤 명령어를 치고 난 후에 ctrl c, 그 명령어 그대로 남아있고 아무작동x
+	다음 프롬프트로 넘어간다. 종료상태는 1
+	cat을 한 후에 ctrl c 를 하면 ‘^C’ 라는 메세지가 출력 
+	다음 프롬프트로 넘어간다. 종료상태는 130
+*/
+
 void do_nothing(int signo)
 {
 	// ft_putstr_fd("\n", 2);
@@ -989,6 +1006,8 @@ void do_nothing(int signo)
 	cat을 한 후 ctrl \ ‘^\Quit: 3'메세지 출력 다음 프롬프트로 넘어감. 종료상태 131
 	-> 이 부분은 따로 구현을 하지 않아도 알아서 잘 될 것
 	 */
+	printf("test %d\n", g_pid);
+	/* 이걸 테스트하기 위해서는 과카몰리가 돼야 한다. */
 	(void)signo;
 }
 
@@ -1019,6 +1038,7 @@ int				main(int argc, char const *argv[])
 	char 		***cmds;
 
 	signal(SIGQUIT, do_nothing);
+	signal(SIGINT, sig_int);
 	copy_environ();
 	while (TRUE)
 	{
