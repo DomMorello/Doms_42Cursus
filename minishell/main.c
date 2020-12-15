@@ -997,19 +997,18 @@ void sig_int(int signo)
 	다음 프롬프트로 넘어간다. 종료상태는 130
 */
 
-void do_nothing(int signo)
+void sig_quit(int signo)
 {
-	ft_putstr_fd("\n", 2);
-	ft_putstr_fd("\033[0;32mmongshell\033[0;34m$ \033[0m", 2);
+	(void)signo;
+	// ft_putstr_fd("\n", STDERR);
+	// ft_putstr_fd("\033[0;32mmongshell\033[0;34m$ \033[0m", STDERR);
 	/* 
 	프롬프트에서 ctrl \ 아무 작동x 종료상태 그대로
 	어떤 명령어를 치고 난 후 ctrl \ 아무 작동x
 	cat을 한 후 ctrl \ ‘^\Quit: 3'메세지 출력 다음 프롬프트로 넘어감. 종료상태 131
 	-> 이 부분은 따로 구현을 하지 않아도 알아서 잘 될 것
 	 */
-	printf("test %d\n", g_pid);
-	
-	(void)signo;
+	// printf("test %d\n", g_pid);
 }
 
 void free_cmds(char ***cmds)
@@ -1038,7 +1037,7 @@ int				main(int argc, char const *argv[])
 	char		buf[BUF_SIZE];
 	char 		***cmds;
 
-	signal(SIGQUIT, do_nothing);
+	signal(SIGQUIT, sig_quit);
 	signal(SIGINT, sig_int);
 	copy_environ();
 	while (TRUE)
