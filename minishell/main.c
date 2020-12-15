@@ -984,32 +984,31 @@ void free_env(void)
 void sig_int(int signo)
 {
 	(void)signo;
-	ft_putstr_fd("\n", STDERR);
-	ft_putstr_fd("\033[0;32mmongshell\033[0;34m$ \033[0m", STDERR);
-	printf("test: %d\n", g_pid);
-	g_exit_status = 1;
+	if (g_pid == 0)
+	{
+		ft_putstr_fd("\b\b  \b\b", STDERR);
+		ft_putstr_fd("\n", STDERR);
+		ft_putstr_fd("\033[0;32mmongshell\033[0;34m$ \033[0m", STDERR);
+		g_exit_status = 1;
+	}
+	else
+	{
+		ft_putstr_fd("\n", STDERR);
+		g_exit_status = 130;	
+	}
 }
-/*
-	프롬프트 ctrl c 를 하고 나서 개행발생, 종료상태 1
-	어떤 명령어를 치고 난 후에 ctrl c, 그 명령어 그대로 남아있고 아무작동x
-	다음 프롬프트로 넘어간다. 종료상태는 1
-	cat을 한 후에 ctrl c 를 하면 ‘^C’ 라는 메세지가 출력 
-	다음 프롬프트로 넘어간다. 종료상태는 130
-*/
 
 void sig_quit(int signo)
 {
 	(void)signo;
-	ft_putstr_fd("\b\b  \b\b", STDERR);
-	// ft_putstr_fd("\n", STDERR);
-	// ft_putstr_fd("\033[0;32mmongshell\033[0;34m$ \033[0m", STDERR);
-	/* 
-	프롬프트에서 ctrl \ 아무 작동x 종료상태 그대로
-	어떤 명령어를 치고 난 후 ctrl \ 아무 작동x
-	cat을 한 후 ctrl \ ‘^\Quit: 3'메세지 출력 다음 프롬프트로 넘어감. 종료상태 131
-	-> 이 부분은 따로 구현을 하지 않아도 알아서 잘 될 것
-	 */
-	// printf("test %d\n", g_pid);
+	if (g_pid == 0)
+		ft_putstr_fd("\b\b  \b\b", STDERR);
+	else
+	{
+		ft_putstr_fd("Quit: 3\n", STDERR);
+		ft_putstr_fd("\033[0;32mmongshell\033[0;34m$ \033[0m", STDERR);
+		g_exit_status = 131;
+	}
 }
 
 void free_cmds(char ***cmds)
