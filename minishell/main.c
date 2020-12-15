@@ -1000,6 +1000,7 @@ void sig_int(int signo)
 void sig_quit(int signo)
 {
 	(void)signo;
+	ft_putstr_fd("\b\b  \b\b", STDERR);
 	// ft_putstr_fd("\n", STDERR);
 	// ft_putstr_fd("\033[0;32mmongshell\033[0;34m$ \033[0m", STDERR);
 	/* 
