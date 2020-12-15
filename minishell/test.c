@@ -35,12 +35,7 @@ void sig_handler(int signo)
 int main()
 {
 	// signal(SIGINT, sig_handler);
-	char buf;
-	int ret = 0;
-	while (ret = read(STDIN, &buf, 1))
-	{
-		
-	}
+	
 	// int status = 0;
 	// pid_t pid = fork();
 	// if (pid == 0)

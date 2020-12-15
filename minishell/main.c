@@ -986,6 +986,7 @@ void sig_int(int signo)
 	(void)signo;
 	ft_putstr_fd("\n", STDERR);
 	ft_putstr_fd("\033[0;32mmongshell\033[0;34m$ \033[0m", STDERR);
+	printf("test: %d\n", g_pid);
 	g_exit_status = 1;
 }
 /*
@@ -998,8 +999,8 @@ void sig_int(int signo)
 
 void do_nothing(int signo)
 {
-	// ft_putstr_fd("\n", 2);
-	// ft_putstr_fd("\033[0;32mmongshell\033[0;34m$ \033[0m", 2);
+	ft_putstr_fd("\n", 2);
+	ft_putstr_fd("\033[0;32mmongshell\033[0;34m$ \033[0m", 2);
 	/* 
 	프롬프트에서 ctrl \ 아무 작동x 종료상태 그대로
 	어떤 명령어를 치고 난 후 ctrl \ 아무 작동x
@@ -1007,7 +1008,7 @@ void do_nothing(int signo)
 	-> 이 부분은 따로 구현을 하지 않아도 알아서 잘 될 것
 	 */
 	printf("test %d\n", g_pid);
-	/* 이걸 테스트하기 위해서는 과카몰리가 돼야 한다. */
+	
 	(void)signo;
 }
 
@@ -1042,6 +1043,7 @@ int				main(int argc, char const *argv[])
 	copy_environ();
 	while (TRUE)
 	{
+		g_pid = 0;
 		handle_prompt(buf);
 		token = tokenize_lexer(buf, ft_strlen(buf)); //링크드 리스트의 헤드 부분 포인터 주소 반환
 		if (!remove_empty_token(token))
@@ -1061,6 +1063,7 @@ int				main(int argc, char const *argv[])
 			free_cmds(cmds);
 		}
 		free_all_tokens(token, free);
+		printf("exit statsu: %d\n", g_exit_status);
 	}
 	free_env();
 	return (EXIT_SUCCESS);
