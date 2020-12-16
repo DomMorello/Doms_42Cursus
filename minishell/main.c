@@ -942,14 +942,16 @@ void copy_environ(void)
 	}
 }
 
-char *make_new_cmd(char *new, char *cmd, char *exit_status)
+char *make_new_cmd(char *new, char *cmd)
 {
 	int i;
 	int j;
 	int k;
+	char *exit_status;
 
 	i = 0;
 	j = 0;
+	exit_status = ft_itoa(g_exit_status);
 	while (cmd[i])
 	{
 		k = 0;
@@ -958,6 +960,7 @@ char *make_new_cmd(char *new, char *cmd, char *exit_status)
 			while (exit_status[k])
 				new[j++] = exit_status[k++];
 			i += 2;
+			continue ;
 		}
 		new[j] = cmd[i];
 		j++;
@@ -966,26 +969,55 @@ char *make_new_cmd(char *new, char *cmd, char *exit_status)
 	return (new);
 }
 
+int get_num_exit_status(char *cmd)
+{
+	int i;
+	int cnt;
+
+	i = 0;
+	cnt = 0;
+	while (cmd[i])
+	{
+		if (cmd[i] == '$' && cmd[i + 1] && cmd[i + 1] == '?')
+		{
+			cnt++;
+			i++;
+		}
+		i++;
+	}
+	return (cnt);
+}
+
+char *alloc_new(char *cmd)
+{
+	int cmd_len;
+	int exit_cnt;
+	char *exit_status;
+	char *ret;
+
+	ret = NULL;
+	exit_cnt = get_num_exit_status(cmd);
+	cmd_len = ft_strlen(cmd);
+	exit_status = ft_itoa(g_exit_status);
+	if ((ret = (char *)malloc(sizeof(char) * (cmd_len - (2 * exit_cnt) + (ft_strlen(exit_status) * exit_cnt)) + 1)) == NULL)
+		exit(-1);
+	ret[cmd_len - (2 * exit_cnt) + (ft_strlen(exit_status) * exit_cnt)] = 0;
+	return (ret);
+}
+
 void convert_exit_status(char **cmd)
 {
 	int i;
-	int cmd_len;
-	char *exit_status;
 	char *new;
 
 	i = 0;
-	exit_status = NULL;
 	while (cmd[i])
 	{
 		if (ft_strnstr(cmd[i], "$?", ft_strlen(cmd[i])))
 		{
-
-			cmd_len = ft_strlen(cmd[i]);
-			exit_status = ft_itoa(g_exit_status);
-			if ((new = (char *)malloc(sizeof(char) * (cmd_len - 2 + ft_strlen(exit_status)) + 1)) == NULL)
-				exit(-1);
-			new[cmd_len - 2 + ft_strlen(exit_status)] = 0;
-			new = make_new_cmd(new, cmd[i], exit_status);
+			g_exit_status = 127;	//test
+			new = alloc_new(cmd[i]);
+			new = make_new_cmd(new, cmd[i]);
 			free(cmd[i]);
 			cmd[i] = new;
 		}
