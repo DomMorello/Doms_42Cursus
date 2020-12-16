@@ -1007,7 +1007,7 @@ void test(char **cmd)
 
 	prev_pipe_idx = 0;
 	i = 0;
-	convert_exit_status(cmd);
+	// convert_exit_status(cmd);
 	while (cmd[i])
 	{
 		process_pipe(cmd, &prev_pipe_idx, i);
