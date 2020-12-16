@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:00:28 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/14 19:25:16 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/16 21:57:27 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,6 @@ void		handle_prompt(char *buf)
 			exit(EXIT_SUCCESS);
 		}
 	}
-	// read(STDIN, buf, BUF_SIZE);
-	// remove_newline(buf); //마지막 newline 지우기
 }
 
 void			initiate_token(t_token *token, int length)

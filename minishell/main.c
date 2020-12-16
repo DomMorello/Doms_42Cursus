@@ -942,90 +942,7 @@ void copy_environ(void)
 	}
 }
 
-char *make_new_cmd(char *new, char *cmd)
-{
-	int i;
-	int j;
-	int k;
-	char *exit_status;
-
-	i = 0;
-	j = 0;
-	exit_status = ft_itoa(g_exit_status);
-	while (cmd[i])
-	{
-		k = 0;
-		if (cmd[i] == '$' && cmd[i + 1] && cmd[i + 1] == '?')
-		{
-			while (exit_status[k])
-				new[j++] = exit_status[k++];
-			i += 2;
-			continue ;
-		}
-		new[j] = cmd[i];
-		j++;
-		i++;
-	}
-	return (new);
-}
-
-int get_num_exit_status(char *cmd)
-{
-	int i;
-	int cnt;
-
-	i = 0;
-	cnt = 0;
-	while (cmd[i])
-	{
-		if (cmd[i] == '$' && cmd[i + 1] && cmd[i + 1] == '?')
-		{
-			cnt++;
-			i++;
-		}
-		i++;
-	}
-	return (cnt);
-}
-
-char *alloc_new(char *cmd)
-{
-	int cmd_len;
-	int exit_cnt;
-	char *exit_status;
-	char *ret;
-
-	ret = NULL;
-	exit_cnt = get_num_exit_status(cmd);
-	cmd_len = ft_strlen(cmd);
-	exit_status = ft_itoa(g_exit_status);
-	if ((ret = (char *)malloc(sizeof(char) * (cmd_len - (2 * exit_cnt) + (ft_strlen(exit_status) * exit_cnt)) + 1)) == NULL)
-		exit(-1);
-	ret[cmd_len - (2 * exit_cnt) + (ft_strlen(exit_status) * exit_cnt)] = 0;
-	return (ret);
-}
-
-void convert_exit_status(char ***cmd)
-{
-	int i;
-	char *new;
-
-	i = 0;
-	while ((*cmd)[i])
-	{
-		if (ft_strnstr((*cmd)[i], "$?", ft_strlen((*cmd)[i])))
-		{
-			g_exit_status = 127;	//test
-			new = alloc_new((*cmd)[i]);
-			new = make_new_cmd(new, (*cmd)[i]);
-			free((*cmd)[i]);
-			(*cmd)[i] = new;
-		}
-		i++;
-	}
-}
-
-void test(char ***cmd)
+void test(char **cmd)
 {
 	int i;
 	int prev_pipe_idx;
@@ -1039,13 +956,13 @@ void test(char ***cmd)
 
 	prev_pipe_idx = 0;
 	i = 0;
-	convert_exit_status(cmd);
-	while ((*cmd)[i])
+	// convert_exit_status(cmd);
+	while (cmd[i])
 	{
-		process_pipe((*cmd), &prev_pipe_idx, i);
+		process_pipe(cmd, &prev_pipe_idx, i);
 		i++;
-		if (!(*cmd)[i])
-			handle_last_cmd((*cmd), &prev_pipe_idx, i);
+		if (!cmd[i])
+			handle_last_cmd(cmd, &prev_pipe_idx, i);
 	}
 	int a = dup2(stdin_tmp, 0);
 	if (a == -1)
@@ -1115,6 +1032,101 @@ void free_cmds(char ***cmds)
 	free(cmds);
 }
 
+void print_token(t_token *token)
+{
+	t_token *tmp = token;
+
+	while (tmp)
+	{
+		printf("test %s\n", tmp->data);
+		tmp = tmp->next;
+	}
+}
+
+// char *make_new_cmd(char *new, char *cmd)
+// {
+// 	int i;
+// 	int j;
+// 	int k;
+// 	char *exit_status;
+
+// 	i = 0;
+// 	j = 0;
+// 	exit_status = ft_itoa(g_exit_status);
+// 	while (cmd[i])
+// 	{
+// 		k = 0;
+// 		if (cmd[i] == '$' && cmd[i + 1] && cmd[i + 1] == '?')
+// 		{
+// 			while (exit_status[k])
+// 				new[j++] = exit_status[k++];
+// 			i += 2;
+// 			continue ;
+// 		}
+// 		new[j] = cmd[i];
+// 		j++;
+// 		i++;
+// 	}
+// 	return (new);
+// }
+
+// int get_num_exit_status(char *cmd)
+// {
+// 	int i;
+// 	int cnt;
+
+// 	i = 0;
+// 	cnt = 0;
+// 	while (cmd[i])
+// 	{
+// 		if (cmd[i] == '$' && cmd[i + 1] && cmd[i + 1] == '?')
+// 		{
+// 			cnt++;
+// 			i++;
+// 		}
+// 		i++;
+// 	}
+// 	return (cnt);
+// }
+
+// char *alloc_new(char *cmd)
+// {
+// 	int cmd_len;
+// 	int exit_cnt;
+// 	char *exit_status;
+// 	char *ret;
+
+// 	ret = NULL;
+// 	exit_cnt = get_num_exit_status(cmd);
+// 	cmd_len = ft_strlen(cmd);
+// 	exit_status = ft_itoa(g_exit_status);
+// 	if ((ret = (char *)malloc(sizeof(char) * (cmd_len - (2 * exit_cnt) + (ft_strlen(exit_status) * exit_cnt)) + 1)) == NULL)
+// 		exit(-1);
+// 	ret[cmd_len - (2 * exit_cnt) + (ft_strlen(exit_status) * exit_cnt)] = 0;
+// 	return (ret);
+// }
+
+void convert_exit_status(t_token *token)
+{
+	char *new;
+	t_token *tmp;
+
+	tmp = token;
+	while (tmp)
+	{
+		if (ft_strnstr(cmd[i], "$?", ft_strlen(cmd[i])))
+		{
+			g_exit_status = 127;	//test
+			new = alloc_new(cmd[i]);
+			new = make_new_cmd(new, cmd[i]);
+			free(cmd[i]);
+			cmd[i] = new;
+		}
+		tmp = tmp->next;
+		/* token으로 해서 파싱하는 것을 메모리릭없이 잘 해결해보자 */
+	}
+}
+
 int				main(int argc, char const *argv[])
 {
 	t_token		*token;
@@ -1141,6 +1153,8 @@ int				main(int argc, char const *argv[])
 			erase_quote(token, CHAR_DQUOTE);
 			erase_quote(token, CHAR_QUOTE);
 			adjust_env_in_dquote(token);
+			// print_token(token);	//test
+			convert_exit_status(token);
 			cmds = divide_semicolon(token);
 			start_bash(cmds);
 			free_cmds(cmds);

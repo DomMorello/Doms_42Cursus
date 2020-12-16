@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/16 21:49:52 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/16 21:51:27 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -406,7 +406,7 @@ void start_bash(char ***cmds)
 	i = 0;
 	while (cmds[i])
 	{
-		test((&cmds)[i]);
+		test(cmds[i]);
 		i++;
 	}
 }
