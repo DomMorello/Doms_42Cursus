@@ -969,8 +969,8 @@ char *make_new_cmd(char *new, char *cmd, char *exit_status)
 void convert_exit_status(char **cmd)
 {
 	int i;
-	char *exit_status;
 	int cmd_len;
+	char *exit_status;
 	char *new;
 
 	i = 0;
@@ -979,6 +979,7 @@ void convert_exit_status(char **cmd)
 	{
 		if (ft_strnstr(cmd[i], "$?", ft_strlen(cmd[i])))
 		{
+
 			cmd_len = ft_strlen(cmd[i]);
 			exit_status = ft_itoa(g_exit_status);
 			if ((new = (char *)malloc(sizeof(char) * (cmd_len - 2 + ft_strlen(exit_status)) + 1)) == NULL)
@@ -986,9 +987,7 @@ void convert_exit_status(char **cmd)
 			new[cmd_len - 2 + ft_strlen(exit_status)] = 0;
 			new = make_new_cmd(new, cmd[i], exit_status);
 			free(cmd[i]);
-			cmd[i] = ft_strdup(new);
-			free(new);
-			new = NULL;
+			cmd[i] = new;
 		}
 		i++;
 	}

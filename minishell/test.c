@@ -26,17 +26,9 @@ void copy_environ(void)
 	}
 }
 
-void sig_handler(int signo)
-{
-	printf("worked!\n");
-	exit(1);
-}
-
 int main()
 {
 	// signal(SIGINT, sig_handler);
-
-	
 
 	// int status = 0;
 	// pid_t pid = fork();
