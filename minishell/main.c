@@ -1005,21 +1005,21 @@ char *alloc_new(char *cmd)
 	return (ret);
 }
 
-void convert_exit_status(char **cmd)
+void convert_exit_status(char ***cmd)
 {
 	int i;
 	char *new;
 
 	i = 0;
-	while (cmd[i])
+	while ((*cmd)[i])
 	{
-		if (ft_strnstr(cmd[i], "$?", ft_strlen(cmd[i])))
+		if (ft_strnstr((*cmd)[i], "$?", ft_strlen((*cmd)[i])))
 		{
 			g_exit_status = 127;	//test
-			new = alloc_new(cmd[i]);
-			new = make_new_cmd(new, cmd[i]);
-			free(cmd[i]);
-			cmd[i] = new;
+			new = alloc_new((*cmd)[i]);
+			new = make_new_cmd(new, (*cmd)[i]);
+			free((*cmd)[i]);
+			(*cmd)[i] = new;
 		}
 		i++;
 	}
@@ -1039,7 +1039,7 @@ void test(char **cmd)
 
 	prev_pipe_idx = 0;
 	i = 0;
-	convert_exit_status(cmd);
+	convert_exit_status(&cmd);
 	while (cmd[i])
 	{
 		process_pipe(cmd, &prev_pipe_idx, i);
