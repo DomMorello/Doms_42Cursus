@@ -30,7 +30,6 @@ int main()
 {
 	// signal(SIGINT, sig_handler);
 
-
 	// int status = 0;
 	// pid_t pid = fork();
 	// if (pid == 0)

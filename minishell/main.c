@@ -1025,7 +1025,7 @@ void convert_exit_status(char ***cmd)
 	}
 }
 
-void test(char **cmd)
+void test(char ***cmd)
 {
 	int i;
 	int prev_pipe_idx;
@@ -1039,13 +1039,13 @@ void test(char **cmd)
 
 	prev_pipe_idx = 0;
 	i = 0;
-	convert_exit_status(&cmd);
-	while (cmd[i])
+	convert_exit_status(cmd);
+	while ((*cmd)[i])
 	{
-		process_pipe(cmd, &prev_pipe_idx, i);
+		process_pipe((*cmd), &prev_pipe_idx, i);
 		i++;
-		if (!cmd[i])
-			handle_last_cmd(cmd, &prev_pipe_idx, i);
+		if (!(*cmd)[i])
+			handle_last_cmd((*cmd), &prev_pipe_idx, i);
 	}
 	int a = dup2(stdin_tmp, 0);
 	if (a == -1)

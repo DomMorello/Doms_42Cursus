@@ -161,7 +161,7 @@ int make_dred_out(t_token *deleted, t_token *prev, int d_red_out);
 /* main */
 void do_nothing(int signo);
 void free_env(void);
-void test(char **cmd);
+void test(char ***cmd);
 void copy_environ(void);
 void handle_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx);
 void exec_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx);
