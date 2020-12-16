@@ -988,6 +988,7 @@ void convert_exit_status(char **cmd)
 			free(cmd[i]);
 			cmd[i] = ft_strdup(new);
 			free(new);
+			new = NULL;
 		}
 		i++;
 	}
