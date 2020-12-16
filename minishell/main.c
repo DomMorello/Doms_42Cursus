@@ -942,6 +942,58 @@ void copy_environ(void)
 	}
 }
 
+char *make_new_cmd(char *new, char *cmd, char *exit_status)
+{
+	int i;
+	int j;
+	int k;
+
+	i = 0;
+	j = 0;
+	while (cmd[i])
+	{
+		k = 0;
+		if (cmd[i] == '$' && cmd[i + 1] && cmd[i + 1] == '?')
+		{
+			while (exit_status[k])
+				new[j++] = exit_status[k++];
+			i += 2;
+		}
+		new[j] = cmd[i];
+		j++;
+		i++;
+	}
+	return (new);
+}
+
+void convert_exit_status(char **cmd)
+{
+	int i;
+	char *exit_status;
+	int cmd_len;
+	char *new;
+
+	i = 0;
+	exit_status = NULL;
+	while (cmd[i])
+	{
+		if (ft_strnstr(cmd[i], "$?", ft_strlen(cmd[i])))
+		{
+			g_exit_status = 127;
+			cmd_len = ft_strlen(cmd[i]);
+			exit_status = ft_itoa(g_exit_status);
+			if ((new = (char *)malloc(sizeof(char) * (cmd_len - 2 + ft_strlen(exit_status)) + 1)) == NULL)
+				exit(-1);
+			new[cmd_len - 2 + ft_strlen(exit_status)] = 0;
+			new = make_new_cmd(new, cmd[i], exit_status);
+			free(cmd[i]);
+			cmd[i] = ft_strdup(new);
+			printf("test: %s\n", cmd[i]);
+		}
+		i++;
+	}
+}
+
 void test(char **cmd)
 {
 	int i;
@@ -956,6 +1008,7 @@ void test(char **cmd)
 
 	prev_pipe_idx = 0;
 	i = 0;
+	convert_exit_status(cmd);
 	while (cmd[i])
 	{
 		process_pipe(cmd, &prev_pipe_idx, i);
@@ -1044,7 +1097,7 @@ int				main(int argc, char const *argv[])
 	{
 		g_pid = 0;
 		handle_prompt(buf);
-		token = tokenize_lexer(buf, ft_strlen(buf)); //링크드 리스트의 헤드 부분 포인터 주소 반환
+		token = tokenize_lexer(buf, ft_strlen(buf));
 		if (!remove_empty_token(token))
 		{
 			free_all_tokens(token, free);
@@ -1052,7 +1105,7 @@ int				main(int argc, char const *argv[])
 		}
 		if (check_basic_grammar(token))
 		{
-			adjust_env(token);	//환경변수를 찾아서 해당 value로 바꿔줘야 함.
+			adjust_env(token);
 			check_dred_out(token);
 			erase_quote(token, CHAR_DQUOTE);
 			erase_quote(token, CHAR_QUOTE);
@@ -1062,7 +1115,6 @@ int				main(int argc, char const *argv[])
 			free_cmds(cmds);
 		}
 		free_all_tokens(token, free);
-		printf("exit statsu: %d\n", g_exit_status);
 	}
 	free_env();
 	return (EXIT_SUCCESS);

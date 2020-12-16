@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/09 19:21:35 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/16 15:07:51 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -269,17 +269,15 @@ void erase_quote(t_token *token, char quote_type)
 {
 	t_token *tmp;
 	char *new;
-	char which_quote;
 
 	tmp = token;
-	which_quote = quote_type;
 	while (tmp)
 	{
-		if (tmp->type == which_quote)
+		if (tmp->type == quote_type)
 		{
 			if ((new = (char *)malloc(sizeof(char) * ft_strlen(tmp->data) - 1)) == NULL)
 				exit(-1);
-			copy_without_quote(tmp->data, new, which_quote);
+			copy_without_quote(tmp->data, new, quote_type);
 			free(tmp->data);
 			tmp->data = new;
 		}
@@ -412,52 +410,3 @@ void start_bash(char ***cmds)
 		i++;
 	}
 }
-
-// int				main(int argc, char const *argv[])
-// {
-// 	t_token		*token;
-// 	char		buf[BUF_SIZE];
-// 	char 		***cmds;
-	
-// 	copy_environ();
-// 	while (TRUE)
-// 	{
-// 		handle_prompt(buf);
-// 		token = tokenize_lexer(buf, ft_strlen(buf)); //링크드 리스트의 헤드 부분 포인터 주소 반환
-// 		remove_empty_token(token);
-// 		if (check_basic_grammar(token))
-// 		{
-// 			adjust_env(token);	//환경변수를 찾아서 해당 value로 바꿔줘야 함.
-// 			check_dred_out(token);
-// 			erase_quote(token, CHAR_DQUOTE);
-// 			erase_quote(token, CHAR_QUOTE);
-// 			adjust_env_in_dquote(token);
-// 			// 테스트 출력
-// 			t_token *tmp = token;
-// 			while (tmp)
-// 			{
-// 				printf("%s!\n", tmp->data);
-// 				tmp = tmp->next;
-// 			}
-// 		}
-// 		cmds = divide_semicolon(token);
-// 		free_all_tokens(token, free);
-// 		print_cmds(cmds);
-// 		start_bash(cmds);
-// 	}
-// 	return (EXIT_SUCCESS);
-// }
-
-/*
-	1) $user$user 인 경우 dongleedonglee 문자열로 하나의 토큰으로 해야 한다.(done)
-	2) 큰 따옴표 안에 있는 환경변수를 치환해야 한다.(done)
-	3) '>>' 더블 아웃풋을 파싱해야 하는데 이 또한 따로 로직으로 처리해야 할 것 같다.(done)
-	4) 세미콜론으로 나눠서 2차원 문자열 배열을 순서대로 내 함수에 넘겨줘야 한다.(done)
-	5) copy_env 를 통해 복제한 리스트를 갖고 환경변수를 치환하도록 해야 한다.(done)
-	6) 마지막에 공백이 있을 경우 token이 하나 더 생성되는데 문제가 없을까?(done)
-	7) 큰따옴표 작은따옴표 제거한 상태로 넘겨줘야 한다 (done)
-	8) 마지막에 >, <, | d인 경우 에러처리-> 에러메세지만 손보면 될듯 원인을 찾자(done)
-	9) >>> 이런식으로 문법오류 에러처리 (done)
-	10) > | 등으로 끝날 때 맨 뒤에 내용없는 토큰이 하나 더 생긴다.(done)
-	11) ; 이 젤 먼저 나올 때 에러 처리(done)
-*/
