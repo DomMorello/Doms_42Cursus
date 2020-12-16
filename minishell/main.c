@@ -979,7 +979,6 @@ void convert_exit_status(char **cmd)
 	{
 		if (ft_strnstr(cmd[i], "$?", ft_strlen(cmd[i])))
 		{
-			g_exit_status = 127;
 			cmd_len = ft_strlen(cmd[i]);
 			exit_status = ft_itoa(g_exit_status);
 			if ((new = (char *)malloc(sizeof(char) * (cmd_len - 2 + ft_strlen(exit_status)) + 1)) == NULL)
@@ -988,7 +987,6 @@ void convert_exit_status(char **cmd)
 			new = make_new_cmd(new, cmd[i], exit_status);
 			free(cmd[i]);
 			cmd[i] = ft_strdup(new);
-			printf("test: %s\n", cmd[i]);
 		}
 		i++;
 	}
