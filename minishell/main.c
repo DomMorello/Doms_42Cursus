@@ -987,6 +987,7 @@ void convert_exit_status(char **cmd)
 			new = make_new_cmd(new, cmd[i], exit_status);
 			free(cmd[i]);
 			cmd[i] = ft_strdup(new);
+			free(new);
 		}
 		i++;
 	}
