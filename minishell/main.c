@@ -1107,12 +1107,12 @@ char *alloc_new(char *cmd)
 	return (ret);
 }
 
-void convert_exit_status(t_token *token)
+void convert_exit_status(t_token **token)
 {
 	char *new;
 	t_token *tmp;
 
-	tmp = token;
+	tmp = *token;
 	while (tmp)
 	{
 		if (ft_strnstr(tmp->data, "$?", ft_strlen(tmp->data)))
@@ -1153,7 +1153,7 @@ int				main(int argc, char const *argv[])
 			erase_quote(token, CHAR_QUOTE);
 			adjust_env_in_dquote(token);
 			// print_token(token);	//test
-			convert_exit_status(token);
+			convert_exit_status(&token);
 			cmds = divide_semicolon(token);
 			start_bash(cmds);
 			free_cmds(cmds);
