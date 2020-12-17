@@ -1043,7 +1043,7 @@ void print_token(t_token *token)
 	}
 }
 
-void make_new_cmd(char *new, char *cmd)
+void make_new_cmd(char *new, char **cmd)
 {
 	int i;
 	int j;
@@ -1053,17 +1053,17 @@ void make_new_cmd(char *new, char *cmd)
 	i = 0;
 	j = 0;
 	exit_status = ft_itoa(g_exit_status);
-	while (cmd[i])
+	while ((*cmd)[i])
 	{
 		k = 0;
-		if (cmd[i] == '$' && cmd[i + 1] && cmd[i + 1] == '?')
+		if ((*cmd)[i] == '$' && (*cmd)[i + 1] && (*cmd)[i + 1] == '?')
 		{
 			while (exit_status[k])
 				new[j++] = exit_status[k++];
 			i += 2;
 			continue ;
 		}
-		new[j] = cmd[i];
+		new[j] = (*cmd)[i];
 		j++;
 		i++;
 	}
@@ -1088,7 +1088,7 @@ int get_num_exit_status(char *cmd)
 	return (cnt);
 }
 
-char *alloc_new(char *cmd)
+char *alloc_new(char **cmd)
 {
 	int cmd_len;
 	int exit_cnt;
@@ -1096,13 +1096,23 @@ char *alloc_new(char *cmd)
 	char *ret;
 
 	ret = NULL;
-	exit_cnt = get_num_exit_status(cmd);
-	cmd_len = ft_strlen(cmd);
+	exit_cnt = get_num_exit_status(*cmd);
+	cmd_len = ft_strlen(*cmd);
 	exit_status = ft_itoa(g_exit_status);
 	if ((ret = (char *)malloc(sizeof(char) * (cmd_len - (2 * exit_cnt) + (ft_strlen(exit_status) * exit_cnt)) + 1)) == NULL)
 		exit(-1);
 	ret[cmd_len - (2 * exit_cnt) + (ft_strlen(exit_status) * exit_cnt)] = 0;
 	return (ret);
+}
+
+void test6(char **cmd)
+{
+	char *new;
+
+	new = alloc_new(cmd);
+	make_new_cmd(new, cmd);
+	free(*cmd);
+	*cmd = new;
 }
 
 void convert_exit_status(t_token *token)
@@ -1116,10 +1126,11 @@ void convert_exit_status(t_token *token)
 		if (ft_strnstr(tmp->data, "$?", ft_strlen(tmp->data)))
 		{
 			g_exit_status = 127;	//test
-			new = alloc_new(tmp->data);
-			make_new_cmd(new, &tmp->data);
-			free(tmp->data);
-			tmp->data = new;
+			test6(&tmp->data);
+			// new = alloc_new(tmp->data);
+			// make_new_cmd(new, &tmp->data);
+			// free(tmp->data);
+			// tmp->data = new;
 		}
 		tmp = tmp->next;
 	}
@@ -1152,7 +1163,7 @@ int				main(int argc, char const *argv[])
 			erase_quote(token, CHAR_QUOTE);
 			adjust_env_in_dquote(token);
 			// print_token(token);	//test
-			convert_exit_status(&token);
+			convert_exit_status(token);
 			cmds = divide_semicolon(token);
 			start_bash(cmds);
 			free_cmds(cmds);
