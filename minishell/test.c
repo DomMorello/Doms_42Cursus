@@ -26,10 +26,21 @@ void copy_environ(void)
 	}
 }
 
+void test1(t_list **lst)
+{
+	t_list *tmp = *lst;
+
+	while (tmp)
+	{
+		printf("11 %s\n", (char *)tmp->content);
+		tmp = tmp->next;
+	}
+}
+
 int main()
 {
 	// signal(SIGINT, sig_handler);
-
+	
 	// int status = 0;
 	// pid_t pid = fork();
 	// if (pid == 0)
