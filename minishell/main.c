@@ -1114,13 +1114,35 @@ char *alloc_new1()
 	return new;
 }
 
-void make_new1(char *new)
+void make_new1(char *new, char *cmd)
 {
-	new[0] = 'w';
-	new[1] = 'o';
-	new[2] = 'r';
-	new[3] = 'l';
-	new[4] = 'd';
+	// new[0] = 'w';
+	// new[1] = 'o';
+	// new[2] = 'r';
+	// new[3] = 'l';
+	// new[4] = 'd';
+	int i;
+	int j;
+	int k;
+	char *exit_status;
+
+	i = 0;
+	j = 0;
+	exit_status = ft_itoa(g_exit_status);
+	while (cmd[i])
+	{
+		k = 0;
+		if (cmd[i] == '$' && cmd[i + 1] && cmd[i + 1] == '?')
+		{
+			while (exit_status[k])
+				new[j++] = exit_status[k++];
+			i += 2;
+			continue ;
+		}
+		new[j] = cmd[i];
+		j++;
+		i++;
+	}
 }
 
 void test6(char **cmd)
@@ -1134,7 +1156,7 @@ void test6(char **cmd)
 	char *new;
 
 	new = alloc_new1();
-	make_new1(new);
+	make_new1(new, *cmd);
 	// free(new);
 	free(*cmd);
 	*cmd = new;
