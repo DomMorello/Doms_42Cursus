@@ -1105,12 +1105,37 @@ char *alloc_new(char **cmd)
 	return (ret);
 }
 
-void test6(char **cmd)
+char *alloc_new1()
 {
 	char *new;
 
-	new = alloc_new(cmd);
-	make_new_cmd(new, cmd);
+	new = malloc(6);
+	new[6] = 0;
+	return new;
+}
+
+void make_new1(char *new)
+{
+	new[0] = 'w';
+	new[1] = 'o';
+	new[2] = 'r';
+	new[3] = 'l';
+	new[4] = 'd';
+}
+
+void test6(char **cmd)
+{
+	// char *new;
+
+	// new = alloc_new(cmd);
+	// make_new_cmd(new, cmd);
+	// free(*cmd);
+	// *cmd = new;
+	char *new;
+
+	new = alloc_new1();
+	make_new1(new);
+	// free(new);
 	free(*cmd);
 	*cmd = new;
 }
