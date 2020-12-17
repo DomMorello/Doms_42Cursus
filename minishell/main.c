@@ -1043,7 +1043,7 @@ void print_token(t_token *token)
 	}
 }
 
-char *make_new_cmd(char *new, char **cmd)
+void make_new_cmd(char *new, char **cmd)
 {
 	int i;
 	int j;
@@ -1068,7 +1068,7 @@ char *make_new_cmd(char *new, char **cmd)
 		i++;
 	}
 	free(*cmd);
-	return (new);
+	*cmd = new;
 }
 
 int get_num_exit_status(char *cmd)
@@ -1107,20 +1107,20 @@ char *alloc_new(char *cmd)
 	return (ret);
 }
 
-void convert_exit_status(t_token **token)
+void convert_exit_status(t_token *token)
 {
 	char *new;
 	t_token *tmp;
 
-	tmp = *token;
+	tmp = token;
 	while (tmp)
 	{
 		if (ft_strnstr(tmp->data, "$?", ft_strlen(tmp->data)))
 		{
 			g_exit_status = 127;	//test
-			new = alloc_new(tmp->data);
-			new = make_new_cmd(new, &tmp->data);
-			tmp->data = new;
+			new = alloc_new(tmp->data);	//return 이 문제인가?
+			make_new_cmd(new, &tmp->data);
+			// tmp->data = new;
 		}
 		tmp = tmp->next;
 	}
@@ -1153,7 +1153,7 @@ int				main(int argc, char const *argv[])
 			erase_quote(token, CHAR_QUOTE);
 			adjust_env_in_dquote(token);
 			// print_token(token);	//test
-			convert_exit_status(&token);
+			convert_exit_status(token);
 			cmds = divide_semicolon(token);
 			start_bash(cmds);
 			free_cmds(cmds);
