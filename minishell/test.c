@@ -44,13 +44,15 @@ void make_new(char *new)
 	new[4] = 'd';
 }
 
-void test1(char *s)
+void test1(char **s)
 {
 	char *new;
 
 	new = alloc_new();
 	make_new(new);
-	free(new);
+	// free(new);
+	free(*s);
+	*s = new;
 }
 
 int main()
@@ -64,7 +66,9 @@ int main()
 	s[4] = 'o';
 	s[5] = 0;
 
-	test1(s);
+	test1(&s);
+
+	printf("%s\n", s);
 	free(s);
 	while (1)
 	{

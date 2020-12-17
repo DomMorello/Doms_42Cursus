@@ -1043,7 +1043,7 @@ void print_token(t_token *token)
 	}
 }
 
-void make_new_cmd(char **new, char **cmd)
+void make_new_cmd(char *new, char *cmd)
 {
 	int i;
 	int j;
@@ -1053,17 +1053,17 @@ void make_new_cmd(char **new, char **cmd)
 	i = 0;
 	j = 0;
 	exit_status = ft_itoa(g_exit_status);
-	while ((*cmd)[i])
+	while (cmd[i])
 	{
 		k = 0;
-		if ((*cmd)[i] == '$' && (*cmd)[i + 1] && (*cmd)[i + 1] == '?')
+		if (cmd[i] == '$' && cmd[i + 1] && cmd[i + 1] == '?')
 		{
 			while (exit_status[k])
-				(*new)[j++] = exit_status[k++];
+				new[j++] = exit_status[k++];
 			i += 2;
 			continue ;
 		}
-		(*new)[j] = (*cmd)[i];
+		new[j] = cmd[i];
 		j++;
 		i++;
 	}
@@ -1105,19 +1105,19 @@ char *alloc_new(char *cmd)
 	return (ret);
 }
 
-void convert_exit_status(t_token **token)
+void convert_exit_status(t_token *token)
 {
 	char *new;
 	t_token *tmp;
 
-	tmp = *token;
+	tmp = token;
 	while (tmp)
 	{
 		if (ft_strnstr(tmp->data, "$?", ft_strlen(tmp->data)))
 		{
 			g_exit_status = 127;	//test
 			new = alloc_new(tmp->data);
-			make_new_cmd(&new, &tmp->data);
+			make_new_cmd(new, &tmp->data);
 			free(tmp->data);
 			tmp->data = new;
 		}
