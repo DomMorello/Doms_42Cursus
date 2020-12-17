@@ -1043,7 +1043,7 @@ void print_token(t_token *token)
 	}
 }
 
-void make_new_cmd(char *new, char **cmd)
+void make_new_cmd(char **new, char **cmd)
 {
 	int i;
 	int j;
@@ -1059,16 +1059,14 @@ void make_new_cmd(char *new, char **cmd)
 		if ((*cmd)[i] == '$' && (*cmd)[i + 1] && (*cmd)[i + 1] == '?')
 		{
 			while (exit_status[k])
-				new[j++] = exit_status[k++];
+				(*new)[j++] = exit_status[k++];
 			i += 2;
 			continue ;
 		}
-		new[j] = (*cmd)[i];
+		(*new)[j] = (*cmd)[i];
 		j++;
 		i++;
 	}
-	free(*cmd);
-	*cmd = new;
 }
 
 int get_num_exit_status(char *cmd)
@@ -1118,9 +1116,10 @@ void convert_exit_status(t_token *token)
 		if (ft_strnstr(tmp->data, "$?", ft_strlen(tmp->data)))
 		{
 			g_exit_status = 127;	//test
-			new = alloc_new(tmp->data);	//return 이 문제인가?
-			make_new_cmd(new, &tmp->data);
-			// tmp->data = new;
+			new = alloc_new(tmp->data);
+			make_new_cmd(&new, &tmp->data);
+			free(tmp->data);
+			tmp->data = new;
 		}
 		tmp = tmp->next;
 	}
