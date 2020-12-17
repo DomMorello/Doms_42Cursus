@@ -26,21 +26,50 @@ void copy_environ(void)
 	}
 }
 
-void test1(t_list **lst)
+char *alloc_new()
 {
-	t_list *tmp = *lst;
+	char *new;
 
-	while (tmp)
-	{
-		printf("11 %s\n", (char *)tmp->content);
-		tmp = tmp->next;
-	}
+	new = malloc(6);
+	new[6] = 0;
+	return new;
+}
+
+void make_new(char *new)
+{
+	new[0] = 'w';
+	new[1] = 'o';
+	new[2] = 'r';
+	new[3] = 'l';
+	new[4] = 'd';
+}
+
+void test1(char *s)
+{
+	char *new;
+
+	new = alloc_new();
+	make_new(new);
+	free(new);
 }
 
 int main()
 {
 	// signal(SIGINT, sig_handler);
-	
+	char *s = malloc(6);
+	s[0] = 'h';
+	s[1] = 'e';
+	s[2] = 'l';
+	s[3] = 'l';
+	s[4] = 'o';
+	s[5] = 0;
+
+	test1(s);
+	free(s);
+	while (1)
+	{
+		;
+	}
 	// int status = 0;
 	// pid_t pid = fork();
 	// if (pid == 0)
