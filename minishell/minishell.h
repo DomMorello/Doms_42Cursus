@@ -89,7 +89,6 @@ typedef struct s_token
 {
 	char *data;
 	int type;
-	int white_space_flag;	//« ø‰«ÿ?
 	t_token *next;
 }				t_token;
 
@@ -161,7 +160,7 @@ int make_dred_out(t_token *deleted, t_token *prev, int d_red_out);
 /* main */
 void do_nothing(int signo);
 void free_env(void);
-void test(char **cmd);
+void handle_process(char **cmd);
 void copy_environ(void);
 void handle_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx);
 void exec_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx);
@@ -202,11 +201,11 @@ void exec_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx, char *filepa
 void exec_executable(char *cmd[], int prev_pipe_idx, int pipe_idx, char *filepath);
 int get_argc(char *cmd[], int prev_pipe_idx, int pipe_idx);
 int is_redirection(char *token);
-void process_redirection(char *cmd[], int *prev_pipe_idx, int pipe_idx);
+void process_redirection(char *cmd[], int *prev_pipe_idx, int pipe_idx, int is_process);
 void set_pipe_parent();
 void set_pipe_child();
 void set_red_double_out(char *title);
-void set_red_in(char *title, char *token);
+void set_red_in(char *title, char *token, int is_process);
 void set_red_out(char *title);
 
 

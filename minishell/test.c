@@ -26,73 +26,36 @@ extern char **environ;
 // 	}
 // }
 
-char *alloc_new()
+void sig_handler(int signo)
 {
-	char *new;
-
-	new = malloc(6);
-	new[6] = 0;
-	return new;
-}
-
-void make_new(char *new)
-{
-	new[0] = 'w';
-	new[1] = 'o';
-	new[2] = 'r';
-	new[3] = 'l';
-	new[4] = 'd';
-}
-
-void test1(char **s)
-{
-	char *new;
-
-	new = alloc_new();
-	make_new(new);
-	// free(new);
-	free(*s);
-	*s = new;
+	printf("hi\n");
+	exit(127);
 }
 
 int main()
 {
-	// signal(SIGINT, sig_handler);
-	char *s = malloc(6);
-	s[0] = 'h';
-	s[1] = 'e';
-	s[2] = 'l';
-	s[3] = 'l';
-	s[4] = 'o';
-	s[5] = 0;
+	signal(SIGINT, sig_handler);
 
-	test1(&s);
-
-	printf("%s\n", s);
-	free(s);
-	while (1)
+	int status = 0;
+	pid_t pid = fork();
+	if (pid == 0)
 	{
-		;
+		printf("hi\n");
+		exit(123);
 	}
-	// int status = 0;
-	// pid_t pid = fork();
-	// if (pid == 0)
-	// {
-	// 	execlp("cat", "cat", NULL);
-	// }
-	// else if (pid < 0)
-	// {
-	// 	perror("fork err");
-	// }
-	// else
-	// {
-	// 	wait(&status);
-	// }
-	// printf("test %d\n", status);
-	// if (WIFEXITED(status))
-	// 	printf("normal term %d\n", WEXITSTATUS(status));
-	// else if (WIFSIGNALED(status))
-	// 	printf("abnormal signal term %d\n", WTERMSIG(status));
+	else if (pid < 0)
+	{
+		perror("fork err");
+	}
+	else
+	{
+		wait(&status);
+	}
+	printf("test %d\n", status);
+	if (WIFEXITED(status))
+		printf("normal term %d\n", WEXITSTATUS(status));
+	else if (WIFSIGNALED(status))
+		printf("abnormal signal term %d\n", WTERMSIG(status));
 	
     return 0;
 }

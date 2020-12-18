@@ -8,7 +8,7 @@ int g_pipe_fd[2];
 int g_red_out_fd;
 int g_red_in_fd;
 int g_exit_status;
-int g_pid;
+pid_t g_pid;
 
 void set_red_out(char *title)
 {
@@ -23,7 +23,7 @@ void set_red_out(char *title)
 		perror("red out open");
 }
 
-void set_red_in(char *title, char *token)
+void set_red_in(char *title, char *token, int is_process)
 {
 	struct stat file;
 
@@ -33,7 +33,9 @@ void set_red_in(char *title, char *token)
 		{
 			ft_putstr_fd(token, 2);
 			ft_putstr_fd(": (standard input): Is a directory\n", 2);
-			exit(-1);
+			g_exit_status = 1;
+			if (is_process)
+				exit(1);
 		}
 		else
 		{
@@ -53,7 +55,9 @@ void set_red_in(char *title, char *token)
 		ft_putstr_fd("momgshell: ", 2);
 		ft_putstr_fd(title, 2);
 		ft_putstr_fd(": No such file or directory\n", 2);
-		exit(-1);
+		g_exit_status = 1;
+		if (is_process)
+			exit(1);
 	}
 }
 
@@ -88,7 +92,7 @@ void set_pipe_parent()
 	close(g_pipe_fd[0]);
 }
 
-void process_redirection(char *cmd[], int *prev_pipe_idx, int pipe_idx)
+void process_redirection(char *cmd[], int *prev_pipe_idx, int pipe_idx, int is_process)
 {
     int i;
 	char *token;
@@ -103,7 +107,7 @@ void process_redirection(char *cmd[], int *prev_pipe_idx, int pipe_idx)
         if (!strcmp(cmd[i], ">"))
             set_red_out(cmd[i + 1]);
         if (!strcmp(cmd[i], "<"))
-            set_red_in(cmd[i + 1], token);
+            set_red_in(cmd[i + 1], token, is_process);
         if (!strcmp(cmd[i], ">>"))
             set_red_double_out(cmd[i + 1]);
         i++;
@@ -150,13 +154,12 @@ void exec_executable(char *cmd[], int prev_pipe_idx, int pipe_idx, char *filepat
 	argv[i] = NULL;
 	if (execve(filepath, argv, environ) == -1)
 	{
-		/* 에러 구체화해서 에러메세지 처리할 필요 있음 */
 		if (errno == 2)
 		{
 			ft_putstr_fd("mongshell: ", STDERR);
 			ft_putstr_fd(cmd[token], STDERR);
 			ft_putstr_fd(": command not found\n", STDERR);	
-			exit(-1);	//종료상태 구현해야 함.
+			exit(127);
 		}
 		else
 		{
@@ -164,7 +167,7 @@ void exec_executable(char *cmd[], int prev_pipe_idx, int pipe_idx, char *filepat
 			ft_putstr_fd(cmd[token], STDERR);
 			ft_putstr_fd(": ", STDERR);
 			ft_putstr_fd(strerror(errno), STDERR);
-			exit(-1);
+			exit(1);
 		}
 	}
 }
@@ -192,7 +195,7 @@ void exec_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx, char *filepa
 			ft_putstr_fd("mongshell: ", STDERR);
 			ft_putstr_fd(cmd[token], STDERR);
 			ft_putstr_fd(": command not found\n", STDERR);	
-			exit(-1);
+			exit(127);
 		}
 		else
 		{
@@ -200,7 +203,7 @@ void exec_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx, char *filepa
 			ft_putstr_fd(cmd[token], STDERR);
 			ft_putstr_fd(": ", STDERR);
 			ft_putstr_fd(strerror(errno), STDERR);
-			exit(-1);
+			exit(1);
 		}
 	}
 }
@@ -340,10 +343,7 @@ void update_env(char *cwd, char *key)
 
 	tmp = g_env_list;
 	if ((new = (char *)malloc(sizeof(char) * (ft_strlen(key) + ft_strlen(cwd)) + 1)) == NULL)
-	{
-		ft_putstr_fd("malloc fuckedup\n", 2);
 		exit(-1);
-	}
 	ft_strlcpy(new, key, ft_strlen(key) + 1);
 	ft_strlcat(new, cwd, ft_strlen(key) + ft_strlen(cwd) + 1);
 	while (tmp)
@@ -376,12 +376,14 @@ void change_dir(char *cmd[], char *dir, int is_pipe)
 				/* showing result (must be deleted) */
 				ft_putstr_fd(cwd, 2);
 				ft_putstr_fd("\n", 2);
+				g_exit_status = 0;
 			}
 			else
 			{
 				ft_putstr_fd("mongshell: cd: ", 2);
 				ft_putstr_fd(dir, 2);
 				ft_putstr_fd(": Not a directory\n", 2);
+				g_exit_status = 1;
 			}
 		}
 	}
@@ -390,6 +392,7 @@ void change_dir(char *cmd[], char *dir, int is_pipe)
 		ft_putstr_fd("mongshell: cd: ", 2);
 		ft_putstr_fd(dir, 2);
 		ft_putstr_fd(": No such file or directory\n", 2);
+		g_exit_status = 1;
 	}
 }
 
@@ -421,6 +424,7 @@ void dir_to_HOME(char *cmd[], int is_pipe)
 	{
 		ft_putstr_fd("mongshell: cd: ", 2);
 		ft_putstr_fd("HOME not found\n", 2);
+		g_exit_status = 1;
 	}
 }
 
@@ -433,24 +437,23 @@ void exec_cd(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 		dir = cmd[prev_pipe_idx + 1];
 	else
 		dir = cmd[prev_pipe_idx + 2];
-	
 	is_pipe = find_pipe(cmd);	//이게 1이면 chdir을 하지 않는다.
-	if (argc > 2)
-	{
-		if (prev_pipe_idx == 0)
-		{
-			ft_putstr_fd("mongshell: ", 2);
-			ft_putstr_fd(cmd[prev_pipe_idx], 2);
-			ft_putstr_fd(": too many arguments\n", 2);
-		}
-		else
-		{
-			ft_putstr_fd("mongshell: ", 2);
-			ft_putstr_fd(cmd[prev_pipe_idx + 1], 2);
-			ft_putstr_fd(": too many arguments\n", 2);
-		}
-	}
-	else if (argc == 1)
+	// if (argc > 2)
+	// {
+	// 	if (prev_pipe_idx == 0)
+	// 	{
+	// 		ft_putstr_fd("mongshell: ", 2);
+	// 		ft_putstr_fd(cmd[prev_pipe_idx], 2);
+	// 		ft_putstr_fd(": too many arguments\n", 2);
+	// 	}
+	// 	else
+	// 	{
+	// 		ft_putstr_fd("mongshell: ", 2);
+	// 		ft_putstr_fd(cmd[prev_pipe_idx + 1], 2);
+	// 		ft_putstr_fd(": too many arguments\n", 2);
+	// 	}
+	// }
+	/*else */if (argc == 1)
 	{
 		dir_to_HOME(cmd, is_pipe);
 	}
@@ -472,7 +475,7 @@ void exec_nprocess_built_in(void (*exec_func)(char **, int, int, int), char **cm
 
 	prev_pipe = *prev_pipe_idx;
     argc = get_argc(cmd, prev_pipe, pipe_idx);
-	process_redirection(cmd, prev_pipe_idx, pipe_idx);
+	process_redirection(cmd, prev_pipe_idx, pipe_idx, FALSE);
 	exec_func(cmd, prev_pipe, pipe_idx, argc);
 }
 
@@ -597,12 +600,13 @@ void print_export(char *line)
 	i = 0;
 	new = (char *)malloc(sizeof(char) * ft_strlen(line) + 3);
 	if (!new)
-		exit(-1);	//malloc fucked up
+		exit(-1);
 	ft_strlcpy(new, line, ft_strlen(line) + 1);
 	add_dquote(new, line);
 	ft_putstr_fd("declare -x ", STDOUT);
 	ft_putstr_fd(new, STDOUT);
 	ft_putstr_fd("\n", STDOUT);
+	g_exit_status = 0;
 }
 
 void exec_export_p(char *cmd[], int prev_pipe_idx, int pipe_idx)
@@ -700,7 +704,6 @@ void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 		token = cmd[i];
 	else
 		token = cmd[i + 1];
-	//process로 진행해야 할 명령어들 그 외에는 execve로 실행
 	if (!ft_strncmp(PWD, token, ft_strlen(token) > ft_strlen(PWD) ? ft_strlen(token) : ft_strlen(PWD)))
 		exec_pwd(cmd, i, pipe_idx);
 	else if (!ft_strncmp(ENV, token, ft_strlen(token) > ft_strlen(ENV) ? ft_strlen(token) : ft_strlen(ENV)))
@@ -717,16 +720,15 @@ void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 
 void exec_cmd_p(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
-    // pid_t pid;
-	
-	// pid = fork();
+	int status;
+
 	g_pid = fork();
     if (g_pid == 0)
     {
         set_pipe_child();
-        process_redirection(cmd, prev_pipe_idx, pipe_idx);
+        process_redirection(cmd, prev_pipe_idx, pipe_idx, TRUE);
         parse_cmd(cmd, prev_pipe_idx, pipe_idx);
-        exit(1);
+        // exit(1);
     }
     else if (g_pid < 0)
     {
@@ -734,7 +736,9 @@ void exec_cmd_p(char *cmd[], int *prev_pipe_idx, int pipe_idx)
     }
     else
     {
-        wait(NULL);
+        wait(&status);
+		if (WIFEXITED(status))
+			g_exit_status = WEXITSTATUS(status);
         set_pipe_parent();
     }
 }
@@ -749,10 +753,7 @@ char *get_key(char *content)
 	while (content[key_len] != '=')
 		key_len++;
 	if ((ret = (char *)malloc(sizeof(char) * key_len + 2)) == NULL)
-	{
-		ft_putstr_fd("malloc fuekcdup\n", STDERR);
 		exit(-1);
-	}
 	ft_strlcpy(ret, content, key_len + 2);
 	return (ret);
 }
@@ -884,14 +885,14 @@ void process_pipe(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 
 void exec_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
-	// pid_t pid;
+	int status;
 
 	g_pid = fork();
 	if (g_pid == 0)
 	{
-		process_redirection(cmd, prev_pipe_idx, pipe_idx);
+		process_redirection(cmd, prev_pipe_idx, pipe_idx, TRUE);
 		parse_cmd(cmd, prev_pipe_idx, pipe_idx);
-		exit(1);
+		// exit(1);
 	}
 	else if (g_pid < 0)
     {
@@ -899,7 +900,9 @@ void exec_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
     }
 	else
 	{
-		wait(NULL);
+		wait(&status);
+		if (WIFEXITED(status))
+			g_exit_status = WEXITSTATUS(status);
 	}
 }
 
@@ -942,7 +945,7 @@ void copy_environ(void)
 	}
 }
 
-void test(char **cmd)
+void handle_process(char **cmd)
 {
 	int i;
 	int prev_pipe_idx;
@@ -956,7 +959,6 @@ void test(char **cmd)
 
 	prev_pipe_idx = 0;
 	i = 0;
-	// convert_exit_status(cmd);
 	while (cmd[i])
 	{
 		process_pipe(cmd, &prev_pipe_idx, i);
@@ -995,7 +997,7 @@ void sig_int(int signo)
 	else
 	{
 		ft_putstr_fd("\n", STDERR);
-		g_exit_status = 130;	
+		g_exit_status = 130;
 	}
 }
 
@@ -1030,17 +1032,6 @@ void free_cmds(char ***cmds)
 		i++;
 	}
 	free(cmds);
-}
-
-void print_token(t_token *token)
-{
-	t_token *tmp = token;
-
-	while (tmp)
-	{
-		printf("test %s\n", tmp->data);
-		tmp = tmp->next;
-	}
 }
 
 void make_new_cmd(char *new, char *cmd)
@@ -1107,63 +1098,6 @@ char *alloc_new(char *cmd)
 	return (ret);
 }
 
-// char *alloc_new1()
-// {
-// 	char *new;
-
-// 	new = malloc(6);
-// 	new[6] = 0;
-// 	return new;
-// }
-
-// void make_new1(char *new, char *cmd)
-// {
-// 	// new[0] = 'w';
-// 	// new[1] = 'o';
-// 	// new[2] = 'r';
-// 	// new[3] = 'l';
-// 	// new[4] = 'd';
-// 	int i;
-// 	int j;
-// 	int k;
-// 	char *exit_status;
-
-// 	i = 0;
-// 	j = 0;
-// 	exit_status = ft_itoa(g_exit_status);
-// 	while (cmd[i])
-// 	{
-// 		k = 0;
-// 		if (cmd[i] == '$' && cmd[i + 1] && cmd[i + 1] == '?')
-// 		{
-// 			while (exit_status[k])
-// 				new[j++] = exit_status[k++];
-// 			i += 2;
-// 			continue ;
-// 		}
-// 		new[j] = cmd[i];
-// 		j++;
-// 		i++;
-// 	}
-// }
-
-// void test6(char **cmd)
-// {
-// 	// char *new;
-
-// 	// new = alloc_new(cmd);
-// 	// make_new_cmd(new, cmd);
-// 	// free(*cmd);
-// 	// *cmd = new;
-// 	char *new;
-
-// 	new = alloc_new1();
-// 	make_new1(new, *cmd);
-// 	// free(new);
-// 	free(*cmd);
-// 	*cmd = new;
-// }
-
 void convert_exit_status(t_token *token)
 {
 	char *new;
@@ -1174,12 +1108,13 @@ void convert_exit_status(t_token *token)
 	{
 		if (ft_strnstr(tmp->data, "$?", ft_strlen(tmp->data)))
 		{
-			g_exit_status = 127;	//test
-			// test6(&tmp->data);
-			new = alloc_new(tmp->data);
-			make_new_cmd(new, tmp->data);
-			free(tmp->data);
-			tmp->data = new;
+			if (tmp->type != CHAR_QUOTE)
+			{
+				new = alloc_new(tmp->data);
+				make_new_cmd(new, tmp->data);
+				free(tmp->data);
+				tmp->data = new;
+			}
 		}
 		tmp = tmp->next;
 	}
@@ -1211,7 +1146,6 @@ int				main(int argc, char const *argv[])
 			erase_quote(token, CHAR_DQUOTE);
 			erase_quote(token, CHAR_QUOTE);
 			adjust_env_in_dquote(token);
-			// print_token(token);	//test
 			convert_exit_status(token);
 			cmds = divide_semicolon(token);
 			start_bash(cmds);
