@@ -740,7 +740,7 @@ void exec_cmd_p(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 		if (WIFEXITED(status))
 			g_exit_status = WEXITSTATUS(status);
 		if (WIFSIGNALED(status))
-			printf("signal!!! %d\n", WTERMSIG(status));
+			printf("signal!!! %d\n", WEXITSTATUS(status));
         set_pipe_parent();
     }
 }
@@ -907,7 +907,7 @@ void exec_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 			g_exit_status = WEXITSTATUS(status);
 		if (WIFSIGNALED(status))
 		{
-			printf("signal!!! %d\n", WTERMSIG(status));
+			printf("signal!!! %d\n", WEXITSTATUS(status));
 		}
 	}
 }
