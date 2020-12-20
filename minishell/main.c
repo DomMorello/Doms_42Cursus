@@ -1010,7 +1010,7 @@ void sig_quit(int signo)
 	else
 	{
 		ft_putstr_fd("Quit: 3\n", STDERR);
-		ft_putstr_fd("\033[0;32mmongshell\033[0;34m$ \033[0m", STDERR);
+		// ft_putstr_fd("\033[0;32mmongshell\033[0;34m$ \033[0m", STDERR);
 	}
 }
 
