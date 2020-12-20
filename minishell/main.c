@@ -740,7 +740,7 @@ void exec_cmd_p(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 		if (WIFEXITED(status))
 			g_exit_status = WEXITSTATUS(status);
 		if (WIFSIGNALED(status))
-			printf("signal!!! %d\n", WTERMSIG(status) + 128);
+			g_exit_status = WTERMSIG(status) + 128;
         set_pipe_parent();
     }
 }
@@ -906,9 +906,7 @@ void exec_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 		if (WIFEXITED(status))
 			g_exit_status = WEXITSTATUS(status);
 		if (WIFSIGNALED(status))
-		{
-			printf("signal!!! %d\n", WTERMSIG(status) + 128);
-		}
+			g_exit_status = WTERMSIG(status) + 128;
 	}
 }
 
@@ -998,13 +996,10 @@ void sig_int(int signo)
 		ft_putstr_fd("\b\b  \b\b", STDERR);
 		ft_putstr_fd("\n", STDERR);
 		ft_putstr_fd("\033[0;32mmongshell\033[0;34m$ \033[0m", STDERR);
-		// g_exit_status = 1;
+		g_exit_status = 1;
 	}
 	else
-	{
 		ft_putstr_fd("\n", STDERR);
-		// g_exit_status = 130;
-	}
 }
 
 void sig_quit(int signo)
@@ -1016,7 +1011,6 @@ void sig_quit(int signo)
 	{
 		ft_putstr_fd("Quit: 3\n", STDERR);
 		ft_putstr_fd("\033[0;32mmongshell\033[0;34m$ \033[0m", STDERR);
-		// g_exit_status = 131;
 	}
 }
 
