@@ -26,29 +26,9 @@ extern char **environ;
 // 	}
 // }
 
-void sig_handler(int signo)
-{
-	printf("hi\n");
-	exit(127);
-}
-
 int main()
 {
-	int status;
-	siginfo_t sig;
-	signal(SIGINT, sig_handler);
 
-	pid_t pid = fork();
-	if (pid == 0)
-	{
-		execlp("cat", "cat", NULL);
-	}
-	else
-	{
-		waitpid(pid, &status, 0);
-		if (WIFSIGNALED(status))
-			printf("signal!! %d\n", )
-	}
 
     return 0;
 }

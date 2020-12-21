@@ -465,7 +465,7 @@ void exec_cd(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 
 void exec_exit(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 {
-	printf("exit!!\n");
+	
 }
 
 void exec_nprocess_built_in(void (*exec_func)(char **, int, int, int), char **cmd, int *prev_pipe_idx, int pipe_idx)
@@ -529,6 +529,12 @@ void exec_env(char *cmd[], int prev_pipe_idx, int pipe_idx)
 			ft_putstr_fd("\n", STDOUT);
 			env_tmp = env_tmp->next;
 		}
+		exit(0);
+	}
+	if (argc == 1 && !find_env_path())
+	{
+		ft_putstr_fd("mongshell: env: No such file or directory\n", STDERR);
+		exit(127);
 	}
 	exit(0);
 }
@@ -635,12 +641,9 @@ void print_echo(char *cmd[], int start, int end)
 	option = FALSE;
 	if (!cmd[start])
 		ft_putstr_fd("\n", STDOUT);
-	if (!ft_strncmp(cmd[start], N_OPTION, ft_strlen(cmd[start]) > ft_strlen(N_OPTION) ? ft_strlen(cmd[start]) : ft_strlen(N_OPTION)))
-	{
-		start++;
+	if (!ft_strncmp(cmd[start], N_OPTION, ft_strlen(cmd[start]) > ft_strlen(N_OPTION) ? ft_strlen(cmd[start++]) : ft_strlen(N_OPTION)))
 		option = TRUE;
-	}
-	while (start < end)
+	while (cmd[start] && start < end)
 	{
 		if (is_redirection(cmd[start]))
 		{
@@ -863,6 +866,8 @@ void handle_cmd(char *token, char *cmd[], int *prev_pipe_idx, int pipe_idx)
 		exec_nprocess_built_in(exec_cd, cmd, prev_pipe_idx, pipe_idx);
 	else if (!ft_strncmp(token, UNSET, ft_strlen(token) > ft_strlen(UNSET) ? ft_strlen(token) : ft_strlen(UNSET)))
 		exec_nprocess_built_in(exec_unset, cmd, prev_pipe_idx, pipe_idx);
+	else if (!ft_strncmp(token, EXIT, ft_strlen(token) > ft_strlen(EXIT) ? ft_strlen(token) : ft_strlen(EXIT)))
+		exec_nprocess_built_in(exec_exit, cmd, prev_pipe_idx, pipe_idx);
 	else
 		exec_cmd_p(cmd, prev_pipe_idx, pipe_idx);
 }
@@ -928,6 +933,8 @@ void handle_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 		exec_nprocess_built_in(exec_export_np, cmd, prev_pipe_idx, pipe_idx);
 	else if (!ft_strncmp(token, UNSET, ft_strlen(token) > ft_strlen(UNSET) ? ft_strlen(token) : ft_strlen(UNSET)))
 		exec_nprocess_built_in(exec_unset, cmd, prev_pipe_idx, pipe_idx);
+	else if (!ft_strncmp(token, EXIT, ft_strlen(token) > ft_strlen(EXIT) ? ft_strlen(token) : ft_strlen(EXIT)))
+		exec_nprocess_built_in(exec_exit, cmd, prev_pipe_idx, pipe_idx);
 	else
 		exec_last_cmd(cmd, prev_pipe_idx, pipe_idx);
 }
@@ -1008,10 +1015,7 @@ void sig_quit(int signo)
 	if (g_pid == 0)
 		ft_putstr_fd("\b\b  \b\b", STDERR);
 	else
-	{
 		ft_putstr_fd("Quit: 3\n", STDERR);
-		// ft_putstr_fd("\033[0;32mmongshell\033[0;34m$ \033[0m", STDERR);
-	}
 }
 
 void free_cmds(char ***cmds)
