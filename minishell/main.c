@@ -148,7 +148,7 @@ void exec_executable(char *cmd[], int prev_pipe_idx, int pipe_idx, char *filepat
     argv = NULL;
     argc = get_argc(cmd, prev_pipe_idx, pipe_idx);
     if (!(argv = (char **)malloc(sizeof(char *) * argc + 1)))
-        exit(-1);   //malloc ½ÇÆÐ ¾Æ¿ô!
+        exit(-1);
     while (prev_pipe_idx < pipe_idx && !is_redirection(cmd[prev_pipe_idx]))
         argv[i++] = cmd[prev_pipe_idx++];
 	argv[i] = NULL;
@@ -315,6 +315,13 @@ void handle_executable(char *token, char *cmd[], int prev_pipe_idx, int pipe_idx
     char *filepath;
 
     path = get_path();
+	if (!path)
+	{
+		ft_putstr_fd("mongshell: ", STDERR);
+		ft_putstr_fd(token, STDERR);
+		ft_putstr_fd(": No such file or directory\n", STDERR);
+		exit(127);
+	}
     filepath = get_filepath(token, path);
 	if (prev_pipe_idx == 0)
     	exec_executable(cmd, prev_pipe_idx, pipe_idx, filepath);
@@ -612,6 +619,7 @@ void print_export(char *line)
 	ft_putstr_fd("declare -x ", STDOUT);
 	ft_putstr_fd(new, STDOUT);
 	ft_putstr_fd("\n", STDOUT);
+	free(new);
 	g_exit_status = 0;
 }
 
