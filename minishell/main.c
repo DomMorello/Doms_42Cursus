@@ -473,8 +473,14 @@ void exec_cd(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 
 void exec_exit(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 {
-	
-}
+	if (prev_pipe_idx == 0)
+	{
+		if (argc > 1)
+			exit(ft_atoi(cmd[prev_pipe_idx + 1]));
+		else
+			exit(g_exit_status);
+	}
+}	
 
 void exec_nprocess_built_in(void (*exec_func)(char **, int, int, int), char **cmd, int *prev_pipe_idx, int pipe_idx)
 {
