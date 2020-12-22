@@ -154,8 +154,9 @@ void exec_executable(char *cmd[], int prev_pipe_idx, int pipe_idx, char *filepat
 	argv[i] = NULL;
 	if (execve(filepath, argv, environ) == -1)
 	{
-		if (errno == 2)
+		if (errno == ENOENT)
 		{
+			ft_putstr_fd("test: ", STDERR);
 			ft_putstr_fd("mongshell: ", STDERR);
 			ft_putstr_fd(cmd[token], STDERR);
 			ft_putstr_fd(": command not found\n", STDERR);	
