@@ -156,7 +156,6 @@ void exec_executable(char *cmd[], int prev_pipe_idx, int pipe_idx, char *filepat
 	{
 		if (errno == ENOENT)
 		{
-			ft_putstr_fd("test: ", STDERR);
 			ft_putstr_fd("mongshell: ", STDERR);
 			ft_putstr_fd(cmd[token], STDERR);
 			ft_putstr_fd(": command not found\n", STDERR);	
@@ -185,14 +184,15 @@ void exec_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx, char *filepa
     argv = NULL;
     argc = get_argc(cmd, prev_pipe_idx, pipe_idx);
 	if (!(argv = (char **)malloc(sizeof(char *) * argc + 1)))
-        exit(-1);   //malloc ½ÇÆÐ ¾Æ¿ô!
+        exit(-1);
     while (++prev_pipe_idx < pipe_idx && !is_redirection(cmd[prev_pipe_idx]))
         argv[i++] = cmd[prev_pipe_idx];
 	argv[i] = NULL;
 	if (execve(filepath, argv, environ) == -1)
 	{
-		if (errno == 2)
+		if (errno == ENOENT)
 		{
+			ft_putstr_fd("test: ", STDERR);
 			ft_putstr_fd("mongshell: ", STDERR);
 			ft_putstr_fd(cmd[token], STDERR);
 			ft_putstr_fd(": command not found\n", STDERR);	
@@ -251,12 +251,12 @@ int search_dir(char *token, char *path)
                 return (TRUE);
             dir = readdir(dir_p);
         }
+		int a = closedir(dir_p);
+		if (a == -1)
+			perror("closedir err");
     }
 	else
-		perror("opendir err");
-	int a = closedir(dir_p);
-	if (a == -1)
-		perror("closedir err");
+		perror("here??? opendir err");
     return (FALSE);
 }
 
@@ -539,11 +539,11 @@ void exec_env(char *cmd[], int prev_pipe_idx, int pipe_idx)
 		}
 		exit(0);
 	}
-	if (argc == 1 && !find_env_path())
-	{
-		ft_putstr_fd("mongshell: env: No such file or directory\n", STDERR);
-		exit(127);
-	}
+	// if (argc == 1 && !find_env_path())
+	// {
+	// 	ft_putstr_fd("mongshell: env: command not found\n", STDERR);
+	// 	exit(127);
+	// }
 	exit(0);
 }
 
