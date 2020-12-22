@@ -12,15 +12,12 @@ pid_t g_pid;
 
 void set_red_out(char *title)
 {
-	if ((g_red_out_fd = open(title, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR)) != ERROR)
+	if ((g_red_out_fd = open(title, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR))
+		!= ERROR)
 	{
-		int a = dup2(g_red_out_fd, 1);
-		if (a == -1)
-			perror("dup2");
+		dup2(g_red_out_fd, 1);
 		close(g_red_out_fd);
 	}
-	else
-		perror("red out open");
 }
 
 void set_red_in(char *title, char *token, int is_process)
@@ -39,15 +36,12 @@ void set_red_in(char *title, char *token, int is_process)
 		}
 		else
 		{
-			if ((g_red_in_fd = open(title, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR)) != ERROR)
+			if ((g_red_in_fd = open(title, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR))
+				!= ERROR)
 			{
-				int a = dup2(g_red_in_fd, 0);
-				if (a == -1)
-					perror("dup2");
+				dup2(g_red_in_fd, 0);
 				close(g_red_in_fd);
-			}
-			if (g_red_in_fd == -1)
-				perror("red in open");		
+			}	
 		}
 	}
 	else
@@ -63,36 +57,30 @@ void set_red_in(char *title, char *token, int is_process)
 
 void set_red_double_out(char *title)
 {
-    if ((g_red_out_fd = open(title, O_CREAT | O_RDWR | O_APPEND, S_IRUSR | S_IWUSR)) != ERROR)
+    if ((g_red_out_fd = open(title, O_CREAT | O_RDWR | O_APPEND,
+		S_IRUSR | S_IWUSR)) != ERROR)
 	{
-		int a = dup2(g_red_out_fd, 1);
-		if (a == -1)
-			perror("dup2");
+		dup2(g_red_out_fd, 1);
 		close(g_red_out_fd);
 	}
-	if (g_red_out_fd == -1)
-		perror("red double out open");
 }
 
 void set_pipe_child()
 {
 	close(g_pipe_fd[0]);
-	int a = dup2(g_pipe_fd[1], 1);
-	if (a == -1)
-		perror("pipe dup2");
+	dup2(g_pipe_fd[1], 1);
 	close(g_pipe_fd[1]);
 }
 
 void set_pipe_parent()
 {
 	close(g_pipe_fd[1]);
-	int a = dup2(g_pipe_fd[0], 0);
-	if (a == -1)
-		perror("pipe dup2");
+	dup2(g_pipe_fd[0], 0);
 	close(g_pipe_fd[0]);
 }
 
-void process_redirection(char *cmd[], int *prev_pipe_idx, int pipe_idx, int is_process)
+void process_redirection(char *cmd[], int *prev_pipe_idx,
+	int pipe_idx, int is_process)
 {
     int i;
 	char *token;
@@ -104,11 +92,11 @@ void process_redirection(char *cmd[], int *prev_pipe_idx, int pipe_idx, int is_p
 		token = cmd[i + 1];
     while (cmd[i] && i < pipe_idx)
     {
-        if (!strcmp(cmd[i], ">"))
+        if (!ft_strncmp(cmd[i], ">", ft_strlen(cmd[i])))
             set_red_out(cmd[i + 1]);
-        if (!strcmp(cmd[i], "<"))
+        if (!ft_strncmp(cmd[i], "<", ft_strlen(cmd[i])))
             set_red_in(cmd[i + 1], token, is_process);
-        if (!strcmp(cmd[i], ">>"))
+        if (!ft_strncmp(cmd[i], ">>", ft_strlen(cmd[i])))
             set_red_double_out(cmd[i + 1]);
         i++;
     }
@@ -116,8 +104,9 @@ void process_redirection(char *cmd[], int *prev_pipe_idx, int pipe_idx, int is_p
 
 int is_redirection(char *token)
 {
-    if (!strcmp(token, ">") || !strcmp(token, ">>")
-        || !strcmp(token, "<"))
+    if (!ft_strncmp(token, ">", ft_strlen(token)) ||
+		!ft_strncmp(token, ">>", ft_strlen(token)) ||
+		!ft_strncmp(token, "<", ft_strlen(token)))
         return (TRUE);
     return (FALSE);
 }
@@ -128,15 +117,18 @@ int get_argc(char *cmd[], int prev_pipe_idx, int pipe_idx)
 
     len = 0;
     if (prev_pipe_idx == 0)
-        while (prev_pipe_idx < pipe_idx && !is_redirection(cmd[prev_pipe_idx++]))
+        while (prev_pipe_idx < pipe_idx &&
+			!is_redirection(cmd[prev_pipe_idx++]))
             len++;
     else
-        while (++prev_pipe_idx < pipe_idx && !is_redirection(cmd[prev_pipe_idx]))
+        while (++prev_pipe_idx < pipe_idx &&
+			!is_redirection(cmd[prev_pipe_idx]))
             len++;
     return (len);
 }
 
-void exec_executable(char *cmd[], int prev_pipe_idx, int pipe_idx, char *filepath)
+void exec_executable(char *cmd[], int prev_pipe_idx,
+	int pipe_idx, char *filepath)
 {
     char **argv;
     int argc;
@@ -172,7 +164,8 @@ void exec_executable(char *cmd[], int prev_pipe_idx, int pipe_idx, char *filepat
 	}
 }
 
-void exec_executable2(char *cmd[], int prev_pipe_idx, int pipe_idx, char *filepath)
+void exec_executable2(char *cmd[], int prev_pipe_idx,
+	int pipe_idx, char *filepath)
 {
     char **argv;
     int argc;
@@ -243,20 +236,16 @@ int search_dir(char *token, char *path)
     if (dir_p = opendir(path))
     {
         dir = readdir(dir_p);
-		if (!dir)
-			perror("read dir err");
         while (dir)
         {
-            if (!strcmp(dir->d_name, token))
+            if (!ft_strncmp(dir->d_name, token,
+			ft_strlen(dir->d_name) > ft_strlen(token) ?
+			ft_strlen(dir->d_name) : ft_strlen(token)))
                 return (TRUE);
             dir = readdir(dir_p);
         }
-		int a = closedir(dir_p);
-		if (a == -1)
-			perror("closedir err");
+		closedir(dir_p);
     }
-	else
-		perror("here??? opendir err");
     return (FALSE);
 }
 
@@ -265,7 +254,8 @@ void cat_filepath(char **ret, char **tmp, char *token)
 	if (*tmp)
 	{
 		ft_strlcat(*tmp, "/", ft_strlen(*tmp) + 2);
-		*ret = (char *)malloc(sizeof(char) * (ft_strlen(*tmp) + ft_strlen(token) + 1));
+		*ret = (char *)malloc(sizeof(char) *
+			(ft_strlen(*tmp) + ft_strlen(token) + 1));
 		*ret = *tmp;
 		ft_strlcat(*ret, token, ft_strlen(token) + ft_strlen(*ret) + 1);
 	}
@@ -310,7 +300,8 @@ char *get_filepath(char *token, char **path)
 	return (ret);
 }
 
-void handle_executable(char *token, char *cmd[], int prev_pipe_idx, int pipe_idx)
+void handle_executable(char *token, char *cmd[],
+	int prev_pipe_idx, int pipe_idx)
 {
 	char **path;
     char *filepath;
@@ -337,7 +328,7 @@ int find_pipe(char *cmd[])
 	i = 0;
 	while (cmd[i])
 	{
-		if (!strcmp(cmd[i], "|"))
+		if (!ft_strncmp(cmd[i], "|", ft_strlen(cmd[i])))
 			return (TRUE);
 		i++;
 	}
@@ -350,7 +341,8 @@ void update_env(char *cwd, char *key)
 	char *new;
 
 	tmp = g_env_list;
-	if ((new = (char *)malloc(sizeof(char) * (ft_strlen(key) + ft_strlen(cwd)) + 1)) == NULL)
+	if ((new = (char *)malloc(sizeof(char) *
+		(ft_strlen(key) + ft_strlen(cwd)) + 1)) == NULL)
 		exit(-1);
 	ft_strlcpy(new, key, ft_strlen(key) + 1);
 	ft_strlcat(new, cwd, ft_strlen(key) + ft_strlen(cwd) + 1);
@@ -381,9 +373,6 @@ void change_dir(char *cmd[], char *dir, int is_pipe)
 				update_env(cwd, OLDPWD);
 				cwd = getcwd(buf, sizeof(buf));
 				update_env(cwd, PWD2);
-				/* showing result (must be deleted) */
-				ft_putstr_fd(cwd, 2);
-				ft_putstr_fd("\n", 2);
 				g_exit_status = 0;
 			}
 			else
@@ -445,34 +434,20 @@ void exec_cd(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 		dir = cmd[prev_pipe_idx + 1];
 	else
 		dir = cmd[prev_pipe_idx + 2];
-	is_pipe = find_pipe(cmd);	//이게 1이면 chdir을 하지 않는다.
-	// if (argc > 2)
-	// {
-	// 	if (prev_pipe_idx == 0)
-	// 	{
-	// 		ft_putstr_fd("mongshell: ", 2);
-	// 		ft_putstr_fd(cmd[prev_pipe_idx], 2);
-	// 		ft_putstr_fd(": too many arguments\n", 2);
-	// 	}
-	// 	else
-	// 	{
-	// 		ft_putstr_fd("mongshell: ", 2);
-	// 		ft_putstr_fd(cmd[prev_pipe_idx + 1], 2);
-	// 		ft_putstr_fd(": too many arguments\n", 2);
-	// 	}
-	// }
-	/*else */if (argc == 1)
-	{
+	is_pipe = find_pipe(cmd);if (argc == 1)
 		dir_to_HOME(cmd, is_pipe);
-	}
 	else
-	{
 		change_dir(cmd, dir, is_pipe);
-	}
 }
 
 void exec_exit(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 {
+	if (argc > 2)
+	{
+		ft_putstr_fd("mongshell: exit: too many arguments\n", STDERR);
+		g_exit_status = 1;
+		return ;
+	}
 	if (prev_pipe_idx == 0)
 	{
 		if (argc > 1)
@@ -480,9 +455,13 @@ void exec_exit(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 		else
 			exit(g_exit_status);
 	}
+	else
+		if (argc > 1)
+			g_exit_status = ft_atoi(cmd[prev_pipe_idx + 2]);
 }	
 
-void exec_nprocess_built_in(void (*exec_func)(char **, int, int, int), char **cmd, int *prev_pipe_idx, int pipe_idx)
+void exec_nprocess_built_in(void (*exec_func)(char **, int, int, int),
+	char **cmd, int *prev_pipe_idx, int pipe_idx)
 {
 	int argc;
 	int prev_pipe;
@@ -498,14 +477,9 @@ void exec_pwd(char *cmd[], int prev_pipe_idx, int pipe_idx)
 	char *cwd;
 
 	cwd = getcwd(NULL, 0);
-	if (!cwd)
-		perror("getcwd err");
-	else
-	{
-		ft_putstr_fd(cwd, STDOUT);
-		ft_putstr_fd("\n", STDOUT);
-		free(cwd);
-	}
+	ft_putstr_fd(cwd, STDOUT);
+	ft_putstr_fd("\n", STDOUT);
+	free(cwd);
 	exit(0);
 }
 
@@ -522,7 +496,8 @@ int find_env_path(void)
         if (!ft_strncmp(PATH, env_tmp->content, ft_strlen(PATH)))
         {
 			is_path = TRUE;
-			needle = ft_strnstr((char *)env_tmp->content, USRBIN, ft_strlen((char *)env_tmp->content));
+			needle = ft_strnstr((char *)env_tmp->content, USRBIN,
+				ft_strlen((char *)env_tmp->content));
 			if (needle)
 				return (TRUE);
 		}
@@ -578,7 +553,8 @@ void	sort_export(t_list **list)
 		ptr1 = *list;
 		while (ptr1->next != lptr)
 		{
-			if (ft_strncmp(ptr1->content, ptr1->next->content, ft_strlen(ptr1->content)) > 0)
+			if (ft_strncmp(ptr1->content, ptr1->next->content,
+				ft_strlen(ptr1->content)) > 0)
 			{
 				tmp = ptr1->content;
 				ptr1->content = ptr1->next->content;
@@ -657,15 +633,17 @@ void exec_export_p(char *cmd[], int prev_pipe_idx, int pipe_idx)
 	exit(0);
 }
 
-void print_echo(char *cmd[], int start, int end)
+void print_echo(char *cmd[], int start, int end, int option)
 {
-	int option;
-
 	option = FALSE;
 	if (!cmd[start])
 		ft_putstr_fd("\n", STDOUT);
-	if (!ft_strncmp(cmd[start], N_OPTION, ft_strlen(cmd[start]) > ft_strlen(N_OPTION) ? ft_strlen(cmd[start++]) : ft_strlen(N_OPTION)))
+	if (!ft_strncmp(cmd[start], N_OPTION, ft_strlen(cmd[start])
+		> ft_strlen(N_OPTION) ? ft_strlen(cmd[start]) : ft_strlen(N_OPTION)))
+	{
 		option = TRUE;
+		start++;
+	}
 	while (cmd[start] && start < end)
 	{
 		if (is_redirection(cmd[start]))
@@ -704,6 +682,7 @@ void exec_echo(char *cmd[], int prev_pipe_idx, int pipe_idx)
 	int argc;
 	int i;
 	int size;
+	int option;
 
 	argc = get_len(cmd, prev_pipe_idx, pipe_idx);
 	if (prev_pipe_idx == 0)
@@ -716,7 +695,7 @@ void exec_echo(char *cmd[], int prev_pipe_idx, int pipe_idx)
 		i = prev_pipe_idx + 2;
 		size = argc + prev_pipe_idx + 1;
 	}
-	print_echo(cmd, i, size);
+	print_echo(cmd, i, size, option);
 	exit(0);
 }
 
@@ -730,13 +709,17 @@ void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 		token = cmd[i];
 	else
 		token = cmd[i + 1];
-	if (!ft_strncmp(PWD, token, ft_strlen(token) > ft_strlen(PWD) ? ft_strlen(token) : ft_strlen(PWD)))
+	if (!ft_strncmp(PWD, token, ft_strlen(token) > ft_strlen(PWD) ?
+		ft_strlen(token) : ft_strlen(PWD)))
 		exec_pwd(cmd, i, pipe_idx);
-	else if (!ft_strncmp(ENV, token, ft_strlen(token) > ft_strlen(ENV) ? ft_strlen(token) : ft_strlen(ENV)))
+	else if (!ft_strncmp(ENV, token, ft_strlen(token) > ft_strlen(ENV) ?
+		ft_strlen(token) : ft_strlen(ENV)))
 		exec_env(cmd, i, pipe_idx);
-	else if (!ft_strncmp(EXPORT, token, ft_strlen(token) > ft_strlen(EXPORT) ? ft_strlen(token) : ft_strlen(EXPORT)))
+	else if (!ft_strncmp(EXPORT, token, ft_strlen(token) > ft_strlen(EXPORT) ?
+		ft_strlen(token) : ft_strlen(EXPORT)))
 		exec_export_p(cmd, i, pipe_idx);
-	else if (!ft_strncmp(ECHO, token, ft_strlen(token) > ft_strlen(ECHO) ? ft_strlen(token) : ft_strlen(ECHO)))
+	else if (!ft_strncmp(ECHO, token, ft_strlen(token) > ft_strlen(ECHO) ?
+		ft_strlen(token) : ft_strlen(ECHO)))
 		exec_echo(cmd, i, pipe_idx);
 	else if (is_redirection(token))
 		;
@@ -754,12 +737,9 @@ void exec_cmd_p(char *cmd[], int *prev_pipe_idx, int pipe_idx)
         set_pipe_child();
         process_redirection(cmd, prev_pipe_idx, pipe_idx, TRUE);
         parse_cmd(cmd, prev_pipe_idx, pipe_idx);
-        // exit(1);
     }
     else if (g_pid < 0)
-    {
-        perror("fork err");
-    }
+		exit(-1);
     else
     {
         wait(&status);
@@ -799,7 +779,6 @@ int check_update(char *content)
 		{
 			if (tmp->content)
 				free(tmp->content);
-			
 			tmp->content = ft_strdup(content);
 			return (TRUE);
 		}
@@ -885,11 +864,14 @@ void exec_unset(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 
 void handle_cmd(char *token, char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
-	if (!ft_strncmp(token, CD, ft_strlen(token) > ft_strlen(CD) ? ft_strlen(token) : ft_strlen(CD)))
+	if (!ft_strncmp(token, CD, ft_strlen(token) > ft_strlen(CD) ?
+		ft_strlen(token) : ft_strlen(CD)))
 		exec_nprocess_built_in(exec_cd, cmd, prev_pipe_idx, pipe_idx);
-	else if (!ft_strncmp(token, UNSET, ft_strlen(token) > ft_strlen(UNSET) ? ft_strlen(token) : ft_strlen(UNSET)))
+	else if (!ft_strncmp(token, UNSET, ft_strlen(token) > ft_strlen(UNSET) ?
+		ft_strlen(token) : ft_strlen(UNSET)))
 		exec_nprocess_built_in(exec_unset, cmd, prev_pipe_idx, pipe_idx);
-	else if (!ft_strncmp(token, EXIT, ft_strlen(token) > ft_strlen(EXIT) ? ft_strlen(token) : ft_strlen(EXIT)))
+	else if (!ft_strncmp(token, EXIT, ft_strlen(token) > ft_strlen(EXIT) ?
+		ft_strlen(token) : ft_strlen(EXIT)))
 		exec_nprocess_built_in(exec_exit, cmd, prev_pipe_idx, pipe_idx);
 	else
 		exec_cmd_p(cmd, prev_pipe_idx, pipe_idx);
@@ -903,11 +885,9 @@ void process_pipe(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 		token = cmd[*prev_pipe_idx];
 	else
 		token = cmd[*prev_pipe_idx + 1];
-    if (!strcmp(cmd[pipe_idx], "|"))
+    if (!ft_strncmp(cmd[pipe_idx], "|", ft_strlen(cmd[pipe_idx])))
     {
-        int a = pipe(g_pipe_fd);
-        if (a == -1)
-			perror("pipe err");
+        pipe(g_pipe_fd);
 		handle_cmd(token, cmd, prev_pipe_idx, pipe_idx);
         *prev_pipe_idx = pipe_idx;
     }
@@ -922,12 +902,9 @@ void exec_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 	{
 		process_redirection(cmd, prev_pipe_idx, pipe_idx, TRUE);
 		parse_cmd(cmd, prev_pipe_idx, pipe_idx);
-		// exit(1);
 	}
 	else if (g_pid < 0)
-    {
-        perror("fork err");
-    }
+		exit(-1);
 	else
 	{
 		wait(&status);
@@ -950,13 +927,17 @@ void handle_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 		token = cmd[i];
 	else
 		token = cmd[i + 1];
-	if (!ft_strncmp(token, CD, ft_strlen(token) > ft_strlen(CD) ? ft_strlen(token) : ft_strlen(CD)))
+	if (!ft_strncmp(token, CD, ft_strlen(token) > ft_strlen(CD) ?
+		ft_strlen(token) : ft_strlen(CD)))
 		exec_nprocess_built_in(exec_cd, cmd, prev_pipe_idx, pipe_idx);
-	else if (!ft_strncmp(token, EXPORT, ft_strlen(token) > ft_strlen(EXPORT) ? ft_strlen(token) : ft_strlen(EXPORT)) && argc > 1)
+	else if (!ft_strncmp(token, EXPORT, ft_strlen(token) > ft_strlen(EXPORT) ?
+		ft_strlen(token) : ft_strlen(EXPORT)) && argc > 1)
 		exec_nprocess_built_in(exec_export_np, cmd, prev_pipe_idx, pipe_idx);
-	else if (!ft_strncmp(token, UNSET, ft_strlen(token) > ft_strlen(UNSET) ? ft_strlen(token) : ft_strlen(UNSET)))
+	else if (!ft_strncmp(token, UNSET, ft_strlen(token) > ft_strlen(UNSET) ?
+		ft_strlen(token) : ft_strlen(UNSET)))
 		exec_nprocess_built_in(exec_unset, cmd, prev_pipe_idx, pipe_idx);
-	else if (!ft_strncmp(token, EXIT, ft_strlen(token) > ft_strlen(EXIT) ? ft_strlen(token) : ft_strlen(EXIT)))
+	else if (!ft_strncmp(token, EXIT, ft_strlen(token) > ft_strlen(EXIT) ?
+		ft_strlen(token) : ft_strlen(EXIT)))
 		exec_nprocess_built_in(exec_exit, cmd, prev_pipe_idx, pipe_idx);
 	else
 		exec_last_cmd(cmd, prev_pipe_idx, pipe_idx);
@@ -983,14 +964,11 @@ void handle_process(char **cmd)
 {
 	int i;
 	int prev_pipe_idx;
+	int stdin_tmp;
+	int stdout_tmp;
 
-	int stdin_tmp = dup(0);
-	if (stdin_tmp == -1)
-		perror("set up dup");
-	int stdout_tmp = dup(1);
-	if (stdout_tmp == -1)
-		perror("set up dup");
-
+	stdin_tmp = dup(0);
+	stdout_tmp = dup(1);
 	prev_pipe_idx = 0;
 	i = 0;
 	while (cmd[i])
@@ -1000,12 +978,8 @@ void handle_process(char **cmd)
 		if (!cmd[i])
 			handle_last_cmd(cmd, &prev_pipe_idx, i);
 	}
-	int a = dup2(stdin_tmp, 0);
-	if (a == -1)
-		perror("take back dup2");
-	int b = dup2(stdout_tmp, 1);
-	if (b == -1)
-		perror("take back dup2");
+	dup2(stdin_tmp, 0);
+	dup2(stdout_tmp, 1);
 }
 
 void free_env(void)
@@ -1118,7 +1092,8 @@ char *alloc_new(char *cmd)
 	exit_cnt = get_num_exit_status(cmd);
 	cmd_len = ft_strlen(cmd);
 	exit_status = ft_itoa(g_exit_status);
-	if ((ret = (char *)malloc(sizeof(char) * (cmd_len - (2 * exit_cnt) + (ft_strlen(exit_status) * exit_cnt)) + 1)) == NULL)
+	if ((ret = (char *)malloc(sizeof(char) * (cmd_len - (2 * exit_cnt) +
+		(ft_strlen(exit_status) * exit_cnt)) + 1)) == NULL)
 		exit(-1);
 	ret[cmd_len - (2 * exit_cnt) + (ft_strlen(exit_status) * exit_cnt)] = 0;
 	free(exit_status);

@@ -49,8 +49,6 @@ t_list g_env_head;
 
 int get_next_line(int fd, char **line);
 
-/* jipark */
-
 # define BUF_SIZE 1024
 /*
 ** enum STATE represents state of current character when parsing lexer.
@@ -175,7 +173,7 @@ void exec_cmd_p(char *cmd[], int *prev_pipe_idx, int pipe_idx);
 void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx);
 void exec_echo(char *cmd[], int prev_pipe_idx, int pipe_idx);
 int get_len(char *cmd[], int prev_pipe_idx, int pipe_idx);
-void print_echo(char *cmd[], int start, int end);
+void print_echo(char *cmd[], int start, int end, int option);
 void exec_export_p(char *cmd[], int prev_pipe_idx, int pipe_idx);
 void print_export(char *line);
 void add_dquote(char *new, char *line);

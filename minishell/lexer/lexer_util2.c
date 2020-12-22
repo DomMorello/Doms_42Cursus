@@ -6,13 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:23:45 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/12 16:35:06 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/22 18:33:35 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void			examine_end_of_line(t_token *token, t_status *status, char char_type)
+void			examine_end_of_line(t_token *token,
+	t_status *status, char char_type)
 {
 	(status->i)++; //norm때문에 i를 여기서 올려줌
 	if (char_type != CHAR_NULL || status->j <= 0) //여기서 말하는 char_type은 gnl로 읽은 문자열의 마지막 문자가 null인지
@@ -21,9 +22,11 @@ void			examine_end_of_line(t_token *token, t_status *status, char char_type)
 	status->j = 0;
 }
 
-int				is_env_exception(t_token *token, t_status *status, char *str, char char_type)
+int				is_env_exception(t_token *token, t_status *status,
+	char *str, char char_type)
 {
-	if (char_type == CHAR_ENV && (str[status->i - 1] != ' ' && str[status->i + 1] != ' ')
+	if (char_type == CHAR_ENV && (str[status->i - 1] != ' '
+		&& str[status->i + 1] != ' ')
 		&& status->state != STATE_IN_QUOTE && status->state != STATE_IN_DQUOTE)
 	{
 		token->type = CHAR_ENV;
@@ -88,29 +91,35 @@ int				check_basic_grammar(t_token *token)
 				return (FALSE);
 			}
 		}
-		if (token->type == CHAR_SEMICOLON && token->next && token->next->type == CHAR_SEMICOLON) //echo hi;;
+		if (token->type == CHAR_SEMICOLON && token->next &&
+			token->next->type == CHAR_SEMICOLON) //echo hi;;
 		{
 			ft_putstr_fd("minishell : syntax error near ';;'\n", STDERR);
 			return (FALSE);
 		}
-		if (!token->next && (token->type == CHAR_PIPE || token->type == CHAR_RED_OUT || token->type == CHAR_RED_IN || token->type == '\\'))
+		if (!token->next && (token->type == CHAR_PIPE || token->type ==
+			CHAR_RED_OUT || token->type == CHAR_RED_IN || token->type == '\\'))
 		{
 			ft_putstr_fd("minishell : syntax error near unexpected token `newline'\n", STDERR);
 			return (FALSE);
 		}
 		if (token->type != CHAR_DQUOTE && token->type != CHAR_QUOTE)
 		{
-			if (!ft_strncmp(token->data, ">", 1) && token->next && !ft_strncmp(token->next->data, ">", 1) && token->next->next && !ft_strncmp(token->next->next->data, ">", 1))
+			if (!ft_strncmp(token->data, ">", 1) && token->next && 
+			!ft_strncmp(token->next->data, ">", 1) && token->next->next &&
+			!ft_strncmp(token->next->next->data, ">", 1))
 			{
 				ft_putstr_fd("minishell : syntax error near unexpected token `>'\n", STDERR);
 				return (FALSE);
 			}
-			if (!ft_strncmp(token->data, "<", 1) && token->next && !ft_strncmp(token->next->data, "<", 1))
+			if (!ft_strncmp(token->data, "<", 1) && token->next &&
+				!ft_strncmp(token->next->data, "<", 1))
 			{
 				ft_putstr_fd("minishell : syntax error near unexpected token `<'\n", STDERR);
 				return (FALSE);
 			}
-			if (!ft_strncmp(token->data, "|", 1) && token->next && !ft_strncmp(token->next->data, "|", 1))
+			if (!ft_strncmp(token->data, "|", 1) && token->next &&
+				!ft_strncmp(token->next->data, "|", 1))
 			{
 				ft_putstr_fd("minishell : syntax error near unexpected token `|'\n", STDERR);
 				return (FALSE);

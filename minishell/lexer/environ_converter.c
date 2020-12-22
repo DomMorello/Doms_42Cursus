@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:26:45 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/12 17:16:05 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/22 18:32:21 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ static void			replace_key_with_value(t_token *token)
 		j = 0;
 		while (((char *)(env_tmp->content))[j] != '=') //환경변수들이 xx=yy 형태이기때문에, key(xx)의 길이를 구함
 			j++;
-		if (!ft_strncmp((char *)(env_tmp->content), key, j > ft_strlen(token->data + 1) ? j : ft_strlen(token->data + 1))) //key(user)랑 environ[i](xx)를 비교
+		if (!ft_strncmp((char *)(env_tmp->content), key, j >
+			ft_strlen(token->data + 1) ? j : ft_strlen(token->data + 1))) //key(user)랑 environ[i](xx)를 비교
 		{
 			free(token->data); //만약 일치하는 환경변수가 있으면 기존 token의 문자열($user) data 지우고
 			token->data = ft_strdup((char *)(env_tmp->content) + j + 1); //해당 data에 환경변수 value를 복사해옴

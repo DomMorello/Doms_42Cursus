@@ -6,13 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:22:18 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/03 00:20:43 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/22 18:39:25 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static int	issue_special_token(t_token *token, t_status *status, char char_type)
+static int issue_special_token(t_token *token, t_status *status, char char_type)
 {
 /*
 해당 함수는 ;, >, | 같이 1개로 끝나는 토큰 처리용
@@ -30,7 +30,8 @@ echo hi > cat.txt
 	return (TRUE);
 }
 
-int			issue_new_token(t_token *token, t_status *status, int flag, char char_type) //flag 필요없을듯.
+int			issue_new_token(t_token *token, t_status *status,
+	int flag, char char_type) //flag 필요없을듯.
 {
 	if (status->j > 0)
 	{
@@ -46,7 +47,8 @@ int			issue_new_token(t_token *token, t_status *status, int flag, char char_type
 	return (TRUE);
 }
 
-void		add_char_and_change_state(t_token *token, t_status *status, char char_type, int state)
+void		add_char_and_change_state(t_token *token, t_status *status,
+	char char_type, int state)
 { //공백 만나고 새로 발급된 토큰의 가장 첫 번째 글자는 char_type (따옴표, 쌍따옴표, 환경변수 기호)로 기록해줌
 	token->data[(status->j)++] = char_type;
 	token->type = char_type;

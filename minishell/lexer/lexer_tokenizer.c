@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/18 15:17:07 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/22 18:31:52 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,22 @@ static int		tokenize_normal(t_token *token, t_status *status, char c, char char_
 		add_char_and_change_state(token, status, char_type, STATE_IN_DQUOTE);
 	else if (char_type == CHAR_ENV) //똑같음
 		add_char_and_change_state(token, status, char_type, STATE_IN_ENV);
-	else if (char_type == CHAR_SEMICOLON || char_type == CHAR_PIPE || char_type == CHAR_RED_OUT || char_type == CHAR_RED_IN)
+	else if (char_type == CHAR_SEMICOLON || char_type == CHAR_PIPE ||
+		char_type == CHAR_RED_OUT || char_type == CHAR_RED_IN)
 		result = issue_new_token(token, status, TRUE, char_type);
 	return (result == -1 || result == TRUE);
 }
 
-static void		tokenize_quote(t_token *token, t_status *status, char c, int is_end_of_quote)
+static void		tokenize_quote(t_token *token, t_status *status,
+	char c, int is_end_of_quote)
 {
 	token->data[(status->j)++] = c; //quote인 경우는 그냥 계속 토큰에 기록
 	if (is_end_of_quote) //마지막 end quote 만나면 state를 다시 normal로 변경해줌
 		status->state = STATE_NORMAL;
 }
 
-static void		tokenize_env(t_token *token, t_status *status, char c, char char_type)
+static void		tokenize_env(t_token *token, t_status *status,
+	char c, char char_type)
 {
 	/*
 	echo $hi kkk
@@ -70,7 +73,8 @@ void trim_end(char *str)
 	}
 }
 
-static int		convert_input_into_tokens(t_token *token, t_status *status, char *str)
+static int		convert_input_into_tokens(t_token *token, 
+	t_status *status, char *str)
 {
 	char		char_type;
 
@@ -83,9 +87,11 @@ static int		convert_input_into_tokens(t_token *token, t_status *status, char *st
 			if (status->state == STATE_NORMAL)
 				tokenize_normal(token, status, str[status->i], char_type);
 			else if (status->state == STATE_IN_QUOTE) //echo "hi my name is" 문자열에서 status->i가 h를 가리킨경우.
-				tokenize_quote(token, status, str[status->i], is_end_of_quote(char_type, CHAR_QUOTE));
+				tokenize_quote(token, status, str[status->i],
+					is_end_of_quote(char_type, CHAR_QUOTE));
 			else if (status->state == STATE_IN_DQUOTE)
-				tokenize_quote(token, status, str[status->i], is_end_of_quote(char_type, CHAR_DQUOTE));
+				tokenize_quote(token, status, str[status->i],
+					is_end_of_quote(char_type, CHAR_DQUOTE));
 			else if (status->state == STATE_IN_ENV)
 				tokenize_env(token, status, str[status->i], char_type);
 		}
@@ -161,7 +167,8 @@ void convert_to_value(char *new, char *env_content, int *i, int *j)
 		new[(*j)++] = env_content[env_key_len++];
 }
 
-void convert_key_to_env(char *env_content, char **token_data, char *key, int env_idx)
+void convert_key_to_env(char *env_content, char **token_data,
+	char *key, int env_idx)
 {
 	int env_key_len;
 	char *new;
@@ -173,7 +180,8 @@ void convert_key_to_env(char *env_content, char **token_data, char *key, int env
 	j = 0;
 	while (env_content[env_key_len] != '=')
 		env_key_len++;
-	if ((new = (char *)malloc(sizeof(char) * ft_strlen(*token_data) + ft_strlen(&env_content[env_key_len + 1]) - ft_strlen(key) + 1)) == NULL)
+	if ((new = (char *)malloc(sizeof(char) * ft_strlen(*token_data) +
+		ft_strlen(&env_content[env_key_len + 1]) - ft_strlen(key) + 1)) == NULL)
 		exit(-1);
 	while ((*token_data)[i])
 	{
@@ -200,8 +208,10 @@ void search_key_in_env(char *key, char **token_data, int env_idx)
 		env_key_len = 0;
 		while (((char *)(env_tmp->content))[env_key_len] != '=')
 			env_key_len++;
-		if (!ft_strncmp((char *)env_tmp->content, key, env_key_len > ft_strlen(key) ? env_key_len : ft_strlen(key)))
-			convert_key_to_env((char *)env_tmp->content, token_data, key, env_idx);
+		if (!ft_strncmp((char *)env_tmp->content, key, env_key_len >
+			ft_strlen(key) ? env_key_len : ft_strlen(key)))
+			convert_key_to_env((char *)env_tmp->content,
+				token_data, key, env_idx);
 		env_tmp = env_tmp->next;
 	}
 }
@@ -221,10 +231,12 @@ void copy_env_key(char **token_data)
 		if ((*token_data)[i] == CHAR_ENV)
 		{
 			env_idx = i;
-			if ((env = (char *)malloc(sizeof(char) * ft_strlen(*token_data) + 1)) == NULL)
+			if ((env = (char *)malloc(sizeof(char) *
+				ft_strlen(*token_data) + 1)) == NULL)
 				exit(-1);
 			i++;
-			while ((*token_data)[i] && (*token_data)[i] != ' ' && (*token_data)[i] != CHAR_ENV)
+			while ((*token_data)[i] && (*token_data)[i]
+				!= ' ' && (*token_data)[i] != CHAR_ENV)
 				env[j++] = (*token_data)[i++];
 			env[j] = 0;
 			search_key_in_env(env, token_data, env_idx);
@@ -275,7 +287,8 @@ void erase_quote(t_token *token, char quote_type)
 	{
 		if (tmp->type == quote_type)
 		{
-			if ((new = (char *)malloc(sizeof(char) * ft_strlen(tmp->data) - 1)) == NULL)
+			if ((new = (char *)malloc(sizeof(char) *
+				ft_strlen(tmp->data) - 1)) == NULL)
 				exit(-1);
 			copy_without_quote(tmp->data, new, quote_type);
 			free(tmp->data);

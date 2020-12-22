@@ -28,7 +28,12 @@ extern char **environ;
 
 int main()
 {
-
+	char *s = "peter";
+	char *s1 = "peterhi";
+	if (!strcmp(s, s1))
+		printf("true1\n");
+	if (!ft_strncmp(s, s1, ft_strlen(s)))
+		printf("true2\n");
 
     return 0;
 }
