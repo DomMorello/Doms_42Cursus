@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:23:45 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/22 18:33:35 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/23 20:38:51 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 void			examine_end_of_line(t_token *token,
 	t_status *status, char char_type)
 {
-	(status->i)++; //norm때문에 i를 여기서 올려줌
-	if (char_type != CHAR_NULL || status->j <= 0) //여기서 말하는 char_type은 gnl로 읽은 문자열의 마지막 문자가 null인지
-		return ; //status->j 에 대한 조건은 없어도 될것같음. 보완점.
+	(status->i)++;
+	if (char_type != CHAR_NULL || status->j <= 0)
+		return ;
 	token->data[status->j] = CHAR_NULL;
 	status->j = 0;
 }
@@ -30,7 +30,7 @@ int				is_env_exception(t_token *token, t_status *status,
 		&& status->state != STATE_IN_QUOTE && status->state != STATE_IN_DQUOTE)
 	{
 		token->type = CHAR_ENV;
-		token->data[(status->j)++] = CHAR_ENV; //새로운 토큰의 첫번째 문자를 $로 기록하고, j를 1 증가시켜줌
+		token->data[(status->j)++] = CHAR_ENV;
 		status->state = STATE_IN_ENV;
 		return (TRUE);
 	}
@@ -52,7 +52,7 @@ t_token			**convert_list_into_array(t_token *token)
 		size++;
 	}
 	if ((dest = (t_token **)malloc(sizeof(t_token *) * (size + 1))) == NULL)
-		return (NULL); //TODO : free all tokens.
+		return (NULL);
 	dest[size] = NULL;
 	i = 0;
 	while (i < size)
@@ -64,67 +64,73 @@ t_token			**convert_list_into_array(t_token *token)
 	return (dest);
 }
 
+int	check_grammar1(t_token *token)
+{
+	if (token->type == CHAR_QUOTE || token->type == CHAR_DQUOTE)
+	{
+		if (token->data[ft_strlen(token->data) - 1] != token->type)
+		{
+			ft_putstr_fd(ERR_QUOTE, STDERR);
+			ft_putstr_fd(token->data, STDERR);
+			ft_putstr_fd("'\n", STDERR);
+			return (FALSE);
+		}
+	}
+	if (token->type == CHAR_SEMICOLON && token->next &&
+		token->next->type == CHAR_SEMICOLON)
+	{
+		ft_putstr_fd(ERR_DSEMI, STDERR);
+		return (FALSE);
+	}
+	if (!token->next && (token->type == CHAR_PIPE || token->type ==
+		CHAR_RED_OUT || token->type == CHAR_RED_IN || token->type == '\\'))
+	{
+		ft_putstr_fd(ERR_NEWL, STDERR);
+		return (FALSE);
+	}
+	return (TRUE);
+}
+
+int check_grammar2(t_token *token)
+{
+	if (token->type != CHAR_DQUOTE && token->type != CHAR_QUOTE)
+	{
+		if (!ft_strncmp(token->data, ">", 1) && token->next && 
+		!ft_strncmp(token->next->data, ">", 1) && token->next->next &&
+		!ft_strncmp(token->next->next->data, ">", 1))
+		{
+			ft_putstr_fd(ERR_REDOUT, STDERR);
+			return (FALSE);
+		}
+		if (!ft_strncmp(token->data, "<", 1) && token->next &&
+			!ft_strncmp(token->next->data, "<", 1))
+		{
+			ft_putstr_fd(ERR_REDIN, STDERR);
+			return (FALSE);
+		}
+		if (!ft_strncmp(token->data, "|", 1) && token->next &&
+			!ft_strncmp(token->next->data, "|", 1))
+		{
+			ft_putstr_fd(ERR_PIPE, STDERR);
+			return (FALSE);
+		}
+	}
+	return (TRUE);
+}
+
 int				check_basic_grammar(t_token *token)
 {
 	if (token && !ft_strncmp((*token).data, ";", 1))
 	{
-		ft_putstr_fd("minishell : syntax error near unexpected token `;'\n", STDERR);
+		ft_putstr_fd(ERR_SEMI, STDERR);
 		return (FALSE);
 	}
-	while (token != NULL) //echo, "hi", ;, cd
+	while (token != NULL)
 	{
-		if (token->type == CHAR_QUOTE || token->type == CHAR_DQUOTE)
-		{
-			if (token->data[ft_strlen(token->data) - 1] != token->type) //따옴표가 안닫혀있는경우 == 맨 마지막 문자가 동등하지 않은경우
-			{
-				/*
-				printf("--------------debug grammar spot-----------\n");
-				printf("token data : %s\n", token->data);
-				printf("token data length : %ld\n", ft_strlen(token->data));
-				printf("last character : %c\n", token->data[ft_strlen(token->data) - 1]);
-				printf("token type : %d (34 == \")\n", token->type);
-				printf("--------------debug grammar spot-----------\n");
-				*/
-				ft_putstr_fd("minishell : syntax error near '", STDERR);
-				ft_putstr_fd(token->data, STDERR);
-				ft_putstr_fd("'\n", STDERR);
-				return (FALSE);
-			}
-		}
-		if (token->type == CHAR_SEMICOLON && token->next &&
-			token->next->type == CHAR_SEMICOLON) //echo hi;;
-		{
-			ft_putstr_fd("minishell : syntax error near ';;'\n", STDERR);
+		if (!check_grammar1(token))
 			return (FALSE);
-		}
-		if (!token->next && (token->type == CHAR_PIPE || token->type ==
-			CHAR_RED_OUT || token->type == CHAR_RED_IN || token->type == '\\'))
-		{
-			ft_putstr_fd("minishell : syntax error near unexpected token `newline'\n", STDERR);
+		if (!check_grammar2(token))
 			return (FALSE);
-		}
-		if (token->type != CHAR_DQUOTE && token->type != CHAR_QUOTE)
-		{
-			if (!ft_strncmp(token->data, ">", 1) && token->next && 
-			!ft_strncmp(token->next->data, ">", 1) && token->next->next &&
-			!ft_strncmp(token->next->next->data, ">", 1))
-			{
-				ft_putstr_fd("minishell : syntax error near unexpected token `>'\n", STDERR);
-				return (FALSE);
-			}
-			if (!ft_strncmp(token->data, "<", 1) && token->next &&
-				!ft_strncmp(token->next->data, "<", 1))
-			{
-				ft_putstr_fd("minishell : syntax error near unexpected token `<'\n", STDERR);
-				return (FALSE);
-			}
-			if (!ft_strncmp(token->data, "|", 1) && token->next &&
-				!ft_strncmp(token->next->data, "|", 1))
-			{
-				ft_putstr_fd("minishell : syntax error near unexpected token `|'\n", STDERR);
-				return (FALSE);
-			}
-		}
 		token = token->next;
 	}
 	return (TRUE);

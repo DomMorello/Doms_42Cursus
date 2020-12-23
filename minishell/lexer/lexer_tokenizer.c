@@ -6,26 +6,27 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/22 18:31:52 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/23 20:25:55 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static int		tokenize_normal(t_token *token, t_status *status, char c, char char_type)
+static int		tokenize_normal(t_token *token, t_status *status,
+	char c, char char_type)
 {
 	int			result;
 
 	result = -1;
-	if (char_type == CHAR_NORMAL) //예를들어 echo hi이고, 현재 str[status->i](즉 char c)가 일반 문자인경우
-		token->data[(status->j)++] = c; //계속 data에 기록해주고 j인덱스 올려줌
-	else if (char_type == CHAR_WHITESPACE) //echo hi이고 현재 data에 echo까지 쓴 상태에서 다음 읽은 문자가 공백인경우
+	if (char_type == CHAR_NORMAL)
+		token->data[(status->j)++] = c;
+	else if (char_type == CHAR_WHITESPACE)
 		result = issue_new_token(token, status, FALSE, char_type);
-	else if (char_type == CHAR_QUOTE) //echo 'hi'이고 현재 data에 echo까지 쓴 상태에서 다음 읽은 문자가 ' 인 경우
+	else if (char_type == CHAR_QUOTE)
 		add_char_and_change_state(token, status, char_type, STATE_IN_QUOTE);
-	else if (char_type == CHAR_DQUOTE) //echo "hi" 이고 현재 data에 echo까지 쓴 상태에서 다음 읽은 문자가 " 인 경우
+	else if (char_type == CHAR_DQUOTE)
 		add_char_and_change_state(token, status, char_type, STATE_IN_DQUOTE);
-	else if (char_type == CHAR_ENV) //똑같음
+	else if (char_type == CHAR_ENV)
 		add_char_and_change_state(token, status, char_type, STATE_IN_ENV);
 	else if (char_type == CHAR_SEMICOLON || char_type == CHAR_PIPE ||
 		char_type == CHAR_RED_OUT || char_type == CHAR_RED_IN)
@@ -36,25 +37,21 @@ static int		tokenize_normal(t_token *token, t_status *status, char c, char char_
 static void		tokenize_quote(t_token *token, t_status *status,
 	char c, int is_end_of_quote)
 {
-	token->data[(status->j)++] = c; //quote인 경우는 그냥 계속 토큰에 기록
-	if (is_end_of_quote) //마지막 end quote 만나면 state를 다시 normal로 변경해줌
+	token->data[(status->j)++] = c;
+	if (is_end_of_quote)
 		status->state = STATE_NORMAL;
 }
 
 static void		tokenize_env(t_token *token, t_status *status,
 	char c, char char_type)
 {
-	/*
-	echo $hi kkk
-	$를 만난 상태에서는 status->state가 STATE_IN_ENV 상태로 바뀌는데, 공백을 만나기 전까지는 안풀림
-	*/
 	if (c == CHAR_WHITESPACE)
 	{
 		status->state = STATE_NORMAL;
 		issue_new_token(token, status, FALSE, CHAR_WHITESPACE);
 		return ;
 	}
-	token->data[(status->j)++] = c; //공백 만나기 전까지는 계속 토큰에 환경변수 이름 기록
+	token->data[(status->j)++] = c;
 }
 
 void trim_end(char *str)
@@ -79,14 +76,14 @@ static int		convert_input_into_tokens(t_token *token,
 	char		char_type;
 
 	trim_end(str);
-	while (str[status->i]) //read나 gnl로 읽은 문자열을 status의 i인덱스로 하나하나씩 읽음
+	while (str[status->i])
 	{
-		char_type = analyze_char_type(str, status); //현재 인덱스의 문자의 타입을 결정함 (이게 특수기호인지, 아니면 문자로 취급하는 예외경우인지 등)
-		if (!is_env_exception(token, status, str, char_type)) //문자열에서 현재 읽은 문자가 $일 때, echo hi$user와 같이 환경변수앞에 공백이 아니라 문자인경우 확인
-		{ //위와같은 예외 사항이 아닌 경우 무조건 if 안으로 들어옴.
+		char_type = analyze_char_type(str, status);
+		if (!is_env_exception(token, status, str, char_type))
+		{
 			if (status->state == STATE_NORMAL)
 				tokenize_normal(token, status, str[status->i], char_type);
-			else if (status->state == STATE_IN_QUOTE) //echo "hi my name is" 문자열에서 status->i가 h를 가리킨경우.
+			else if (status->state == STATE_IN_QUOTE)
 				tokenize_quote(token, status, str[status->i],
 					is_end_of_quote(char_type, CHAR_QUOTE));
 			else if (status->state == STATE_IN_DQUOTE)
@@ -95,8 +92,8 @@ static int		convert_input_into_tokens(t_token *token,
 			else if (status->state == STATE_IN_ENV)
 				tokenize_env(token, status, str[status->i], char_type);
 		}
-		while (token->next != NULL) //기록하면서 계속 TOEKN을 새로 생성했기 때문에, 현재 TOKEN 변수에 NEXT를 가져와줌
-			token = token->next; //현재 위치에서는 그 전 TOEKN을 가리키고 있기 때문에, 다음으로 넘겨줌
+		while (token->next != NULL)
+			token = token->next;
 		examine_end_of_line(token, status, char_type);
 	}
 }
@@ -106,12 +103,12 @@ t_token			*tokenize_lexer(char *str, int length)
 	t_token		*token;
 	t_status	status;
 
-	if ((token = (t_token *)malloc(sizeof(t_token))) == NULL) //list 첫번재 원소 메모리 할당
+	if ((token = (t_token *)malloc(sizeof(t_token))) == NULL)
 		exit(ERROR);
 	initiate_token(token, length);
 	initiate_token_status(&status, str, length);
 	convert_input_into_tokens(token, &status, str);
-	return (token); //토큰의 가장 첫 번째 원소 주소를 반환.
+	return (token);
 }
 
 int make_dred_out(t_token *deleted, t_token *prev, int d_red_out)
@@ -216,7 +213,7 @@ void search_key_in_env(char *key, char **token_data, int env_idx)
 	}
 }
 
-void copy_env_key(char **token_data)
+void copy_env_key(char **tokens)
 {
 	char *env;
 	int i;
@@ -225,21 +222,20 @@ void copy_env_key(char **token_data)
 
 	i = 0;
 	env_idx = 0;
-	while ((*token_data)[i])
+	while ((*tokens)[i])
 	{
 		j = 0;
-		if ((*token_data)[i] == CHAR_ENV)
+		if ((*tokens)[i] == CHAR_ENV)
 		{
 			env_idx = i;
-			if ((env = (char *)malloc(sizeof(char) *
-				ft_strlen(*token_data) + 1)) == NULL)
+			if (!(env = (char *)malloc(sizeof(char) * ft_strlen(*tokens) + 1)))
 				exit(-1);
 			i++;
-			while ((*token_data)[i] && (*token_data)[i]
-				!= ' ' && (*token_data)[i] != CHAR_ENV)
-				env[j++] = (*token_data)[i++];
+			while ((*tokens)[i] && (*tokens)[i] != ' '
+				&& (*tokens)[i] != CHAR_ENV)
+				env[j++] = (*tokens)[i++];
 			env[j] = 0;
-			search_key_in_env(env, token_data, env_idx);
+			search_key_in_env(env, tokens, env_idx);
 			free(env);
 		}
 		i++;
@@ -254,9 +250,7 @@ void adjust_env_in_dquote(t_token *token)
 	while (tmp)
 	{
 		if (tmp->type == CHAR_DQUOTE)
-		{
 			copy_env_key(&(tmp->data));
-		}
 		tmp = tmp->next;
 	}
 }

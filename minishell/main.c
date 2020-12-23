@@ -636,17 +636,8 @@ void exec_export_p(char *cmd[], int prev_pipe_idx, int pipe_idx)
 	exit(0);
 }
 
-void print_echo(char *cmd[], int start, int end, int option)
+void do_echo(int start, int end, char *cmd[])
 {
-	option = FALSE;
-	if (!cmd[start])
-		ft_putstr_fd("\n", STDOUT);
-	if (!ft_strncmp(cmd[start], N_OPTION, ft_strlen(cmd[start])
-		> ft_strlen(N_OPTION) ? ft_strlen(cmd[start]) : ft_strlen(N_OPTION)))
-	{
-		option = TRUE;
-		start++;
-	}
 	while (cmd[start] && start < end)
 	{
 		if (is_redirection(cmd[start]))
@@ -661,6 +652,22 @@ void print_echo(char *cmd[], int start, int end, int option)
 		}
 		start++;
 	}
+}
+
+void print_echo(char *cmd[], int start, int end, int option)
+{
+	if (!cmd[start])
+	{
+		ft_putstr_fd("\n", STDOUT);
+		exit(0);
+	}
+	if (!ft_strncmp(cmd[start], N_OPTION, ft_strlen(cmd[start])
+		> ft_strlen(N_OPTION) ? ft_strlen(cmd[start]) : ft_strlen(N_OPTION)))
+	{
+		option = TRUE;
+		start++;
+	}
+	do_echo(start, end, cmd);
 	if (!option)
 		ft_putstr_fd("\n", STDOUT);
 }
@@ -685,7 +692,6 @@ void exec_echo(char *cmd[], int prev_pipe_idx, int pipe_idx)
 	int argc;
 	int i;
 	int size;
-	int option;
 
 	argc = get_len(cmd, prev_pipe_idx, pipe_idx);
 	if (prev_pipe_idx == 0)
@@ -698,7 +704,7 @@ void exec_echo(char *cmd[], int prev_pipe_idx, int pipe_idx)
 		i = prev_pipe_idx + 2;
 		size = argc + prev_pipe_idx + 1;
 	}
-	print_echo(cmd, i, size, option);
+	print_echo(cmd, i, size, FALSE);
 	exit(0);
 }
 

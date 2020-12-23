@@ -28,7 +28,7 @@ extern char **environ;
 
 int main()
 {
-	
+	ft_putstr_fd("asdfasdfasdflsdjkhasdhfa sdfasdfja\n", STDERR);
 
     return 0;
 }

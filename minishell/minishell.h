@@ -47,6 +47,16 @@ t_list g_env_head;
 # define ENV "env"
 # define EXIT "exit"
 
+# define ERR_REDOUT "mongshell : syntax error near unexpected token `>'\n"
+# define ERR_REDIN "mongshell : syntax error near unexpected token `<'\n"
+# define ERR_PIPE "mongshell : syntax error near unexpected token `|'\n"
+# define ERR_SEMI "mongshell : syntax error near unexpected token `;'\n"
+# define ERR_QUOTE "mongshell : syntax error near '"
+# define ERR_DSEMI "mongshell : syntax error near ';;'\n"
+# define ERR_NEWL "mongshell : syntax error near unexpected token `newline'\n"
+
+
+
 int get_next_line(int fd, char **line);
 
 # define BUF_SIZE 1024
@@ -210,5 +220,6 @@ void print_err_not_dir(char *dir);
 void print_err_no_dir(char *dir);
 void do_export(char *token, int prev_pipe_idx);
 void parse_to_start(t_token *token);
+void do_echo(int start, int end, char *cmd[]);
 
 #endif

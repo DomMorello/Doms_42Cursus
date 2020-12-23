@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:00:28 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/16 21:57:27 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/23 20:24:44 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,9 @@ void			initiate_token(t_token *token, int length)
 
 void		initiate_token_status(t_status *status, char *str, int length)
 {
-	status->i = 0; //read나 gnl로 읽은 문자열 인덱스
+	status->i = 0;
 	status->j = 0;
-	status->state = STATE_NORMAL; //따옴표가 아닌 일반 노말
+	status->state = STATE_NORMAL;
 	status->length = length;
 	status->str = str;
 }
