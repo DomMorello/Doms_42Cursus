@@ -20,6 +20,16 @@ void set_red_out(char *title)
 	}
 }
 
+void print_error_red_in(char *title, int is_process)
+{
+	ft_putstr_fd("momgshell: ", STDERR);
+	ft_putstr_fd(title, STDERR);
+	ft_putstr_fd(": No such file or directory\n", STDERR);
+	g_exit_status = 1;
+	if (is_process)
+		exit(1);
+}
+
 void set_red_in(char *title, char *token, int is_process)
 {
 	struct stat file;
@@ -45,14 +55,7 @@ void set_red_in(char *title, char *token, int is_process)
 		}
 	}
 	else
-	{
-		ft_putstr_fd("momgshell: ", 2);
-		ft_putstr_fd(title, 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
-		g_exit_status = 1;
-		if (is_process)
-			exit(1);
-	}
+		print_error_red_in(title, is_process);
 }
 
 void set_red_double_out(char *title)
@@ -92,11 +95,14 @@ void process_redirection(char *cmd[], int *prev_pipe_idx,
 		token = cmd[i + 1];
     while (cmd[i] && i < pipe_idx)
     {
-        if (!ft_strncmp(cmd[i], ">", ft_strlen(cmd[i])))
+        if (!ft_strncmp(cmd[i], ">", ft_strlen(cmd[i])
+			> 1 ? ft_strlen(cmd[i]) : 1))
             set_red_out(cmd[i + 1]);
-        if (!ft_strncmp(cmd[i], "<", ft_strlen(cmd[i])))
+        if (!ft_strncmp(cmd[i], "<", ft_strlen(cmd[i])
+			> 1 ? ft_strlen(cmd[i]) : 1))
             set_red_in(cmd[i + 1], token, is_process);
-        if (!ft_strncmp(cmd[i], ">>", ft_strlen(cmd[i])))
+        if (!ft_strncmp(cmd[i], ">>", ft_strlen(cmd[i])
+			> 2 ? ft_strlen(cmd[i]) : 2))
             set_red_double_out(cmd[i + 1]);
         i++;
     }
@@ -104,9 +110,9 @@ void process_redirection(char *cmd[], int *prev_pipe_idx,
 
 int is_redirection(char *token)
 {
-    if (!ft_strncmp(token, ">", ft_strlen(token)) ||
-		!ft_strncmp(token, ">>", ft_strlen(token)) ||
-		!ft_strncmp(token, "<", ft_strlen(token)))
+    if (!ft_strncmp(token, ">", ft_strlen(token) > 1 ? ft_strlen(token) : 1) ||
+		!ft_strncmp(token, ">>", ft_strlen(token) > 2 ? ft_strlen(token) : 2) ||
+		!ft_strncmp(token, "<", ft_strlen(token) > 1 ? ft_strlen(token) : 1))
         return (TRUE);
     return (FALSE);
 }
@@ -125,6 +131,25 @@ int get_argc(char *cmd[], int prev_pipe_idx, int pipe_idx)
 			!is_redirection(cmd[prev_pipe_idx]))
             len++;
     return (len);
+}
+
+void print_exec_error(int errnum, char *token)
+{
+	if (errnum == ENOENT)
+	{
+		ft_putstr_fd("mongshell: ", STDERR);
+		ft_putstr_fd(token, STDERR);
+		ft_putstr_fd(": command not found\n", STDERR);	
+		exit(127);
+	}
+	else
+	{
+		ft_putstr_fd("mongshell: ", STDERR);
+		ft_putstr_fd(token, STDERR);
+		ft_putstr_fd(": ", STDERR);
+		ft_putstr_fd(strerror(errno), STDERR);
+		exit(1);
+	}
 }
 
 void exec_executable(char *cmd[], int prev_pipe_idx,
@@ -146,21 +171,8 @@ void exec_executable(char *cmd[], int prev_pipe_idx,
 	argv[i] = NULL;
 	if (execve(filepath, argv, environ) == -1)
 	{
-		if (errno == ENOENT)
-		{
-			ft_putstr_fd("mongshell: ", STDERR);
-			ft_putstr_fd(cmd[token], STDERR);
-			ft_putstr_fd(": command not found\n", STDERR);	
-			exit(127);
-		}
-		else
-		{
-			ft_putstr_fd("mongshell: ", STDERR);
-			ft_putstr_fd(cmd[token], STDERR);
-			ft_putstr_fd(": ", STDERR);
-			ft_putstr_fd(strerror(errno), STDERR);
-			exit(1);
-		}
+		i = errno;
+		print_exec_error(i, cmd[token]);
 	}
 }
 
@@ -183,22 +195,8 @@ void exec_executable2(char *cmd[], int prev_pipe_idx,
 	argv[i] = NULL;
 	if (execve(filepath, argv, environ) == -1)
 	{
-		if (errno == ENOENT)
-		{
-			ft_putstr_fd("test: ", STDERR);
-			ft_putstr_fd("mongshell: ", STDERR);
-			ft_putstr_fd(cmd[token], STDERR);
-			ft_putstr_fd(": command not found\n", STDERR);	
-			exit(127);
-		}
-		else
-		{
-			ft_putstr_fd("mongshell: ", STDERR);
-			ft_putstr_fd(cmd[token], STDERR);
-			ft_putstr_fd(": ", STDERR);
-			ft_putstr_fd(strerror(errno), STDERR);
-			exit(1);
-		}
+		i = errno;
+		print_exec_error(i, cmd[token]);
 	}
 }
 
@@ -328,7 +326,8 @@ int find_pipe(char *cmd[])
 	i = 0;
 	while (cmd[i])
 	{
-		if (!ft_strncmp(cmd[i], "|", ft_strlen(cmd[i])))
+		if (!ft_strncmp(cmd[i], "|", ft_strlen(cmd[i])
+			> 1 ? ft_strlen(cmd[i]) : 1))
 			return (TRUE);
 		i++;
 	}
@@ -357,6 +356,22 @@ void update_env(char *cwd, char *key)
 	}
 }
 
+void print_err_not_dir(char *dir)
+{
+	ft_putstr_fd("mongshell: cd: ", STDERR);
+	ft_putstr_fd(dir, STDERR);
+	ft_putstr_fd(": Not a directory\n", STDERR);
+	g_exit_status = 1;
+}
+
+void print_err_no_dir(char *dir)
+{
+	ft_putstr_fd("mongshell: cd: ", STDERR);
+	ft_putstr_fd(dir, STDERR);
+	ft_putstr_fd(": No such file or directory\n", STDERR);
+	g_exit_status = 1;
+}
+
 void change_dir(char *cmd[], char *dir, int is_pipe)
 {
 	struct stat file;
@@ -376,21 +391,11 @@ void change_dir(char *cmd[], char *dir, int is_pipe)
 				g_exit_status = 0;
 			}
 			else
-			{
-				ft_putstr_fd("mongshell: cd: ", 2);
-				ft_putstr_fd(dir, 2);
-				ft_putstr_fd(": Not a directory\n", 2);
-				g_exit_status = 1;
-			}
+				print_err_not_dir(dir);
 		}
 	}
 	else
-	{
-		ft_putstr_fd("mongshell: cd: ", 2);
-		ft_putstr_fd(dir, 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
-		g_exit_status = 1;
-	}
+		print_err_no_dir(dir);
 }
 
 char *find_home(void)
@@ -544,9 +549,7 @@ void	sort_export(t_list **list)
 	char *tmp;
 	
 	swapped = 1;
-	ptr1 = NULL;
 	lptr = NULL;
-	tmp = NULL;
 	while (swapped)
 	{
 		swapped = 0;
@@ -788,11 +791,25 @@ int check_update(char *content)
 	return (FALSE);
 }
 
+void do_export(char *token, int prev_pipe_idx)
+{
+	char *new_content;
+	t_list *new;
+
+	if (ft_strrchr(token, '='))
+	{
+		if (!check_update(token))
+		{
+			new_content = ft_strdup(token);
+			new = ft_lstnew(new_content);
+			ft_lstadd_back(&g_env_list, new);
+		}
+	}
+}
+
 void exec_export_np(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 {
 	int i;
-	t_list *new;
-	char *new_content;
 	int size;
 
 	i = prev_pipe_idx;
@@ -804,17 +821,7 @@ void exec_export_np(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 	{
 		while (prev_pipe_idx < size)
 		{
-			new_content = NULL;
-			new = NULL;
-			if (ft_strrchr(cmd[prev_pipe_idx], '='))
-			{
-				if (!check_update(cmd[prev_pipe_idx]))
-				{
-					new_content = ft_strdup(cmd[prev_pipe_idx]);
-					new = ft_lstnew(new_content);
-					ft_lstadd_back(&g_env_list, new);
-				}
-			}
+			do_export(cmd[prev_pipe_idx], prev_pipe_idx);
 			prev_pipe_idx++;
 		}
 	}
@@ -885,7 +892,8 @@ void process_pipe(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 		token = cmd[*prev_pipe_idx];
 	else
 		token = cmd[*prev_pipe_idx + 1];
-    if (!ft_strncmp(cmd[pipe_idx], "|", ft_strlen(cmd[pipe_idx])))
+    if (ft_strncmp(cmd[pipe_idx], "", ft_strlen(cmd[pipe_idx]))
+		&& !ft_strncmp(cmd[pipe_idx], "|", ft_strlen(cmd[pipe_idx])))
     {
         pipe(g_pipe_fd);
 		handle_cmd(token, cmd, prev_pipe_idx, pipe_idx);
@@ -967,6 +975,11 @@ void handle_process(char **cmd)
 	int stdin_tmp;
 	int stdout_tmp;
 
+	if (!ft_strncmp(cmd[0], "", ft_strlen(cmd[0])))
+	{
+		g_exit_status = 0;
+		return ;
+	}
 	stdin_tmp = dup(0);
 	stdout_tmp = dup(1);
 	prev_pipe_idx = 0;
@@ -1122,11 +1135,28 @@ void convert_exit_status(t_token *token)
 	}
 }
 
+void parse_to_start(t_token *token)
+{
+	char ***cmds;
+
+	if (check_basic_grammar(token))
+	{
+		adjust_env(token);
+		check_dred_out(token);
+		erase_quote(token, CHAR_DQUOTE);
+		erase_quote(token, CHAR_QUOTE);
+		adjust_env_in_dquote(token);
+		convert_exit_status(token);
+		cmds = divide_semicolon(token);
+		start_bash(cmds);
+		free_cmds(cmds);
+	}
+}
+
 int				main(int argc, char const *argv[])
 {
 	t_token		*token;
 	char		buf[BUF_SIZE];
-	char 		***cmds;
 
 	signal(SIGQUIT, sig_quit);
 	signal(SIGINT, sig_int);
@@ -1141,18 +1171,7 @@ int				main(int argc, char const *argv[])
 			free_all_tokens(token, free);
 			continue ;
 		}
-		if (check_basic_grammar(token))
-		{
-			adjust_env(token);
-			check_dred_out(token);
-			erase_quote(token, CHAR_DQUOTE);
-			erase_quote(token, CHAR_QUOTE);
-			adjust_env_in_dquote(token);
-			convert_exit_status(token);
-			cmds = divide_semicolon(token);
-			start_bash(cmds);
-			free_cmds(cmds);
-		}
+		parse_to_start(token);
 		free_all_tokens(token, free);
 	}
 	free_env();

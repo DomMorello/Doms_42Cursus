@@ -205,6 +205,10 @@ void set_pipe_child();
 void set_red_double_out(char *title);
 void set_red_in(char *title, char *token, int is_process);
 void set_red_out(char *title);
-
+void print_error_red_in(char *title, int is_process);
+void print_err_not_dir(char *dir);
+void print_err_no_dir(char *dir);
+void do_export(char *token, int prev_pipe_idx);
+void parse_to_start(t_token *token);
 
 #endif
