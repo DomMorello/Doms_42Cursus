@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:23:45 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/23 20:38:51 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/24 13:13:48 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,86 +64,41 @@ t_token			**convert_list_into_array(t_token *token)
 	return (dest);
 }
 
-int	check_grammar1(t_token *token)
+void trim_end(char *str)
 {
-	if (token->type == CHAR_QUOTE || token->type == CHAR_DQUOTE)
+	int len;
+
+	len = ft_strlen(str);
+	while (str[len - 1])
 	{
-		if (token->data[ft_strlen(token->data) - 1] != token->type)
+		if (str[len - 1] != CHAR_WHITESPACE)
 		{
-			ft_putstr_fd(ERR_QUOTE, STDERR);
-			ft_putstr_fd(token->data, STDERR);
-			ft_putstr_fd("'\n", STDERR);
-			return (FALSE);
+			str[len] = 0;
+			return ;
 		}
+		len--;
 	}
-	if (token->type == CHAR_SEMICOLON && token->next &&
-		token->next->type == CHAR_SEMICOLON)
-	{
-		ft_putstr_fd(ERR_DSEMI, STDERR);
-		return (FALSE);
-	}
-	if (!token->next && (token->type == CHAR_PIPE || token->type ==
-		CHAR_RED_OUT || token->type == CHAR_RED_IN || token->type == '\\'))
-	{
-		ft_putstr_fd(ERR_NEWL, STDERR);
-		return (FALSE);
-	}
-	return (TRUE);
 }
 
-int check_grammar2(t_token *token)
+int remove_empty_token(t_token *token)
 {
-	if (token->type != CHAR_DQUOTE && token->type != CHAR_QUOTE)
-	{
-		if (!ft_strncmp(token->data, ">", 1) && token->next && 
-		!ft_strncmp(token->next->data, ">", 1) && token->next->next &&
-		!ft_strncmp(token->next->next->data, ">", 1))
-		{
-			ft_putstr_fd(ERR_REDOUT, STDERR);
-			return (FALSE);
-		}
-		if (!ft_strncmp(token->data, "<", 1) && token->next &&
-			!ft_strncmp(token->next->data, "<", 1))
-		{
-			ft_putstr_fd(ERR_REDIN, STDERR);
-			return (FALSE);
-		}
-		if (!ft_strncmp(token->data, "|", 1) && token->next &&
-			!ft_strncmp(token->next->data, "|", 1))
-		{
-			ft_putstr_fd(ERR_PIPE, STDERR);
-			return (FALSE);
-		}
-	}
-	return (TRUE);
-}
+	t_token *tmp;
+	t_token *prev;
 
-int				check_basic_grammar(t_token *token)
-{
-	if (token && !ft_strncmp((*token).data, ";", 1))
-	{
-		ft_putstr_fd(ERR_SEMI, STDERR);
+	tmp = token;
+	if (!ft_strncmp(tmp->data, "", 1))
 		return (FALSE);
-	}
-	while (token != NULL)
+	while (tmp)
 	{
-		if (!check_grammar1(token))
-			return (FALSE);
-		if (!check_grammar2(token))
-			return (FALSE);
-		token = token->next;
+		if (!tmp->next && !ft_strncmp(tmp->data, "", 1))
+		{
+			prev->next = NULL;
+			free(tmp->data);
+			free(tmp);
+			break ;
+		}
+		prev = tmp;
+		tmp = tmp->next;
 	}
 	return (TRUE);
-}
-
-void			free_all_tokens(t_token *token, void (*del)(void *))
-{
-	if (!token)
-		return ;
-	while (token)
-	{
-		del(token->data);
-		del(token);
-		token = token->next;
-	}
 }

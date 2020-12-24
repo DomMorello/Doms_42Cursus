@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:26:45 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/23 20:07:31 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/24 12:31:51 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ static void			handle_empty_environ(t_token *token)
 
 static void			replace_key_with_value(t_token *token, int flag)
 {
-	char			*key;
-	int				j;
-	t_list *env_tmp;
+	char	*key;
+	int		j;
+	t_list	*env_tmp;
 
 	env_tmp = g_env_list;
 	key = token->data + sizeof(char);
@@ -52,7 +52,7 @@ static void			replace_key_with_value(t_token *token, int flag)
 		handle_empty_environ(token);
 }
 
-void replace_exception_env(t_token *token)
+void				replace_exception_env(t_token *token)
 {
 	t_token *tmp;
 
@@ -60,7 +60,7 @@ void replace_exception_env(t_token *token)
 	copy_env_key(&(tmp->data));
 }
 
-int is_one_env(t_token *token)
+int					is_one_env(t_token *token)
 {
 	int i;
 	int num_env;
@@ -80,9 +80,9 @@ int is_one_env(t_token *token)
 	return (TRUE);
 }
 
-void			adjust_env(t_token *token)
+void				adjust_env(t_token *token)
 {
-	t_token		*tmp;
+	t_token	*tmp;
 
 	tmp = token;
 	while (tmp != NULL)

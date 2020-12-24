@@ -1,0 +1,88 @@
+#include "./minishell.h"
+
+void make_new_cmd(char *new, char *cmd)
+{
+	int		i;
+	int		j;
+	int		k;
+	char	*exit_status;
+
+	i = 0;
+	j = 0;
+	exit_status = ft_itoa(g_exit_status);
+	while (cmd[i])
+	{
+		k = 0;
+		if (cmd[i] == '$' && cmd[i + 1] && cmd[i + 1] == '?')
+		{
+			while (exit_status[k])
+				new[j++] = exit_status[k++];
+			i += 2;
+			continue ;
+		}
+		new[j] = cmd[i];
+		j++;
+		i++;
+	}
+	free(exit_status);
+}
+
+int get_num_exit_status(char *cmd)
+{
+	int i;
+	int cnt;
+
+	i = 0;
+	cnt = 0;
+	while (cmd[i])
+	{
+		if (cmd[i] == '$' && cmd[i + 1] && cmd[i + 1] == '?')
+		{
+			cnt++;
+			i++;
+		}
+		i++;
+	}
+	return (cnt);
+}
+
+char *alloc_new(char *cmd)
+{
+	int		cmd_len;
+	int		exit_cnt;
+	char	*exit_status;
+	char	*ret;
+
+	ret = NULL;
+	exit_cnt = get_num_exit_status(cmd);
+	cmd_len = ft_strlen(cmd);
+	exit_status = ft_itoa(g_exit_status);
+	if ((ret = (char *)malloc(sizeof(char) * (cmd_len - (2 * exit_cnt) +
+		(ft_strlen(exit_status) * exit_cnt)) + 1)) == NULL)
+		exit(-1);
+	ret[cmd_len - (2 * exit_cnt) + (ft_strlen(exit_status) * exit_cnt)] = 0;
+	free(exit_status);
+	return (ret);
+}
+
+void convert_exit_status(t_token *token)
+{
+	char	*new;
+	t_token	*tmp;
+
+	tmp = token;
+	while (tmp)
+	{
+		if (ft_strnstr(tmp->data, "$?", ft_strlen(tmp->data)))
+		{
+			if (tmp->type != CHAR_QUOTE)
+			{
+				new = alloc_new(tmp->data);
+				make_new_cmd(new, tmp->data);
+				free(tmp->data);
+				tmp->data = new;
+			}
+		}
+		tmp = tmp->next;
+	}
+}

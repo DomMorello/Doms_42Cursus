@@ -1,6 +1,16 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+extern char	**environ;
+t_list		*g_env_list;
+t_list		g_env_head;
+
+int 		g_pipe_fd[2];
+int 		g_red_out_fd;
+int 		g_red_in_fd;
+int 		g_exit_status;
+pid_t 		g_pid;
+
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
@@ -18,11 +28,6 @@
 extern char **environ;
 t_list *g_env_list;
 t_list g_env_head;
-
-// # define GREEN "\033[0;32m"
-// # define LIGHT_BLUE "\033[0;34m"
-// # define YELLOW "\033[0;33m"
-// # define NC "\033[0m"
 
 # define TRUE 1
 # define FALSE 0
@@ -55,11 +60,8 @@ t_list g_env_head;
 # define ERR_DSEMI "mongshell : syntax error near ';;'\n"
 # define ERR_NEWL "mongshell : syntax error near unexpected token `newline'\n"
 
-
-
-int get_next_line(int fd, char **line);
-
 # define BUF_SIZE 1024
+
 /*
 ** enum STATE represents state of current character when parsing lexer.
 */

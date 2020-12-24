@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 15:00:28 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/23 20:24:44 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/24 12:52:00 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	remove_newline(char *buf)
 {
-	int		i;
+	int	i;
 
 	i = BUF_SIZE - 1;
 	while (i >= 0)
@@ -30,9 +30,9 @@ static void	remove_newline(char *buf)
 
 void		handle_prompt(char *buf)
 {
-	char tmp;
-	int ret;
-	int i;
+	char	tmp;
+	int		ret;
+	int		i;
 
 	ret = 0;
 	i = 0;
@@ -40,7 +40,7 @@ void		handle_prompt(char *buf)
 	ft_bzero(buf, BUF_SIZE);
 	while (ret || tmp != '\n')
 	{
-		while (ret = read(STDIN, &tmp, 1) && tmp != '\n')
+		while ((ret = read(STDIN, &tmp, 1)) && tmp != '\n')
 			buf[i++] = tmp;
 		if (tmp != '\n' && i == 0 && !ret)
 		{
@@ -50,7 +50,7 @@ void		handle_prompt(char *buf)
 	}
 }
 
-void			initiate_token(t_token *token, int length)
+void		initiate_token(t_token *token, int length)
 {
 	if ((token->data = (char *)malloc(sizeof(char) * (length + 1))) == NULL)
 		exit(ERROR);
@@ -66,4 +66,16 @@ void		initiate_token_status(t_status *status, char *str, int length)
 	status->state = STATE_NORMAL;
 	status->length = length;
 	status->str = str;
+}
+
+void			free_all_tokens(t_token *token, void (*del)(void *))
+{
+	if (!token)
+		return ;
+	while (token)
+	{
+		del(token->data);
+		del(token);
+		token = token->next;
+	}
 }
