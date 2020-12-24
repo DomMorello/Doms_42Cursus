@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   char_analyzer.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/07 15:02:10 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/24 12:31:29 by marvin           ###   ########.fr       */
+/*   Created: 2020/12/24 18:28:31 by donglee           #+#    #+#             */
+/*   Updated: 2020/12/24 18:30:37 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,24 +15,24 @@
 static char	get_char_type(char c)
 {
 	if (c == '\'')
-		return CHAR_QUOTE;
+		return (CHAR_QUOTE);
 	if (c == '\"')
-		return CHAR_DQUOTE;
+		return (CHAR_DQUOTE);
 	if (c == '|')
-		return CHAR_PIPE;
+		return (CHAR_PIPE);
 	if (c == ' ')
-		return CHAR_WHITESPACE;
+		return (CHAR_WHITESPACE);
 	if (c == ';')
-		return CHAR_SEMICOLON;
+		return (CHAR_SEMICOLON);
 	if (c == '>')
-		return CHAR_RED_OUT;
+		return (CHAR_RED_OUT);
 	if (c == '<')
-		return CHAR_RED_IN;
+		return (CHAR_RED_IN);
 	if (c == '$')
-		return CHAR_ENV;
+		return (CHAR_ENV);
 	if (c == '\0')
-		return CHAR_NULL;
-	return CHAR_NORMAL;
+		return (CHAR_NULL);
+	return (CHAR_NORMAL);
 }
 
 int			is_normal_env(char c1, char c2)
@@ -56,13 +56,13 @@ char		analyze_char_type(char *str, t_status *status)
 		return (CHAR_NORMAL);
 	}
 	if (status->state == STATE_IN_QUOTE && str[status->i] != CHAR_QUOTE)
-		return (CHAR_NORMAL); 
+		return (CHAR_NORMAL);
 	if (status->state == STATE_IN_DQUOTE && str[status->i] != CHAR_DQUOTE)
 		return (CHAR_NORMAL);
 	return (get_char_type(str[status->i]));
 }
 
-int				is_end_of_quote(char char_type, char c)
+int			is_end_of_quote(char char_type, char c)
 {
 	return (char_type == c);
 }

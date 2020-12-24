@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_export_np.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/24 14:32:50 by donglee           #+#    #+#             */
+/*   Updated: 2020/12/24 18:02:18 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./minishell.h"
 
-char *get_key(char *content)
+char	*get_key(char *content)
 {
 	int		key_len;
 	char	*ret;
@@ -15,7 +27,7 @@ char *get_key(char *content)
 	return (ret);
 }
 
-int check_update(char *content)
+int		check_update(char *content)
 {
 	char	*key;
 	t_list	*tmp;
@@ -37,7 +49,7 @@ int check_update(char *content)
 	return (FALSE);
 }
 
-void do_export(char *token, int prev_pipe_idx)
+void	do_export(char *token, int prev_pipe_idx)
 {
 	char	*new_content;
 	t_list	*new;
@@ -53,7 +65,7 @@ void do_export(char *token, int prev_pipe_idx)
 	}
 }
 
-void exec_export_np(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
+void	exec_export_np(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 {
 	int i;
 	int size;

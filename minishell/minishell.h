@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/24 14:31:36 by donglee           #+#    #+#             */
+/*   Updated: 2020/12/24 18:15:58 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -196,7 +208,7 @@ void exec_pwd(char *cmd[], int prev_pipe_idx, int pipe_idx);
 void exec_nprocess_built_in(void (*exec_func)(char **, int, int, int), char **cmd, int *prev_pipe_idx, int pipe_idx);
 void exec_exit(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc);
 void exec_cd(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc);
-void dir_to_HOME(char *cmd[], int is_pipe);
+void dir_to_home(char *cmd[], int is_pipe);
 char *find_home(void);
 void change_dir(char *cmd[], char *dir, int is_pipe);
 void update_env(char *cwd, char *key);

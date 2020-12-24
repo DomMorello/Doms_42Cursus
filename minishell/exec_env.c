@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_env.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/24 14:30:51 by donglee           #+#    #+#             */
+/*   Updated: 2020/12/24 17:16:33 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./minishell.h"
 
-int find_env_path(void)
+int		find_env_path(void)
 {
 	t_list	*env_tmp;
 	char	*needle;
@@ -10,8 +22,8 @@ int find_env_path(void)
 	env_tmp = g_env_list;
 	while (env_tmp)
 	{
-        if (!ft_strncmp(PATH, env_tmp->content, ft_strlen(PATH)))
-        {
+		if (!ft_strncmp(PATH, env_tmp->content, ft_strlen(PATH)))
+		{
 			is_path = TRUE;
 			needle = ft_strnstr((char *)env_tmp->content, USRBIN,
 				ft_strlen((char *)env_tmp->content));
@@ -28,7 +40,7 @@ int find_env_path(void)
 	return (FALSE);
 }
 
-void exec_env(char *cmd[], int prev_pipe_idx, int pipe_idx)
+void	exec_env(char *cmd[], int prev_pipe_idx, int pipe_idx)
 {
 	int		argc;
 	t_list	*env_tmp;

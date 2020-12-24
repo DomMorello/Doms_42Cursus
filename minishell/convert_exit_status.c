@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   convert_exit_status.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/24 14:30:23 by donglee           #+#    #+#             */
+/*   Updated: 2020/12/24 17:14:58 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./minishell.h"
 
-void make_new_cmd(char *new, char *cmd)
+void	make_new_cmd(char *new, char *cmd)
 {
 	int		i;
 	int		j;
@@ -27,7 +39,7 @@ void make_new_cmd(char *new, char *cmd)
 	free(exit_status);
 }
 
-int get_num_exit_status(char *cmd)
+int		get_num_exit_status(char *cmd)
 {
 	int i;
 	int cnt;
@@ -46,7 +58,7 @@ int get_num_exit_status(char *cmd)
 	return (cnt);
 }
 
-char *alloc_new(char *cmd)
+char	*alloc_new(char *cmd)
 {
 	int		cmd_len;
 	int		exit_cnt;
@@ -65,7 +77,7 @@ char *alloc_new(char *cmd)
 	return (ret);
 }
 
-void convert_exit_status(t_token *token)
+void	convert_exit_status(t_token *token)
 {
 	char	*new;
 	t_token	*tmp;

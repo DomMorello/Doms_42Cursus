@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   adjust_env_in_dquote.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/24 18:17:49 by donglee           #+#    #+#             */
+/*   Updated: 2020/12/24 18:18:22 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-void convert_to_value(char *new, char *env_content, int *i, int *j)
+void	convert_to_value(char *new, char *env_content, int *i, int *j)
 {
 	int env_key_len;
 
@@ -13,7 +25,7 @@ void convert_to_value(char *new, char *env_content, int *i, int *j)
 		new[(*j)++] = env_content[env_key_len++];
 }
 
-void convert_key_to_env(char *env_content, char **token_data,
+void	convert_key_to_env(char *env_content, char **token_data,
 	char *key, int env_idx)
 {
 	int		env_key_len;
@@ -43,7 +55,7 @@ void convert_key_to_env(char *env_content, char **token_data,
 	*token_data = new;
 }
 
-void search_key_in_env(char *key, char **token_data, int env_idx)
+void	search_key_in_env(char *key, char **token_data, int env_idx)
 {
 	t_list	*env_tmp;
 	int		env_key_len;
@@ -62,7 +74,7 @@ void search_key_in_env(char *key, char **token_data, int env_idx)
 	}
 }
 
-void copy_env_key(char **tokens)
+void	copy_env_key(char **tokens)
 {
 	char	*env;
 	int		i;
@@ -91,7 +103,7 @@ void copy_env_key(char **tokens)
 	}
 }
 
-void adjust_env_in_dquote(t_token *token)
+void	adjust_env_in_dquote(t_token *token)
 {
 	t_token *tmp;
 

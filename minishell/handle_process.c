@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_process.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/24 14:33:05 by donglee           #+#    #+#             */
+/*   Updated: 2020/12/24 18:04:38 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./minishell.h"
 
-void handle_cmd(char *token, char *cmd[], int *prev_pipe_idx, int pipe_idx)
+void	handle_cmd(char *token, char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
 	if (!ft_strncmp(token, CD, ft_strlen(token) > ft_strlen(CD) ?
 		ft_strlen(token) : ft_strlen(CD)))
@@ -15,7 +27,7 @@ void handle_cmd(char *token, char *cmd[], int *prev_pipe_idx, int pipe_idx)
 		exec_cmd_p(cmd, prev_pipe_idx, pipe_idx);
 }
 
-void process_pipe(char *cmd[], int *prev_pipe_idx, int pipe_idx)
+void	process_pipe(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
 	char *token;
 
@@ -23,16 +35,16 @@ void process_pipe(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 		token = cmd[*prev_pipe_idx];
 	else
 		token = cmd[*prev_pipe_idx + 1];
-    if (ft_strncmp(cmd[pipe_idx], "", ft_strlen(cmd[pipe_idx]))
+	if (ft_strncmp(cmd[pipe_idx], "", ft_strlen(cmd[pipe_idx]))
 		&& !ft_strncmp(cmd[pipe_idx], "|", ft_strlen(cmd[pipe_idx])))
-    {
-        pipe(g_pipe_fd);
+	{
+		pipe(g_pipe_fd);
 		handle_cmd(token, cmd, prev_pipe_idx, pipe_idx);
-        *prev_pipe_idx = pipe_idx;
-    }
+		*prev_pipe_idx = pipe_idx;
+	}
 }
 
-void exec_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
+void	exec_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
 	int status;
 
@@ -54,7 +66,7 @@ void exec_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 	}
 }
 
-void handle_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
+void	handle_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
 	char	*token;
 	int		i;
@@ -82,7 +94,7 @@ void handle_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 		exec_last_cmd(cmd, prev_pipe_idx, pipe_idx);
 }
 
-void handle_process(char **cmd)
+void	handle_process(char **cmd)
 {
 	int i;
 	int prev_pipe_idx;

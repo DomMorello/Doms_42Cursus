@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_unset.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/24 14:32:57 by donglee           #+#    #+#             */
+/*   Updated: 2020/12/24 18:02:48 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./minishell.h"
 
-void delete_env_node(char *token)
+void	delete_env_node(char *token)
 {
 	t_list *tmp;
 	t_list *prev;
@@ -22,7 +34,7 @@ void delete_env_node(char *token)
 	}
 }
 
-void exec_unset(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
+void	exec_unset(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 {
 	int i;
 	int size;

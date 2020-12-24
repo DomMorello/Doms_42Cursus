@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_util.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/07 15:00:28 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/24 12:52:00 by marvin           ###   ########.fr       */
+/*   Created: 2020/12/24 18:23:00 by donglee           #+#    #+#             */
+/*   Updated: 2020/12/24 18:23:02 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static void	remove_newline(char *buf)
+static void		remove_newline(char *buf)
 {
 	int	i;
 
@@ -28,7 +28,7 @@ static void	remove_newline(char *buf)
 	}
 }
 
-void		handle_prompt(char *buf)
+void			handle_prompt(char *buf)
 {
 	char	tmp;
 	int		ret;
@@ -50,7 +50,7 @@ void		handle_prompt(char *buf)
 	}
 }
 
-void		initiate_token(t_token *token, int length)
+void			initiate_token(t_token *token, int length)
 {
 	if ((token->data = (char *)malloc(sizeof(char) * (length + 1))) == NULL)
 		exit(ERROR);
@@ -59,7 +59,7 @@ void		initiate_token(t_token *token, int length)
 	token->next = NULL;
 }
 
-void		initiate_token_status(t_status *status, char *str, int length)
+void			initiate_token_status(t_status *status, char *str, int length)
 {
 	status->i = 0;
 	status->j = 0;

@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/24 14:33:12 by donglee           #+#    #+#             */
+/*   Updated: 2020/12/24 18:05:20 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./minishell.h"
 
-void free_env(void)
+void	free_env(void)
 {
 	while (g_env_list)
 	{
@@ -10,7 +22,7 @@ void free_env(void)
 	ft_lstclear(&g_env_list, free);
 }
 
-void free_cmds(char ***cmds)
+void	free_cmds(char ***cmds)
 {
 	int i;
 	int j;
@@ -30,7 +42,7 @@ void free_cmds(char ***cmds)
 	free(cmds);
 }
 
-void start_bash(char ***cmds)
+void	start_bash(char ***cmds)
 {
 	int i;
 
@@ -42,7 +54,7 @@ void start_bash(char ***cmds)
 	}
 }
 
-void parse_to_start(t_token *token)
+void	parse_to_start(t_token *token)
 {
 	char ***cmds;
 
@@ -60,7 +72,7 @@ void parse_to_start(t_token *token)
 	}
 }
 
-int				main(int argc, char const *argv[])
+int		main(int argc, char const *argv[])
 {
 	t_token		*token;
 	char		buf[BUF_SIZE];

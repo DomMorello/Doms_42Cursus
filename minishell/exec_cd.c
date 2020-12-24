@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_cd.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/24 14:31:59 by donglee           #+#    #+#             */
+/*   Updated: 2020/12/24 17:42:21 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./minishell.h"
 
-void update_env(char *cwd, char *key)
+void	update_env(char *cwd, char *key)
 {
 	t_list	*tmp;
 	char	*new;
@@ -22,12 +34,12 @@ void update_env(char *cwd, char *key)
 	}
 }
 
-void change_dir(char *cmd[], char *dir, int is_pipe)
+void	change_dir(char *cmd[], char *dir, int is_pipe)
 {
 	struct stat	file;
 	char		buf[BUF_SIZE];
 	char		*cwd;
- 
+
 	cwd = getcwd(buf, sizeof(buf));
 	if (!stat(dir, &file))
 	{
@@ -48,21 +60,21 @@ void change_dir(char *cmd[], char *dir, int is_pipe)
 		print_err_no_dir(dir);
 }
 
-char *find_home(void)
+char	*find_home(void)
 {
 	t_list *env_tmp;
 
 	env_tmp = g_env_list;
 	while (env_tmp)
 	{
-        if (!ft_strncmp(HOME, env_tmp->content, ft_strlen(HOME)))
-            return ((char *)env_tmp->content);
+		if (!ft_strncmp(HOME, env_tmp->content, ft_strlen(HOME)))
+			return ((char *)env_tmp->content);
 		env_tmp = env_tmp->next;
 	}
 	return (NULL);
 }
 
-void dir_to_HOME(char *cmd[], int is_pipe)
+void	dir_to_home(char *cmd[], int is_pipe)
 {
 	char *home;
 
@@ -80,7 +92,7 @@ void dir_to_HOME(char *cmd[], int is_pipe)
 	}
 }
 
-void exec_cd(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
+void	exec_cd(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 {
 	int		is_pipe;
 	char	*dir;
@@ -89,8 +101,9 @@ void exec_cd(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 		dir = cmd[prev_pipe_idx + 1];
 	else
 		dir = cmd[prev_pipe_idx + 2];
-	is_pipe = find_pipe(cmd);if (argc == 1)
-		dir_to_HOME(cmd, is_pipe);
+	is_pipe = find_pipe(cmd);
+	if (argc == 1)
+		dir_to_home(cmd, is_pipe);
 	else
 		change_dir(cmd, dir, is_pipe);
 }

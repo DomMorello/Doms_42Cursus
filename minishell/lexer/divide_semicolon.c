@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   divide_semicolon.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/24 18:30:51 by donglee           #+#    #+#             */
+/*   Updated: 2020/12/24 18:51:47 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-int get_num_cmdline(t_token *token)
+int		get_num_cmdline(t_token *token)
 {
 	int		len;
 	t_token	*tmp;
@@ -16,7 +28,7 @@ int get_num_cmdline(t_token *token)
 	return (len);
 }
 
-int get_num_cmd(t_token **token)
+int		get_num_cmd(t_token **token)
 {
 	int len;
 
@@ -34,7 +46,8 @@ int get_num_cmd(t_token **token)
 	return (len);
 }
 
-void copy_token_to_char(t_token **token, int num_cmd, char **cmds)
+void	copy_token_to_char(t_token **token,
+		int num_cmd, char **cmds)
 {
 	int i;
 
@@ -53,7 +66,7 @@ void copy_token_to_char(t_token **token, int num_cmd, char **cmds)
 	cmds[i] = NULL;
 }
 
-char ***alloc_cmds(t_token *token, char ***cmds, int len)
+char	***alloc_cmds(t_token *token, char ***cmds, int len)
 {
 	int		i;
 	int		num_cmd;
@@ -69,7 +82,7 @@ char ***alloc_cmds(t_token *token, char ***cmds, int len)
 	while (i < len)
 	{
 		num_cmd = get_num_cmd(&tmp);
-		if ((cmds[i] = (char **)malloc(sizeof(char *) * num_cmd + 1)) == NULL)
+		if (!(cmds[i] = (char **)malloc(sizeof(char *) * num_cmd + 1)))
 			exit(-1);
 		copy_token_to_char(&tmp2, num_cmd, cmds[i]);
 		cmds[i][num_cmd] = NULL;
@@ -78,7 +91,7 @@ char ***alloc_cmds(t_token *token, char ***cmds, int len)
 	return (cmds);
 }
 
-char ***divide_semicolon(t_token *token)
+char	***divide_semicolon(t_token *token)
 {
 	char	***cmds;
 	int		len;

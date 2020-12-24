@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_exit.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/24 14:32:07 by donglee           #+#    #+#             */
+/*   Updated: 2020/12/24 17:48:31 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./minishell.h"
 
-void exec_exit(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
+void	exec_exit(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 {
 	if (argc > 2)
 	{
@@ -16,6 +28,8 @@ void exec_exit(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 			exit(g_exit_status);
 	}
 	else
+	{
 		if (argc > 1)
 			g_exit_status = ft_atoi(cmd[prev_pipe_idx + 2]);
-}	
+	}
+}

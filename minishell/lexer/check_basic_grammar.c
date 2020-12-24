@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_basic_grammar.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/24 18:18:29 by donglee           #+#    #+#             */
+/*   Updated: 2020/12/24 18:19:07 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 int				check_grammar1(t_token *token)
@@ -27,11 +39,11 @@ int				check_grammar1(t_token *token)
 	return (TRUE);
 }
 
-int 			check_grammar2(t_token *token)
+int				check_grammar2(t_token *token)
 {
 	if (token->type != CHAR_DQUOTE && token->type != CHAR_QUOTE)
 	{
-		if (!ft_strncmp(token->data, ">", 1) && token->next && 
+		if (!ft_strncmp(token->data, ">", 1) && token->next &&
 		!ft_strncmp(token->next->data, ">", 1) && token->next->next &&
 		!ft_strncmp(token->next->next->data, ">", 1))
 		{

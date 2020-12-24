@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_export_p.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/24 14:31:17 by donglee           #+#    #+#             */
+/*   Updated: 2020/12/24 17:17:59 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./minishell.h"
 
 void	sort_export(t_list **list)
@@ -6,7 +18,7 @@ void	sort_export(t_list **list)
 	t_list	*ptr1;
 	t_list	*lptr;
 	char	*tmp;
-	
+
 	swapped = 1;
 	lptr = NULL;
 	while (swapped)
@@ -29,7 +41,7 @@ void	sort_export(t_list **list)
 	}
 }
 
-void add_dquote(char *new, char *line)
+void	add_dquote(char *new, char *line)
 {
 	int i;
 
@@ -58,7 +70,7 @@ void add_dquote(char *new, char *line)
 	}
 }
 
-void print_export(char *line)
+void	print_export(char *line)
 {
 	char	*new;
 	int		i;
@@ -76,7 +88,7 @@ void print_export(char *line)
 	g_exit_status = 0;
 }
 
-void exec_export_p(char *cmd[], int prev_pipe_idx, int pipe_idx)
+void	exec_export_p(char *cmd[], int prev_pipe_idx, int pipe_idx)
 {
 	t_list	*export_tmp;
 	int		argc;

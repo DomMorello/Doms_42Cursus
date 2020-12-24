@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_echo.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/24 14:32:39 by donglee           #+#    #+#             */
+/*   Updated: 2020/12/24 18:01:08 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./minishell.h"
 
-void do_echo(int start, int end, char *cmd[])
+void	do_echo(int start, int end, char *cmd[])
 {
 	while (cmd[start] && start < end)
 	{
@@ -18,7 +30,7 @@ void do_echo(int start, int end, char *cmd[])
 	}
 }
 
-void print_echo(char *cmd[], int start, int end, int option)
+void	print_echo(char *cmd[], int start, int end, int option)
 {
 	if (!cmd[start])
 	{
@@ -36,22 +48,22 @@ void print_echo(char *cmd[], int start, int end, int option)
 		ft_putstr_fd("\n", STDOUT);
 }
 
-int get_len(char *cmd[], int prev_pipe_idx, int pipe_idx)
+int		get_len(char *cmd[], int prev_pipe_idx, int pipe_idx)
 {
-    int len;
+	int len;
 	int start;
 
-    len = 0;
+	len = 0;
 	if (prev_pipe_idx == 0)
 		start = 0;
 	else
-		start = 1;		
-    while (start++ < pipe_idx)
-        len++;
-    return (len);
+		start = 1;
+	while (start++ < pipe_idx)
+		len++;
+	return (len);
 }
 
-void exec_echo(char *cmd[], int prev_pipe_idx, int pipe_idx)
+void	exec_echo(char *cmd[], int prev_pipe_idx, int pipe_idx)
 {
 	int argc;
 	int i;

@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   quote_dred.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/24 18:21:58 by donglee           #+#    #+#             */
+/*   Updated: 2020/12/24 18:28:15 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-int make_dred_out(t_token *deleted, t_token *prev, int d_red_out)
+int		make_dred_out(t_token *deleted, t_token *prev, int d_red_out)
 {
 	if (deleted && d_red_out && !ft_strncmp(deleted->data, ">", ft_strlen(">")))
 	{
@@ -14,13 +26,13 @@ int make_dred_out(t_token *deleted, t_token *prev, int d_red_out)
 	return (FALSE);
 }
 
-void check_dred_out(t_token *token)
+void	check_dred_out(t_token *token)
 {
 	t_token	*tmp;
 	t_token *tmp2;
 	t_token *prev;
 	int		d_red_out;
-	
+
 	tmp = token;
 	tmp2 = token;
 	while (tmp2)
@@ -40,7 +52,7 @@ void check_dred_out(t_token *token)
 	}
 }
 
-void copy_without_quote(char *data, char *new, char quote_type)
+void	copy_without_quote(char *data, char *new, char quote_type)
 {
 	int i;
 	int j;
@@ -56,7 +68,7 @@ void copy_without_quote(char *data, char *new, char quote_type)
 	new[j] = 0;
 }
 
-void erase_quote(t_token *token, char quote_type)
+void	erase_quote(t_token *token, char quote_type)
 {
 	t_token	*tmp;
 	char	*new;

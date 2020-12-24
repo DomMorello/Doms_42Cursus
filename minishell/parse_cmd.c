@@ -1,23 +1,35 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_cmd.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/24 14:32:27 by donglee           #+#    #+#             */
+/*   Updated: 2020/12/24 17:56:57 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./minishell.h"
 
-void exec_nprocess_built_in(void (*exec_func)(char **, int, int, int),
+void	exec_nprocess_built_in(void (*exec_func)(char **, int, int, int),
 	char **cmd, int *prev_pipe_idx, int pipe_idx)
 {
 	int argc;
 	int prev_pipe;
 
 	prev_pipe = *prev_pipe_idx;
-    argc = get_argc(cmd, prev_pipe, pipe_idx);
+	argc = get_argc(cmd, prev_pipe, pipe_idx);
 	process_redirection(cmd, prev_pipe_idx, pipe_idx, FALSE);
 	exec_func(cmd, prev_pipe, pipe_idx, argc);
 }
 
-void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
+void	parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
-    int		i;
+	int		i;
 	char	*token;
 
-    i = *prev_pipe_idx;
+	i = *prev_pipe_idx;
 	if (i == 0)
 		token = cmd[i];
 	else
@@ -40,31 +52,31 @@ void parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 		handle_executable(token, cmd, i, pipe_idx);
 }
 
-void exec_cmd_p(char *cmd[], int *prev_pipe_idx, int pipe_idx)
+void	exec_cmd_p(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
 	int status;
 
 	g_pid = fork();
-    if (g_pid == 0)
-    {
-        set_pipe_child();
-        process_redirection(cmd, prev_pipe_idx, pipe_idx, TRUE);
-        parse_cmd(cmd, prev_pipe_idx, pipe_idx);
-    }
-    else if (g_pid < 0)
+	if (g_pid == 0)
+	{
+		set_pipe_child();
+		process_redirection(cmd, prev_pipe_idx, pipe_idx, TRUE);
+		parse_cmd(cmd, prev_pipe_idx, pipe_idx);
+	}
+	else if (g_pid < 0)
 		exit(-1);
-    else
-    {
-        wait(&status);
+	else
+	{
+		wait(&status);
 		if (WIFEXITED(status))
 			g_exit_status = WEXITSTATUS(status);
 		if (WIFSIGNALED(status))
 			g_exit_status = WTERMSIG(status) + 128;
-        set_pipe_parent();
-    }
+		set_pipe_parent();
+	}
 }
 
-void copy_environ(void)
+void	copy_environ(void)
 {
 	int		i;
 	t_list	*tmp;
