@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_tokenizer.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/06 14:15:05 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/24 13:22:59 by marvin           ###   ########.fr       */
+/*   Created: 2020/12/25 15:44:03 by donglee           #+#    #+#             */
+/*   Updated: 2020/12/25 15:44:24 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static void		tokenize_env(t_token *token, t_status *status,
 	token->data[(status->j)++] = c;
 }
 
-static void		convert_input_into_tokens(t_token *token, 
+static void		convert_input_into_tokens(t_token *token,
 	t_status *status, char *str)
 {
 	char		char_type;

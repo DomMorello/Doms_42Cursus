@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   token_issuer.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/07 15:22:18 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/23 20:40:03 by marvin           ###   ########.fr       */
+/*   Created: 2020/12/25 15:45:54 by donglee           #+#    #+#             */
+/*   Updated: 2020/12/25 15:46:34 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static int issue_special_token(t_token *token, t_status *status, char char_type)
+static int	issue_special_token(t_token *token,
+		t_status *status, char char_type)
 {
 	token->data[0] = char_type;
 	token->data[1] = CHAR_NULL;

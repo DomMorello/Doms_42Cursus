@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_util2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/07 15:23:45 by jipark            #+#    #+#             */
-/*   Updated: 2020/12/24 13:13:48 by marvin           ###   ########.fr       */
+/*   Created: 2020/12/25 15:44:42 by donglee           #+#    #+#             */
+/*   Updated: 2020/12/25 15:45:40 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void			examine_end_of_line(t_token *token,
+void		examine_end_of_line(t_token *token,
 	t_status *status, char char_type)
 {
 	(status->i)++;
@@ -22,7 +22,7 @@ void			examine_end_of_line(t_token *token,
 	status->j = 0;
 }
 
-int				is_env_exception(t_token *token, t_status *status,
+int			is_env_exception(t_token *token, t_status *status,
 	char *str, char char_type)
 {
 	if (char_type == CHAR_ENV && (str[status->i - 1] != ' '
@@ -37,7 +37,7 @@ int				is_env_exception(t_token *token, t_status *status,
 	return (FALSE);
 }
 
-t_token			**convert_list_into_array(t_token *token)
+t_token		**convert_list_into_array(t_token *token)
 {
 	t_token		*tmp;
 	t_token		**dest;
@@ -64,7 +64,7 @@ t_token			**convert_list_into_array(t_token *token)
 	return (dest);
 }
 
-void trim_end(char *str)
+void		trim_end(char *str)
 {
 	int len;
 
@@ -80,7 +80,7 @@ void trim_end(char *str)
 	}
 }
 
-int remove_empty_token(t_token *token)
+int			remove_empty_token(t_token *token)
 {
 	t_token *tmp;
 	t_token *prev;
