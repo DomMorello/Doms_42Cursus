@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 18:23:00 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/27 18:55:02 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/27 19:55:40 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,10 @@ void			handle_prompt(char *buf)
 
 	ret = 0;
 	i = 0;
+	tmp = 0;
 	ft_putstr_fd("\033[0;32mmongshell\033[0;34m$ \033[0m", STDERR);
 	ft_bzero(buf, BUF_SIZE);
-	while (ret || tmp != '\n')
+	while (tmp != '\n')
 	{
 		while ((ret = read(STDIN, &tmp, 1)) && tmp != '\n')
 			buf[i++] = tmp;

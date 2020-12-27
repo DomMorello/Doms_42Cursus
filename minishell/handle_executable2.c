@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_executable2.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 14:32:20 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/24 17:51:22 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/27 19:32:03 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,19 @@ void	exec_executable2(char *cmd[], int prev_pipe_idx,
 		i = errno;
 		print_exec_error(i, cmd[token]);
 	}
+}
+
+void free_2d_char(char **arr)
+{
+    int i;
+
+	i = 0;
+    while (arr[i])
+    {
+        free(arr[i]);
+        arr[i] = NULL;
+        i++;
+    }
+    free(arr);
+    arr = NULL;
 }
