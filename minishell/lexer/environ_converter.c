@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   environ_converter.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 18:22:37 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/24 18:22:41 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/27 18:51:10 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static void			handle_empty_environ(t_token *token)
 static void			replace_key_with_value(t_token *token, int flag)
 {
 	char	*key;
-	int		j;
+	size_t	j;
 	t_list	*env_tmp;
 
 	env_tmp = g_env_list;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_echo.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 14:32:39 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/24 18:01:08 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/25 17:57:49 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	print_echo(char *cmd[], int start, int end, int option)
 		ft_putstr_fd("\n", STDOUT);
 }
 
-int		get_len(char *cmd[], int prev_pipe_idx, int pipe_idx)
+int		get_len(int prev_pipe_idx, int pipe_idx)
 {
 	int len;
 	int start;
@@ -69,7 +69,7 @@ void	exec_echo(char *cmd[], int prev_pipe_idx, int pipe_idx)
 	int i;
 	int size;
 
-	argc = get_len(cmd, prev_pipe_idx, pipe_idx);
+	argc = get_len(prev_pipe_idx, pipe_idx);
 	if (prev_pipe_idx == 0)
 	{
 		i = prev_pipe_idx + 1;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_unset.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 14:32:57 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/24 18:02:48 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/25 17:59:42 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	exec_unset(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 	int i;
 	int size;
 
+	(void)pipe_idx;
 	i = prev_pipe_idx;
 	if (!find_pipe(cmd))
 	{

@@ -3,30 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_util.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 18:23:00 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/24 18:23:02 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/27 18:55:02 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-static void		remove_newline(char *buf)
-{
-	int	i;
-
-	i = BUF_SIZE - 1;
-	while (i >= 0)
-	{
-		if (buf[i] == CHAR_NEWLINE)
-		{
-			buf[i] = CHAR_NULL;
-			return ;
-		}
-		i--;
-	}
-}
 
 void			handle_prompt(char *buf)
 {

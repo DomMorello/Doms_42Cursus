@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_export_p.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 14:31:17 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/24 17:17:59 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/25 17:51:59 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,7 @@ void	add_dquote(char *new, char *line)
 void	print_export(char *line)
 {
 	char	*new;
-	int		i;
 
-	i = 0;
 	new = (char *)malloc(sizeof(char) * ft_strlen(line) + 3);
 	if (!new)
 		exit(-1);

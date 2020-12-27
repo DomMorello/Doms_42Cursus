@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_tokenizer.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/25 15:44:03 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/25 15:44:24 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/27 18:52:11 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void		tokenize_quote(t_token *token, t_status *status,
 }
 
 static void		tokenize_env(t_token *token, t_status *status,
-	char c, char char_type)
+	char c)
 {
 	if (c == CHAR_WHITESPACE)
 	{
@@ -74,7 +74,7 @@ static void		convert_input_into_tokens(t_token *token,
 				tokenize_quote(token, status, str[status->i],
 					is_end_of_quote(char_type, CHAR_DQUOTE));
 			else if (status->state == STATE_IN_ENV)
-				tokenize_env(token, status, str[status->i], char_type);
+				tokenize_env(token, status, str[status->i]);
 		}
 		while (token->next != NULL)
 			token = token->next;

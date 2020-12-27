@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 14:31:36 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/25 17:37:03 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/27 19:11:58 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,7 @@ char				*get_key(char *content);
 void				exec_cmd_p(char *cmd[], int *prev_pipe_idx, int pipe_idx);
 void				parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx);
 void				exec_echo(char *cmd[], int prev_pipe_idx, int pipe_idx);
-int					get_len(char *cmd[], int prev_pipe_idx, int pipe_idx);
+int					get_len(int prev_pipe_idx, int pipe_idx);
 void				print_echo(char *cmd[], int start, int end, int option);
 void				exec_export_p(char *cmd[], int prev_pipe_idx, int pipe_idx);
 void				print_export(char *line);
@@ -196,15 +196,15 @@ void				exec_exit(char *cmd[], int prev_pipe_idx,
 					int pipe_idx, int argc);
 void				exec_cd(char *cmd[], int prev_pipe_idx,
 					int pipe_idx, int argc);
-void				dir_to_home(char *cmd[], int is_pipe);
+void				dir_to_home(int is_pipe);
 char				*find_home(void);
-void				change_dir(char *cmd[], char *dir, int is_pipe);
+void				change_dir(char *dir, int is_pipe);
 void				update_env(char *cwd, char *key);
 int					find_pipe(char *cmd[]);
 void				handle_executable(char *token, char *cmd[],
 					int prev_pipe_idx, int pipe_idx);
-char				*get_filepath(char *token, char **path);
 void				free_2d_char(char **arr);
+char				*get_filepath(char *token, char **path);
 void				cat_filepath(char **ret, char **tmp, char *token);
 int					search_dir(char *token, char *path);
 char				**get_path(void);
@@ -224,8 +224,13 @@ void				set_red_out(char *title);
 void				print_error_red_in(char *title, int is_process);
 void				print_err_not_dir(char *dir);
 void				print_err_no_dir(char *dir);
-void				do_export(char *token, int prev_pipe_idx);
+void				do_export(char *token);
 void				parse_to_start(t_token *token);
 void				do_echo(int start, int end, char *cmd[]);
+void				print_exec_error(int errnum, char *token);
+void				sig_int(int signo);
+void				sig_quit(int signo);
+void				convert_exit_status(t_token *token);
+void				trim_end(char *str);
 
 #endif

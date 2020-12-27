@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   adjust_env_in_dquote.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 18:17:49 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/24 18:18:22 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/27 18:42:44 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	convert_key_to_env(char *env_content, char **token_data,
 void	search_key_in_env(char *key, char **token_data, int env_idx)
 {
 	t_list	*env_tmp;
-	int		env_key_len;
+	size_t	env_key_len;
 
 	env_tmp = g_env_list;
 	while (env_tmp)

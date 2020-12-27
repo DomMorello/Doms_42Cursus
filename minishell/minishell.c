@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 14:33:12 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/24 18:05:20 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/25 18:03:51 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ int		main(int argc, char const *argv[])
 	t_token		*token;
 	char		buf[BUF_SIZE];
 
+	(void)argc;
+	(void)argv;
 	signal(SIGQUIT, sig_quit);
 	signal(SIGINT, sig_int);
 	copy_environ();

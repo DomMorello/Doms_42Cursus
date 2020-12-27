@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   divide_semicolon.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 18:30:51 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/25 15:42:06 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/27 18:43:28 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,9 +95,8 @@ char	***divide_semicolon(t_token *token)
 {
 	char	***cmds;
 	int		len;
-	int		i;
 
-	i = 0;
+	cmds = NULL;
 	len = 0;
 	len = get_num_cmdline(token) + 1;
 	cmds = alloc_cmds(token, cmds, len);

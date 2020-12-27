@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_export_np.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 14:32:50 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/24 18:02:18 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/25 17:59:04 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int		check_update(char *content)
 	return (FALSE);
 }
 
-void	do_export(char *token, int prev_pipe_idx)
+void	do_export(char *token)
 {
 	char	*new_content;
 	t_list	*new;
@@ -70,6 +70,7 @@ void	exec_export_np(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 	int i;
 	int size;
 
+	(void)pipe_idx;
 	i = prev_pipe_idx;
 	if (i == 0)
 		size = argc + i;
@@ -79,7 +80,7 @@ void	exec_export_np(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 	{
 		while (prev_pipe_idx < size)
 		{
-			do_export(cmd[prev_pipe_idx], prev_pipe_idx);
+			do_export(cmd[prev_pipe_idx]);
 			prev_pipe_idx++;
 		}
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 14:31:59 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/25 17:02:19 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/25 17:55:11 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	update_env(char *cwd, char *key)
 	}
 }
 
-void	change_dir(char *cmd[], char *dir, int is_pipe)
+void	change_dir(char *dir, int is_pipe)
 {
 	struct stat	file;
 	char		buf[BUF_SIZE];
@@ -74,7 +74,7 @@ char	*find_home(void)
 	return (NULL);
 }
 
-void	dir_to_home(char *cmd[], int is_pipe)
+void	dir_to_home(int is_pipe)
 {
 	char *home;
 
@@ -82,7 +82,7 @@ void	dir_to_home(char *cmd[], int is_pipe)
 	if (home)
 	{
 		home += ft_strlen(HOME);
-		change_dir(cmd, home, is_pipe);
+		change_dir(home, is_pipe);
 	}
 	else
 	{
@@ -97,13 +97,14 @@ void	exec_cd(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 	int		is_pipe;
 	char	*dir;
 
+	(void)pipe_idx;
 	if (prev_pipe_idx == 0)
 		dir = cmd[prev_pipe_idx + 1];
 	else
 		dir = cmd[prev_pipe_idx + 2];
 	is_pipe = find_pipe(cmd);
 	if (argc == 1)
-		dir_to_home(cmd, is_pipe);
+		dir_to_home(is_pipe);
 	else
-		change_dir(cmd, dir, is_pipe);
+		change_dir(dir, is_pipe);
 }
