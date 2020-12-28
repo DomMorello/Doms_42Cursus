@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 14:33:12 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/27 19:46:37 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/28 14:11:14 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	parse_to_start(t_token *token)
 	}
 }
 
-int		main(int argc, char const *argv[])
+int		main(int argc, char const *argv[], char **envp)
 {
 	t_token		*token;
 	char		buf[BUF_SIZE];
@@ -81,7 +81,7 @@ int		main(int argc, char const *argv[])
 	(void)argv;
 	signal(SIGQUIT, sig_quit);
 	signal(SIGINT, sig_int);
-	copy_environ();
+	copy_environ(envp);
 	while (TRUE)
 	{
 		g_pid = 0;

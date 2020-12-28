@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 14:32:27 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/24 17:56:57 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/28 14:10:59 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,18 +76,18 @@ void	exec_cmd_p(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 	}
 }
 
-void	copy_environ(void)
+void	copy_environ(char **envp)
 {
 	int		i;
 	t_list	*tmp;
 
-	g_env_head.content = ft_strdup(environ[0]);
+	g_env_head.content = ft_strdup(envp[0]);
 	g_env_head.next = NULL;
 	g_env_list = &g_env_head;
 	i = 1;
-	while (environ[i])
+	while (envp[i])
 	{
-		tmp = ft_lstnew(ft_strdup(environ[i]));
+		tmp = ft_lstnew(ft_strdup(envp[i]));
 		ft_lstadd_back(&g_env_list, tmp);
 		i++;
 	}

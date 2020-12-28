@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 14:31:36 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/27 19:11:58 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/28 14:15:12 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@
 
 # define BUF_SIZE 1024
 
-extern char	**environ;
 t_list		*g_env_list;
 t_list		g_env_head;
 
@@ -162,7 +161,7 @@ int					make_dred_out(t_token *deleted,
 void				do_nothing(int signo);
 void				free_env(void);
 void				handle_process(char **cmd);
-void				copy_environ(void);
+void				copy_environ(char **envp);
 void				handle_last_cmd(char *cmd[],
 					int *prev_pipe_idx, int pipe_idx);
 void				exec_last_cmd(char *cmd[],
