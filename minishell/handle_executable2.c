@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 14:32:20 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/27 19:32:03 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/28 14:06:06 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,17 +76,17 @@ void	exec_executable2(char *cmd[], int prev_pipe_idx,
 	}
 }
 
-void free_2d_char(char **arr)
+void	free_2d_char(char **arr)
 {
-    int i;
+	int i;
 
 	i = 0;
-    while (arr[i])
-    {
-        free(arr[i]);
-        arr[i] = NULL;
-        i++;
-    }
-    free(arr);
-    arr = NULL;
+	while (arr[i])
+	{
+		free(arr[i]);
+		arr[i] = NULL;
+		i++;
+	}
+	free(arr);
+	arr = NULL;
 }
