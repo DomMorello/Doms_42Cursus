@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 14:32:50 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/25 17:59:04 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/28 16:48:14 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ int		check_update(char *content)
 	{
 		if (!ft_strncmp(key, (char *)tmp->content, ft_strlen(key)))
 		{
+			free(key);
+			key = NULL;
 			if (tmp->content)
 				free(tmp->content);
 			tmp->content = ft_strdup(content);
@@ -45,7 +47,8 @@ int		check_update(char *content)
 		}
 		tmp = tmp->next;
 	}
-	free(key);
+	if (key)
+		free(key);
 	return (FALSE);
 }
 
