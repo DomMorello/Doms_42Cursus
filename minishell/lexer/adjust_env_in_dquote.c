@@ -3,14 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   adjust_env_in_dquote.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 17:08:50 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/28 17:08:51 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/29 17:21:33 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+/*
+**	Converts key to value. 
+*/
 
 void	convert_to_value(char *new, char *env_content, int *i, int *j)
 {
@@ -24,6 +28,11 @@ void	convert_to_value(char *new, char *env_content, int *i, int *j)
 	while (env_content[env_key_len])
 		new[(*j)++] = env_content[env_key_len++];
 }
+
+/*
+**	Allocates exact size of new token(new).
+**	Puts new string(converted to the value) to token and free old one. 
+*/
 
 void	convert_key_to_env(char *env_content, char **token_data,
 	char *key, int env_idx)
@@ -55,6 +64,11 @@ void	convert_key_to_env(char *env_content, char **token_data,
 	*token_data = new;
 }
 
+/*
+**	Searches the key in the environment variables.
+**	If there is exact same key, converts it to the value.
+*/
+
 void	search_key_in_env(char *key, char **token_data, int env_idx)
 {
 	t_list	*env_tmp;
@@ -73,6 +87,12 @@ void	search_key_in_env(char *key, char **token_data, int env_idx)
 		env_tmp = env_tmp->next;
 	}
 }
+
+/*
+**	Allocates env string as much as token length(maximum).
+**	Stores key to string env.
+**	Ex) "hello$user hi" -> env == "user".
+*/
 
 void	copy_env_key(char **tokens)
 {
@@ -102,6 +122,12 @@ void	copy_env_key(char **tokens)
 		i++;
 	}
 }
+
+/*
+**	After conversion of environment variable in other functions.
+**	Still cannot convert environment vairable in double quotatation marks.
+**	So, this func handles environment variables in double quote state. 
+*/
 
 void	adjust_env_in_dquote(t_token *token)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_util2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/25 15:44:42 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/25 15:45:40 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/29 17:55:44 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,13 @@ void		examine_end_of_line(t_token *token,
 	token->data[status->j] = CHAR_NULL;
 	status->j = 0;
 }
+
+/*
+**	Previous parser cannot handle this exception like "hello$user"
+**	Without this function, previous parser divide tokens into two
+**	such as "hello", "$user".
+**	To distinguish this exception, this function exists.
+*/
 
 int			is_env_exception(t_token *token, t_status *status,
 	char *str, char char_type)
@@ -37,32 +44,32 @@ int			is_env_exception(t_token *token, t_status *status,
 	return (FALSE);
 }
 
-t_token		**convert_list_into_array(t_token *token)
-{
-	t_token		*tmp;
-	t_token		**dest;
-	int			size;
-	int			i;
+// t_token		**convert_list_into_array(t_token *token)
+// {
+// 	t_token		*tmp;
+// 	t_token		**dest;
+// 	int			size;
+// 	int			i;
 
-	size = 0;
-	tmp = token;
-	while (tmp != NULL)
-	{
-		tmp = tmp->next;
-		size++;
-	}
-	if ((dest = (t_token **)malloc(sizeof(t_token *) * (size + 1))) == NULL)
-		return (NULL);
-	dest[size] = NULL;
-	i = 0;
-	while (i < size)
-	{
-		dest[i] = token;
-		i++;
-		token = token->next;
-	}
-	return (dest);
-}
+// 	size = 0;
+// 	tmp = token;
+// 	while (tmp != NULL)
+// 	{
+// 		tmp = tmp->next;
+// 		size++;
+// 	}
+// 	if ((dest = (t_token **)malloc(sizeof(t_token *) * (size + 1))) == NULL)
+// 		return (NULL);
+// 	dest[size] = NULL;
+// 	i = 0;
+// 	while (i < size)
+// 	{
+// 		dest[i] = token;
+// 		i++;
+// 		token = token->next;
+// 	}
+// 	return (dest);
+// }
 
 void		trim_end(char *str)
 {
@@ -79,6 +86,12 @@ void		trim_end(char *str)
 		len--;
 	}
 }
+
+/*
+**	If first token is empty string, just returns false.
+**	For some reasons, empty string is added at the end of tokens.
+**	So, deletes the unnecessary empty string.
+*/
 
 int			remove_empty_token(t_token *token)
 {

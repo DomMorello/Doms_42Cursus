@@ -3,14 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   quote_dred.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 18:21:58 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/24 18:28:15 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/29 17:36:00 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+/*
+**	Frees previous node's data and changes it to ">>".
+**	And then deletes the later node('>').
+**	Ex) 'echo' '>' '>' 'hi' -> 'echo' '>>' 'hi' 
+*/
 
 int		make_dred_out(t_token *deleted, t_token *prev, int d_red_out)
 {
@@ -25,6 +31,11 @@ int		make_dred_out(t_token *deleted, t_token *prev, int d_red_out)
 	}
 	return (FALSE);
 }
+
+/*
+**	If token comes '>' after '>' in a row, makes double redirection output
+**	token.
+*/
 
 void	check_dred_out(t_token *token)
 {
@@ -52,6 +63,10 @@ void	check_dred_out(t_token *token)
 	}
 }
 
+/*
+**	copies token without (double) quotation marks. 
+*/
+
 void	copy_without_quote(char *data, char *new, char quote_type)
 {
 	int i;
@@ -67,6 +82,11 @@ void	copy_without_quote(char *data, char *new, char quote_type)
 	}
 	new[j] = 0;
 }
+
+/*
+**	After all conversion in (double) quote state,
+**	erases the (double) quotation marks in the token. 
+*/
 
 void	erase_quote(t_token *token, char quote_type)
 {

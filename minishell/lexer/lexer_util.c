@@ -3,14 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_util.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 17:09:20 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/28 17:09:21 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/29 17:38:09 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+/*
+**	Outer while loop is intended for igonoring CTRL + D
+**	when the middle of writing commands on terminal.
+**	If user types nothing on the terminal, and presses CTRL + D,
+**	the program exits.
+*/
 
 void			handle_prompt(char *buf)
 {

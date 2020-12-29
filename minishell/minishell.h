@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 17:06:07 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/28 18:13:50 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/29 17:51:18 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ void				examine_end_of_line(t_token *token,
 					t_status *status, char char_type);
 int					is_env_exception(t_token *token, t_status *status,
 					char *str, char char_type);
-t_token				**convert_list_into_array(t_token *token);
+// t_token				**convert_list_into_array(t_token *token);
 int					check_basic_grammar(t_token *token);
 void				free_all_tokens(t_token *token, void (*del)(void *));
 int					issue_new_token(t_token *token, t_status *status,
