@@ -3,14 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 17:07:15 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/28 17:07:17 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/29 16:03:46 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
+
+/*
+**	Updates key(2nd parameter) value to cwd(current directory). 
+*/
 
 void	update_env(char *cwd, char *key)
 {
@@ -33,6 +37,12 @@ void	update_env(char *cwd, char *key)
 		tmp = tmp->next;
 	}
 }
+
+/*
+**	Checks if the argument is directory by using stat func.
+**	Changes current directory to argument directory.
+**	Updates OLDPWD, PWD path in environment variable.
+*/
 
 void	change_dir(char *dir, int is_pipe)
 {
@@ -60,6 +70,10 @@ void	change_dir(char *dir, int is_pipe)
 		print_err_no_dir(dir);
 }
 
+/*
+**	Finds HOME path in environment variables. 
+*/
+
 char	*find_home(void)
 {
 	t_list *env_tmp;
@@ -73,6 +87,13 @@ char	*find_home(void)
 	}
 	return (NULL);
 }
+
+/*
+**	If user inputs "cd" without argument, finds HOME path
+**	in environment variables and changes directory
+**	to the HOME path if it exits.
+**	Otherwise, prints error message and change exit status to 1.
+*/
 
 void	dir_to_home(int is_pipe)
 {
@@ -91,6 +112,10 @@ void	dir_to_home(int is_pipe)
 		g_exit_status = 1;
 	}
 }
+
+/*
+**	Executes cd command. 
+*/
 
 void	exec_cd(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 {

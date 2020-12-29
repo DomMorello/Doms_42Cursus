@@ -3,14 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   exec_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 14:30:51 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/24 17:16:33 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/29 15:30:06 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
+
+/*
+**	Finds "/usr/bin" path in PATH in environment variables.
+**	If the env path exists, returns true.
+*/
 
 int		find_env_path(void)
 {
@@ -39,6 +44,11 @@ int		find_env_path(void)
 	}
 	return (FALSE);
 }
+
+/*
+**	Executes env command.
+**	Only if there is /usr/bin path in PATH in environment variables, it works.
+*/
 
 void	exec_env(char *cmd[], int prev_pipe_idx, int pipe_idx)
 {

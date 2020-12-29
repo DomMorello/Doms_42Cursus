@@ -3,14 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   exec_echo.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 17:07:58 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/28 17:07:59 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/29 15:41:29 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
+
+/*
+**	Prints arguments on stdout fd.
+**	if there are redirection characters, does not print them.
+**	Printing keep going on until it finds pipe.
+*/
 
 void	do_echo(int start, int end, char *cmd[])
 {
@@ -30,6 +36,13 @@ void	do_echo(int start, int end, char *cmd[])
 	}
 }
 
+/*
+**	Prints echo. If the token is just "echo" without argument,
+**	simply prints "\n".
+**	If there is "-n" right after "echo" option is TRUE
+**	that does not print "\n" at the end of arguments.
+*/
+
 void	print_echo(char *cmd[], int start, int end, int option)
 {
 	if (!cmd[start])
@@ -48,6 +61,10 @@ void	print_echo(char *cmd[], int start, int end, int option)
 		ft_putstr_fd("\n", STDOUT);
 }
 
+/*
+**	Gets length of arguments which are to be printed.
+*/
+
 int		get_len(int prev_pipe_idx, int pipe_idx)
 {
 	int len;
@@ -62,6 +79,13 @@ int		get_len(int prev_pipe_idx, int pipe_idx)
 		len++;
 	return (len);
 }
+
+/*
+**	Executes echo command.
+**	If the command comes before first pipe, prev_pipe_idx == 0.
+**	Otherwise, prev_pipe_idx != 0. This is because the indexes(i, size) are
+**	diffrent depending on the location of the command.
+*/
 
 void	exec_echo(char *cmd[], int prev_pipe_idx, int pipe_idx)
 {

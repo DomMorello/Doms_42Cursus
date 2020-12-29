@@ -3,14 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   check_basic_grammar.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 18:18:29 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/24 18:19:07 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/29 16:27:45 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+/*
+**	If the token is not fully covered by (double)quotation marks, returns false.
+**	Ex) "hello
+*/
 
 int				check_grammar1(t_token *token)
 {
@@ -39,6 +44,12 @@ int				check_grammar1(t_token *token)
 	return (TRUE);
 }
 
+/*
+**	If >>> comes, returns false.
+**	If << comes, returns false.
+**	If || comes returns false. 
+*/
+
 int				check_grammar2(t_token *token)
 {
 	if (token->type != CHAR_DQUOTE && token->type != CHAR_QUOTE)
@@ -65,6 +76,11 @@ int				check_grammar2(t_token *token)
 	}
 	return (TRUE);
 }
+
+/*
+**	If ; comes first, returns false.
+**	Checks basic grammar. 
+*/
 
 int				check_basic_grammar(t_token *token)
 {

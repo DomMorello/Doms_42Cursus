@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   char_analyzer.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 18:28:31 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/24 18:30:37 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/29 16:24:52 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,31 @@ static char	get_char_type(char c)
 	return (CHAR_NORMAL);
 }
 
+/*
+**	If first character(c1) is '$' and the next one(c2) is ' ','\0',';','\\'
+**	the & is normal environment character.  
+*/
+
 int			is_normal_env(char c1, char c2)
 {
 	return (c1 == '$' && (c2 == ' ' || c2 == '\0' || c2 == ';' || c2 == '\\'));
 }
+
+/*
+**	Handles back slash.
+*/
 
 int			is_normal_special_char(char c1, char c2)
 {
 	return (c1 == '\\' && (c2 == '<' || c2 == '>' || c2 == '|' || c2 == '$'
 		|| c2 == '\"' || c2 == '\'' || c2 == '\\' || c2 == ';'));
 }
+
+/*
+**	Decides the character types.
+**	In quote or double quote state, all the characters are decided to be
+**	normal character. 
+*/
 
 char		analyze_char_type(char *str, t_status *status)
 {

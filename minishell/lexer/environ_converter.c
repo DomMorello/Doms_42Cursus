@@ -3,14 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   environ_converter.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 17:09:05 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/28 17:09:07 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/29 16:53:25 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+/*
+**	If "$?" comes, just returns. This one will be handled other functions.
+**	If there is no key in the environment variabales,
+**	just converts into empty line of "".
+*/
 
 static void			handle_empty_environ(t_token *token)
 {
@@ -23,6 +29,10 @@ static void			handle_empty_environ(t_token *token)
 		token->type = TOKEN;
 	}
 }
+
+/*
+**	Replaces key(like $user) to environment variable value(donglee).
+*/
 
 static void			replace_key_with_value(t_token *token, int flag)
 {
@@ -52,6 +62,10 @@ static void			replace_key_with_value(t_token *token, int flag)
 		handle_empty_environ(token);
 }
 
+/*
+**	Handles exceptional case like "hel$user", "$user$path" etc.
+*/
+
 void				replace_exception_env(t_token *token)
 {
 	t_token *tmp;
@@ -59,6 +73,12 @@ void				replace_exception_env(t_token *token)
 	tmp = token;
 	copy_env_key(&(tmp->data));
 }
+
+/*
+**	Finds if there is one environment character in a token.
+**	Ex) "$user" returns true.
+**	"hi$user" returns false. "$user$path" returns false. 
+*/
 
 int					is_one_env(t_token *token)
 {
@@ -79,6 +99,11 @@ int					is_one_env(t_token *token)
 	}
 	return (TRUE);
 }
+
+/*
+**	Converts environment character to environment variables value.
+**	Ex) "hello$user" -> "hellodonglee" 
+*/
 
 void				adjust_env(t_token *token)
 {

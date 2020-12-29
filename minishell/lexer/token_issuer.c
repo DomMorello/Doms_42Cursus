@@ -3,14 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   token_issuer.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/25 15:45:54 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/25 15:46:34 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/29 17:07:55 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+/*
+**	 
+*/
 
 static int	issue_special_token(t_token *token,
 		t_status *status, char char_type)
@@ -24,6 +28,10 @@ static int	issue_special_token(t_token *token,
 	initiate_token(token, status->length - status->i);
 	return (TRUE);
 }
+
+/*
+**	Makes new token and initiates it. 
+*/
 
 int			issue_new_token(t_token *token, t_status *status,
 	int flag, char char_type)

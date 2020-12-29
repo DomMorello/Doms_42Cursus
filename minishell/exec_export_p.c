@@ -3,14 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   exec_export_p.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 17:08:09 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/28 17:08:10 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/29 14:56:35 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
+
+/*
+**	Sorts environment varaibales in alphabetical order. 
+*/
 
 void	sort_export(t_list **list)
 {
@@ -41,6 +45,11 @@ void	sort_export(t_list **list)
 	}
 }
 
+/*
+**	Adds double quotation mark around value part in environment variables.
+**	such as, key="hello".
+*/
+
 void	add_dquote(char *new, char *line)
 {
 	int i;
@@ -70,6 +79,10 @@ void	add_dquote(char *new, char *line)
 	}
 }
 
+/*
+**	Prints an environment variable.
+*/
+
 void	print_export(char *line)
 {
 	char	*new;
@@ -85,6 +98,12 @@ void	print_export(char *line)
 	free(new);
 	g_exit_status = 0;
 }
+
+/*
+**	When user inputs "export" without any arguments, simply shows
+**	the environment variables in child process.
+**	Export sorts the variables in alphabetical order.
+*/
 
 void	exec_export_p(char *cmd[], int prev_pipe_idx, int pipe_idx)
 {

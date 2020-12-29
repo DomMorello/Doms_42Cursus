@@ -3,14 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   exec_export_np.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 17:07:30 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/28 17:07:32 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/29 15:12:05 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
+
+/*
+**	Simply gets key part like "dom" in "dom=morello".
+*/
 
 char	*get_key(char *content)
 {
@@ -26,6 +30,11 @@ char	*get_key(char *content)
 	ft_strlcpy(ret, content, key_len + 2);
 	return (ret);
 }
+
+/*
+**	If the key already exists in the environment variables,
+**	update its value to new one.
+*/
 
 int		check_update(char *content)
 {
@@ -52,6 +61,11 @@ int		check_update(char *content)
 	return (FALSE);
 }
 
+/*
+**	In arguments, only if there is a '=' character it works.
+**	Makes new node and add one at the end of the list. 
+*/
+
 void	do_export(char *token)
 {
 	char	*new_content;
@@ -67,6 +81,11 @@ void	do_export(char *token)
 		}
 	}
 }
+
+/*
+**	Executes export with arguments not in child process.
+**	If there is a pipe in the tokens, doesn't work.
+*/
 
 void	exec_export_np(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 {

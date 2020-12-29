@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 17:06:07 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/28 17:06:08 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/28 18:13:50 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,10 @@ typedef struct		s_status
 	char			*str;
 }					t_status;
 
+/*
+**	parsing 
+*/
+
 t_token				*tokenize_lexer(char *str, int length);
 int					is_normal_env(char c1, char c2);
 int					is_normal_special_char(char c1, char c2);
@@ -136,6 +140,10 @@ int					issue_new_token(t_token *token, t_status *status,
 void				add_char_and_change_state(t_token *token, t_status *status,
 					char char_type, int state);
 
+/*
+**	launch bash 
+*/
+
 void				start_bash(char ***cmds);
 char				***divide_semicolon(t_token *token);
 char				***alloc_cmds(t_token *token, char ***cmds, int len);
@@ -157,7 +165,6 @@ void				convert_to_value(char *new, char *env_content,
 void				check_dred_out(t_token *token);
 int					make_dred_out(t_token *deleted,
 					t_token *prev, int d_red_out);
-
 void				do_nothing(int signo);
 void				free_env(void);
 void				handle_process(char **cmd);

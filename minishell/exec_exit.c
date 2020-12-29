@@ -3,14 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   exec_exit.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 17:06:27 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/28 17:06:28 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/29 15:15:22 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
+
+/*
+**	When argument is not numeric value, prints error message
+**	and change exit status to 255 and exit the program. 
+*/
 
 void	numeric_exception(char *arg)
 {
@@ -29,6 +34,14 @@ void	numeric_exception(char *arg)
 		i++;
 	}
 }
+
+/*
+**	Executes exit commands with or without arguments.
+**	If there are more than two arguments, prints error message and returns.
+**	If exit command comes after pipe, does not exit program but stores
+**	exit status(numeric argument).
+**	When argument is not numeric value, handle exception.  
+*/
 
 void	exec_exit(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 {

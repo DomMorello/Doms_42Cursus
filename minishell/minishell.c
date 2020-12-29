@@ -3,14 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 17:08:32 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/28 17:08:33 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/28 17:31:49 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
+
+/*
+**	frees the g_env_list strings and all nodes which are copy of environment	 
+*/
 
 void	free_env(void)
 {
@@ -21,6 +25,10 @@ void	free_env(void)
 	}
 	ft_lstclear(&g_env_list, free);
 }
+
+/*
+**	frees three dimensional array(tokens)
+*/
 
 void	free_cmds(char ***cmds)
 {
@@ -42,6 +50,10 @@ void	free_cmds(char ***cmds)
 	free(cmds);
 }
 
+/*
+**	starts processing commands divided by semicolons  
+*/
+
 void	start_bash(char ***cmds)
 {
 	int i;
@@ -53,6 +65,10 @@ void	start_bash(char ***cmds)
 		i++;
 	}
 }
+
+/*
+**	checks basic grammar exceptions and handles addition parising process 
+*/
 
 void	parse_to_start(t_token *token)
 {
@@ -71,6 +87,10 @@ void	parse_to_start(t_token *token)
 		free_cmds(cmds);
 	}
 }
+
+/*
+**	handles signal, prompt, parsing, and start to launch bash
+*/
 
 int		main(int argc, char const *argv[], char **envp)
 {

@@ -3,14 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   handle_executable1.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 14:31:26 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/24 17:23:44 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/28 18:52:22 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
+
+/*
+**	gets all the paths from PATH in environment variables.
+**	stores in the path(two dimensional array) and returns it.
+*/
 
 char	**get_path(void)
 {
@@ -38,6 +43,10 @@ char	**get_path(void)
 	return (ret);
 }
 
+/*
+**	Searches all paths in the PATH in environment variables.
+*/
+
 int		search_dir(char *token, char *path)
 {
 	struct dirent	*dir;
@@ -59,6 +68,11 @@ int		search_dir(char *token, char *path)
 	return (FALSE);
 }
 
+/*
+**	If input is "ls", then this func append filepath before the "ls" and makes
+**	"/bin/ls".
+*/
+
 void	cat_filepath(char **ret, char **tmp, char *token)
 {
 	if (*tmp)
@@ -66,12 +80,21 @@ void	cat_filepath(char **ret, char **tmp, char *token)
 		ft_strlcat(*tmp, "/", ft_strlen(*tmp) + 2);
 		*ret = (char *)malloc(sizeof(char) *
 			(ft_strlen(*tmp) + ft_strlen(token) + 1));
+		if (!*ret)
+			exit(-1);
 		*ret = *tmp;
 		ft_strlcat(*ret, token, ft_strlen(token) + ft_strlen(*ret) + 1);
 	}
 	else
 		*ret = token;
 }
+
+/*
+**	To launch executable commands, gets filepath through the PATH
+**	in environment variables.
+**	To launch executable commands without path like 'ls' not '/bin/ls',
+**	make filepath string in ret and returns it.
+*/
 
 char	*get_filepath(char *token, char **path)
 {
@@ -95,6 +118,12 @@ char	*get_filepath(char *token, char **path)
 	free_2d_char(path);
 	return (ret);
 }
+
+/*
+**	handles executable commands like ls.
+**	reads PATH in environment variables and if there's no PATH in it,
+**	print error message and exit child process.
+*/
 
 void	handle_executable(char *token, char *cmd[],
 	int prev_pipe_idx, int pipe_idx)

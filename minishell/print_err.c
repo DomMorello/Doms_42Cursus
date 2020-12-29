@@ -3,14 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   print_err.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 14:33:17 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/24 18:06:09 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/28 18:04:30 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
+
+/*
+**	prints not a directory err message. 
+*/
 
 void	print_err_not_dir(char *dir)
 {
@@ -20,6 +24,10 @@ void	print_err_not_dir(char *dir)
 	g_exit_status = 1;
 }
 
+/*
+**	prints no such file err messages.
+*/
+
 void	print_err_no_dir(char *dir)
 {
 	ft_putstr_fd("mongshell: cd: ", STDERR);
@@ -27,6 +35,10 @@ void	print_err_no_dir(char *dir)
 	ft_putstr_fd(": No such file or directory\n", STDERR);
 	g_exit_status = 1;
 }
+
+/*
+**	prints err messages when it fails to execute executable commands like ls. 
+*/
 
 void	print_exec_error(int errnum, char *token)
 {
@@ -46,6 +58,10 @@ void	print_exec_error(int errnum, char *token)
 		exit(1);
 	}
 }
+
+/*
+**	prints no such file err message in redirection input. 
+*/
 
 void	print_error_red_in(char *title, int is_process)
 {

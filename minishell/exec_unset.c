@@ -3,14 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   exec_unset.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 17:06:41 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/28 17:06:43 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/29 14:47:44 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
+
+/*
+**	When user inputs "unset XX", deletes environment variables of which
+**	key value is XX in the linked list(g_env_list).
+*/
 
 void	delete_env_node(char *token)
 {
@@ -33,6 +38,10 @@ void	delete_env_node(char *token)
 		tmp = tmp->next;
 	}
 }
+
+/*
+**	handles unset. But if tokens have pipe, it doesn't work.
+*/
 
 void	exec_unset(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)
 {

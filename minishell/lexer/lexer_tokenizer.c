@@ -3,14 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_tokenizer.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 17:09:48 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/28 17:09:50 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/29 17:03:46 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+/*
+**	Basically, tokens are divided by white space.
+**	Parses the character types and handles them in relative funcs.
+**	Semi colon, redirection, pipe characters also divies the token.
+*/
 
 static int		tokenize_normal(t_token *token, t_status *status,
 	char c, char char_type)
@@ -34,6 +40,13 @@ static int		tokenize_normal(t_token *token, t_status *status,
 	return (result == -1 || result == TRUE);
 }
 
+/*
+**	If parsing character(c) is in state of (double) quote,
+**	just puts the characters in the token.
+**	And when it confronts closing (double) quotation mark,
+**	changes the state to normal.
+*/
+
 static void		tokenize_quote(t_token *token, t_status *status,
 	char c, int is_end_of_quote)
 {
@@ -41,6 +54,11 @@ static void		tokenize_quote(t_token *token, t_status *status,
 	if (is_end_of_quote)
 		status->state = STATE_NORMAL;
 }
+
+/*
+**	If input is "$user", and next character is white space,
+**	makes new token and links it to the list.  
+*/
 
 static void		tokenize_env(t_token *token, t_status *status,
 	char c)
@@ -53,6 +71,10 @@ static void		tokenize_env(t_token *token, t_status *status,
 	}
 	token->data[(status->j)++] = c;
 }
+
+/*
+**	If not exceptional case, tokenizes all types of inputs. 
+*/
 
 static void		convert_input_into_tokens(t_token *token,
 	t_status *status, char *str)
@@ -81,6 +103,12 @@ static void		convert_input_into_tokens(t_token *token,
 		examine_end_of_line(token, status, char_type);
 	}
 }
+
+/*
+**	Makes token list and initiates all the member variables
+**	in the token and state structure.
+**	Converts input into tokens.
+*/
 
 t_token			*tokenize_lexer(char *str, int length)
 {

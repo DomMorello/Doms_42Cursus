@@ -3,14 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   divide_semicolon.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 17:09:38 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/28 17:09:39 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/29 16:45:54 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+/*
+**	Gets the number of commnad lines.
+**	Ex) echo hi ; echo hi2 ; echo hi3 -> three comand lines.
+*/
 
 int		get_num_cmdline(t_token *token)
 {
@@ -27,6 +32,11 @@ int		get_num_cmdline(t_token *token)
 	}
 	return (len);
 }
+
+/*
+**	Gets the number of tokens in a single command line.
+**	Ex) echo hello world ; echo hi -> first line has three tokens, 2nd one tho 
+*/
 
 int		get_num_cmd(t_token **token)
 {
@@ -45,6 +55,10 @@ int		get_num_cmd(t_token **token)
 	}
 	return (len);
 }
+
+/*
+**	 copies the token value to cmds.
+*/
 
 void	copy_token_to_char(t_token **token,
 		int num_cmd, char **cmds)
@@ -65,6 +79,10 @@ void	copy_token_to_char(t_token **token,
 	}
 	cmds[i] = NULL;
 }
+
+/*
+**	Allocates exact size of cmds.
+*/
 
 char	***alloc_cmds(t_token *token, char ***cmds, int len)
 {
@@ -90,6 +108,12 @@ char	***alloc_cmds(t_token *token, char ***cmds, int len)
 	}
 	return (cmds);
 }
+
+/*
+**	Divides tokens by semi colons.
+**	Makes three dimensional array divided by semi colons.
+**	Copies the token(linked list) to char array.
+*/
 
 char	***divide_semicolon(t_token *token)
 {

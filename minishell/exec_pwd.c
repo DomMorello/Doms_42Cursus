@@ -3,14 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pwd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 17:05:46 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/28 17:05:48 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/29 14:49:41 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
+
+/*
+**	executes pwd command; simply shows current directory. 
+*/
 
 void	exec_pwd(char *cmd[], int prev_pipe_idx, int pipe_idx)
 {

@@ -3,14 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   set_pipe.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 14:32:32 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/24 17:58:02 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/28 18:06:56 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
+
+/*
+**	sets pipe in child process. 
+*/
 
 void	set_pipe_child(void)
 {
@@ -19,12 +23,20 @@ void	set_pipe_child(void)
 	close(g_pipe_fd[1]);
 }
 
+/*
+**	sets pipe in parent process. 
+*/
+
 void	set_pipe_parent(void)
 {
 	close(g_pipe_fd[1]);
 	dup2(g_pipe_fd[0], 0);
 	close(g_pipe_fd[0]);
 }
+
+/*
+**	returns if token is pipe character('|'). 
+*/
 
 int		find_pipe(char *cmd[])
 {

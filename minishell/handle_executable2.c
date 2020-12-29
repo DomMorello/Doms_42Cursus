@@ -3,14 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   handle_executable2.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 17:08:21 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/28 17:08:22 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/28 18:17:47 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
+
+/*
+**	 when launch executable commands, this func returns length of arguements.
+*/
 
 int		get_argc(char *cmd[], int prev_pipe_idx, int pipe_idx)
 {
@@ -27,6 +31,11 @@ int		get_argc(char *cmd[], int prev_pipe_idx, int pipe_idx)
 			len++;
 	return (len);
 }
+
+/*
+**	If the command is before first pipe, this func works.
+**	executes the executable commands like ls, grep.
+*/
 
 void	exec_executable(char *cmd[], int prev_pipe_idx,
 	int pipe_idx, char *filepath)
@@ -52,6 +61,11 @@ void	exec_executable(char *cmd[], int prev_pipe_idx,
 	}
 }
 
+/*
+**	If the command is after first or later pipe, this func works.
+**	executes the executable commands like ls, grep.
+*/
+
 void	exec_executable2(char *cmd[], int prev_pipe_idx,
 	int pipe_idx, char *filepath)
 {
@@ -75,6 +89,10 @@ void	exec_executable2(char *cmd[], int prev_pipe_idx,
 		print_exec_error(i, cmd[token]);
 	}
 }
+
+/*
+**	frees two dimensional array. 
+*/
 
 void	free_2d_char(char **arr)
 {

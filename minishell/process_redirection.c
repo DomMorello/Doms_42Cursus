@@ -3,14 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   process_redirection.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 14:31:42 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/24 17:28:37 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/28 18:06:02 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
+
+/*
+**	sets redirection output. 
+*/
 
 void	set_red_out(char *title)
 {
@@ -21,6 +25,10 @@ void	set_red_out(char *title)
 		close(g_red_out_fd);
 	}
 }
+
+/*
+**	sets redirection input. 
+*/
 
 void	set_red_in(char *title, char *token, int is_process)
 {
@@ -50,6 +58,10 @@ void	set_red_in(char *title, char *token, int is_process)
 		print_error_red_in(title, is_process);
 }
 
+/*
+**	sets redirection double output('>>'). 
+*/
+
 void	set_red_double_out(char *title)
 {
 	if ((g_red_out_fd = open(title, O_CREAT | O_RDWR | O_APPEND,
@@ -60,6 +72,10 @@ void	set_red_double_out(char *title)
 	}
 }
 
+/*
+**	it returns TRUE if token is redirection character. 
+*/
+
 int		is_redirection(char *token)
 {
 	if (!ft_strncmp(token, ">", ft_strlen(token) > 1 ? ft_strlen(token) : 1) ||
@@ -68,6 +84,10 @@ int		is_redirection(char *token)
 		return (TRUE);
 	return (FALSE);
 }
+
+/*
+**	when it finds redirection character in the tokens, sets the redirections. 
+*/
 
 void	process_redirection(char *cmd[], int *prev_pipe_idx,
 	int pipe_idx, int is_process)

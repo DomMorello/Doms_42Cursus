@@ -3,14 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   convert_exit_status.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 14:30:23 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/24 17:14:58 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/29 16:11:22 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./minishell.h"
+#include "../minishell.h"
+
+/*
+**	Makes new token converting $? into exit status number.
+**	Ex) "hi$?$?hello" -> "hi127127hello" 
+*/
 
 void	make_new_cmd(char *new, char *cmd)
 {
@@ -39,6 +44,11 @@ void	make_new_cmd(char *new, char *cmd)
 	free(exit_status);
 }
 
+/*
+**	Counts the number of exit status character("$?") in a token.
+**	Ex) if a token is "$?$?hello$?", the number of $? will be three. 
+*/
+
 int		get_num_exit_status(char *cmd)
 {
 	int i;
@@ -58,6 +68,12 @@ int		get_num_exit_status(char *cmd)
 	return (cnt);
 }
 
+/*
+**	Allocates exact size of reseult length.
+**	For example, "$?$?$?" if exit status is 127, "127127127".
+**	Its result length is 9.
+*/
+
 char	*alloc_new(char *cmd)
 {
 	int		cmd_len;
@@ -76,6 +92,10 @@ char	*alloc_new(char *cmd)
 	free(exit_status);
 	return (ret);
 }
+
+/*
+**	If the token is "$?", converts it into exit status number.
+*/
 
 void	convert_exit_status(t_token *token)
 {

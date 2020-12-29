@@ -3,14 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   handle_process.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 14:33:05 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/28 17:05:56 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/28 17:54:31 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
+
+/*
+**	If there is pipe in the tokens, parses what command is.
+**	If the command is not cd, unset, exit, then execute exsec_cmd_p.
+*/
 
 void	handle_cmd(char *token, char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
@@ -26,6 +31,10 @@ void	handle_cmd(char *token, char *cmd[], int *prev_pipe_idx, int pipe_idx)
 	else
 		exec_cmd_p(cmd, prev_pipe_idx, pipe_idx);
 }
+
+/*
+**	when there is pipe, sets pipe and process commands in handle_cmd func.
+*/
 
 void	process_pipe(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
@@ -43,6 +52,14 @@ void	process_pipe(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 		*prev_pipe_idx = pipe_idx;
 	}
 }
+
+/*
+**	after last pipe, handles last command.
+**	sets redirection if it is included in the commands.
+**	parses what the command is in parse_cmd func.
+**	if fork fails, program ends.
+**	stores exit status when it is terminated normally or stopped by signal.
+*/
 
 void	exec_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
@@ -65,6 +82,13 @@ void	exec_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 			g_exit_status = WTERMSIG(status) + 128;
 	}
 }
+
+/*
+**	after last pipe or in case of just single command, this function works.
+**	nprocess means that thoes commands are not handled in child process by fork.
+**	if the token is cd, export(in case of registering environment), unset,
+**	and exit, then they are handled nprocess funcs.
+*/
 
 void	handle_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
@@ -93,6 +117,18 @@ void	handle_last_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 	else
 		exec_last_cmd(cmd, prev_pipe_idx, pipe_idx);
 }
+
+/*
+**	when empty string comes in this function, just returns.
+**	In case of redirections and pipes, stores stdout, stdin fds
+**	in the stdin_tmp, stdout_tmp to restore them after processing
+**	redirections and pipes.
+**	when it finds pipe in cmds(tokens), the fucntion handles command
+**	before the found pipe and keep go on in regular sequence.
+**	In handle_last_cmd, handles last command.
+**	if single commands without pipe comes in this function,
+**	the commands will be handled in handle_last_cmd func.
+*/
 
 void	handle_process(char **cmd)
 {

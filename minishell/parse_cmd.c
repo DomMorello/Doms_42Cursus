@@ -3,14 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 17:06:59 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/28 17:07:01 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/28 18:03:04 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
+
+/*
+**	when handles nprocess(which means not being handled in child process)
+**	it sets redirection in process_redirection func, and execute
+**	the command in the exec_func func. 
+*/
 
 void	exec_nprocess_built_in(void (*exec_func)(char **, int, int, int),
 	char **cmd, int *prev_pipe_idx, int pipe_idx)
@@ -23,6 +29,12 @@ void	exec_nprocess_built_in(void (*exec_func)(char **, int, int, int),
 	process_redirection(cmd, prev_pipe_idx, pipe_idx, FALSE);
 	exec_func(cmd, prev_pipe, pipe_idx, argc);
 }
+
+/*
+**	finds out what the command is.
+**	if the redirection character('>', '<', '>>') comes in this func,
+**	just igonres.
+*/
 
 void	parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
@@ -52,6 +64,16 @@ void	parse_cmd(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 		handle_executable(token, cmd, i, pipe_idx);
 }
 
+/*
+**	Between pipes, this func works.
+**	sets the pipe linking the result(printed on terminal) of previous fd
+**	to the later command input fd.
+**	sets redirection if it is included in the commands.
+**	parses what the command is in parse_cmd func.
+**	if fork fails, program ends.
+**	stores exit status when it is terminated normally or stopped by signal.
+*/
+
 void	exec_cmd_p(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 {
 	int status;
@@ -75,6 +97,11 @@ void	exec_cmd_p(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 		set_pipe_parent();
 	}
 }
+
+/*
+**	In the main function, environmant variables are given through the third
+**	argument. and this func copies it in g_env_list which is liked list. 
+*/
 
 void	copy_environ(char **envp)
 {
