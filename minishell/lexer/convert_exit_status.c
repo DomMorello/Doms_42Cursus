@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 14:30:23 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/29 16:11:22 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/30 13:34:03 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /*
 **	Makes new token converting $? into exit status number.
-**	Ex) "hi$?$?hello" -> "hi127127hello" 
+**	Ex) "hi$?$?hello" -> "hi127127hello"
 */
 
 void	make_new_cmd(char *new, char *cmd)
@@ -46,7 +46,7 @@ void	make_new_cmd(char *new, char *cmd)
 
 /*
 **	Counts the number of exit status character("$?") in a token.
-**	Ex) if a token is "$?$?hello$?", the number of $? will be three. 
+**	Ex) if a token is "$?$?hello$?", the number of $? will be three.
 */
 
 int		get_num_exit_status(char *cmd)

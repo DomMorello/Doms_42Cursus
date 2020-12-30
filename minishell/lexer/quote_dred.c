@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 18:21:58 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/29 17:36:00 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/30 13:34:57 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*
 **	Frees previous node's data and changes it to ">>".
 **	And then deletes the later node('>').
-**	Ex) 'echo' '>' '>' 'hi' -> 'echo' '>>' 'hi' 
+**	Ex) 'echo' '>' '>' 'hi' -> 'echo' '>>' 'hi'
 */
 
 int		make_dred_out(t_token *deleted, t_token *prev, int d_red_out)
@@ -64,7 +64,7 @@ void	check_dred_out(t_token *token)
 }
 
 /*
-**	copies token without (double) quotation marks. 
+**	copies token without (double) quotation marks.
 */
 
 void	copy_without_quote(char *data, char *new, char quote_type)
@@ -85,7 +85,7 @@ void	copy_without_quote(char *data, char *new, char quote_type)
 
 /*
 **	After all conversion in (double) quote state,
-**	erases the (double) quotation marks in the token. 
+**	erases the (double) quotation marks in the token.
 */
 
 void	erase_quote(t_token *token, char quote_type)

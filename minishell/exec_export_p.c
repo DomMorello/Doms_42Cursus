@@ -6,14 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 17:08:09 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/29 14:56:35 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/30 13:35:24 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
 
 /*
-**	Sorts environment varaibales in alphabetical order. 
+**	Sorts environment varaibales in alphabetical order.
 */
 
 void	sort_export(t_list **list)

@@ -6,14 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 14:32:32 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/28 18:06:56 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/30 13:29:16 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
 
 /*
-**	sets pipe in child process. 
+**	sets pipe in child process.
 */
 
 void	set_pipe_child(void)
@@ -24,7 +24,7 @@ void	set_pipe_child(void)
 }
 
 /*
-**	sets pipe in parent process. 
+**	sets pipe in parent process.
 */
 
 void	set_pipe_parent(void)
@@ -35,7 +35,7 @@ void	set_pipe_parent(void)
 }
 
 /*
-**	returns if token is pipe character('|'). 
+**	returns if token is pipe character('|').
 */
 
 int		find_pipe(char *cmd[])

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 17:06:59 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/28 18:03:04 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/30 13:28:55 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*
 **	when handles nprocess(which means not being handled in child process)
 **	it sets redirection in process_redirection func, and execute
-**	the command in the exec_func func. 
+**	the command in the exec_func func.
 */
 
 void	exec_nprocess_built_in(void (*exec_func)(char **, int, int, int),
@@ -100,7 +100,7 @@ void	exec_cmd_p(char *cmd[], int *prev_pipe_idx, int pipe_idx)
 
 /*
 **	In the main function, environmant variables are given through the third
-**	argument. and this func copies it in g_env_list which is liked list. 
+**	argument. and this func copies it in g_env_list which is liked list.
 */
 
 void	copy_environ(char **envp)

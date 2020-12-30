@@ -6,14 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 14:31:42 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/28 18:06:02 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/30 13:27:23 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
 
 /*
-**	sets redirection output. 
+**	sets redirection output.
 */
 
 void	set_red_out(char *title)
@@ -27,7 +27,7 @@ void	set_red_out(char *title)
 }
 
 /*
-**	sets redirection input. 
+**	sets redirection input.
 */
 
 void	set_red_in(char *title, char *token, int is_process)
@@ -59,7 +59,7 @@ void	set_red_in(char *title, char *token, int is_process)
 }
 
 /*
-**	sets redirection double output('>>'). 
+**	sets redirection double output('>>').
 */
 
 void	set_red_double_out(char *title)
@@ -73,7 +73,7 @@ void	set_red_double_out(char *title)
 }
 
 /*
-**	it returns TRUE if token is redirection character. 
+**	it returns TRUE if token is redirection character.
 */
 
 int		is_redirection(char *token)
@@ -86,7 +86,7 @@ int		is_redirection(char *token)
 }
 
 /*
-**	when it finds redirection character in the tokens, sets the redirections. 
+**	when it finds redirection character in the tokens, sets the redirections.
 */
 
 void	process_redirection(char *cmd[], int *prev_pipe_idx,

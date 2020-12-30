@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 17:09:05 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/29 16:53:25 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/30 13:34:23 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void				replace_exception_env(t_token *token)
 /*
 **	Finds if there is one environment character in a token.
 **	Ex) "$user" returns true.
-**	"hi$user" returns false. "$user$path" returns false. 
+**	"hi$user" returns false. "$user$path" returns false.
 */
 
 int					is_one_env(t_token *token)
@@ -102,7 +102,7 @@ int					is_one_env(t_token *token)
 
 /*
 **	Converts environment character to environment variables value.
-**	Ex) "hello$user" -> "hellodonglee" 
+**	Ex) "hello$user" -> "hellodonglee"
 */
 
 void				adjust_env(t_token *token)

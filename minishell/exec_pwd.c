@@ -6,14 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 17:05:46 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/29 14:49:41 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/30 13:35:35 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
 
 /*
-**	executes pwd command; simply shows current directory. 
+**	executes pwd command; simply shows current directory.
 */
 
 void	exec_pwd(char *cmd[], int prev_pipe_idx, int pipe_idx)

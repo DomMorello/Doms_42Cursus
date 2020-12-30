@@ -6,14 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 14:33:17 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/28 18:04:30 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/30 13:30:51 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
 
 /*
-**	prints not a directory err message. 
+**	prints not a directory err message.
 */
 
 void	print_err_not_dir(char *dir)
@@ -37,7 +37,7 @@ void	print_err_no_dir(char *dir)
 }
 
 /*
-**	prints err messages when it fails to execute executable commands like ls. 
+**	prints err messages when it fails to execute executable commands like ls.
 */
 
 void	print_exec_error(int errnum, char *token)
@@ -60,7 +60,7 @@ void	print_exec_error(int errnum, char *token)
 }
 
 /*
-**	prints no such file err message in redirection input. 
+**	prints no such file err message in redirection input.
 */
 
 void	print_error_red_in(char *title, int is_process)

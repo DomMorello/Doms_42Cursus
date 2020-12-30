@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 17:08:21 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/28 18:17:47 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/30 13:28:20 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	exec_executable2(char *cmd[], int prev_pipe_idx,
 }
 
 /*
-**	frees two dimensional array. 
+**	frees two dimensional array.
 */
 
 void	free_2d_char(char **arr)

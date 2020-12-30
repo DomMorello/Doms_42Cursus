@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 17:07:30 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/29 15:12:05 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/30 13:29:41 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int		check_update(char *content)
 
 /*
 **	In arguments, only if there is a '=' character it works.
-**	Makes new node and add one at the end of the list. 
+**	Makes new node and add one at the end of the list.
 */
 
 void	do_export(char *token)

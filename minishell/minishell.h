@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 17:06:07 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/29 17:51:18 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/30 13:26:42 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ typedef struct		s_status
 }					t_status;
 
 /*
-**	parsing 
+**	parsing
 */
 
 t_token				*tokenize_lexer(char *str, int length);
@@ -132,7 +132,6 @@ void				examine_end_of_line(t_token *token,
 					t_status *status, char char_type);
 int					is_env_exception(t_token *token, t_status *status,
 					char *str, char char_type);
-// t_token				**convert_list_into_array(t_token *token);
 int					check_basic_grammar(t_token *token);
 void				free_all_tokens(t_token *token, void (*del)(void *));
 int					issue_new_token(t_token *token, t_status *status,
@@ -141,7 +140,7 @@ void				add_char_and_change_state(t_token *token, t_status *status,
 					char char_type, int state);
 
 /*
-**	launch bash 
+**	launch bash
 */
 
 void				start_bash(char ***cmds);

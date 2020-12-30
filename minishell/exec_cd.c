@@ -6,14 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 17:07:15 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/29 16:03:46 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/30 13:27:58 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
 
 /*
-**	Updates key(2nd parameter) value to cwd(current directory). 
+**	Updates key(2nd parameter) value to cwd(current directory).
 */
 
 void	update_env(char *cwd, char *key)
@@ -71,7 +71,7 @@ void	change_dir(char *dir, int is_pipe)
 }
 
 /*
-**	Finds HOME path in environment variables. 
+**	Finds HOME path in environment variables.
 */
 
 char	*find_home(void)
@@ -114,7 +114,7 @@ void	dir_to_home(int is_pipe)
 }
 
 /*
-**	Executes cd command. 
+**	Executes cd command.
 */
 
 void	exec_cd(char *cmd[], int prev_pipe_idx, int pipe_idx, int argc)

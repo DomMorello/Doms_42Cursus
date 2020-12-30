@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/25 15:44:42 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/29 17:55:44 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/30 13:32:58 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,33 +43,6 @@ int			is_env_exception(t_token *token, t_status *status,
 	}
 	return (FALSE);
 }
-
-// t_token		**convert_list_into_array(t_token *token)
-// {
-// 	t_token		*tmp;
-// 	t_token		**dest;
-// 	int			size;
-// 	int			i;
-
-// 	size = 0;
-// 	tmp = token;
-// 	while (tmp != NULL)
-// 	{
-// 		tmp = tmp->next;
-// 		size++;
-// 	}
-// 	if ((dest = (t_token **)malloc(sizeof(t_token *) * (size + 1))) == NULL)
-// 		return (NULL);
-// 	dest[size] = NULL;
-// 	i = 0;
-// 	while (i < size)
-// 	{
-// 		dest[i] = token;
-// 		i++;
-// 		token = token->next;
-// 	}
-// 	return (dest);
-// }
 
 void		trim_end(char *str)
 {

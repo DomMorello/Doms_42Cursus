@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/24 18:18:29 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/29 16:27:45 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/30 13:31:49 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int				check_grammar1(t_token *token)
 /*
 **	If >>> comes, returns false.
 **	If << comes, returns false.
-**	If || comes returns false. 
+**	If || comes returns false.
 */
 
 int				check_grammar2(t_token *token)
@@ -79,7 +79,7 @@ int				check_grammar2(t_token *token)
 
 /*
 **	If ; comes first, returns false.
-**	Checks basic grammar. 
+**	Checks basic grammar.
 */
 
 int				check_basic_grammar(t_token *token)

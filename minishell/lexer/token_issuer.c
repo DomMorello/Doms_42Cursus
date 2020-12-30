@@ -6,19 +6,20 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/25 15:45:54 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/29 17:13:24 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/30 13:33:27 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 /*
-**	??????????????
+**	When token is '>','<','>>','|',';', makes new token.
 */
 
 static int	issue_special_token(t_token *token,
 		t_status *status, char char_type)
 {
+	printf("here??\n");
 	token->data[0] = char_type;
 	token->data[1] = CHAR_NULL;
 	token->type = char_type;
@@ -30,7 +31,7 @@ static int	issue_special_token(t_token *token,
 }
 
 /*
-**	Makes new token and initiates it. 
+**	Makes new token and initiates it.
 */
 
 int			issue_new_token(t_token *token, t_status *status,

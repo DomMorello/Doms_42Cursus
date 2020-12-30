@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 17:09:38 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/29 16:45:54 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/30 13:32:07 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int		get_num_cmdline(t_token *token)
 
 /*
 **	Gets the number of tokens in a single command line.
-**	Ex) echo hello world ; echo hi -> first line has three tokens, 2nd one tho 
+**	Ex) echo hello world ; echo hi -> first line has three tokens, 2nd one tho.
 */
 
 int		get_num_cmd(t_token **token)

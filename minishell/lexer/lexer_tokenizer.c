@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 17:09:48 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/29 17:03:46 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/30 13:32:29 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static void		tokenize_quote(t_token *token, t_status *status,
 
 /*
 **	If input is "$user", and next character is white space,
-**	makes new token and links it to the list.  
+**	makes new token and links it to the list.
 */
 
 static void		tokenize_env(t_token *token, t_status *status,
@@ -73,7 +73,7 @@ static void		tokenize_env(t_token *token, t_status *status,
 }
 
 /*
-**	If not exceptional case, tokenizes all types of inputs. 
+**	If not exceptional case, tokenizes all types of inputs.
 */
 
 static void		convert_input_into_tokens(t_token *token,

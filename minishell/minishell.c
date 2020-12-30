@@ -6,14 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 17:08:32 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/28 17:31:49 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/30 13:30:24 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minishell.h"
 
 /*
-**	frees the g_env_list strings and all nodes which are copy of environment	 
+**	frees the g_env_list strings and all nodes which are copy of environment.
 */
 
 void	free_env(void)
@@ -27,7 +27,7 @@ void	free_env(void)
 }
 
 /*
-**	frees three dimensional array(tokens)
+**	frees three dimensional array(tokens).
 */
 
 void	free_cmds(char ***cmds)
@@ -51,7 +51,7 @@ void	free_cmds(char ***cmds)
 }
 
 /*
-**	starts processing commands divided by semicolons  
+**	starts processing commands divided by semicolons.
 */
 
 void	start_bash(char ***cmds)
@@ -67,7 +67,7 @@ void	start_bash(char ***cmds)
 }
 
 /*
-**	checks basic grammar exceptions and handles addition parising process 
+**	checks basic grammar exceptions and handles addition parising process.
 */
 
 void	parse_to_start(t_token *token)
@@ -89,7 +89,7 @@ void	parse_to_start(t_token *token)
 }
 
 /*
-**	handles signal, prompt, parsing, and start to launch bash
+**	handles signal, prompt, parsing, and start to launch bash.
 */
 
 int		main(int argc, char const *argv[], char **envp)

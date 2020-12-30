@@ -6,14 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/28 17:08:50 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/29 17:21:33 by marvin           ###   ########.fr       */
+/*   Updated: 2020/12/30 13:31:28 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 /*
-**	Converts key to value. 
+**	Converts key to value.
 */
 
 void	convert_to_value(char *new, char *env_content, int *i, int *j)
@@ -31,7 +31,7 @@ void	convert_to_value(char *new, char *env_content, int *i, int *j)
 
 /*
 **	Allocates exact size of new token(new).
-**	Puts new string(converted to the value) to token and free old one. 
+**	Puts new string(converted to the value) to token and free old one.
 */
 
 void	convert_key_to_env(char *env_content, char **token_data,
@@ -126,7 +126,7 @@ void	copy_env_key(char **tokens)
 /*
 **	After conversion of environment variable in other functions.
 **	Still cannot convert environment vairable in double quotatation marks.
-**	So, this func handles environment variables in double quote state. 
+**	So, this func handles environment variables in double quote state.
 */
 
 void	adjust_env_in_dquote(t_token *token)
