@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 13:41:34 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/30 13:41:36 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/30 13:55:00 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,8 @@ int					issue_new_token(t_token *token, t_status *status,
 					int flag, char char_type);
 void				add_char_and_change_state(t_token *token, t_status *status,
 					char char_type, int state);
+void				convert_exit_status(t_token *token);
+void				trim_end(char *str);
 
 /*
 **	launch bash
@@ -235,7 +237,5 @@ void				do_echo(int start, int end, char *cmd[]);
 void				print_exec_error(int errnum, char *token);
 void				sig_int(int signo);
 void				sig_quit(int signo);
-void				convert_exit_status(t_token *token);
-void				trim_end(char *str);
 
 #endif
