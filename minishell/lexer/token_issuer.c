@@ -6,7 +6,7 @@
 /*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 13:45:07 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/30 13:45:08 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/31 12:36:54 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 static int	issue_special_token(t_token *token,
 		t_status *status, char char_type)
 {
-	printf("here??\n");
 	token->data[0] = char_type;
 	token->data[1] = CHAR_NULL;
 	token->type = char_type;
