@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_redirection.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 13:41:46 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/30 13:41:47 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/31 12:43:13 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	set_red_in(char *title, char *token, int is_process)
 		if (S_ISDIR(file.st_mode))
 		{
 			ft_putstr_fd(token, 2);
-			ft_putstr_fd(": (standard input): Is a directory\n", 2);
+			ft_putstr_fd(": (standard input): Is a directory\n", STDERR);
 			g_exit_status = 1;
 			if (is_process)
 				exit(1);

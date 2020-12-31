@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donglee <donglee@student.42seoul.k>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/30 13:41:59 by donglee           #+#    #+#             */
-/*   Updated: 2020/12/30 13:42:00 by donglee          ###   ########.fr       */
+/*   Updated: 2020/12/31 12:41:22 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,8 @@ void	dir_to_home(int is_pipe)
 	}
 	else
 	{
-		ft_putstr_fd("mongshell: cd: ", 2);
-		ft_putstr_fd("HOME not found\n", 2);
+		ft_putstr_fd("mongshell: cd: ", STDERR);
+		ft_putstr_fd("HOME not found\n", STDERR);
 		g_exit_status = 1;
 	}
 }
