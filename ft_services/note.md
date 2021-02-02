@@ -6,4 +6,6 @@ minikube 설치 방법
 minikube start --no-vtx-check<br>
 이렇게 해야지만 에러가 발생하지 않고 정상적으로 minikube가 설치된다. <br>
 
+virtual box에서 리눅스 깔고 난 후에 ubuntu에서 minikube 설치방법
+(https://vovaprivalov.medium.com/setup-minikube-on-virtualbox-7cba363ca3bc)<br>
 
