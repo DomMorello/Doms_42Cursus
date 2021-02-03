@@ -8,10 +8,14 @@ minikube start --no-vtx-check<br>
 
 - virtual box에서 리눅스 깔고 난 후에 ubuntu에서 minikube 설치방법
 
-`sudo install conntrack` 으로 conntrack 설치함.
-아래 링크에서 minikube를 설치하지 않고 설치는 공홈에서 실시함(version 때문에)
-그리고 kubectl 부터는 아래 링크를 따라했는데 마지막에 kubectl 버전이 낮다고 해서
-`sudo minikube kubectl -- get pods -A` 명령어를 침
-아래 링크에서 chmod +x minikube && sudo mv minikube /usr/local/bin/ 이 부분은 실행하지 않음. 공홈에서 받으면 알아서 됨.
+(https://zetawiki.com/wiki/%EB%A6%AC%EB%88%85%EC%8A%A4_minikube_%EC%84%A4%EC%B9%98)<br>
+이 링크를 그냥 그대로 따라한다. 그런데 그렇게 하면 버전때문에 conntrack 설치해야 된다는 에러가 뜬다. 그래서 `sudo apt-get install conntrack` 으로 conntrack 설치함. 근데 이 링크로 하다가 마지막에 "minikube start --cpus 4 --memory 4096" 이 부분은 실행하지 않는다. 대신에 아래 링크를 참고한다. <br>
 (https://vovaprivalov.medium.com/setup-minikube-on-virtualbox-7cba363ca3bc)<br>
+여기 링크에서는 
+
+`export CHANGE_MINIKUBE_NONE_USER=true`
+`echo ‘export CHANGE_MINIKUBE_NONE_USER=true’ >> ~/.bashrc`
+`sudo -E minikube start --vm-driver=none`
+이 부분을 참고해서 이렇게 start를 하면 된다. <br>
+
 
