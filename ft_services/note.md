@@ -1,10 +1,3 @@
-웹 UI 대시보드 설정 방법
-(https://fliedcat.tistory.com/171)<br>
-
-minikube 설치 방법
-(https://medium.com/@cratios48/minikube-%EC%84%A4%EC%B9%98-%EB%B0%8F-%ED%99%9C%EC%9A%A9-4a63ddbc7fcb)
-minikube start --no-vtx-check<br>
-이렇게 해야지만 에러가 발생하지 않고 정상적으로 minikube가 설치된다. <br>
 
 - virtual box에서 리눅스 깔고 난 후에 ubuntu에서 minikube 설치방법
 
@@ -17,5 +10,3 @@ minikube start --no-vtx-check<br>
 `echo ‘export CHANGE_MINIKUBE_NONE_USER=true’ >> ~/.bashrc`
 `sudo -E minikube start --vm-driver=none`
 이 부분을 참고해서 이렇게 start를 하면 된다. <br>
-
-
