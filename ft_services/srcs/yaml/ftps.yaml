@@ -1,0 +1,61 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    ftps.yaml                                          :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: donglee <donglee@student.42.fr>            +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2021/02/18 16:40:00 by donglee           #+#    #+#              #
+#    Updated: 2021/02/18 16:42:00 by donglee          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+apiVersion: v1
+kind: Service
+metadata: 
+  annotations:
+    metallb.universe.tf/allow-shared-ip: shared
+  labels: 
+    app: ftps
+  name: ftps-service
+spec: 
+  ports: 
+       - port: 21
+         name: ftps-port
+       - port: 20
+         name: port-ftps
+       - port: 31110
+         name: ftps-passv-port
+       - port: 31111
+         name: passv-ftps-port
+  selector: 
+    app: ftps
+  type: LoadBalancer
+
+---
+        
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+     labels: 
+       app: ftps
+     name: ftps-deployment
+spec: 
+     replicas: 1
+     selector: 
+       matchLabels: 
+         app: ftps
+     template: 
+       metadata: 
+         labels: 
+           app: ftps
+       spec: 
+         containers: 
+           - 
+             image: ftps_service
+             name: ftps
+             imagePullPolicy: Never
+             ports:
+              - containerPort: 21
+              - containerPort: 31110
+              - containerPort: 31111

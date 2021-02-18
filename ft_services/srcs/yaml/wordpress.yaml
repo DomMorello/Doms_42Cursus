@@ -1,0 +1,51 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    wordpress.yaml                                     :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: molabhai <molabhai@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/10/16 11:21:39 by molabhai          #+#    #+#              #
+#    Updated: 2020/10/17 18:54:52 by molabhai         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+apiVersion: v1
+kind: Service
+metadata: 
+  annotations:
+    metallb.universe.tf/allow-shared-ip: shared
+  labels: 
+    app: wordpress
+  name: wordpress-service
+spec: 
+  ports: 
+    -
+      port: 5050
+  selector: 
+    app: wordpress
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  labels: 
+    app: wordpress
+  name: wordpress-deployment
+spec: 
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: wordpress
+  template: 
+    metadata: 
+      labels: 
+        app: wordpress
+    spec: 
+      containers: 
+        - 
+          image: wordpress_service
+          name: wordpress
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5050

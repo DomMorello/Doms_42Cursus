@@ -1,0 +1,51 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    grafana.yaml                                       :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: molabhai <molabhai@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/10/16 11:20:49 by molabhai          #+#    #+#              #
+#    Updated: 2020/10/17 18:55:33 by molabhai         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+apiVersion: v1
+kind: Service
+metadata: 
+  annotations:
+    metallb.universe.tf/allow-shared-ip: shared
+  labels: 
+    app: grafana
+  name: grafana-service
+spec: 
+  ports: 
+    -
+      port: 3000
+  selector: 
+    app: grafana
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  labels: 
+    app: grafana
+  name: grafana-deployment
+spec: 
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: grafana
+  template: 
+    metadata: 
+      labels: 
+        app: grafana
+    spec: 
+      containers: 
+        - 
+          image: grafana_service
+          name: grafana
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 3000

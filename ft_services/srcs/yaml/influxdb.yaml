@@ -1,0 +1,67 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    influxdb.yaml                                      :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: molabhai <marvin@42.fr>                    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/10/16 11:21:25 by molabhai          #+#    #+#              #
+#    Updated: 2020/10/16 11:21:26 by molabhai         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+apiVersion: v1
+kind: Service
+metadata: 
+  labels: 
+    app: influxdb
+  name: influxdb-service
+spec: 
+  ports: 
+    -
+      port: 8086
+  selector: 
+    app: influxdb
+  type: ClusterIP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: influxdb-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  labels: 
+    app: influxdb
+  name: influxdb-deployment
+spec: 
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: influxdb
+  template: 
+    metadata: 
+      labels: 
+        app: influxdb
+    spec: 
+      containers: 
+        - 
+          image: influxdb_service
+          name: influxdb
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8086
+          volumeMounts:
+            - name: influxdb
+              mountPath: /var/lib/influxdb/data
+      volumes:
+            - name: influxdb
+              persistentVolumeClaim:
+                claimName: influxdb-pvc
