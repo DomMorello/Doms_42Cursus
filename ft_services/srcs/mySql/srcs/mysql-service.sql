@@ -112,7 +112,7 @@ INSERT INTO `wp_options` (`option_id`, `option_name`, `option_value`, `autoload`
 (3, 'blogname', 'The-Hell', 'yes'),
 (4, 'blogdescription', 'Just another WordPress site', 'yes'),
 (5, 'users_can_register', '0', 'yes'),
-(6, 'admin_email', 'molabhai@student.1337.ma', 'yes'),
+(6, 'admin_email', 'donglee@student.42seoul.kr', 'yes'),
 (7, 'start_of_week', '1', 'yes'),
 (8, 'use_balanceTags', '0', 'yes'),
 (9, 'use_smilies', '1', 'yes'),
@@ -377,7 +377,7 @@ CREATE TABLE `wp_usermeta` (
 --
 
 INSERT INTO `wp_usermeta` (`umeta_id`, `user_id`, `meta_key`, `meta_value`) VALUES
-(1, 1, 'nickname', 'molabhai'),
+(1, 1, 'nickname', 'donglee'),
 (2, 1, 'first_name', ''),
 (3, 1, 'last_name', ''),
 (4, 1, 'description', ''),
@@ -417,7 +417,7 @@ CREATE TABLE `wp_users` (
 --
 
 INSERT INTO `wp_users` (`ID`, `user_login`, `user_pass`, `user_nicename`, `user_email`, `user_url`, `user_registered`, `user_activation_key`, `user_status`, `display_name`) VALUES
-(1, 'molabhai', '$P$BjsB6KwJsSFulj1eqg/jFLL1VdzHqF0', 'molabhai', 'molabhai@student.1337.ma', 'http://192.168.99.124:5050', '2020-11-05 17:16:57', '', 0, 'molabhai');
+(1, 'donglee', '$P$BjsB6KwJsSFulj1eqg/jFLL1VdzHqF0', 'donglee', 'donglee@student.42seoul.kr', 'http://192.168.99.124:5050', '2020-11-05 17:16:57', '', 0, 'donglee');
 
 --
 -- Indexes for dumped tables

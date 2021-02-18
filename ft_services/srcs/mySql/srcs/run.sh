@@ -14,9 +14,9 @@ echo "Apllying DataBase"
 
 echo "CREATE DATABASE wordpress;" | mysql -u root
 
-echo "CREATE USER 'molabhai'@'%' identified by 'molabhai';" | mysql -u root
+echo "CREATE USER 'donglee'@'%' identified by 'donglee';" | mysql -u root
 
-echo "GRANT ALL PRIVILEGES ON wordpress.* TO 'molabhai'@'%';" | mysql -u root
+echo "GRANT ALL PRIVILEGES ON wordpress.* TO 'donglee'@'%';" | mysql -u root
 
 echo "FLUSH PRIVILEGES;" | mysql -u root
 
