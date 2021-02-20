@@ -1,145 +1,116 @@
-#include <unistd.h>
-#include <stdlin.h>
+#include "./get_next_line.h"
+
+char *ft_strndup(char *s, int n)
+{
+    char *ret;
+    int i = 0;
+
+    ret = malloc(sizeof(char) * n + 1);
+    while (s[i] && i < n)
+    {
+        ret[i] = s[i];
+        i++;
+    }
+    ret[i] = 0;
+    return ret;
+}
 
 int ft_strlen(char *s)
 {
-	int len = 0;
-
-	while (s[len])
-		len++;
-	return len;
+    int len = 0;
+    
+    while (s[len])
+        len++;
+    return len;
 }
+
 
 char *ft_strchr(char *s, int c)
 {
-	char *ret = s;
+    char *ret = s;
 
-	while (*ret != c)
-	{
-		if (!*ret)
-			return NULL;
-		ret++;
-	}
-	return ret;
+    while (*ret != c)
+    {
+        if (!*ret)
+            return NULL;
+        ret++;
+    }
+    return ret;
 }
 
-char *ft_substr(char *s, int start, int len)
+char *ft_strjoin(char *s1, char *s2)
 {
-	int i = 0;
-	char *ret = NULL;
+    int i = 0;
+    int s1_len = ft_strlen(s1);
+    int s2_len = ft_strlen(s2);
+    char *ret;
 
-	if ((ret = (char *)malloc(sizeof(char) * len + 1)) == NULL)
-		return NULL;
-	while (i < len && s[i])
-	{
-		ret[i] = s[start];
-		i++;
-		start++;
-	}
-	ret[i] = 0;
-	return ret;
-}
-
-void ft_strdel(char **s)
-{
-	if (s && *s)
-	{
-		free(*s);
-		*s = NULL;
-	}
-}
-
-char *ft_strdup(char *str)
-{
-	int len = ft_strlen(str);
-	char *ret = NULL;
-	int i = 0;
-
-	if ((ret = (char *)malloc(sizeof(char) * len + 1)) == NULL)
-		return NULL;
-	while (str[i])
-	{
-		ret[i] = str[i];
-		i++;
-	}
-	ret[i] = 0;
-	return ret;
-}
-
-int ft_strlcpy(char *dst, char *src, int size)
-{
-	int i = 0;
-	int s_len = ft_strlen(src);
-
-	if (size == 0)
-		return s_len;
-	while (i < size -1 && src[i])
-	{
-		dst[i] = src[i];
-		i++;
-	}
-	dst[i] = 0;
-	return s_len;
-}
-
-int is_newline(char *save, char **line)
-{
-	int end = 0;
-	char *found = NULL;
-	int len = 0;
-
-	if (found = ft_strchr(save, '\n'))
-	{
-		end = found - save;
-		len = ft_strlen(found);
-		*line = ft_substr(save, 0, end);
-		ft_strlcpy(save, found + 1, len + 1);
-		return 0;
-	}
-	return 1;
-
-}
-
-char *ft_strjoindel(char *save, char *buf)
-{
-	char *ret = NULL;
-	int len1 = 0;
-	int len2 = ft_strlen(buf);
-	if (save)
-		len1 = ft_strlen(save);
-	ret = malloc(sizeof(char) * (len1 + len2 + 1));
-	if (save)
-	{
-		ft_strjoindel(ret, save, len1 + 1);
-		ft_strdel(&save);
-	}
-	ft_strlcpy(ret + len1, buf, len2 + 1)
-	return ret;
+    ret = malloc(sizeof(char) * (s1_len + s2_len + 1));
+    while (i < s1_len)
+    {
+        ret[i] = s1[i];
+        i++;
+    }
+    while (i - s1_len < s2_len)
+    {
+        ret[i] = s2[i - s1_len];
+        i++;
+    }
+    ret[i] = 0;
+    return ret;
 }
 
 int get_next_line(char **line)
 {
-	int ret = 0;
-	static char *save;
-	int buf_size = 10;
-	char buf[buf_size + 1];
+    static char *save;
+    char buf[2];
+    int bytes;
+    char *tmp;
+    char *n_ptr;
 
-	if (!line)
-		return -1;
-	if (save && (is_newline(save, line) == 1))
-		return 1;
-	while ((ret = read(0, buf, buf_size)) > 0)
+    if (!save)
+    {
+        save = ft_strndup("", 0);
+        while ((bytes = read(0, buf, 1)) > 0)
+        {
+            buf[bytes] = 0;
+            tmp = save;
+            save = ft_strjoin(save, buf);
+            free(tmp);
+        }
+    }
+    n_ptr = ft_strchr(save, '\n');
+    if (n_ptr)
+    {
+        *line = ft_strndup(save, n_ptr - save);
+        save += n_ptr - save + 1;
+        return 1;
+    }
+    else
+    {
+        *line = ft_strndup(save, ft_strchr(save, '\0') - save);
+        return 0;
+    }
+    
+}
+
+int main(int argc, char const *argv[])
+{
+	char 	*line;
+	int	ret;
+
+	line = NULL;
+	while ((ret = get_next_line(&line)) > 0)
 	{
-		buf[buf_size] = 0;
-		if ((save = ft_strjoindel(save, buf)) == NULL)
-			return -1;
-		if (is_newline(save, line) == 1)
-			return 1;
+		printf("%d %s\n", ret, line);
+		free(line);
+		line = NULL;
 	}
-	if (save)
-		*line = ft_strdup(save);
-	else if (ret == -1 || ret == 0)
-		*line = ft_strdup("");
-	ft_strdel(&save);
-	return ret;
+	printf("%d %s\n", ret, line);
+	free(line);
+    while (1)
+    {
+        ;
+    }
+    return 0;
 }

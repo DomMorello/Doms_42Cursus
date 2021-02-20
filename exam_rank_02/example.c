@@ -1,178 +1,125 @@
-#include "get_next_line.h"
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
 
-int ft_strlen(char *s)
+char	*ft_strndup(char *s, int n)
 {
-	int len;
-
-	len = 0;
-	while (s[len])
-		len++;
-	return (len);
-}
-
-char *ft_strchr(char *s, int c)
-{
-	char *result;
-
-	result = (char *)s;
-	while (*result != c)
-	{
-		if (!*result)
-			return (NULL);
-		result++;
-	}
-	return (result);
-}
-
-char *ft_substr(char *s, int start, int len)
-{
-	char *result;
-	int i;
-	int str_len;
-
-	str_len = ft_strlen(s);
-	i = 0;
-	if ((result = (char *)malloc(sizeof(char) * len + 1)) == 0)
-		return (NULL);
-	while (i < len && start < str_len)
-	{
-		result[i] = s[start];
-		i++;
-		start++;
-	}
-	result[i] = 0;
-	return (result);
-}
-
-char *ft_strdup(char *s1)
-{
-	char *result;
-	int len;
-	int i;
+	int	i;
+	char	*_Ret_bound_impl_;
 
 	i = 0;
-	len = ft_strlen(s1);
-	if ((result = (char *)malloc(sizeof(char) * len + 1)) == 0)
+	if (!(ret = (char *)malloc(sizeof(char) * (n + 1))))
 		return (NULL);
-	while (s1[i])
+	while (s[i] && i < n)
 	{
-		result[i] = s1[i];
+		ret[i] = s[i];
 		i++;
 	}
-	result[i] = 0;
-	return (result);
-}
-
-void ft_strdel(char **as)
-{
-	if (as && *as)
-	{
-		free(*as);
-		*as = NULL;
-	}
-}
-
-int ft_strlcpy(char *dst, char *src, int dstsize)
-{
-	int src_len;
-	int i;
-
-	src_len = 0;
-	i = 0;
-	while (src[src_len])
-		src_len++;
-	if (dstsize == 0)
-		return (src_len);
-	while (src[i] && i < dstsize - 1)
-	{
-		dst[i] = src[i];
-		i++;
-	}
-	dst[i] = 0;
-	return (src_len);
-}
-
-char *ft_strjoindel(char *s1, char *s2)
-{
-	char *ret;
-	int len_s1;
-	int len_s2;
-	int len;
-
-	len_s1 = 0;
-	len_s2 = ft_strlen(s2);
-	if (s1)
-		len_s1 = ft_strlen(s1);
-	len = len_s1 + len_s2;
-	if ((ret = (char *)malloc(sizeof(char) * (len + 1))) == 0)
-		return (NULL);
-	if (s1)
-	{
-		ft_strlcpy(ret, s1, (len_s1 + 1));
-		ft_strdel(&s1);
-	}
-	ft_strlcpy(ret + len_s1, s2, (len_s2 + 1));
+	ret[i] = '\0';
 	return (ret);
 }
 
-int is_newline(char *save, char **line)
+int	ft_strlen(char *s)
 {
-	char *found;
-	int end;
-	int len;
+	int	i;
 
-	len = 0;
-	found = NULL;
-	if ((found = ft_strchr(save, '\n')))
-	{
-		end = found - save;
-		len = ft_strlen(found);
-		*line = ft_substr(save, 0, end);
-		ft_strlcpy(save, (found + 1), (len + 1));
-		return (1);
-	}
-	return (0);
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
 }
 
-int get_next_line(char **line)
+char	*ft_strchr(char *s, int c)
 {
-	int bytes_read;
-	static char *save;
-	char buf[10 + 1];
+	int	i;
 
-	if (!line)
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == (char)c)
+			return (s + i);
+		i++;
+	}
+	if ((char)c == 0)
+		return (s + i);
+	else
+		return (NULL);
+}
+
+char	*ft_strjoin(char *s1, char *s2)
+{
+	int	i;
+	int	s1_len;
+	int	s2_len;
+	char	*ret;
+
+	i = 0;
+	s1_len = ft_strlen(s1);
+	s2_len = ft_strlen(s2);
+	if (!(ret = (char *)malloc(sizeof(char) * (s1_len + s2_len + 1))))
+		return (NULL);
+	while (i < s1_len)
+	{
+		ret[i] = s1[i];
+		i++;
+	}
+	while (i - s1_len < s2_len)
+	{
+		ret[i] = s2[i - s1_len];
+		i++;
+	}
+	ret[i] = '\0';
+	return (ret);
+}
+
+int	get_next_line(char **line)
+{
+	static char 	*save;
+	char 		*buff;
+	ssize_t		bytes;
+	char		*tmp;
+	char		*n_ptr;
+
+	if (!(buff = (char*)malloc(sizeof(char) * 2)))
 		return (-1);
-	if (save && is_newline(save, line) == 1)
-		return (1);
-	while ((bytes_read = read(0, buf, 10)) > 0)
+	if (!save)
 	{
-		buf[bytes_read] = 0;
-		if (!(save = ft_strjoindel(save, buf)))
-			return (-1);
-		if (is_newline(save, line) == 1)
-			return (1);
+		save = ft_strndup("", 0);
+		while ((bytes = read(0, buff, 1) > 0))
+		{
+			buff[bytes] = '\0';
+			tmp = save;
+			save = ft_strjoin(save, buff);
+			free(tmp);
+		}
 	}
-	if (save)
-		*line = ft_strdup(save);
-	else if (bytes_read == -1 || bytes_read == 0)
-		*line = ft_strdup("");
-	ft_strdel(&save);
-	return (bytes_read);
-}
+	free(buff);
+	n_ptr = ft_strchr(save, '\n');
+	if (n_ptr)
+	{
+		*line = ft_strndup(save, n_ptr - save);
+		save += n_ptr - save + 1;
+		return (1);
+	}
+	else 
+	{
+		*line = ft_strndup(save, ft_strchr(save, '\0') - save);
+		return (0);
+	}
+}		
 
-int main()
+int main(void)
 {
-	char *line = NULL;
-	int ret = 0;
+	char 	*line;
+	int	ret;
 
+	line = NULL;
 	while ((ret = get_next_line(&line)) > 0)
 	{
-		printf("line:%s\n", line);
+		printf("%d %s\n", ret, line);
 		free(line);
 		line = NULL;
 	}
-	printf("line:%s\n", line);
+	printf("%d %s\n", ret, line);
 	free(line);
-	line = NULL;
-	return 0;
 }
