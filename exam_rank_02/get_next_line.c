@@ -1,103 +1,103 @@
 #include "./get_next_line.h"
 
-char *ft_strndup(char *s, int n)
-{
-    char *ret;
-    int i = 0;
-
-    ret = malloc(sizeof(char) * n + 1);
-    while (s[i] && i < n)
-    {
-        ret[i] = s[i];
-        i++;
-    }
-    ret[i] = 0;
-    return ret;
-}
-
 int ft_strlen(char *s)
 {
-    int len = 0;
-    
-    while (s[len])
-        len++;
-    return len;
-}
+	int len = 0;
 
+	while (s[len])
+		len++;
+	return len;
+}
 
 char *ft_strchr(char *s, int c)
 {
-    char *ret = s;
+	char *ret = s;
 
-    while (*ret != c)
-    {
-        if (!*ret)
-            return NULL;
-        ret++;
-    }
-    return ret;
+	while (*ret != c)
+	{
+		if (!*ret)
+			return NULL;
+		ret++;
+	}
+	return ret;
+}
+
+char *ft_strndup(char *s, int n)
+{
+	int i = 0;
+	char *ret;
+
+	if ((ret = malloc(sizeof(char) * n + 1)) == NULL)
+		return NULL;
+	while (s[i] && i < n)
+	{
+		ret[i] = s[i];
+		i++;
+	}
+	ret[i] = 0;
+	return ret;
 }
 
 char *ft_strjoin(char *s1, char *s2)
 {
-    int i = 0;
-    int s1_len = ft_strlen(s1);
-    int s2_len = ft_strlen(s2);
-    char *ret;
+	char *ret;
+	int s1_len = ft_strlen(s1);
+	int s2_len = ft_strlen(s2);
+	int i = 0;
 
-    ret = malloc(sizeof(char) * (s1_len + s2_len + 1));
-    while (i < s1_len)
-    {
-        ret[i] = s1[i];
-        i++;
-    }
-    while (i - s1_len < s2_len)
-    {
-        ret[i] = s2[i - s1_len];
-        i++;
-    }
-    ret[i] = 0;
-    return ret;
+	if ((ret = malloc(sizeof(char) * (s1_len + s2_len + 1))) == NULL)
+		return NULL;
+	while (i < s1_len)
+	{
+		ret[i] = s1[i];
+		i++;
+	}
+	while (i - s1_len < s2_len)
+	{
+		ret[i] = s2[i - s1_len];
+		i++;
+	}
+	ret[i] = 0;
+	return ret;
 }
 
 int get_next_line(char **line)
 {
-    static char *save;
-    char buf[2];
-    int bytes;
-    char *tmp;
-    char *n_ptr;
+	static char *save;
+	char buf[2];
+	char *tmp;
+	char *n_ptr;
+	int bytes;
 
-    if (!save)
-    {
-        save = ft_strndup("", 0);
-        while ((bytes = read(0, buf, 1)) > 0)
-        {
-            buf[bytes] = 0;
-            tmp = save;
-            save = ft_strjoin(save, buf);
-            free(tmp);
-        }
-    }
-    n_ptr = ft_strchr(save, '\n');
-    if (n_ptr)
-    {
-        *line = ft_strndup(save, n_ptr - save);
-        save += n_ptr - save + 1;
-        return 1;
-    }
-    else
-    {
-        *line = ft_strndup(save, ft_strchr(save, '\0') - save);
-        return 0;
-    }
-    
+	if (!save)
+	{
+		save = ft_strndup("", 0);
+		while ((bytes = read(0, buf, 1)) > 0)
+		{
+			buf[bytes] = 0;
+			tmp = save;
+			save = ft_strjoin(save, buf);
+			free(tmp);
+		}
+	}
+	n_ptr = ft_strchr(save, '\n');
+	if (n_ptr)
+	{
+		*line = ft_strndup(save, n_ptr - save);
+		save += n_ptr - save + 1;
+		return 1;
+	}
+	else
+	{
+		*line = ft_strndup(save, ft_strchr(save, '\0') - save);
+		return 0;
+	}
 }
 
-int main(int argc, char const *argv[])
+int main()
 {
-	char 	*line;
-	int	ret;
+	char *line;
+	int ret;
 
 	line = NULL;
 	while ((ret = get_next_line(&line)) > 0)
@@ -108,9 +108,6 @@ int main(int argc, char const *argv[])
 	}
 	printf("%d %s\n", ret, line);
 	free(line);
-    while (1)
-    {
-        ;
-    }
-    return 0;
+	line = NULL;
+	return 0;
 }

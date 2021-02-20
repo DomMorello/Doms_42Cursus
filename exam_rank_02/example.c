@@ -5,7 +5,7 @@
 char	*ft_strndup(char *s, int n)
 {
 	int	i;
-	char	*_Ret_bound_impl_;
+	char	*ret;
 
 	i = 0;
 	if (!(ret = (char *)malloc(sizeof(char) * (n + 1))))
@@ -29,21 +29,17 @@ int	ft_strlen(char *s)
 	return (i);
 }
 
-char	*ft_strchr(char *s, int c)
+char *ft_strchr(char *s, int c)
 {
-	int	i;
+    char *ret = s;
 
-	i = 0;
-	while (s[i])
-	{
-		if (s[i] == (char)c)
-			return (s + i);
-		i++;
-	}
-	if ((char)c == 0)
-		return (s + i);
-	else
-		return (NULL);
+    while (*ret != c)
+    {
+        if (!*ret)
+            return NULL;
+        ret++;
+    }
+    return ret;
 }
 
 char	*ft_strjoin(char *s1, char *s2)
@@ -75,13 +71,11 @@ char	*ft_strjoin(char *s1, char *s2)
 int	get_next_line(char **line)
 {
 	static char 	*save;
-	char 		*buff;
+	char 		buff[2];
 	ssize_t		bytes;
 	char		*tmp;
 	char		*n_ptr;
 
-	if (!(buff = (char*)malloc(sizeof(char) * 2)))
-		return (-1);
 	if (!save)
 	{
 		save = ft_strndup("", 0);
@@ -93,7 +87,6 @@ int	get_next_line(char **line)
 			free(tmp);
 		}
 	}
-	free(buff);
 	n_ptr = ft_strchr(save, '\n');
 	if (n_ptr)
 	{
