@@ -77,9 +77,112 @@ simulation will stop. If not specified, the simulation will stop only at the dea
 - 철학자 번호 1은 철학자 번호 ’number_of_philosophers’ 옆에 위치합니다. 다른 모든 철학자들도 본인의 철학자 번호가 N이라면 N - 1 과 N + 1 사이에 위치합니다.
 - 철학자의 상태 변화는 아래와 같이 출력돼야 합니다. (아래의 X 는 철학자 번호를 말하고 timestamp_in_ms 는 현재 시간(밀리세컨)을 말합니다.)
 
-`malloc, free, write, open, read, close, fork, wait,
-waitpid, wait3, wait4, signal, kill, exit, getcwd,
-chdir, stat, lstat, fstat, execve, dup, dup2, pipe,
-opendir, readdir, closedir, strerror, errno`
+    ? *timestamp_in_ms* X has taken a fork<br>
+? *timestamp_in_ms* X is eating<br>
+? *timestamp_in_ms* X is sleeping<br>
+? *timestamp_in_ms* X is thinking<br>
+? *timestamp_in_ms* X died<br>
+- 위의 상태 메세지는 다른 철학자의 상태 메세지와 뭉개지거나 겹쳐서 출력되면 안 됩니다.
+- 철학자가 죽고 나서 철학자의 죽은 상태 메세지를 출력하는데 까지 걸리는 시간은 10밀리세컨이상이 되면 안 됩니다.
+- 다시 한 번 말하지만 철학자는 죽음을 피해야 합니다.
+---
+### philo_one
+- **Program name(프로그램 이름)**: philo_one
+- **Turn in files(제출할 파일)**: philo_one/
+- **Makefile**: Yes
+- **Arguments(인자)**: number_of_philosophers, time_to_die, time_to_eat,
+time_to_sleep [number_of_times_each_philosopher_must_eat]
+- **External functs(허용되는 외부 함수)**:
+```
+memset, printf, malloc, free, write,
+usleep, gettimeofday, pthread_create,
+pthread_detach, pthread_join, pthread_mutex_init,
+pthread_mutex_destroy, pthread_mutex_lock,
+pthread_mutex_unlock
+```
+- **Libft authorized(libft 라이브러리 사용가능 여부)**: No
+- **Description(설명)**: philosopher with threads and mutex(철학자는 스레드이고 mutex를 이용한다)
+<br><br>
+
+In this version the non common rules will be:
+
+- One fork between each philosopher, therefore there will be a fork at the right and
+at the left of each philosopher.
+- To avoid philosophers duplicating forks, you should protect the forks state with a
+mutex for each of them.
+- Each philosopher should be a thread.
+<br><br>
+
+이 프로그램에서 지켜야 할 규칙은 다음과 같습니다:
+
+- 각각의 철학자들 사이에 포크가 놓여 있기 때문에, 포크는 모든 철학자의 왼 편과 오른 편에 놓여져 있습니다.
+- 철학자가 동시에 포크를 사용하는 것을 방지하기 위해 모든 각각의 포크 상태를 mutex를 이용해서 보호해야 합니다.
+- 모든 철학자들은 각각 스레드여야 합니다.
+
+---
+### philo_two
+- **Program name(프로그램 이름)**: philo_two
+- **Turn in files(제출할 파일)**: philo_two/
+- **Makefile**: Yes
+- **Arguments(인자)**: number_of_philosophers, time_to_die, time_to_eat,
+time_to_sleep [number_of_times_each_philosopher_must_eat]
+- **External functs(허용되는 외부 함수)**:
+```
+memset, printf, malloc, free, write, usleep,
+gettimeofday, pthread_create, pthread_detach,
+pthread_join, sem_open, sem_close, sem_post,
+sem_wait, sem_unlink
+```
+- **Libft authorized(libft 라이브러리 사용가능 여부)**: No
+- **Description(설명)**: philosopher with threads and semaphore(철학자는 스레드이고 semaphore를 이용한다)
+<br><br>
+
+In this version the non common rules will be:
+
+- All the forks are in the middle of the table.
+- They have no states in memory but the number of available forks is represented by
+a semaphore.
+- Each philosopher should be a thread.
+
+<br><br>
+
+이 프로그램에서 지켜야 할 규칙은 다음과 같습니다:
+
+- 모든 포크는 식탁의 가운데에 위치해있습니다.
+- 포크들은 메모리에 포크 상태를 저장하지 않고 사용 가능한 포크의 개수는 semaphore가 알려줍니다.
+- 모든 철학자들은 각각 스레드여야 합니다.
+---
+### philo_three
+- **Program name(프로그램 이름)**: philo_three
+- **Turn in files(제출할 파일)**: philo_three/
+- **Makefile**: Yes
+- **Arguments(인자)**: number_of_philosophers, time_to_die, time_to_eat,
+time_to_sleep [number_of_times_each_philosopher_must_eat]
+- **External functs(허용되는 외부 함수)**:
+```
+memset, printf, malloc, free, write, fork, kill,
+exit, pthread_create, pthread_detach, pthread_join,
+usleep, gettimeofday, waitpid, sem_open, sem_close,
+sem_post, sem_wait, sem_unlink
+```
+- **Libft authorized(libft 라이브러리 사용가능 여부)**: No
+- **Description(설명)**: philosopher with processes and semaphore
+(철학자는 프로세스이고 semaphore를 이용한다)
+<br><br>
+
+In this version the non common rules will be:
+
+- All the forks are in the middle of the table.
+- They have no states in memory but the number of available forks is represented by
+a semaphore.
+- Each philosopher should be a process and the main process should not be a philosopher.
+
+<br><br>
+
+이 프로그램에서 지켜야 할 규칙은 다음과 같습니다:
+
+- 모든 포크는 식탁의 가운데에 위치해있습니다.
+- 포크들은 메모리에 포크 상태를 저장하지 않고 사용 가능한 포크의 개수는 semaphore가 알려줍니다.
+- 모든 철학자들은 각각 프로세스여야 하고 메인 프로세스는 철학자가 아니어야 합니다.
 
 #### Contact: zuzudnf@gmail.com
