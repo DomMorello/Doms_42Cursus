@@ -2,6 +2,16 @@
 
 # define N 5
 
+void *routine(void *arg)
+{
+    while (1)
+    {
+        printf("hi\n");
+        sleep(1);
+    }
+
+}
+
 int main(int argc, char const *argv[])
 {
 
@@ -10,7 +20,9 @@ int main(int argc, char const *argv[])
         printf("invalid argument\n");
         return (ERROR);
     }
-    
+    pthread_t th;
+
+    pthread_create(&th, NULL, routine, NULL);
 	// init structure(arg, philo)
     // 5개 스레드(철학자)를 만들고
     // 5개 포크(뮤텍스)를 만든다
