@@ -27,8 +27,7 @@ typedef struct 		s_philo
 	int				l_fork;
 	int				r_fork;
 	int				is_eating;
-	int				is_sleeping;
-	int				is_thinking;
+	int				eat_cnt;
 	unsigned long	limit;
 	unsigned long 	last_eat;
 }					t_philo;
@@ -36,7 +35,9 @@ typedef struct 		s_philo
 typedef struct		s_data
 {
 	t_arg			*arg;
-	t_philo			*philo;
+	t_philo			*philos;
 }					t_data;
+
+int ft_atoi(char const *str);
 
 #endif
