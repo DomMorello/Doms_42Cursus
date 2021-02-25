@@ -56,18 +56,18 @@ int	print_msg(t_philo *philo, int state)
 
 void take_fork(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->info->forks[philo->l_fork]);
-	print_msg(philo, S_TAKEN_FORK);
-	pthread_mutex_lock(&philo->info->forks[philo->r_fork]);
-	print_msg(philo, S_TAKEN_FORK);
+	//pthread_mutex_lock(&philo->info->forks[philo->l_fork]);
+	//print_msg(philo, S_TAKEN_FORK);
+	//pthread_mutex_lock(&philo->info->forks[philo->r_fork]);
+	//print_msg(philo, S_TAKEN_FORK);
 	sleep(1);
 }
 
 void put_fork(t_philo *philo)
 {
-	print_msg(philo, S_SLEEPING);
-	pthread_mutex_unlock(&philo->info->forks[philo->l_fork]);
-	pthread_mutex_unlock(&philo->info->forks[philo->r_fork]);
+	//print_msg(philo, S_SLEEPING);
+	//pthread_mutex_unlock(&philo->info->forks[philo->l_fork]);
+	//pthread_mutex_unlock(&philo->info->forks[philo->r_fork]);
 }
 
 void *routine(void *philo_v)

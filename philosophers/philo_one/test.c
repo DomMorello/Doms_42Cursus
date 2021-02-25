@@ -1,31 +1,27 @@
 #include "./philo_one.h"
 
+typedef struct s_test
+{
+	int id;
+	pthread_mutex_t *forks;
+}				t_test;
+
 void *routine(void *arg)
 {
-	int *a = (int *)arg;
-
-	while (1)
-	{
-		printf("hi %d\n", *a);
-		sleep(1);
-	}
-	return (void *)a;
 }
 
 int main(int argc, char const *argv[])
 {
-    pthread_t th;
+	t_test philo;
 
 	int i = 0;
+
 	while (i < 3)
 	{
-		pthread_create(&th, NULL, routine, (void *)&i);
-		pthread_detach(th);
+		philo.forks = malloc(sizeof(pthread_mutex_t) * 3);
+		pthread_mutex_init(&philo.forks[i], NULL);
 		i++;
 	}
-	while (1)
-	{
-		;
-	}
+	
     return 0;
 }
