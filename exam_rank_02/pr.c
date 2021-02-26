@@ -1,12 +1,29 @@
-#include "./get_next_line.h"
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdio.h>
 
 int ft_strlen(char *s)
 {
 	int len = 0;
-
 	while (s[len])
 		len++;
 	return len;
+}
+
+char *ft_strndup(char *s, int n)
+{
+	char *ret;
+
+	if ((ret = malloc(sizeof(char) * n + 1)) == NULL)
+		return NULL;
+	int i = 0;
+	while (s[i] && i < n)
+	{
+		ret[i] = s[i];
+		i++;
+	}
+	ret[i] = 0;
+	return ret;
 }
 
 char *ft_strchr(char *s, int c)
@@ -19,22 +36,6 @@ char *ft_strchr(char *s, int c)
 			return NULL;
 		ret++;
 	}
-	return ret;
-}
-
-char *ft_strndup(char *s, int n)
-{
-	int i = 0;
-	char *ret;
-
-	if ((ret = malloc(sizeof(char) * n + 1)) == NULL)
-		return NULL;
-	while (s[i] && i < n)
-	{
-		ret[i] = s[i];
-		i++;
-	}
-	ret[i] = 0;
 	return ret;
 }
 
@@ -65,14 +66,14 @@ int get_next_line(char **line)
 {
 	static char *save;
 	char buf[2];
+	int bytes;
 	char *tmp;
 	char *n_ptr;
-	int bytes;
 
 	if (!save)
 	{
 		save = ft_strndup("", 0);
-		while ((bytes = read(0, buf, 1)) > 0)
+		while ((bytes = read(0, buf, 1) > 0))
 		{
 			buf[bytes] = 0;
 			tmp = save;
@@ -94,7 +95,7 @@ int get_next_line(char **line)
 	}
 }
 
-int main()
+int main(void)
 {
 	char *line;
 	int ret;
