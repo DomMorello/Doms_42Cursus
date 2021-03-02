@@ -22,3 +22,11 @@ int		ft_atoi(char const *str)
 			res = (res * 10) + (str[i++] - '0');
 	return (res * is_neg);
 }
+
+unsigned long	get_time(void)
+{
+	static struct timeval	time;
+
+	gettimeofday(&time, NULL);
+	return ((time.tv_sec * (unsigned long)1000) + (time.tv_usec / 1000));
+}

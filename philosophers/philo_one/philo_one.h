@@ -34,6 +34,7 @@ typedef struct 		s_philo
 	unsigned long 	last_eat;
 	struct s_info	*info;
 	pthread_mutex_t	mutex;
+	pthread_mutex_t	eat;
 }					t_philo;
 
 typedef struct		s_info
@@ -42,12 +43,15 @@ typedef struct		s_info
 	unsigned long	time_to_die;
 	unsigned long	time_to_eat;
 	unsigned long	time_to_sleep;
+	unsigned long	start;
 	int				must_eat_cnt;
 	t_philo			*philo;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	msg;
+	pthread_mutex_t game_done;
 }					t_info;
 
 int ft_atoi(char const *str);
+unsigned long get_time(void);
 
 #endif
