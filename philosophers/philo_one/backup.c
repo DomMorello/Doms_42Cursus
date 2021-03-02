@@ -27,6 +27,8 @@ void	 init_philos(t_info *info)
 		info->philo[i].l_fork = i;
 		info->philo[i].r_fork = (i + 1) % info->num_of_philos;
 		info->philo[i].eat_cnt = 0;
+		info->philo[i].info = info;
+		pthread_mutex_init(&info->philo[i].mutex, NULL);
 		i++;
 	}
 }
@@ -67,6 +69,17 @@ void put_fork(t_philo *philo)
 	print_msg(philo, S_SLEEPING);
 	pthread_mutex_unlock(&philo->info->forks[philo->l_fork]);
 	pthread_mutex_unlock(&philo->info->forks[philo->r_fork]);
+	usleep(philo->info->time_to_sleep * 1000);
+}
+
+void eat(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->mutex);
+	philo->is_eating = 1;
+	print_msg(philo, S_EATING);
+	usleep(philo->info->time_to_eat * 1000);
+	philo->is_eating = 0;
+	pthread_mutex_unlock(&philo->mutex);
 }
 
 void *routine(void *philo_v)
@@ -77,7 +90,7 @@ void *routine(void *philo_v)
 	while (1)
 	{
 		take_fork(philo);
-		//eat();
+		eat(philo);
 		put_fork(philo);
 	}
 	return philo_v;
@@ -91,8 +104,10 @@ void solution(t_info *info)
 	i = 0;
 	while (i < info->num_of_philos)
 	{
-		pthread_create(&th, NULL, routine, (void *)&info->philo[i]);
-		pthread_detach(th);
+		if (pthread_create(&th, NULL, routine, (void *)&info->philo[i]))
+			perror("create: ");
+		if (pthread_detach(th))
+			perror("detach: ");
 		i++;
 	}
 	while (1)

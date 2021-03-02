@@ -33,6 +33,7 @@ typedef struct 		s_philo
 	unsigned long	limit;
 	unsigned long 	last_eat;
 	struct s_info	*info;
+	pthread_mutex_t	mutex;
 }					t_philo;
 
 typedef struct		s_info
