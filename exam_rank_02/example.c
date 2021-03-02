@@ -115,4 +115,5 @@ int main(void)
 	}
 	printf("%d %s\n", ret, line);
 	free(line);
+	return 0;
 }

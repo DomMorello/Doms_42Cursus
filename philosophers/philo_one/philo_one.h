@@ -12,14 +12,16 @@
 # define FALSE 0
 # define ERROR -1
 
-typedef struct		s_arg
-{
-	int				num_of_philos;
-	unsigned long	time_to_die;
-	unsigned long	time_to_eat;
-	unsigned long	time_to_sleep;
-	int				must_eat_cnt;
-}					t_arg;
+enum	e_state{
+	S_EATING,
+	S_TAKEN_FORK,
+	S_SLEEPING,
+	S_THINKING,
+	S_DIED,
+	S_FULL
+};
+
+struct	s_info;
 
 typedef struct 		s_philo
 {
@@ -30,13 +32,20 @@ typedef struct 		s_philo
 	int				eat_cnt;
 	unsigned long	limit;
 	unsigned long 	last_eat;
+	struct s_info	*info;
 }					t_philo;
 
-typedef struct		s_data
+typedef struct		s_info
 {
-	t_arg			*arg;
-	t_philo			*philos;
-}					t_data;
+	int				num_of_philos;
+	unsigned long	time_to_die;
+	unsigned long	time_to_eat;
+	unsigned long	time_to_sleep;
+	int				must_eat_cnt;
+	t_philo			*philo;
+	pthread_mutex_t	*forks;
+	pthread_mutex_t	msg;
+}					t_info;
 
 int ft_atoi(char const *str);
 
