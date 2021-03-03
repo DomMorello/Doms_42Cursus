@@ -1,8 +1,7 @@
 #include "./philo_one.h"
 
-int main(int argc, char const *argv[])
+int main(void)
 {
 
-
-    return 0;
+	return 0;
 }

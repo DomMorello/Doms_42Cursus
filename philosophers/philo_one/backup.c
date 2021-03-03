@@ -47,10 +47,10 @@ char *get_msg(int state)
 		return (" is sleeping\n");
 	else if (state == S_THINKING)
 		return (" is thinking\n");
-	else if (state == S_DIED)
-		return (" died\n");
-	else
+	else if (state == S_FULL)
 		return ("All the philosophers are full\n");
+	else
+		return (" died\n");
 }
 
 void	print_msg(t_philo *philo, int state)
