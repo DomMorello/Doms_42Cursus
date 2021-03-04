@@ -61,7 +61,7 @@ void	print_msg(t_philo *philo, int state)
 	if (!died)
 	{
 		printf("%lu\t", get_time() - philo->info->start);
-		if (state != S_DIED)
+		if (state != S_FULL)
 			printf("%d", philo->philo_no + 1);
 		if (state >= S_DIED)
 			died = 1;	
@@ -97,6 +97,7 @@ void eat(t_philo *philo)
 	philo->eat_cnt++;
 	philo->is_eating = 0;
 	pthread_mutex_unlock(&philo->mutex);
+	pthread_mutex_unlock(&philo->eat);
 }
 
 void *monitor(void *philo_v)
@@ -153,7 +154,7 @@ void *monitor_cnt(void *info_v)
 	{
 		i = 0;
 		while (i < info->num_of_philos)
-			pthread_mutex_lock(&info->philo[i].eat);
+			pthread_mutex_lock(&info->philo[i++].eat);
 		total++;
 	}
 	print_msg(&info->philo[0], S_FULL);
