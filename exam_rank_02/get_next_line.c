@@ -1,146 +1,126 @@
-#include "get_next_line.h"
+#include "./get_next_line.h"
 
 int ft_strlen(char *s)
 {
-	int i;
+	int len = 0;
 
-	i = 0;
-	while(s[i])
-		i++;
-	return (i);
+	while (s[len])
+		len++;
+	return len;
 }
 
 char *ft_strchr(char *s, int c)
 {
-	if (s == NULL)
-		return (0);
-	while(*s != c)
+	char *ret = s;
+
+	while (ret && *ret != c)
 	{
-		if (!*s)
-			return (0);
-		s++;
+		if (!*ret)
+			return NULL;
+		ret++;
 	}
-	return (s);
+	return ret;
 }
 
 char *ft_strdup(char *s)
 {
-	int i;
-	char *ptr;
+	char *ret;
+	int len = ft_strlen(s);
+	int i = 0;
 
-	if (!(ptr = malloc(sizeof(char) * ft_strlen(s) + 1)))
-		return (0);
-	i = 0;
-	while(*s)
-		ptr[i++] = *s++;
-	ptr[i] = '\0';
-	return(ptr);
+	if ((ret = (char *)malloc(sizeof(char) * len + 1)) == NULL)
+		return NULL;
+	while (i < len)
+	{
+		ret[i] = s[i];
+		i++;
+	}
+	ret[i] = 0;
+	return ret;
 }
 
-char *ft_substr(char *s, unsigned start, int len)
+char *ft_substr(char *s, unsigned int start, int len)
 {
-	int i;
-	char *ptr;
+	char *ret;
+	int i = 0;
 
-	if (!(ptr = malloc(sizeof(char) * (len + 1))))
-		return (0);
-	i = 0;
-	while(i < len)
-		ptr[i++] = s[start++];
-	ptr[i] = '\0';
-	return(ptr);
+	if ((ret = malloc(sizeof(char) * len + 1)) == NULL)
+		return NULL;
+	while (i < len)
+		ret[i++] = s[start++];
+	ret[i] = 0;
+	return ret;
+
 }
 
 char *ft_strjoin(char *s1, char *s2)
 {
-	int i;
-	char *ptr;
+	char *ret;
+	int s1_len = ft_strlen(s1);
+	int s2_len = ft_strlen(s2);
+	int i = 0;
 
-	if(!(ptr = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1))))
-		return (0);
-	i = 0;
-	while (*s1)
-		ptr[i++] = *s1++;
-	while (*s2)
-		ptr[i++] = *s2++;
-	ptr[i] = '\0';
-	return (ptr);
+	if ((ret = (char *)malloc(sizeof(char) * (s1_len + s2_len + 1))) == NULL)
+		return NULL;
+	while (i < s1_len)
+	{
+		ret[i] = s1[i];
+		i++;
+	}
+	while (i - s1_len < s2_len)
+	{
+		ret[i] = s2[i - s1_len];
+		i++;
+	}
+	ret[i] = 0;
+	return ret;
 }
 
-char ft_puts(char *s)
-{
-	write(1, s, ft_strlen(s));
-}
-/*
 int get_next_line(char **line)
 {
-	char *tp;
-	int nread;
+	char *n_ptr;
+	int bytes;
 	char buf[1024];
-	static char *str;
-	char *temp;
+	static char *save;
+	char *tmp;
 
-	nread = 1;
-	while(((tp = ft_strchr(str, '\n')) == NULL) && nread != 0)
+	bytes = 1;
+	while(((n_ptr = ft_strchr(save, '\n')) == NULL) && bytes != 0)
 	{
-		if ((nread = read(0, buf, 1024)) == -1)
+		if ((bytes = read(0, buf, 1024)) == -1)
 			return (-1);
-		buf[nread] = '\0';
-		(str == NULL)? (temp = ft_strdup(buf)) : (temp = ft_strjoin(str, buf));
-		if (str != NULL)
-			free(str);
-		str = temp;
+		buf[bytes] = '\0';
+		(save == NULL)? (tmp = ft_strdup(buf)) : (tmp = ft_strjoin(save, buf));
+		if (save != NULL)
+			free(save);
+		save = tmp;
 	}
-	if(tp != NULL)
+	if(n_ptr != NULL)
 	{
-		temp = str;
-		*line = ft_substr(str, 0, tp - str);
-		str = ft_strdup(tp + 1);
-		free(temp);
+		tmp = save;
+		*line = ft_substr(save, 0, n_ptr - save);
+		save = ft_strdup(n_ptr + 1);
+		free(tmp);
 		return (1);
 	}
-	*line = str;
-	str = NULL;
+	*line = save;
+	save = NULL;
 	return (0);
 }
-*/
-int get_next_line(int fd, char **line)
-{
-	char *tp;
-	int nread;
-	char buf[6];
-	static char *str;
-	char *temp;
 
-	nread = 1;
-	while(((tp = ft_strchr(str, '\n')) == NULL) && nread != 0)
+int main(int argc, char *argv[])
+{
+	char 	*line;
+	int	ret;
+
+	line = NULL;
+	while ((ret = get_next_line(&line)) > 0)
 	{
-		ft_puts("111");
-		if ((nread = read(fd, buf, 5)) == -1)
-			return (-1);
-		buf[nread] = '\0';
-		(str == NULL)? (temp = ft_strdup(buf)) : (temp = ft_strjoin(str, buf));
-		ft_puts("temp is");
-		ft_puts(temp);
-		if (str != NULL)
-			free(str);
-		str = temp;
-		ft_puts("****no new line*****\n");
-		ft_puts(str);
-		ft_puts("\n");
+		printf("%d %s\n", ret, line);
+		free(line);
+		line = NULL;
 	}
-	if(tp != NULL)
-	{
-		ft_puts("222");
-		temp = str;
-		*line = ft_substr(str, 0, tp - str);
-		str = ft_strdup(tp + 1);
-		ft_puts("****new line*****\n");
-		ft_puts(str);
-		free(temp);
-		return (1);
-	}
-	*line = str;
-	str = NULL;
-	return (0);
+	printf("%d %s\n", ret, line);
+	free(line);
+	return 0;
 }
