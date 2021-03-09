@@ -53,6 +53,16 @@ mutex 는 여러개의 쓰레드가 공유하는 데이타를 보호하기 위�
 
 `int    pthread_mutex_unlock(pthread_mutex_*mutex);`
 
+## sem_open
+> 세마포어를 초기화하고 생성한다.
+`sem_t *    sem_open(const char *name, int oflag, ...);`
+1. name: 서로 다르게 구분되는 세마포어의 이름
+2. oflag: 세마포어 생성시 플래그. 아래 두가지 조합으로 사용 가능: O_CREAT, O_EXCL
+
+## sem_close
+## sem_post
+## sem_wait
+## sem_unlink
 ### reference
 - (https://reakwon.tistory.com/56)
 - (https://bitsoul.tistory.com/172)
