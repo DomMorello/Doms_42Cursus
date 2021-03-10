@@ -1,4 +1,4 @@
-#include "./philo_one.h"
+#include "./philo_two.h"
 
 int		ft_atoi(char const *str)
 {
@@ -25,8 +25,23 @@ int		ft_atoi(char const *str)
 
 unsigned long	get_time(void)
 {
-	static struct timeval	time;
+	struct timeval		tv;
 
-	gettimeofday(&time, NULL);
-	return ((time.tv_sec * (unsigned long)1000) + (time.tv_usec / 1000));
+	gettimeofday(&tv, NULL);
+	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
+}
+
+void			less_error_sleep(unsigned long input)
+{
+	unsigned long	base;
+	unsigned long	cur;
+
+	base = get_time();
+	while (1)
+	{
+		cur = get_time();
+		if (input < cur - base)
+			return ;
+		usleep(100);
+	}
 }
