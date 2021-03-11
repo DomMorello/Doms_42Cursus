@@ -95,7 +95,7 @@ void *monitor(void *arg)
 			print_msg(philo, S_DIED, cur);
 			return (NULL);
 		}
-		less_error_sleep(1);
+		usleep(1000);
 	}
 	return (NULL);
 }
