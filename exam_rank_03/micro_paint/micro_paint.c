@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 			free(image);
 			fclose(file);
 			return (str_error(E_OP));
-		}
+		}		
 		y = 0;
 		while (y < b_height)
 		{

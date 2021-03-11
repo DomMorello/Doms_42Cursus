@@ -1,7 +1,7 @@
-#include <unistd.h>
 #include <stdio.h>
-#include <stdlib.h>
+#include <unistd.h>
 #include <string.h>
+#include <stdlib.h>
 #include <math.h>
 
 #define E_ARG "Error: argument\n"
@@ -10,6 +10,7 @@
 int ft_strlen(char *s)
 {
 	int len = 0;
+
 	while (s[len])
 		len++;
 	return len;
@@ -53,7 +54,7 @@ int main(int argc, char *argv[])
 	read = fscanf(file, "%c %f %f %f %c\n", &type, &center_x, &center_y, &r, &c_char);
 	while (read == 5)
 	{
-		if (r < 0 || !(type == 'c' || type == 'C'))
+		if (r < 0 || !(type == 'c' || type == 'C')) 
 		{
 			free(image);
 			fclose(file);
@@ -100,3 +101,4 @@ int main(int argc, char *argv[])
 
 	return 0;
 }
+
