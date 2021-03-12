@@ -16,6 +16,8 @@
 # include <semaphore.h>
 # include <signal.h>
 # include <sys/time.h>
+# include <sys/wait.h>
+# include <signal.h>
 
 enum	e_state{
 	S_TAKEN_FORK,

@@ -27,15 +27,25 @@ void init_info(t_info *info)
 	info->full_philo = 0;
 	info->done = 0;
 	info->time = get_time();
-	info->enter = sem_open(SEM_ENTER, O_CREAT | O_EXCL, 0777, info->num_of_philos / 2);
-	info->msg = sem_open(SEM_MSG, O_CREAT | O_EXCL, 0777, 1);
-	sem_unlink(SEM_ENTER);
-	sem_unlink(SEM_MSG);
+	// info->enter = sem_open(SEM_ENTER, O_CREAT | O_EXCL, 0777, info->num_of_philos / 2);
+	// info->msg = sem_open(SEM_MSG, O_CREAT | O_EXCL, 0777, 1);
+	// sem_unlink(SEM_ENTER);
+	// sem_unlink(SEM_MSG);
+}
+
+void routine(t_philo *philo)
+{
+	while (1)
+	{
+		
+	}
+	exit(1);
 }
 
 void init_philos(t_info *info)
 {
 	int i;
+	int stat;
 
 	i = -1;
 	while (++i < info->num_of_philos)
@@ -44,13 +54,22 @@ void init_philos(t_info *info)
 		info->philos[i].eat_cnt = 0;
 		info->philos[i].info = info;
 		info->philos[i].last_eat = get_time();
-		//fork
+		info->philos[i].pid = fork();
+		// if (info->philos[i].pid > 0)
+		// 	waitpid(info->philos[i].pid, &stat, WUNTRACED);
+		/*else */if (info->philos[i].pid == 0)
+		{
+			routine(&info->philos[i]);
+		}
 	}
+	// if (i == info->num_of_philos)
+	// 	monitor()
 }
 
 int main(int argc, char const *argv[])
 {
 	t_info info;
+	int stat;
 
 	if (!(argc == 5 || argc == 6) || err_check(argv, &info))
 		return (printf("invalid arguments\n"));
@@ -58,5 +77,9 @@ int main(int argc, char const *argv[])
 		return (ERROR);
 	init_info(&info);
 	init_philos(&info);
+	// sem_close(info.enter);
+	// sem_close(info.msg);
+	printf("main!!\n");
+	free(info.philos);
 	return (TRUE);
 }
