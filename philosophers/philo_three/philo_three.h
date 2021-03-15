@@ -55,5 +55,6 @@ typedef struct		s_info
 
 int ft_atoi(char const *s);
 unsigned long	get_time(void);
+void less_error_sleep(unsigned long input);
 
 #endif

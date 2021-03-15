@@ -31,3 +31,18 @@ unsigned long	get_time(void)
 	gettimeofday(&tv, NULL);
 	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
+
+void			less_error_sleep(unsigned long input)
+{
+	unsigned long	base;
+	unsigned long	cur;
+
+	base = get_time();
+	while (1)
+	{
+		cur = get_time();
+		if (input < cur - base)
+			return ;
+		usleep(100);
+	}
+}
