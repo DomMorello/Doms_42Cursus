@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 	char b_char;
 	int x;
 	int y;
-
+	
 	char type;
 	float center_x;
 	float center_y;
@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
 	read = fscanf(file, "%c %f %f %f %c\n", &type, &center_x, &center_y, &r, &c_char);
 	while (read == 5)
 	{
-		if (r < 0 || !(type == 'c' || type == 'C')) 
+		if (r < 0 || !(type == 'c' || type == 'C'))
 		{
 			free(image);
 			fclose(file);
@@ -82,7 +82,8 @@ int main(int argc, char *argv[])
 			y++;
 		}
 		read = fscanf(file, "%c %f %f %f %c\n", &type, &center_x, &center_y, &r, &c_char);
-	}
+	}	
+	
 	if (read != -1)
 	{
 		free(image);

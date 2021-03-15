@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <unistd.h>
-#include <stdlib.h>
 #include <string.h>
+#include <stdlib.h>
 
 #define E_ARG "Error: argument\n"
 #define E_OP "Error: Operation file corrupted\n"
@@ -21,7 +21,7 @@ int str_error(char *s)
 	return 1;
 }
 
-int main(int argc, char *argv[])
+int  main(int argc, char *argv[])
 {
 	FILE *file;
 	char *image;
@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 			free(image);
 			fclose(file);
 			return (str_error(E_OP));
-		}		
+		}
 		y = 0;
 		while (y < b_height)
 		{
@@ -70,16 +70,16 @@ int main(int argc, char *argv[])
 					if ((float)x - start_x < 1.0000000 || (start_x + width) - (float)x < 1.0000000 ||
 						(float)y - start_y < 1.0000000 || (start_y + height) - (float)y < 1.0000000)
 					{
-						if ((float)x >= start_x && (float)x <= start_x + width &&
+						if ((float)x >= start_x && (float)x <= start_x + width && 
 							(float)y >= start_y && (float)y <= start_y + height)
 							image[y * b_width + x] = c_char;
 					}
 				}
 				else if (type == 'R')
 				{
-					if ((float)x >= start_x && (float)x <= start_x + width &&
+					if ((float)x >= start_x && (float)x <= start_x + width && 
 						(float)y >= start_y && (float)y <= start_y + height)
-						image[y * b_width + x] = c_char;				
+						image[y * b_width + x] = c_char;			
 				}
 				x++;
 			}
@@ -102,6 +102,5 @@ int main(int argc, char *argv[])
 	}
 	free(image);
 	fclose(file);
-
 	return 0;
 }
