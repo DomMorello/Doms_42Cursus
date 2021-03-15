@@ -35,11 +35,15 @@ void init_info(t_info *info)
 
 void routine(t_philo *philo)
 {
-	while (1)
-	{
-		
-	}
 	exit(1);
+}
+
+void monitor(t_philo *philo)
+{
+	int stat;
+
+	waitpid(philo->pid, &stat, WNOHANG);
+	printf("parent! %d %d\n", philo->philo_no, stat);
 }
 
 void init_philos(t_info *info)
@@ -55,15 +59,14 @@ void init_philos(t_info *info)
 		info->philos[i].info = info;
 		info->philos[i].last_eat = get_time();
 		info->philos[i].pid = fork();
-		// if (info->philos[i].pid > 0)
-		// 	waitpid(info->philos[i].pid, &stat, WUNTRACED);
-		/*else */if (info->philos[i].pid == 0)
-		{
+		if (info->philos[i].pid == 0)
 			routine(&info->philos[i]);
-		}
+		else
+			monitor(&info->philos[i]);
+		printf("tesT: %d\n", stat);
 	}
 	// if (i == info->num_of_philos)
-	// 	monitor()
+	// 	monitor(info);
 }
 
 int main(int argc, char const *argv[])
