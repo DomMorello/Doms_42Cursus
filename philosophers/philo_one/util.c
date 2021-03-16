@@ -1,32 +1,56 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   util.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/16 11:51:19 by donglee           #+#    #+#             */
+/*   Updated: 2021/03/16 11:51:20 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./philo_one.h"
 
-int		ft_atoi(char const *str)
+int				ft_atoi(char *str)
 {
-	int	i;
-	int	start;
-	int	is_neg;
-	int	res;
+	int		i;
+	int		ret;
+	int		sign;
 
-	if (!str)
-		return (0);
-	i = 0;
-	while (str[i] == '\t' || str[i] == '\n' || str[i] == '\v' ||
-			str[i] == '\f' || str[i] == '\r' || str[i] == ' ')
-		i++;
-	is_neg = (str[i] == '-') ? -1 : 1;
-	if (is_neg == -1 || str[i] == '+')
-		i++;
-	start = i;
-	res = 0;
-	while (str[i] >= '0' && str[i] <= '9')
-			res = (res * 10) + (str[i++] - '0');
-	return (res * is_neg);
+	sign = 1;
+	ret = 0;
+	i = -1;
+	if (str[i + 1] == '-' && i++)
+		sign = -1;
+	while (str[++i])
+	{
+		if (str[i] < '0' || '9' < str[i])
+			return (-1);
+		ret = ret * 10 + (str[i] - '0');
+	}
+	return (sign * ret);
 }
 
 unsigned long	get_time(void)
 {
-	static struct timeval	time;
+	struct timeval		tv;
 
-	gettimeofday(&time, NULL);
-	return ((time.tv_sec * (unsigned long)1000) + (time.tv_usec / 1000));
+	gettimeofday(&tv, NULL);
+	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
+}
+
+void			less_error_sleep(unsigned long input)
+{
+	unsigned long	base;
+	unsigned long	cur;
+
+	base = get_time();
+	while (1)
+	{
+		cur = get_time();
+		if (input < cur - base)
+			return ;
+		usleep(100);
+	}
 }
