@@ -6,7 +6,7 @@
 /*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 12:58:46 by donglee           #+#    #+#             */
-/*   Updated: 2021/03/16 13:02:36 by donglee          ###   ########.fr       */
+/*   Updated: 2021/03/16 16:46:50 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 int		eat(t_philo *philo)
 {
-	sem_wait(philo->info->enter);
+	sem_wait(philo->info->forks);
 	print_msg(philo, S_TAKEN_FORK, get_time());
 	print_msg(philo, S_TAKEN_FORK, get_time());
 	print_msg(philo, S_EATING, get_time());
 	less_error_sleep(philo->info->time_to_eat);
-	sem_post(philo->info->enter);
+	sem_post(philo->info->forks);
 	philo->eat_cnt++;
 	if (philo->eat_cnt == philo->info->must_eat)
 	{
@@ -28,6 +28,14 @@ int		eat(t_philo *philo)
 	}
 	return (FALSE);
 }
+
+/*
+**	A thread that monitors each processes.
+**	checks if the philosopher has eaten must_eat times
+**	and has died.
+**	when the monitor thread found the philosopher died,
+**	the process that contains this thread exits returning TRUE. 
+*/
 
 void	*monitor_th(void *arg)
 {
@@ -45,7 +53,7 @@ void	*monitor_th(void *arg)
 			print_msg(philo, S_DIED, cur);
 			exit(TRUE);
 		}
-		usleep(1000);
+		less_error_sleep(1);
 	}
 	return (NULL);
 }
@@ -66,7 +74,19 @@ void	routine(t_philo *philo)
 			break ;
 	}
 	pthread_join(th, NULL);
+	exit(FALSE);
 }
+
+/*
+**	Only main process(parent process) comes in this function.
+**	Doesn't wait child processes by using WNOHANG.
+**	when a child process exits,
+**	reads the exit status(stat) and decides what to do.
+**	if a child process exits returning FALSE,
+**	it means the philosopher is full.
+**	Otherwise, it means the philosopher died(stat == 256).
+**	when a philosopher died, kills all the remaining processes.
+*/
 
 void	monitor_p(t_info *info)
 {

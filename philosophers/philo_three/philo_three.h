@@ -6,7 +6,7 @@
 /*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 13:04:52 by donglee           #+#    #+#             */
-/*   Updated: 2021/03/16 13:06:07 by donglee          ###   ########.fr       */
+/*   Updated: 2021/03/16 17:16:42 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # define FALSE 0
 # define ERROR -1
 
-# define SEM_ENTER "/enter"
+# define SEM_FORKS "/forks"
 # define SEM_MSG "/msg"
 
 enum	e_state{
@@ -60,7 +60,7 @@ typedef struct		s_info
 	unsigned long	time;
 	int				full_philo;
 	int				done;
-	sem_t			*enter;
+	sem_t			*forks;
 	sem_t			*msg;
 	t_philo			*philos;
 }					t_info;
@@ -73,7 +73,7 @@ void				routine(t_philo *philo);
 void				monitor_p(t_info *info);
 void				init_philos(t_info *info);
 void				init_info(t_info *info);
-int					kill_process(t_info *info);
+void					kill_process(t_info *info);
 int					ft_atoi(char const *s);
 unsigned long		get_time(void);
 void				less_error_sleep(unsigned long input);

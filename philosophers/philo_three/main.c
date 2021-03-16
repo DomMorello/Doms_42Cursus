@@ -6,7 +6,7 @@
 /*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 12:59:19 by donglee           #+#    #+#             */
-/*   Updated: 2021/03/16 13:00:14 by donglee          ###   ########.fr       */
+/*   Updated: 2021/03/16 16:46:59 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,10 @@ int		err_check(char const *argv[], t_info *info)
 		info->must_eat = -1;
 	return (FALSE);
 }
+
+/*
+**	Prints state and checks if someone died 
+*/
 
 int		print_msg(t_philo *philo, int state, unsigned long cur)
 {
@@ -66,7 +70,7 @@ int		main(int argc, char const *argv[])
 		return (ERROR);
 	init_info(&info);
 	init_philos(&info);
-	sem_close(info.enter);
+	sem_close(info.forks);
 	sem_close(info.msg);
 	free(info.philos);
 	return (TRUE);
