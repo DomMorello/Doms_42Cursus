@@ -6,30 +6,33 @@
 /*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 11:51:19 by donglee           #+#    #+#             */
-/*   Updated: 2021/03/16 11:51:20 by donglee          ###   ########.fr       */
+/*   Updated: 2021/03/16 12:40:04 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./philo_one.h"
 
-int				ft_atoi(char *str)
+int		ft_atoi(char const *str)
 {
-	int		i;
-	int		ret;
-	int		sign;
+	int	i;
+	int	start;
+	int	is_neg;
+	int	res;
 
-	sign = 1;
-	ret = 0;
-	i = -1;
-	if (str[i + 1] == '-' && i++)
-		sign = -1;
-	while (str[++i])
-	{
-		if (str[i] < '0' || '9' < str[i])
-			return (-1);
-		ret = ret * 10 + (str[i] - '0');
-	}
-	return (sign * ret);
+	if (!str)
+		return (0);
+	i = 0;
+	while (str[i] == '\t' || str[i] == '\n' || str[i] == '\v' ||
+			str[i] == '\f' || str[i] == '\r' || str[i] == ' ')
+		i++;
+	is_neg = (str[i] == '-') ? -1 : 1;
+	if (is_neg == -1 || str[i] == '+')
+		i++;
+	start = i;
+	res = 0;
+	while (str[i] >= '0' && str[i] <= '9')
+			res = (res * 10) + (str[i++] - '0');
+	return (res * is_neg);
 }
 
 unsigned long	get_time(void)

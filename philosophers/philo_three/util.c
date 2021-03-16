@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   util.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/16 12:59:21 by donglee           #+#    #+#             */
+/*   Updated: 2021/03/16 13:01:00 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./philo_three.h"
 
-int		ft_atoi(char const *str)
+int				ft_atoi(char const *str)
 {
 	int	i;
 	int	start;
@@ -24,7 +36,6 @@ int		ft_atoi(char const *str)
 }
 
 unsigned long	get_time(void)
-
 {
 	struct timeval		tv;
 

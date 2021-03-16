@@ -1,20 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo_two.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/16 12:53:20 by donglee           #+#    #+#             */
+/*   Updated: 2021/03/16 12:55:20 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILO_TWO_H
-#define PHILO_TWO_H
-
-#define TRUE 1
-#define FALSE 0
-#define ERROR -1
-
-#define SEM_ENTER "/enter"
-#define SEM_MSG "/msg"
-
-enum	e_state	{
-	S_TAKEN_FORK,
-	S_EATING,
-	S_SLEEPING,
-	S_THINKING,
-	S_DIED
-};
+# define PHILO_TWO_H
 
 # include <stdlib.h>
 # include <unistd.h>
@@ -24,33 +21,55 @@ enum	e_state	{
 # include <semaphore.h>
 # include <stdio.h>
 
+# define TRUE 1
+# define FALSE 0
+# define ERROR -1
+
+# define SEM_ENTER "/enter"
+# define SEM_MSG "/msg"
+
+enum	e_state	{
+	S_TAKEN_FORK,
+	S_EATING,
+	S_SLEEPING,
+	S_THINKING,
+	S_DIED
+};
+
 typedef struct		s_info
 {
 	int				num_of_philos;
 	unsigned long	time_to_die;
 	unsigned long	time_to_eat;
 	unsigned long	time_to_sleep;
-	int				must_eat;	//num_eat
-	unsigned long	time;		//base_time
-	int				full_philo;	//eat
-	int				done;		//dead
+	int				must_eat;
+	unsigned long	time;
+	int				full_philo;
+	int				done;
 	sem_t			*enter;
 	sem_t			*msg;
-}               	t_info;
+}					t_info;
 
-typedef struct 		s_philo
+typedef struct		s_philo
 {
-	int				philo_no;	//nbr
-	int				eat_cnt;	//eat
+	int				philo_no;
+	int				eat_cnt;
 	unsigned long	last_eat;
-	pthread_t		th;			///tid
+	pthread_t		th;
 }					t_philo;
 
 t_info				g_info;
 t_philo				*g_philos;
 
-int ft_atoi(char const *s);
-void	less_error_sleep(unsigned long input);
-unsigned long	get_time(void);
+int					err_check(char const *argv[]);
+int					print_msg(t_philo *philo, int state, unsigned long cur);
+void				init_info(void);
+void				init_philos(void);
+int					eat(t_philo *philo);
+void				*monitor(void *arg);
+void				*routine(void *arg);
+int					ft_atoi(char const *s);
+void				less_error_sleep(unsigned long input);
+unsigned long		get_time(void);
 
 #endif

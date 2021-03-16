@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   util.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/16 12:40:20 by donglee           #+#    #+#             */
+/*   Updated: 2021/03/16 12:53:07 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./philo_two.h"
 
-int		ft_atoi(char const *str)
+int				ft_atoi(char const *str)
 {
 	int	i;
 	int	start;
@@ -19,7 +31,7 @@ int		ft_atoi(char const *str)
 	start = i;
 	res = 0;
 	while (str[i] >= '0' && str[i] <= '9')
-			res = (res * 10) + (str[i++] - '0');
+		res = (res * 10) + (str[i++] - '0');
 	return (res * is_neg);
 }
 

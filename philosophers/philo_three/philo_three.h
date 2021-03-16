@@ -1,12 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo_three.h                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/16 13:04:52 by donglee           #+#    #+#             */
+/*   Updated: 2021/03/16 13:06:07 by donglee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILO_THREE_H
-#define PHILO_THREE_H
-
-#define TRUE 1
-#define FALSE 0
-#define ERROR -1
-
-#define SEM_ENTER "/enter"
-#define SEM_MSG "/msg"
+# define PHILO_THREE_H
 
 # include <stdlib.h>
 # include <unistd.h>
@@ -19,12 +24,19 @@
 # include <sys/wait.h>
 # include <signal.h>
 
+# define TRUE 1
+# define FALSE 0
+# define ERROR -1
+
+# define SEM_ENTER "/enter"
+# define SEM_MSG "/msg"
+
 enum	e_state{
 	S_TAKEN_FORK,
 	S_EATING,
 	S_SLEEPING,
 	S_THINKING,
-	S_DIED	
+	S_DIED
 };
 
 struct s_info;
@@ -53,8 +65,17 @@ typedef struct		s_info
 	t_philo			*philos;
 }					t_info;
 
-int ft_atoi(char const *s);
-unsigned long	get_time(void);
-void less_error_sleep(unsigned long input);
+int					print_msg(t_philo *philo, int state, unsigned long cur);
+int					err_check(char const *argv[], t_info *info);
+int					eat(t_philo *philo);
+void				*monitor_th(void *arg);
+void				routine(t_philo *philo);
+void				monitor_p(t_info *info);
+void				init_philos(t_info *info);
+void				init_info(t_info *info);
+int					kill_process(t_info *info);
+int					ft_atoi(char const *s);
+unsigned long		get_time(void);
+void				less_error_sleep(unsigned long input);
 
 #endif

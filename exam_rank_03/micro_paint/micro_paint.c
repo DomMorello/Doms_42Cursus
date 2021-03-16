@@ -48,7 +48,7 @@ int  main(int argc, char *argv[])
 		return (str_error(E_OP));
 	if (!(b_width > 0 && b_width <= 300 && b_height > 0 && b_height <= 300))
 		return (str_error(E_OP));
-	image = (char *)malloc(sizeof(char) * (b_width * b_height));
+	image = malloc(sizeof(char) * (b_width * b_height));
 	memset(image, b_char, b_width * b_height);
 	read = fscanf(file, "%c %f %f %f %f %c\n", &type, &start_x, &start_y, &width, &height, &c_char);
 	while (read == 6)
@@ -67,19 +67,19 @@ int  main(int argc, char *argv[])
 			{
 				if (type == 'r')
 				{
-					if ((float)x - start_x < 1.0000000 || (start_x + width) - (float)x < 1.0000000 ||
+					if ((float)x - start_x < 1.0000000 || (start_x + width) - (float)x < 1.0000000 || 
 						(float)y - start_y < 1.0000000 || (start_y + height) - (float)y < 1.0000000)
 					{
-						if ((float)x >= start_x && (float)x <= start_x + width && 
+						if ((float)x >= start_x && (float)x <= start_x + width &&
 							(float)y >= start_y && (float)y <= start_y + height)
 							image[y * b_width + x] = c_char;
 					}
 				}
 				else if (type == 'R')
 				{
-					if ((float)x >= start_x && (float)x <= start_x + width && 
+					if ((float)x >= start_x && (float)x <= start_x + width &&
 						(float)y >= start_y && (float)y <= start_y + height)
-						image[y * b_width + x] = c_char;			
+						image[y * b_width + x] = c_char;
 				}
 				x++;
 			}
