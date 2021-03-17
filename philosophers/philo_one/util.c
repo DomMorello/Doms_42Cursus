@@ -12,7 +12,7 @@
 
 #include "./philo_one.h"
 
-int		ft_atoi(char const *str)
+int				ft_atoi(char const *str)
 {
 	int	i;
 	int	start;
@@ -31,7 +31,7 @@ int		ft_atoi(char const *str)
 	start = i;
 	res = 0;
 	while (str[i] >= '0' && str[i] <= '9')
-			res = (res * 10) + (str[i++] - '0');
+		res = (res * 10) + (str[i++] - '0');
 	return (res * is_neg);
 }
 

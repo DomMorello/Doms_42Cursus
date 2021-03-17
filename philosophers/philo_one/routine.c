@@ -52,6 +52,10 @@ int		eat(t_philo *philo)
 	return (FALSE);
 }
 
+/*
+**	even number philosopher waits 1 microseconds to avoid deadlock.
+*/
+
 void	*routine(void *arg)
 {
 	t_philo		*philo;
