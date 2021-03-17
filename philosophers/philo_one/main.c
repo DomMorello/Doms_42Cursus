@@ -12,6 +12,10 @@
 
 #include "./philo_one.h"
 
+/*
+**	prints state and checks if someone died.
+*/
+
 int		print_msg(t_philo *philo, int state, unsigned long cur)
 {
 	pthread_mutex_lock(&g_info.msg);

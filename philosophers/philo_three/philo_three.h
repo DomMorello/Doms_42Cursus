@@ -73,7 +73,7 @@ void				routine(t_philo *philo);
 void				monitor_p(t_info *info);
 void				init_philos(t_info *info);
 void				init_info(t_info *info);
-void					kill_process(t_info *info);
+void				kill_process(t_info *info);
 int					ft_atoi(char const *s);
 unsigned long		get_time(void);
 void				less_error_sleep(unsigned long input);

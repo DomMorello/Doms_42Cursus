@@ -12,6 +12,10 @@
 
 #include "./philo_one.h"
 
+/*
+**	sets location of left and right forks.
+*/
+
 void	init_info(void)
 {
 	int		i;

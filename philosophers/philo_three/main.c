@@ -27,7 +27,7 @@ int		err_check(char const *argv[], t_info *info)
 }
 
 /*
-**	Prints state and checks if someone died 
+**	Prints state and checks if someone died
 */
 
 int		print_msg(t_philo *philo, int state, unsigned long cur)

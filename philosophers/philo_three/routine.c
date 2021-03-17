@@ -30,11 +30,11 @@ int		eat(t_philo *philo)
 }
 
 /*
-**	A thread that monitors each processes.
+**	A thread that monitors each process.
 **	checks if the philosopher has eaten must_eat times
 **	and has died.
 **	when the monitor thread found the philosopher died,
-**	the process that contains this thread exits returning TRUE. 
+**	the process that contains this thread exits returning TRUE.
 */
 
 void	*monitor_th(void *arg)

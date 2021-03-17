@@ -12,7 +12,7 @@
 
 #include "./philo_three.h"
 
-void		kill_process(t_info *info)
+void	kill_process(t_info *info)
 {
 	int i;
 
@@ -25,7 +25,7 @@ void		kill_process(t_info *info)
 **	Because a philosopher takes two forks,
 **	the Semaphore restricts the number of forks
 **	to num_of_philos / 2 regardless of whether
-**	the num_of_philos is odd or even number. 
+**	the num_of_philos is odd or even number.
 */
 
 void	init_info(t_info *info)
@@ -42,7 +42,7 @@ void	init_info(t_info *info)
 
 /*
 **	initializes each philosophers and makes child processes.
-**	only parent process(main process) goes into monitor_p function. 
+**	only parent process(main process) goes into monitor_p function.
 */
 
 void	init_philos(t_info *info)
