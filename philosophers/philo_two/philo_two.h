@@ -6,7 +6,7 @@
 /*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 12:53:20 by donglee           #+#    #+#             */
-/*   Updated: 2021/03/16 12:55:20 by donglee          ###   ########.fr       */
+/*   Updated: 2021/03/18 10:24:43 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # define FALSE 0
 # define ERROR -1
 
-# define SEM_ENTER "/enter"
+# define SEM_FORKS "/forks"
 # define SEM_MSG "/msg"
 
 enum	e_state	{
@@ -46,7 +46,7 @@ typedef struct		s_info
 	unsigned long	time;
 	int				full_philo;
 	int				done;
-	sem_t			*enter;
+	sem_t			*forks;
 	sem_t			*msg;
 }					t_info;
 

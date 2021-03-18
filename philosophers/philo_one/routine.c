@@ -6,7 +6,7 @@
 /*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 11:48:10 by donglee           #+#    #+#             */
-/*   Updated: 2021/03/16 11:51:02 by donglee          ###   ########.fr       */
+/*   Updated: 2021/03/18 10:12:58 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int		eat(t_philo *philo)
 }
 
 /*
-**	even number philosopher waits 1 microseconds to avoid deadlock.
+**	even number philosopher waits 100 microseconds to avoid deadlock.
 */
 
 void	*routine(void *arg)

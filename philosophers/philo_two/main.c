@@ -6,7 +6,7 @@
 /*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 12:47:45 by donglee           #+#    #+#             */
-/*   Updated: 2021/03/16 12:49:22 by donglee          ###   ########.fr       */
+/*   Updated: 2021/03/18 10:25:27 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int		main(int argc, char const *argv[])
 		return (printf("malloc error\n"));
 	init_info();
 	init_philos();
-	sem_close(g_info.enter);
+	sem_close(g_info.forks);
 	sem_close(g_info.msg);
 	free(g_philos);
 	return (FALSE);

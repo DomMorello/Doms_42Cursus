@@ -6,7 +6,7 @@
 /*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 12:41:57 by donglee           #+#    #+#             */
-/*   Updated: 2021/03/16 12:52:25 by donglee          ###   ########.fr       */
+/*   Updated: 2021/03/18 10:25:39 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 int		eat(t_philo *philo)
 {
-	sem_wait(g_info.enter);
+	sem_wait(g_info.forks);
 	print_msg(philo, S_TAKEN_FORK, get_time());
 	print_msg(philo, S_TAKEN_FORK, get_time());
 	print_msg(philo, S_EATING, get_time());
 	less_error_sleep(g_info.time_to_eat);
-	sem_post(g_info.enter);
+	sem_post(g_info.forks);
 	philo->eat_cnt++;
 	if (philo->eat_cnt == g_info.must_eat)
 	{
