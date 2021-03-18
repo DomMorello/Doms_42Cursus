@@ -5,13 +5,12 @@
 
 > 이 프로젝트에서 프로세스를 스레딩 하는 방법과 같은 메모리 공간을 사용하는 방법에 대해 배우게 됩니다. 스레드를 만드는 방법을 배우고 mutex, semaphore와 공유메모리에 대해서 알게될 것입니다.
 
-//수정돼야함
 ## Compile
-- `git clone https://github.com/DomMorello/minishell.git`
+- `git clone https://github.com/DomMorello/philosophers.git`
 - `cd philosohper`
 - `cd philo_one`    // or philo_tow or philo_three
 - `make`
-- `./philo_one`     // or ./philo_tow or ./philo_three
+- `./philo_one 4 410 200 200 6`     // or ./philo_tow or ./philo_three
 
 ## Requirements
 There are 3 different programs but they will have the same basic rules:
