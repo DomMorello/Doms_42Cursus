@@ -6,7 +6,7 @@
 /*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 11:50:47 by donglee           #+#    #+#             */
-/*   Updated: 2021/03/16 11:50:47 by donglee          ###   ########.fr       */
+/*   Updated: 2021/03/18 10:03:41 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void				clean_info(void);
 void				less_error_sleep(unsigned long time);
 void				init_philos(void);
 void				init_info(void);
-int					ft_atoi(char *str);
+int					ft_atoi(char const *str);
 int					err_check(char **argv);
 int					print_msg(t_philo *philo, int msg, unsigned long cur);
 int					eat(t_philo *philo);
