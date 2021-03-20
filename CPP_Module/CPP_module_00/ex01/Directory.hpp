@@ -1,14 +1,17 @@
 #ifndef DIRECTORY_HPP
 #define DIRECTORY_HPP
 
-#include "Contact.hpp"
+#include "./Contact.hpp"
 
 class Directory {
-public:
-    void addContact(void);
-    void searchContact(void);
-private:
-    Contact contacts[8];
+    public:
+        Directory(void);
+        void addContact(void);
+        void searchContact(void);
+
+    private:
+        int idx;
+        Contact contacts[SIZE];
 };
 
-#endif 
+#endif

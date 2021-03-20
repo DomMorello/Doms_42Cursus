@@ -1,34 +1,41 @@
 #ifndef CONTACT_HPP
 #define CONTACT_HPP
 
-#include <string>
 #include <iostream>
+#include <string>
+#include <iomanip>
+
+#define SIZE 8
+#define FIELD_NUM 11
 
 class Contact {
-public:
-	Contact() {
-		index = idCounter++;
-	}
-	static int idCounter;
-private:
-    enum Info
-    {
-        FIRST_NAME,
-        LAST_NAME,
-        NICKNAME,
-        LOGIN,
-        POSTAL,
-        EMAIL,
-        PHONE,
-        BIRTHDAY,
-        FAV_MEAL,
-        UNDERWEAR,
-        SECRET
-    };
-	std::string info[11];
-	int index;
+    Contact() {
+        std::cout << "Contact Constructor!" << std::endl;
+    }
+    ~Contact() {
+        std::cout << "Contact Constructor!" << std::endl;
+    }
+    public:
+        void input_info(void);
+        void show_header(void);
+        void print_info(void);
+    private:
+        static std::string  field[FIELD_NUM];
+        std::string         info[FIELD_NUM];
 };
 
-int Contact::idCounter = 1;
+std::string Contact::field[11] = {
+	"First Name",
+	"Last Name",
+	"Nickname",
+	"Login",
+	"Postal Address",
+	"Email Address",
+	"Phone Number",
+	"Birthday Date",
+	"Favorite Meal",
+	"Underwear Color",
+	"Darkest Secret"
+};
 
 #endif
