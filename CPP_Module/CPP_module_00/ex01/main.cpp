@@ -2,7 +2,7 @@
 
 int main(void)
 {
-    Directory   dir;
+    Directory dr;
     std::string input;
 
     while (true)
