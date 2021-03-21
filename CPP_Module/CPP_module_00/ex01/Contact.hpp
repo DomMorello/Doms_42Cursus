@@ -9,12 +9,6 @@
 #define FIELD_NUM 11
 
 class Contact {
-    Contact() {
-        std::cout << "Contact Constructor!" << std::endl;
-    }
-    ~Contact() {
-        std::cout << "Contact Constructor!" << std::endl;
-    }
     public:
         void input_info(void);
         void show_header(void);
@@ -22,20 +16,6 @@ class Contact {
     private:
         static std::string  field[FIELD_NUM];
         std::string         info[FIELD_NUM];
-};
-
-std::string Contact::field[11] = {
-	"First Name",
-	"Last Name",
-	"Nickname",
-	"Login",
-	"Postal Address",
-	"Email Address",
-	"Phone Number",
-	"Birthday Date",
-	"Favorite Meal",
-	"Underwear Color",
-	"Darkest Secret"
 };
 
 #endif
