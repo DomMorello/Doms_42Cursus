@@ -25,6 +25,8 @@ unprotected header, means 0 to the exercise.
 >Namespace, class, member functions, stdio stream,
 initialization lists, static, const, and lots of basic stuff
 ## C++ Module 01
+> Memory allocation, References, Pointers to members,
+File streams
 ## C++ Module 02
 ## C++ Module 03
 ## C++ Module 04
