@@ -4,6 +4,7 @@ std::string Human::identify() const {
     return (brain.identify());
 }
 
-Brain   Human::getBrain() const {
-    return (brain);
+const Brain&   Human::getBrain() const {
+    const Brain& ref = brain;
+    return (ref);
 }

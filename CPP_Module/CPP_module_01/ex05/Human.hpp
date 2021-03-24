@@ -5,8 +5,8 @@
 
 class Human {
 	public:
-		std::string identify() const;
-        Brain       getBrain() const;
+		std::string		identify() const;
+        const Brain&	getBrain() const;
 	private:
         const Brain brain;
 };
