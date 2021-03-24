@@ -5,6 +5,7 @@
 
 class Human {
 	public:
+		Human();
 		std::string		identify() const;
         const Brain&	getBrain() const;
 	private:
