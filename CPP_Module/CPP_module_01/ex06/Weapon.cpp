@@ -3,8 +3,7 @@
 Weapon::Weapon(std::string _type) : type(_type) { }
 
 const std::string& Weapon::getType() {
-    const std::string& ref = type;
-    return (ref);
+    return (type);
 }
 
 //type 이 const면 set을 할 수가 없다. list initializer로 초기화가
