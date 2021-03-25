@@ -28,6 +28,8 @@ initialization lists, static, const, and lots of basic stuff
 > Memory allocation, References, Pointers to members,
 File streams
 ## C++ Module 02
+> Ad-hoc polymorphism, operators overload and
+canonical classes
 ## C++ Module 03
 ## C++ Module 04
 ## C++ Module 05
