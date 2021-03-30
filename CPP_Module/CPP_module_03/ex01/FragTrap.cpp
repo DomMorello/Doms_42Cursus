@@ -93,7 +93,7 @@ unsigned int FragTrap::vaulthunter_dot_exe(std::string const & target) {
     }
     energy -= 25;
     unsigned int randDamage[5] = {10, 20, 30, 40, 50};
-    const std::string randSkill[5] = {"punch", "kick", "stick", "flourescent light", "stone"};
+    std::string randSkill[5] = {"punch", "kick", "stick", "flourescent light", "stone"};
     srand(clock());
     int random = rand() % 5;
         std::cout <<
