@@ -1,23 +1,25 @@
 #include "./FragTrap.hpp"
 #include "./ScavTrap.hpp"
+#include "./ClapTrap.hpp"
 
 int main()
 {
-    FragTrap dong;   //µğÆúÆ®»ı¼ºÀÚ
+    std::cout << "@@@@@@@@@@@@@@  start  @@@@@@@@@@@@@@" << std::endl;
+    FragTrap dong;   //ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     FragTrap morello("morello");
-    dong = morello; //´ëÀÔ ¿¬»êÀÚ ¿À¹ö·Îµù
-    FragTrap lee(dong); //º¹»ç»ı¼ºÀÚ
+    dong = morello; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Îµï¿½
+    FragTrap lee(dong); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
     FragTrap domas("domas");
 
-    //domas°¡ morello¸¦ melee·Î °ø°İÇÔ
+    //domasï¿½ï¿½ morelloï¿½ï¿½ meleeï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     morello.takeDamage(domas.meleeAttack(morello.getName()));
-    //morello°¡ domas¸¦ range·Î °ø°İÇÔ
+    //morelloï¿½ï¿½ domasï¿½ï¿½ rangeï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     domas.takeDamage(morello.rangedAttack(domas.getName()));
     morello.printStat();
     domas.printStat();
 
-    //domas¿Í morello°¡ ¼­·Î ·£´ı°ø°İÀ» ÇÔ.
+    //domasï¿½ï¿½ morelloï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½.
     morello.takeDamage(domas.vaulthunter_dot_exe(morello.getName()));
     domas.takeDamage(morello.vaulthunter_dot_exe(domas.getName()));
     morello.takeDamage(domas.vaulthunter_dot_exe(morello.getName()));
@@ -25,14 +27,14 @@ int main()
     morello.printStat();
     domas.printStat();
 
-    //È¸º¹ÇÏ±â
+    //È¸ï¿½ï¿½ï¿½Ï±ï¿½
     morello.beRepaired(50);
     domas.beRepaired(30);
-    morello.beRepaired(100);    //¿ÏÀüÈ÷ È¸º¹ÇÏ±â
+    morello.beRepaired(100);    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½Ï±ï¿½
     morello.printStat();
     domas.printStat();
 
-    //domas Á×ÀÌ±â
+    //domas ï¿½ï¿½ï¿½Ì±ï¿½
     domas.takeDamage(morello.rangedAttack(domas.getName()));
     domas.takeDamage(morello.rangedAttack(domas.getName()));
     domas.takeDamage(morello.rangedAttack(domas.getName()));
