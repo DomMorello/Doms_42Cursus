@@ -1,5 +1,6 @@
 #include "./FragTrap.hpp"
 #include "./ScavTrap.hpp"
+#include "./NinjaTrap.hpp"
 
 int main()
 {
@@ -52,5 +53,14 @@ int main()
     scavTrap.takeDamage(morello.meleeAttack(scavTrap.getName()));
     scavTrap.printStat();
 
+    //Ninja test
+    NinjaTrap nt1("Mr.Ninja1");
+    NinjaTrap nt2("Mr.Ninja2");
+    ClapTrap ct("Mr.ClapTrap");
+    nt1.ninjaShoebox(ct);
+    nt1.ninjaShoebox(domas);
+    nt1.ninjaShoebox(scavTrap);
+    nt1.ninjaShoebox(nt2);
+    nt1.printStat();
     return 0;
 }
