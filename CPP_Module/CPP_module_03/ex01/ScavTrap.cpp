@@ -4,27 +4,27 @@ ScavTrap::ScavTrap() :
     hit(100), maxHit(100), energy(50),
     maxEnergy(50), level(1), name("unknown"), meleeDamage(20),
     rangedDamage(15), armorReduction(3) {
-    std::cout << "ScavTrap Constructor called" << std::endl;
+    std::cout << "ScavTrap Constructor called wow!" << std::endl;
 }
 
 ScavTrap::ScavTrap(const std::string name) :
     hit(100), maxHit(100), energy(50),
     maxEnergy(50), level(1), name(name), meleeDamage(20),
     rangedDamage(15), armorReduction(3) {
-    std::cout << "ScavTrap Constructor called" << std::endl;
+    std::cout << "ScavTrap Constructor called wow!" << std::endl;
 }
 
 ScavTrap::ScavTrap(const ScavTrap& scavTrap) {
-    std::cout << "ScavTrap Copy constructor called" << std::endl;
-    *this = scavTrap;   //´ëÀÔ¿¬»êÀÚ ¿À¹ö·ÎµùÀÌ ½ÇÇàµÈ´Ù.
+    std::cout << "ScavTrap Copy constructor called wow!" << std::endl;
+    *this = scavTrap;   //ï¿½ï¿½ï¿½Ô¿ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È´ï¿½.
 }
 
 ScavTrap::~ScavTrap() {
-    std::cout << "ScavTrap Destructor called" << std::endl;
+    std::cout << "ScavTrap Destructor called wow!" << std::endl;
 }
 
 ScavTrap& ScavTrap::operator=(const ScavTrap& scavTrap) {
-    std::cout << "ScavTrap Assignation operator called" << std::endl;
+    std::cout << "ScavTrap Assignation operator called wow!" << std::endl;
     hit = scavTrap.hit;
     maxHit = scavTrap.maxHit;
     energy = scavTrap.energy;
@@ -40,21 +40,21 @@ ScavTrap& ScavTrap::operator=(const ScavTrap& scavTrap) {
 int ScavTrap::rangedAttack(std::string const & target) {
     std::cout <<
     "FR4G-TP(scavtrap) "<< this->name << " attacks " << target <<
-    " at range, causing " << this->rangedDamage << " points of damage!" << std::endl;
+    " at range, causing " << this->rangedDamage << " points of damage! yeah!" << std::endl;
     return rangedDamage;
 }
 
 int ScavTrap::meleeAttack(std::string const & target) {
     std::cout <<
     "FR4G-TP(scavtrap) "<< this->name << " attacks " << target <<
-    " at melee, causing " << this->meleeDamage << " points of damage!" << std::endl;
+    " at melee, causing " << this->meleeDamage << " points of damage! yeah!" << std::endl;
     return meleeDamage;
 }
 
 void ScavTrap::takeDamage(unsigned int amount) {
     if (hit == 0)
     {
-        std::cout << name << " is already dead" << std::endl;
+        std::cout << name << " is already dead yeah!" << std::endl;
         return ;
     }
     int damage = amount - armorReduction;
@@ -62,12 +62,12 @@ void ScavTrap::takeDamage(unsigned int amount) {
         damage = 0;
     std::cout <<
     "FR4G-TP(scavtrap) "<< this->name << " is attacked and got "
-    << damage << " points of damage!" << std::endl;
+    << damage << " points of damage! yeah!" << std::endl;
     hit -= damage;
     if (hit <= 0)
     {
         hit = 0;
-        std::cout << name << " is dead" << std::endl;
+        std::cout << name << " is dead yeah!" << std::endl;
         printStat();
     }
 }
@@ -81,7 +81,7 @@ void ScavTrap::beRepaired(unsigned int amount) {
         energy = maxEnergy;
     std::cout <<
     "FR4G-TP(scavtrap) "<< this->name << " is repaired and got "
-    << amount << " points of energy and hit points!" << std::endl;
+    << amount << " points of energy and hit points! yeah!" << std::endl;
 }
 
 void ScavTrap::challengeNewcomer(void) {

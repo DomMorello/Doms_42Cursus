@@ -4,27 +4,27 @@ FragTrap::FragTrap() :
     hit(100), maxHit(100), energy(100),
     maxEnergy(100), level(1), name("unknown"), meleeDamage(30),
     rangedDamage(20), armorReduction(5) {
-    std::cout << "Constructor called" << std::endl;
+    std::cout << "FragTrap Constructor called yoo hoo!" << std::endl;
 }
 
 FragTrap::FragTrap(const std::string name) :
     hit(100), maxHit(100), energy(100),
     maxEnergy(100), level(1), name(name), meleeDamage(30),
     rangedDamage(20), armorReduction(5) {
-    std::cout << "Constructor called" << std::endl;
+    std::cout << "FragTrap Constructor called yoo hoo!" << std::endl;
 }
 
 FragTrap::FragTrap(const FragTrap& fragTrap) {
-    std::cout << "Copy constructor called" << std::endl;
-    *this = fragTrap;   //´ëÀÔ¿¬»êÀÚ ¿À¹ö·ÎµùÀÌ ½ÇÇàµÈ´Ù.
+    std::cout << "FragTrap Copy constructor called yoo hoo!" << std::endl;
+    *this = fragTrap;   //ï¿½ï¿½ï¿½Ô¿ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È´ï¿½.
 }
 
 FragTrap::~FragTrap() {
-    std::cout << "Destructor called" << std::endl;
+    std::cout << "FragTrap Destructor called yoo hoo!" << std::endl;
 }
 
 FragTrap& FragTrap::operator=(const FragTrap& fragTrap) {
-    std::cout << "Assignation operator called" << std::endl;
+    std::cout << "FragTrap Assignation operator called yoo hoo!" << std::endl;
     hit = fragTrap.hit;
     maxHit = fragTrap.maxHit;
     energy = fragTrap.energy;
@@ -40,21 +40,21 @@ FragTrap& FragTrap::operator=(const FragTrap& fragTrap) {
 unsigned int FragTrap::rangedAttack(std::string const & target) {
     std::cout <<
     "FR4G-TP "<< this->name << " attacks " << target <<
-    " at range, causing " << this->rangedDamage << " points of damage!" << std::endl;
+    " at range, causing " << this->rangedDamage << " points of damage! holy!" << std::endl;
     return rangedDamage;
 }
 
 unsigned int FragTrap::meleeAttack(std::string const & target) {
     std::cout <<
     "FR4G-TP "<< this->name << " attacks " << target <<
-    " at melee, causing " << this->meleeDamage << " points of damage!" << std::endl;
+    " at melee, causing " << this->meleeDamage << " points of damage! holy!" << std::endl;
     return meleeDamage;
 }
 
 void FragTrap::takeDamage(unsigned int amount) {
     if (hit == 0)
     {
-        std::cout << name << " is already dead" << std::endl;
+        std::cout << name << " is already dead holy!" << std::endl;
         return ;
     }
     unsigned int damage = amount - armorReduction;
@@ -62,12 +62,12 @@ void FragTrap::takeDamage(unsigned int amount) {
         damage = 0;
     std::cout <<
     "FR4G-TP "<< this->name << " is attacked and got "
-    << damage << " points of damage!" << std::endl;
+    << damage << " points of damage! holy!" << std::endl;
     hit -= damage;
     if (hit <= 0)
     {
         hit = 0;
-        std::cout << name << " is dead" << std::endl;
+        std::cout << name << " is dead holy!" << std::endl;
         printStat();
     }
 }
@@ -81,14 +81,14 @@ void FragTrap::beRepaired(unsigned int amount) {
         energy = maxEnergy;
     std::cout <<
     "FR4G-TP "<< this->name << " is repaired and got "
-    << amount << " points of energy and hit points!" << std::endl;
+    << amount << " points of energy and hit points! holy!" << std::endl;
 }
 
 unsigned int FragTrap::vaulthunter_dot_exe(std::string const & target) {
-    //¿¡³ÊÁö°¡ 25 ¹Ì¸¸ÀÌ¸é ÇÔ¼ö¸¦ ½ÇÇàÇÏÁö ¾Ê°í µ¥¹ÌÁö 0À» ¸®ÅÏÇÑ´Ù.
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 25 ï¿½Ì¸ï¿½ï¿½Ì¸ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 0ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
     if (energy < 25)
     {
-        std::cout << "FAIL! out of energy" << std::endl;
+        std::cout << "FAIL! out of energy holy!" << std::endl;
         return 0;
     }
     energy -= 25;
@@ -98,7 +98,7 @@ unsigned int FragTrap::vaulthunter_dot_exe(std::string const & target) {
     int random = rand() % 5;
         std::cout <<
     "FR4G-TP "<< this->name << " attacks " << target <<
-    " at " << randSkill[random] << ", causing " << randDamage[random] << " points of damage!" << std::endl;
+    " at " << randSkill[random] << ", causing " << randDamage[random] << " points of damage! holy!" << std::endl;
     return randDamage[random];
 }
 
