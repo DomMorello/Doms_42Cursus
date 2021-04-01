@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <cmath>
-#include <bitset>
 
 class Fixed{
     public:
