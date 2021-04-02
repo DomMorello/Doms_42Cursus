@@ -11,6 +11,9 @@ class SuperTrap : public FragTrap, NinjaTrap {
         SuperTrap(const SuperTrap& scavTrap);
         ~SuperTrap();
         SuperTrap& operator=(const SuperTrap& scavTrap);
+
+        unsigned int rangedAttack(std::string const & target);
+        unsigned int meleeAttack(std::string const & target);
 };
 
 #endif
