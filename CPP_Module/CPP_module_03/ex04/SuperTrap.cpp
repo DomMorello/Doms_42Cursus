@@ -50,3 +50,11 @@ SuperTrap& SuperTrap::operator=(const SuperTrap& superTrap) {
     this->armorReduction = superTrap.armorReduction;
     return *this;
 }
+
+unsigned int SuperTrap::rangedAttack(std::string const & target) {
+
+}
+
+unsigned int SuperTrap::meleeAttack(std::string const & target) {
+
+}

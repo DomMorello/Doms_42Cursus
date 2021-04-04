@@ -31,7 +31,9 @@ File streams
 > Ad-hoc polymorphism, operators overload and
 canonical classes
 ## C++ Module 03
+> Inheritance
 ## C++ Module 04
+> Subtype polymorphism, abstract classes, interfaces
 ## C++ Module 05
 ## C++ Module 06
 ## C++ Module 07

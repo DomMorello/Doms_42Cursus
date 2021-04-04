@@ -28,26 +28,26 @@ NinjaTrap::NinjaTrap(std::string name): ClapTrap(name)
 	std::cout << "NinjaTrap Constructor called wow!" << std::endl;
 }
 
-NinjaTrap::NinjaTrap(const NinjaTrap& scavTrap) {
+NinjaTrap::NinjaTrap(const NinjaTrap& ninjaTrap) {
     std::cout << "NinjaTrap Copy constructor called wow!" << std::endl;
-    *this = scavTrap;   //���Կ����� �����ε��� ����ȴ�.
+    *this = ninjaTrap;   //���Կ����� �����ε��� ����ȴ�.
 }
 
 NinjaTrap::~NinjaTrap() {
     std::cout << "NinjaTrap Destructor called wow!" << std::endl;
 }
 
-NinjaTrap& NinjaTrap::operator=(const NinjaTrap& scavTrap) {
+NinjaTrap& NinjaTrap::operator=(const NinjaTrap& ninjaTrap) {
     std::cout << "NinjaTrap Assignation operator called wow!" << std::endl;
-    this->hit = scavTrap.hit;
-    this->maxHit = scavTrap.maxHit;
-    this->energy = scavTrap.energy;
-    this->maxEnergy = scavTrap.maxEnergy;
-    this->level = scavTrap.level;
-    this->name = scavTrap.name;
-    this->meleeDamage = scavTrap.meleeDamage;
-    this->rangedDamage = scavTrap.rangedDamage;
-    this->armorReduction = scavTrap.armorReduction;
+    this->hit = ninjaTrap.hit;
+    this->maxHit = ninjaTrap.maxHit;
+    this->energy = ninjaTrap.energy;
+    this->maxEnergy = ninjaTrap.maxEnergy;
+    this->level = ninjaTrap.level;
+    this->name = ninjaTrap.name;
+    this->meleeDamage = ninjaTrap.meleeDamage;
+    this->rangedDamage = ninjaTrap.rangedDamage;
+    this->armorReduction = ninjaTrap.armorReduction;
     return *this;
 }
 void NinjaTrap::ninjaShoebox(ClapTrap& clapTrap) {
