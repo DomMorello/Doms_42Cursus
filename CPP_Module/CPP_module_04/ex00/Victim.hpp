@@ -13,7 +13,9 @@ class Victim {
         Victim& operator=(const Victim & victim);
         const std::string getName(void) const;
 
-        void getPolymorphed() const;
+        //Peon의 경우 Sorcerer에서 Victim으로 매개변수를 받기 때문에
+        //virtual로 해줘야 Peon에 오버라이딩된 함수로 실행이 된다.
+        virtual void getPolymorphed() const;
     protected:
         std::string name;
 };

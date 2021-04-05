@@ -1,8 +1,6 @@
 #ifndef SORVERER_HPP
 #define SORVERER_HPP
 
-#include <iostream>
-#include <string>
 #include "./Victim.hpp"
 
 class Sorcerer {
@@ -14,7 +12,7 @@ class Sorcerer {
   
         const std::string getName(void) const;
         const std::string getTitle(void) const;
-        void polymorph(Victim const &) const;
+        void polymorph(Victim const &victim) const;
     private:
         Sorcerer();
 
