@@ -1,30 +1,30 @@
 #include "./SuperTrap.hpp"
 
-SuperTrap::SuperTrap() : FragTrap(), NinjaTrap()
+SuperTrap::SuperTrap() : ClapTrap(), FragTrap(), NinjaTrap()
 {
     name = "unknown";
-    hit = FragTrap::hit;
-    maxHit = FragTrap::maxHit;
-    energy = NinjaTrap::energy;
-    maxEnergy = NinjaTrap::maxEnergy;
+    hit = 100;
+    maxHit = 100;
+    energy = 120;
+    maxEnergy = 120;
     level = 1;
-    meleeDamage = NinjaTrap::meleeDamage;
-    rangedDamage = FragTrap::rangedDamage;
-    armorReduction = FragTrap::armorReduction;
+    meleeDamage = 60;
+    rangedDamage = 20;
+    armorReduction = 5;
 	std::cout << "SuperTrap Constructor called ulala!" << std::endl; 
 }
 
-SuperTrap::SuperTrap(std::string name): FragTrap(name), NinjaTrap(name)
+SuperTrap::SuperTrap(std::string name): ClapTrap(name), FragTrap(name), NinjaTrap(name)
 {
     this->name = name;
-    hit = FragTrap::hit;
-    maxHit = FragTrap::maxHit;
-    energy = NinjaTrap::energy;
-    maxEnergy = NinjaTrap::maxEnergy;
+    hit = 100;
+    maxHit = 100;
+    energy = 120;
+    maxEnergy = 120;
     level = 1;
-    meleeDamage = NinjaTrap::meleeDamage;
-    rangedDamage = FragTrap::rangedDamage;
-    armorReduction = FragTrap::armorReduction;
+    meleeDamage = 60;
+    rangedDamage = 20;
+    armorReduction = 5;
 	std::cout << "SuperTrap Constructor called ulala!" << std::endl;
 }
 
@@ -52,9 +52,9 @@ SuperTrap& SuperTrap::operator=(const SuperTrap& superTrap) {
 }
 
 unsigned int SuperTrap::rangedAttack(std::string const & target) {
-
+    return FragTrap::rangedAttack(target);
 }
 
 unsigned int SuperTrap::meleeAttack(std::string const & target) {
-
+    return NinjaTrap::meleeAttack(target);
 }

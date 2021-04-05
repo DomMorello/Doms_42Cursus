@@ -16,7 +16,7 @@ FragTrap::FragTrap(const std::string name) :
 
 FragTrap::FragTrap(const FragTrap& fragTrap) {
     std::cout << "Copy constructor called yoohoo" << std::endl;
-    *this = fragTrap;   //���Կ����� �����ε��� ����ȴ�.
+    *this = fragTrap;   //���Կ����� �����ε��� ����ȴ�?.
 }
 
 FragTrap::~FragTrap() {
