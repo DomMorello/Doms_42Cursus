@@ -3,8 +3,8 @@
 AWeapon::AWeapon()
     :
     name("unknown"),
-    damage(0),
-    apcost(0)
+    apcost(0),
+    damage(0)
     { }
 
 AWeapon::AWeapon(std::string const &name, int apcost, int damage)
@@ -27,7 +27,7 @@ AWeapon& AWeapon::operator=(const AWeapon & weapon) {
     return *this;
 }
 
-const std::string AWwapon::getName() const {
+const std::string AWeapon::getName() const {
     return name;
 }
 

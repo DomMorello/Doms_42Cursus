@@ -1,3 +1,11 @@
+#include "./AWeapon.hpp"
+#include "./Character.hpp"
+#include "./Enemy.hpp"
+#include "./PlasmaRifle.hpp"
+#include "./PowerFist.hpp"
+#include "./RadScorpion.hpp"
+#include "./SuperMutant.hpp"
+
 int main()
 {
     Character* me = new Character("me");

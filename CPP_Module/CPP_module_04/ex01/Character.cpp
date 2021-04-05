@@ -34,23 +34,39 @@ void Character::equip(AWeapon* weapon) {
 }
 
 void Character::attack(Enemy* enemy) {
-    if (AP <= 0)
+    if (AP < weapon->getAPCost() || weapon == NULL)
         return ;
-    if (weapon != NULL)
-    {
-        weapon->attack();
-        std::cout << name << " attacks " << enemy->getType()
-        << " with a " <<  weapon->getName() << std::endl;
-    }
+    std::cout << name << " attacks " << enemy->getType()
+    << " with a " <<  weapon->getName() << std::endl;
+    weapon->attack();
+    AP -= weapon->getAPCost();
     enemy->takeDamage(weapon->getDamage());
     if (enemy->getHP() <= 0)
-        delete enemy;
+        enemy->~Enemy();
 }
 
 const std::string Character::getName() const {
-
+    return name;
 }
 
-ostream& operator<<(ostream& os, const Character &character) {
-    os << 
+int Character::getAP() const {
+    return AP;
+}
+
+const AWeapon* Character::getWeapon() const {
+    return weapon;
+}
+
+std::ostream& operator<<(std::ostream& os, const Character &character) {
+    if (character.getWeapon() != NULL)
+    {
+        os << character.getName() << " has " << character.getAP()
+        << " AP and wields a " <<  character.getWeapon()->getName() << std::endl; 
+    }
+    else
+    {
+        os << character.getName() << " has " << character.getAP()
+        << " AP and is unarmed" << std::endl;
+    }
+    return os;
 }

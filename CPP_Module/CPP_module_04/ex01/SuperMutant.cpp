@@ -1,11 +1,11 @@
 #include "./SuperMutant.hpp"
 
 SuperMutant::SuperMutant() : Enemy(170, "Super Mutant") {
-    std::cout << "Gaaah. Me want smash heads!" std::endl;
+    std::cout << "Gaaah. Me want smash heads!" << std::endl;
 }
 
 SuperMutant::SuperMutant(const SuperMutant & mutant) : Enemy(mutant) {
-    std::cout << "Gaaah. Me want smash heads!" std::endl;
+    std::cout << "Gaaah. Me want smash heads!" << std::endl;
 }
 
 SuperMutant::~SuperMutant() {

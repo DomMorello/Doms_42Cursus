@@ -20,6 +20,7 @@ class AWeapon {
         const std::string getName() const;
         int getAPCost() const;
         int getDamage() const;
+        // 순수 가상 함수이므로 이 클래스에서는 몸체를 구현하지 않는다.
         virtual void attack() const = 0;
 };
 
