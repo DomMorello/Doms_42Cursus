@@ -5,6 +5,7 @@
 
 class Sorcerer {
     public:
+        Sorcerer();
         Sorcerer(std::string _name, std::string _title);
         Sorcerer(const Sorcerer & sorcerer);
         virtual ~Sorcerer();
@@ -14,7 +15,6 @@ class Sorcerer {
         const std::string getTitle(void) const;
         void polymorph(Victim const &victim) const;
     private:
-        Sorcerer();
 
         std::string name;
         std::string title;
