@@ -3,7 +3,15 @@
 Squad::Squad() : count(0), unit(NULL) { }
 
 Squad::Squad(const Squad & squad) : count(0), unit(NULL) {
-    /* TODO: 다른 클래스 먼저 구현해보고 그 함수를 가져다 쓸 수 있는지 보자 */
+    int i = 0;
+    
+    count = squad.count;
+    unit = new ISpaceMarine*[squad.count + 1];
+    while (i < squad.count)
+        unit[i] = squad.unit[i]->clone();
+    //윗줄에서 clone을 하지 않으면 포인터를 가리키는 얕은 복사임
+    //그래서 동적할당을 해주는 clone함수를 사용해서 깊은 복사를 해야함
+    unit[i] = NULL;
 }
 
 Squad& Squad::operator=(const Squad & squad) {
@@ -15,7 +23,12 @@ Squad& Squad::operator=(const Squad & squad) {
         delete unit;
         unit = NULL;
     }
-    /* TODO: 연산자 깊은 복사 좀 더 공부해서 구현 */
+    count = squad.count;
+    unit = new ISpaceMarine*[squad.count + 1];
+    for (int i = 0; i < squad.count; i++)
+        unit[i] = squad.unit[i]->clone();
+    unit[squad.count] = NULL;
+    return *this;
 }
 
 Squad::~Squad() {
@@ -63,12 +76,8 @@ int Squad::push(ISpaceMarine* newOne) {
         unit = copy;
         unit[count] = newOne;    //새로운 매개변수 newOne을 맨 뒤에 추가
         count++;
+        return count;
     }
     else    //매개변수가 널일 경우 현재 count 반환
         return count;
-}
-
-int main()
-{
-    Squad s;
 }
