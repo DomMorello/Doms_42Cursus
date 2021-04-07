@@ -34,15 +34,16 @@ void Character::equip(AWeapon* weapon) {
 }
 
 void Character::attack(Enemy* enemy) {
-    if (AP < weapon->getAPCost() || weapon == NULL)
+    if (weapon == NULL || AP < weapon->getAPCost())
         return ;
+    (void)enemy;
     std::cout << name << " attacks " << enemy->getType()
     << " with a " <<  weapon->getName() << std::endl;
     weapon->attack();
     AP -= weapon->getAPCost();
     enemy->takeDamage(weapon->getDamage());
     if (enemy->getHP() <= 0)
-        enemy->~Enemy();
+        delete enemy;
 }
 
 const std::string Character::getName() const {
