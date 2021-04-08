@@ -40,6 +40,8 @@ int main()
     try
     {
         b2.signForm(f3);
+        std::cout << b2;
+        std::cout << f3;
     }
     catch(const std::exception& e)
     {
