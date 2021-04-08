@@ -8,13 +8,7 @@ Bureaucrat::Bureaucrat(const std::string &name, int grade) :_name(name), _grade(
 }
 
 Bureaucrat::Bureaucrat(const Bureaucrat & b) : _name(b.getName()), _grade(b.getGrade()) {
-    std::cout << "copy" << std::endl;
     *this = b;
-}
-
-Bureaucrat& Bureaucrat::nothing(const Bureaucrat & b) {
-    (void)b;
-    return *this;
 }
 
 Bureaucrat& Bureaucrat::operator=(const Bureaucrat & b) {
@@ -51,13 +45,26 @@ void Bureaucrat::decGrade() {
     _grade++;
 }
 
+void Bureaucrat::signForm(Form & form) {
+    try
+    {
+        form.beSigned(*this);
+        std::cout << _name << " signs " << form.getName() << std::endl;
+    }
+    catch (std::exception & e)
+    {
+        std::cout << _name << " cannot sign " << form.getName() << " because ";
+        std::cerr << e.what() << std::endl;
+    }
+}
+
 //함수 선언부에는 Bureaucrat:: 을 추가해줘야 인식한다.
 const char* Bureaucrat::GradeTooHighException::what() const throw() {
-    return "GradeTooHighException";
+    return "GradeTooHighException: grade is too high";
 }
 
 const char* Bureaucrat::GradeTooLowException::what() const throw() {
-    return "GradeTooLowException";
+    return "GradeTooLowException: grade is too low";
 }
 
 std::ostream& operator<<(std::ostream &os, const Bureaucrat &b) {
