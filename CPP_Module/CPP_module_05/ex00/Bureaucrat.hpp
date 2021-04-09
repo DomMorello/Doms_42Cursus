@@ -21,7 +21,6 @@ class Bureaucrat {
         int getGrade() const;
         void incGrade();
         void decGrade();
-        Bureaucrat& nothing(const Bureaucrat & b);
 
         class GradeTooHighException : public std::exception {
             public:

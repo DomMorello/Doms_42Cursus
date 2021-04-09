@@ -11,11 +11,6 @@ Bureaucrat::Bureaucrat(const Bureaucrat & b) : _name(b.getName()), _grade(b.getG
     *this = b;
 }
 
-Bureaucrat& Bureaucrat::nothing(const Bureaucrat & b) {
-    (void)b;
-    return *this;
-}
-
 Bureaucrat& Bureaucrat::operator=(const Bureaucrat & b) {
     //�ڱ� �ڽ��� ������ �ڱ� �ڽ� ��ȯ
     if (this == &b)
