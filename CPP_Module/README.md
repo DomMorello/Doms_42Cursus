@@ -35,7 +35,9 @@ canonical classes
 ## C++ Module 04
 > Subtype polymorphism, abstract classes, interfaces
 ## C++ Module 05
+> Repetition and Exceptions
 ## C++ Module 06
+> C++ Casts
 ## C++ Module 07
 ## C++ Module 08
 
