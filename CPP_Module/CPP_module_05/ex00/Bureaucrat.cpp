@@ -8,7 +8,6 @@ Bureaucrat::Bureaucrat(const std::string &name, int grade) :_name(name), _grade(
 }
 
 Bureaucrat::Bureaucrat(const Bureaucrat & b) : _name(b.getName()), _grade(b.getGrade()) {
-    std::cout << "copy" << std::endl;
     *this = b;
 }
 
@@ -18,7 +17,7 @@ Bureaucrat& Bureaucrat::nothing(const Bureaucrat & b) {
 }
 
 Bureaucrat& Bureaucrat::operator=(const Bureaucrat & b) {
-    //ÀÚ±â ÀÚ½ÅÀÌ µé¾î¿À¸é ÀÚ±â ÀÚ½Å ¹İÈ¯
+    //ï¿½Ú±ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ú±ï¿½ ï¿½Ú½ï¿½ ï¿½ï¿½È¯
     if (this == &b)
         return *this;
     _grade = b.getGrade();
@@ -51,7 +50,7 @@ void Bureaucrat::decGrade() {
     _grade++;
 }
 
-//ÇÔ¼ö ¼±¾ğºÎ¿¡´Â Bureaucrat:: À» Ãß°¡ÇØÁà¾ß ÀÎ½ÄÇÑ´Ù.
+//ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½ï¿½Î¿ï¿½ï¿½ï¿½ Bureaucrat:: ï¿½ï¿½ ï¿½ß°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î½ï¿½ï¿½Ñ´ï¿½.
 const char* Bureaucrat::GradeTooHighException::what() const throw() {
     return "GradeTooHighException";
 }
