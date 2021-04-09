@@ -22,6 +22,7 @@ RobotomyRequestForm& RobotomyRequestForm::operator=(const RobotomyRequestForm & 
 }
 
 void RobotomyRequestForm::execute(Bureaucrat const & executor) const {
+    srand(clock());
     Form::execute(executor);
 
     std::cout << "ddddrrrrriliiing nooooooiiiseeeeee...." << std::endl;
