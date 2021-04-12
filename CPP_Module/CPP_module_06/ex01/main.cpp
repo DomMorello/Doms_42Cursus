@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <ctime>
-#include <string.h>
+//#include <string.h>
 
 struct Data
 {
@@ -12,9 +12,9 @@ struct Data
 
 void *serialize(void) {
     const char alphanum[] = "0123456789abcdefghijklmnopqrstuvwxyz";
-    std::string s1("");
-    std::string s2("");
-    int randInt;
+  //  std::string s1("");
+    //std::string s2("");
+   // int randInt;
 
     srand(clock());
     randInt = rand();
@@ -28,9 +28,9 @@ void *serialize(void) {
     std::cout << "n : " << randInt << std::endl;
     std::cout << "s2 : " << s2 << std::endl;
 
-    memcpy(ret, &s1, sizeof(s1));
-    memcpy(ret + sizeof(s1), &randInt, sizeof(randInt));
-    memcpy(ret + sizeof(s1), &s2, sizeof(s2));
+//    memcpy(ret, &s1, sizeof(s1));
+  //  memcpy(ret + sizeof(s1), &randInt, sizeof(randInt));
+    //memcpy(ret + sizeof(s1), &s2, sizeof(s2));
     return ret;
 }
 
