@@ -33,8 +33,7 @@ void Convert::toChar() {
     //0 이 아니라면 소수부분이 있는 것이므로 char로 형변환 불가
     if (val - _double != 0)
         throw ConvertionException();
-    // else if (std::isprint(static_cast<unsigned char>(val)))
-    else if (val >= 32 && val <= 126)   //displayable하다면 출력
+    else if (std::isprint(static_cast<unsigned char>(val))) //displayable한 문자면 출력
         std::cout << "'" << static_cast<char>(_double) << "'" << std::endl;
     else    //  출력가능하지 않으면 에러 발생
         throw NonDisplayableException();

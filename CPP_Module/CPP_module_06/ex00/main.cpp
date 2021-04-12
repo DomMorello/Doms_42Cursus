@@ -11,9 +11,11 @@ int main(int argc, const char *argv[])
     }
     //'a'처럼 출력가능한 char literal로 들어온 경우 처리
     std::string str = argv[1];
-    if (str.length() == 1 && std::isprint(static_cast<unsigned char>(argv[1][0])))
+    if (str.length() == 1 && std::isprint(static_cast<unsigned char>(argv[1][0]))
+        && !std::isdigit(argv[1][0]))
     {
         input = static_cast<double>(argv[1][0]);
+        std::cout << "test:: "<< input << std::endl;
     }
     else
     {
