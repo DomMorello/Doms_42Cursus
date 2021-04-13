@@ -1,4 +1,3 @@
-#include "Base.hpp"
 #include "A.hpp"
 #include "B.hpp"
 #include "C.hpp"
@@ -15,7 +14,7 @@ Base* generate(void) {
         return ret = new A;
     else if (randNum == 1)
         return ret = new B;
-    else if (randNum == 2)
+    else
         return ret = new C;
 }
 
@@ -31,10 +30,13 @@ void identify_from_pointer(Base * p) {
 }
 
 void identify_from_reference(Base & p) {
+    //참조형의 경우 dynamic_cast에 실패하면
+    //exception을 발생시키기 때문에 try catch로 구현함
     try
     {
         A& a = dynamic_cast<A&>(p);
         std::cout << "A" << std::endl;
+        (void)a;
     }
     catch(const std::exception& e)
     { }
@@ -42,6 +44,7 @@ void identify_from_reference(Base & p) {
     {
         B& b = dynamic_cast<B&>(p);
         std::cout << "B" << std::endl;
+        (void)b;
     }
     catch(const std::exception& e)
     { }
@@ -49,6 +52,7 @@ void identify_from_reference(Base & p) {
     {
         C& c = dynamic_cast<C&>(p);
         std::cout << "C" << std::endl;
+        (void)c;
     }
     catch(const std::exception& e)
     { }
