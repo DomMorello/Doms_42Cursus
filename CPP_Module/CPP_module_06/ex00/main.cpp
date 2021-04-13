@@ -15,7 +15,6 @@ int main(int argc, const char *argv[])
         && !std::isdigit(argv[1][0]))
     {
         input = static_cast<double>(argv[1][0]);
-        std::cout << "test:: "<< input << std::endl;
     }
     else
     {

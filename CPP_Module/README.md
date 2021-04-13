@@ -39,6 +39,7 @@ canonical classes
 ## C++ Module 06
 > C++ Casts
 ## C++ Module 07
+> c++ Templates
 ## C++ Module 08
 
 ## reference

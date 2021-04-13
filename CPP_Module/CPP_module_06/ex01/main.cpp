@@ -37,8 +37,8 @@ Data* deserialize(void *raw) {
     Data *data = new Data;
     
 	data->s1 = reinterpret_cast<char*>(raw);
-	data->n = *reinterpret_cast<int*>(raw) + sizeof(data->s1);
-	data->s2 = reinterpret_cast<char*>(raw) + sizeof(data->s1) + sizeof(data->n);
+	data->n = *reinterpret_cast<int*>(reinterpret_cast<char*>(raw) + sizeof(data->s1));
+	data->s2 = reinterpret_cast<char*>(reinterpret_cast<char*>(raw) + sizeof(data->s1) + sizeof(data->n));
     return data;
 }
 
