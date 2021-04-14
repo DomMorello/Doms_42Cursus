@@ -41,8 +41,10 @@ canonical classes
 ## C++ Module 07
 > c++ Templates
 ## C++ Module 08
+> Templated containers, iterators, algorithms
 
 ## reference
 - (https://www.youtube.com/channel/UCmGcqqKdIKnH_-oHnkoyshg)
+- (https://modoocode.com/135)
 
 #### Contact: zuzudnf@gmail.com
