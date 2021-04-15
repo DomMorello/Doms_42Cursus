@@ -7,6 +7,7 @@
 #include <vector>
 #include <list>
 #include <deque>
+#include <set>
 
 template <typename T>
 typename T::iterator easyfind(T &container, int n) {
