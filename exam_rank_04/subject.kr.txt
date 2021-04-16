@@ -1,0 +1,31 @@
+과제이름 : microshell
+예상파일 : *.c *.h
+허용함수 : malloc, free, write, close, fork, waitpid, signal, kill, exit, chdir, execve, dup, dup2, pipe, strcmp, strncmp
+--------------------------------------------------------------------------------------
+
+shell처럼 동작하는 프로그램을 만들어라
+- 실행할 command line은 이 프로그램의 인자가 됨
+- 실행 파일의 경로는 절대경로 또는 상대경로 이고 프로그램이 경로를 build 해서는 안됨(예: PATH 변수)
+- bash 처럼 "|"와 ";"를 구현해야함
+	- "|" 앞뒤에 아무것도 안나오거나 "|" 나 ";"이 나오는 경우는 고려하지 않아도 됨
+- 프로그램은 경로를 나타내는 인자 오직 1개만 가지는 built-in command cd를 구현해야함 ('-' 또는 다른 매개 변수 없음)
+	- cd에 잘못된 인자가 들어간 경우 프로그램은 STDERR으로 "error: cd: bad arguments\n"를 출력해야함
+	- cd를 실패한 경우 프로그램은 STDERR으로 "error: cd: cannot change directory to path_to_change\n"를 출력해야함. path_to_change는 cd의 인자
+	- cd는 "|"와 함께 사용되는 경우는 고려하지 않아도 됨
+- type of wildcards는 구현하지 않아도 됨 (*, ~ 등등)
+- 환경변수는 구현하지 않아도 됨 ($BLA)
+- execve와 chdir를 제외하고 system call이 에러를 return 할떄, STDERR으로 "error: fatal\n"를 출력하고 프로그램이 exit 되야함
+- execve가 실패한 경우 프로그램은  STDERR으로 "error: cannot execute executable_that_failed\n"를 출력해야함. executable_that_failed는 실패한 실행파일의 경로 (execve의 첫번째 인자)
+- 열린파일의 수를 30 개이하로 제한 하더라도 프로그램은 수백개의 "|"를 관리할수 있어야함
+
+실행 예시:
+$>./microshell /bin/ls "|" /usr/bin/grep microshell ";" /bin/echo i love my microshell
+microshell
+i love my microshell
+$>
+
+힌트:
+execve에 환경변수를 넣는걸 잊지마라
+
+힌트:
+file descriptors leak을 하지마라
