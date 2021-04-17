@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define CD_BAD "error: cd: bas arguments\n"
-#define CD_FAIL "error: cd: cannot change direcotry to "
+#define CD_ERR "error: cd: bad arguments\n"
+#define CD_ERR2 "error: cd: cannot change direcotry to "
 #define SYS_ERR "error: fatal\n"
 #define EXEC_ERR "error: cannot execute "
 
@@ -18,7 +18,7 @@ int ft_strlen(char *s)
 
 int err(char *s)
 {
-	write(STDERR_FILENO, s, ft_strlen(s));
+	write(2, s, ft_strlen(s));
 	return 1;
 }
 
@@ -28,7 +28,7 @@ int is_pipe(char **argv)
 
 	while (argv[i])
 	{
-		if (!strncmp(argv[i], "|", 2))
+		if (!stncmp(argv[i], "|", 2))
 		{
 			argv[i] = NULL;
 			return 1;
@@ -52,21 +52,21 @@ int ft_argvlen(char **argv)
 	return i;
 }
 
-void cd(char **input)
+void ft_cd(char **argv)
 {
-	int i = ft_argvlen(input);
+	int i = ft_argvlen(argv);
 
 	if (i != 2)
-		err(CD_BAD);
-	else if (chdir(input[1]) < 0)
+		err(CD_ERR);
+	else if (chdir(argv[1]) < 0)
 	{
-		err(CD_FAIL);
-		err(input[1]);
+		err(CD_ERR2);
+		err(argv[1]);
 		err("\n");
 	}
 }
 
-void shell(int argc, char **input, char **envp, int prev, int *fd)
+void shell(int argc, char **argv, char **envp, int prev, int *fd_prev)
 {
 	pid_t pid;
 	int fd_next[2];
@@ -74,23 +74,51 @@ void shell(int argc, char **input, char **envp, int prev, int *fd)
 
 	if (argc <= 0)
 		return ;
-	next = is_pipe(input);
-	if (input[0])
+	next = is_pipe(argv);
+	if (argv[0])
 	{
 		if (next && pipe(fd_next) < 0)
 			exit(err(SYS_ERR));
-		if (!strncmp(input[0], "cd", 3))
-			cd(input);
+		if (!strncmp(argv[0], "cd", 3))
+			fd_cd(argv);
+		else if ((pid = fork()) < 0)
+			exit(err(SYS_ERR));
+		else if (!pid)
+		{
+			if (prev && dup2(fd_prev[0], 0) < 0)
+				exit(2);
+			if (next && dup2(fd_prev[1], 1) < 0)
+				exit(2);
+			if (execve(argv[0], argv, envp) < 0)
+			{
+				err(EXEC_ERR);
+				err(argv[0]);
+				err("\n");
+				exit(1);
+			}
+		}
+		else
+		{
+			if (waitpid(pid, &status, 0) < 0)
+				exit(err(SYS_ERR));
+			if (status == 512)
+				exit(err(SYS_ERR));
+			if (prev)
+				close(fd_prev[0]);
+			if (next)
+				close(fd_next[1]);
+		}
 	}
+	i = ft_argvlen(argv);
+	shell(argc - i - 1, argv + i + 1, envp, next, fd_next);
 }
 
 int main(int argc, char **argv, char **envp)
 {
-	int fd[2];
-	fd[0] = STDIN_FILENO;
-	fd[1] = STDOUT_FILENO;
+	int fd_prev[2];
 
-	shell(argc - 1, argv + 1, envp, 0, fd);
-	
+	fd_prev[0] = STDIN_FILENO;
+	fd_prev[1] = STDOUT_FILENO;
+	shell(argc - 1, argv + 1, envp, 0, fd_prev);
 	return 0;
 }
