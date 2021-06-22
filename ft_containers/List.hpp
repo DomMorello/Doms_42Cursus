@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   list.hpp                                           :+:      :+:    :+:   */
+/*   List.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/03 16:10:24 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/22 19:07:19 by marvin           ###   ########.fr       */
+/*   Created: 2021/06/22 20:19:25 by donglee           #+#    #+#             */
+/*   Updated: 2021/06/22 20:19:26 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ namespace ft
                 y.next = y.prev = &y;
             }
         }
-        // ÇØ´ç ³ëµå firstºÎÅÍ last±îÁö ¿Å°Ü¼­ º¹»çÇÑ´Ù.
+        // ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ firstï¿½ï¿½ï¿½ï¿½ lastï¿½ï¿½ï¿½ï¿½ ï¿½Å°Ü¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
         void _transfer(_list_node_base* const first, _list_node_base* const last)
         {
             if (this != last)
@@ -101,7 +101,7 @@ namespace ft
 
     // ############## list iterator ############################################################
     template<typename T>
-    struct _list_iterator   //»ó¼Ó¹Þ¾Æ¼­ ±»ÀÌ ÇÒ ÇÊ¿ä ¾ø´Ù.
+    struct _list_iterator   //ï¿½ï¿½Ó¹Þ¾Æ¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ê¿ï¿½ ï¿½ï¿½ï¿½ï¿½.
     {
         typedef _list_iterator<T>                   _Self;
         typedef _list_node<T>                       _Node;
@@ -110,7 +110,7 @@ namespace ft
         typedef ptrdiff_t                           difference_type;
         typedef T*                                  pointer;
         typedef T&                                  reference;
-        typedef std::bidirectional_iterator_tag     iterator_category;  //ÀÌÅÍ·¹ÀÌÅÍÀÇ ¼º°ÝÀ» º¸¿©ÁÖ´Â Ç¥ÁöÆÇ
+        typedef std::bidirectional_iterator_tag     iterator_category;  //ï¿½ï¿½ï¿½Í·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ Ç¥ï¿½ï¿½ï¿½ï¿½
 
         _list_node_base* node_ptr;
 
@@ -256,8 +256,8 @@ namespace ft
         typedef typename allocator_type::pointer            pointer;
         typedef typename allocator_type::const_pointer      const_pointer;
         
-        typedef _list_iterator<T>                           iterator;   //Á÷Á¢ ¸¸µé¾î¾ß ÇÔ
-        typedef _list_const_iterator<T>                     const_iterator; //Á÷Á¢ ¸¸µé¾î¾ß ÇÔ
+        typedef _list_iterator<T>                           iterator;   //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+        typedef _list_const_iterator<T>                     const_iterator; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
         typedef ft::reverse_iterator<iterator>              reverse_iterator;
         typedef ft::reverse_iterator<const_iterator>        const_reverse_iterator;
 
@@ -271,7 +271,7 @@ namespace ft
         
 
         _node_alloc_type    node_allocator;
-        _list_node_base     sentry_node;    //gnu¿Í ´Ù¸£°Ô µû·Î ºÐ¸®Ã³¸®
+        _list_node_base     sentry_node;    //gnuï¿½ï¿½ ï¿½Ù¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ð¸ï¿½Ã³ï¿½ï¿½
 
         _Node* _create_node(const value_type& val)
         {
@@ -281,7 +281,7 @@ namespace ft
             return _p;
         }
 
-        void _init()    //º¸ÃÊ³ëµå°¡ ÀÚ±â ÀÚ½ÅÀ» °¡¶óÅ²´Ù. ³Ø½ºÆ® ÇÁ¸®ºê ÀüºÎ´Ù. ¼¾Æ®¸®³ëµå°¡ Ç×»ó ¸¶Áö¸·¿¡ À§Ä¡/
+        void _init()    //ï¿½ï¿½ï¿½Ê³ï¿½å°¡ ï¿½Ú±ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Å²ï¿½ï¿½. ï¿½Ø½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î´ï¿½. ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½å°¡ ï¿½×»ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡/
         {
             this->sentry_node.next = &(this->sentry_node);
             this->sentry_node.prev = &(this->sentry_node);
@@ -374,7 +374,7 @@ namespace ft
         //fill (2)	
         explicit list(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
         //range (3)	
-        template <class InputIterator>  //ex) list(int 10, int 2)·Î ÇÏ¸é ÀÌ ¾Æ·¡ »ý¼ºÀÚ°¡ È£ÃâµÈ´Ù. Å¸ÀÔÀÌ ´Ù¸£±â ¶§¹®
+        template <class InputIterator>  //ex) list(int 10, int 2)ï¿½ï¿½ ï¿½Ï¸ï¿½ ï¿½ï¿½ ï¿½Æ·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ú°ï¿½ È£ï¿½ï¿½È´ï¿½. Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         list(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
         //copy (4)	
         list(const list& x);
@@ -483,7 +483,7 @@ namespace ft
         sentry_node()
     {
         _init();
-        typedef typename ft::is_integer<InputIterator>::type is_integer_type;   //integerÀÎÁö È®ÀÎÇØ¼­ ºÐ±âÃ³¸®
+        typedef typename ft::is_integer<InputIterator>::type is_integer_type;   //integerï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½Ð±ï¿½Ã³ï¿½ï¿½
         _initialize_dispatch(first, last, is_integer_type());
     }
     //copy (4)

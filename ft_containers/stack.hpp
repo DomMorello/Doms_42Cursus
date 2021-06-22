@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   stack.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 20:47:21 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/22 18:09:04 by marvin           ###   ########.fr       */
+/*   Updated: 2021/06/22 20:19:50 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 namespace ft
 {
 	// ############## stack class ##############################################
-	template <class T, class Container = ft::list<T> >	//list¸¦ ¹Þ¾Æ¿Í¼­ ÇÒ ¼ö ÀÖ´Ù.
+	template <class T, class Container = ft::list<T> >	//listï¿½ï¿½ ï¿½Þ¾Æ¿Í¼ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö´ï¿½.
 	class stack
 	{
 	public:

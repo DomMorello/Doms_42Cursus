@@ -8,9 +8,6 @@ clang++ -Wall -Wextra -Werror \
 		test_map.cpp \
 		test_stack.cpp \
 		test_queue.cpp \
-		test_set.cpp \
-		test_multimap.cpp \
-		test_multiset.cpp \
 		-o my_containers
 		
 clang++ -Wall -Wextra -Werror \
@@ -21,9 +18,6 @@ clang++ -Wall -Wextra -Werror \
 		test_map.cpp \
 		test_stack.cpp \
 		test_queue.cpp \
-		test_set.cpp \
-		test_multimap.cpp \
-		test_multiset.cpp \
 		-D STD \
 		-o std_containers
 

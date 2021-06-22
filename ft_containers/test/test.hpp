@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
+/*   By: donglee <donglee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/06/06 01:51:52 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/06 21:52:57 by kycho            ###   ########.fr       */
+/*   Created: 2021/06/22 20:19:19 by donglee           #+#    #+#             */
+/*   Updated: 2021/06/22 20:27:30 by donglee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,6 @@
 #  include "../map.hpp"
 #  include "../stack.hpp"
 #  include "../queue.hpp"
-#  include "../set.hpp"
-#  include "../multimap.hpp"
-#  include "../multiset.hpp"
 
 #  define LIST ft::list
 #  define VECTOR ft::vector
@@ -65,8 +62,5 @@ void test_vector(void);
 void test_map(void);
 void test_stack(void);
 void test_queue(void);
-void test_set(void);
-void test_multimap(void);
-void test_multiset(void);
 
 #endif
